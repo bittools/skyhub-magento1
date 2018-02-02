@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <BSeller_SkyHub>
+            <version>1.0.0</version>
+        </BSeller_SkyHub>
+    </modules>
+    <global>
+        <models>
+            <bseller_skyhub>
+                <class>BSeller_SkyHub_Model</class>
+            </bseller_skyhub>
+        </models>
+        <events>
+            <controller_front_init_before>
+                <observers>
+                    <bseller_skyhub>
+                        <class>bseller_skyhub/observer</class>
+                        <method>init</method>
+                    </bseller_skyhub>
+                </observers>
+            </controller_front_init_before>
+        </events>
+    </global>
+    <default>
+        <bseller_skyhub>
+            <service>
+                <base_uri>https://api.skyhub.com.br</base_uri>
+                <email>valdir.calixto@e-smart.com.br</email>
+                <api_key>wxVMVTkf_csx17LioTjY</api_key>
+                <api_token>bZa6Ml0zgS</api_token>
+            </service>
+        </bseller_skyhub>
+    </default>
+</config>
