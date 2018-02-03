@@ -1,6 +1,6 @@
 <?php
 
-trait BSeller_SkyHub_Model_Transformer_Getters
+trait BSeller_SkyHub_Trait_Transformers
 {
 
     /**
@@ -22,5 +22,4 @@ trait BSeller_SkyHub_Model_Transformer_Getters
         $transformer = Mage::getSingleton('bseller_skyhub/transformer_catalog_product');
         return $transformer;
     }
-
 }

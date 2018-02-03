@@ -18,15 +18,20 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Attribute
         $interface = $this->api()->productAttribute()->entityInterface();
 
         try {
-            $interface->setCode($attribute->getAttributeCode())
-                ->setLabel($attribute->getFrontendLabel());
+            $code  = $attribute->getAttributeCode();
+            $label = $attribute->getStoreLabel(Mage::app()->getDefaultStoreView());
+
+            $interface->setCode($code)
+                ->setLabel($label);
 
             foreach ($attribute->getSource()->getAllOptions() as $option) {
-                if (!isset($option['value']) || empty($option['value'])) {
+                if (!isset($option['label']) || empty($option['label'])) {
                     continue;
                 }
 
-                $interface->addOption($option['value']);
+                $optionLabel = $option['label'];
+
+                $interface->addOption($optionLabel);
             }
         } catch (Exception $e) {
             Mage::logException($e);

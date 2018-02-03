@@ -25,11 +25,23 @@ class BSeller_SkyHub_Model_Observer
         /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
         $attribute = $observer->getData('attribute');
 
-        if ($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute) {
+        if (!$attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute) {
             return;
         }
 
-        $this->catalogProductAttributeProcessor()->update($attribute);
-    }
+        /** @var BSeller_SkyHub_Model_Processor_Catalog_Product_Attribute $processor */
+        $processor = $this->catalogProductAttributeProcessor();
 
+        /**
+         * Call method according to product attribute's operation: update or creation.
+         */
+        if ($attribute->getOrigData('attribute_code')) {
+            /** Attribute is being updated. */
+            $processor->update($attribute);
+            return;
+        }
+
+        /** Otherwise attribute is being created. */
+        $processor->create($attribute);
+    }
 }
