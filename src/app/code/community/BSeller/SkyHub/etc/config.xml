@@ -6,24 +6,47 @@
         </BSeller_SkyHub>
     </modules>
     <global>
+        <helpers>
+            <bseller_skyhub>
+                <class>BSeller_SkyHub_Helper</class>
+            </bseller_skyhub>
+        </helpers>
         <models>
             <bseller_skyhub>
                 <class>BSeller_SkyHub_Model</class>
             </bseller_skyhub>
         </models>
         <events>
-            <controller_front_init_before>
+            <catalog_entity_attribute_save_after>
                 <observers>
-                    <bseller_skyhub>
+                    <bseller_skyhub_update_attribute_after_save>
                         <class>bseller_skyhub/observer</class>
-                        <method>init</method>
-                    </bseller_skyhub>
+                        <method>updateProductAttribute</method>
+                    </bseller_skyhub_update_attribute_after_save>
                 </observers>
-            </controller_front_init_before>
+            </catalog_entity_attribute_save_after>
         </events>
     </global>
+    <frontend>
+        <routers>
+            <bseller_skyhub>
+                <use>standard</use>
+                <args>
+                    <module>BSeller_SkyHub</module>
+                    <frontName>skyhub</frontName>
+                </args>
+            </bseller_skyhub>
+        </routers>
+    </frontend>
     <default>
         <bseller_skyhub>
+            <general>
+                <enabled>1</enabled>
+            </general>
+            <log>
+                <enabled>1</enabled>
+                <filename>bseller_skyhub_request_log.log</filename>
+            </log>
             <service>
                 <base_uri>https://api.skyhub.com.br</base_uri>
                 <email>valdir.calixto@e-smart.com.br</email>
@@ -32,4 +55,14 @@
             </service>
         </bseller_skyhub>
     </default>
+    <phpunit>
+        <suite>
+            <modules>
+                <BSeller_SkyHub/>
+            </modules>
+            <groups>
+                <lib>Lib</lib>
+            </groups>
+        </suite>
+    </phpunit>
 </config>

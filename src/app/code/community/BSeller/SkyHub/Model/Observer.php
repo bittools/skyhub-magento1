@@ -11,24 +11,25 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-require_once '/Users/tiagosampaio/Sites/e-smart/skyhub/sdk/src/bootstrap.php';
-
 class BSeller_SkyHub_Model_Observer
 {
-    
-    public function init(Varien_Event_Observer $observer)
+
+    use BSeller_SkyHub_Trait_Processors;
+
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function updateProductAttribute(Varien_Event_Observer $observer)
     {
-        $baseUri = 'https://api.skyhub.com.br';
-        $email = 'valdir.calixto@e-smart.com.br';
-        $apiKey = 'wxVMVTkf_csx17LioTjY';
-        $apiToken = 'bZa6Ml0zgS';
-    
-        $api = new \SkyHub\Api($baseUri, $email, $apiKey, $apiToken);
-        
-        /**
-         * Attribute Creation and Update.
-         */
-        $responseCreate = $api->productAttribute()->create('size_jeffinho', 'Size Jeffinho', ['Blue', 'White', 'Green', 'Yellow']);
+        /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
+        $attribute = $observer->getData('attribute');
+
+        if ($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute) {
+            return;
+        }
+
+        $this->catalogProductAttributeProcessor()->update($attribute);
     }
 
 }
