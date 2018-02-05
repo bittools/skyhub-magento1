@@ -58,8 +58,7 @@ A documentação para cada funcionalidade está escrita nos códigos fonte do m�
 
 Autor||Versão
 --- | --- | ---
-**Tiago Sampaio** | tiago.sampaio@e-smart.com.br | `0.1.0.0`
-**Diogo Santiago** and **Tiago Sampaio**| diogo.santiago@e-smart.com.br and tiago.sampaio@e-smart.com.br | `0.1.1.0`
+**Tiago Sampaio** | tiago.sampaio@e-smart.com.br | `0.1.0`
 
 ## Licença
 
