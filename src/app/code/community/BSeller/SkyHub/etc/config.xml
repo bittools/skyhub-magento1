@@ -33,7 +33,7 @@
                 <use>standard</use>
                 <args>
                     <module>BSeller_SkyHub</module>
-                    <frontName>skyhub</frontName>
+                    <frontName>bseller_skyhub</frontName>
                 </args>
             </bseller_skyhub>
         </routers>
