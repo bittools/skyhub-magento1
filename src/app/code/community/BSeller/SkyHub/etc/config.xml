@@ -58,6 +58,17 @@
             </modules>
         </translate>
     </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <bseller_skyhub after="Mage_Adminhtml">BSeller_SkyHub_Adminhtml</bseller_skyhub>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <default>
         <bseller_skyhub>
             <general>

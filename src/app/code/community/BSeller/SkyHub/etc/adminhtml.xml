@@ -7,6 +7,17 @@
                     <title>SkyHub Integration</title>
                     <sort_order>900</sort_order>
                     <children>
+                        <catalog_product_attributes>
+                            <title>Product Attributes</title>
+                            <sort_order>10</sort_order>
+                            <children>
+                                <mapping>
+                                    <title>Attributes Mapping</title>
+                                    <sort_order>10</sort_order>
+                                    <action>adminhtml/bseller_skyhub_product/mapAttributes</action>
+                                </mapping>
+                            </children>
+                        </catalog_product_attributes>
                         <configuration translate="title" module="bseller_skyhub">
                             <title>Configuration</title>
                             <sort_order>900</sort_order>

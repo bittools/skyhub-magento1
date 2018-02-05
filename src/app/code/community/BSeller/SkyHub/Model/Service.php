@@ -2,15 +2,15 @@
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
+use SkyHub\Api;
+
 class BSeller_SkyHub_Model_Service
 {
 
     use BSeller_SkyHub_Trait_Config;
 
 
-    /**
-     * @var \SkyHub\Api;
-     */
+    /** @var Api */
     protected $api;
 
 
@@ -21,7 +21,7 @@ class BSeller_SkyHub_Model_Service
 
 
     /**
-     * @return \SkyHub\Api
+     * @return Api
      */
     public function api()
     {
@@ -47,7 +47,7 @@ class BSeller_SkyHub_Model_Service
      */
     public function initApi()
     {
-        $this->api = new \SkyHub\Api(
+        $this->api = new Api(
             $this->getServiceBaseUri(),
             $this->getServiceEmail(),
             $this->getServiceApiKey(),
