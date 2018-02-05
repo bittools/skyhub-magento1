@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <bseller>
+            <children>
+                <bseller_skyhub translate="title" module="bseller_skyhub">
+                    <title>SkyHub Integration</title>
+                    <sort_order>900</sort_order>
+                    <children>
+                        <configuration translate="title" module="bseller_skyhub">
+                            <title>Configuration</title>
+                            <sort_order>900</sort_order>
+                            <action>adminhtml/system_config/edit/section/bseller_skyhub</action>
+                        </configuration>
+                    </children>
+                </bseller_skyhub>
+            </children>
+        </bseller>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <bseller>
+                        <children>
+                            <bseller_skyhub translate="title" module="bseller_skyhub">
+                                <title>SkyHub Integration</title>
+                                <sort_order>900</sort_order>
+                                <children>
+                                    <configuration translate="title" module="bseller_skyhub">
+                                        <title>Configuration</title>
+                                        <sort_order>900</sort_order>
+                                    </configuration>
+                                </children>
+                            </bseller_skyhub>
+                        </children>
+                    </bseller>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <bseller_skyhub>
+                                        <title>SkyHub Integration</title>
+                                        <sort_order>900</sort_order>
+                                    </bseller_skyhub>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

@@ -37,7 +37,27 @@
                 </args>
             </bseller_skyhub>
         </routers>
+        <translate>
+            <modules>
+                <bseller_skyhub>
+                    <files>
+                        <default>BSeller/SkyHub.csv</default>
+                    </files>
+                </bseller_skyhub>
+            </modules>
+        </translate>
     </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <bseller_skyhub>
+                    <files>
+                        <default>BSeller/SkyHub.csv</default>
+                    </files>
+                </bseller_skyhub>
+            </modules>
+        </translate>
+    </adminhtml>
     <default>
         <bseller_skyhub>
             <general>
