@@ -1,6 +1,6 @@
 <?php
 
-require_once '/Users/tiagosampaio/web/sites/esmart/skyhub-sdk/src/bootstrap.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 class BSeller_SkyHub_Model_Service
 {
