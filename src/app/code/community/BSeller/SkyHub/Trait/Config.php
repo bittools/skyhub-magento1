@@ -113,4 +113,13 @@ trait BSeller_SkyHub_Trait_Config
     {
         return (string) $this->getServiceConfig('api_token');
     }
+    
+    
+    /**
+     * @return BSeller_SkyHub_Model_Config
+     */
+    protected function getSkyHubConfig()
+    {
+        return Mage::getSingleton('bseller_skyhub/config');
+    }
 }

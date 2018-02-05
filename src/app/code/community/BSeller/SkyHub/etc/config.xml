@@ -14,8 +14,25 @@
         <models>
             <bseller_skyhub>
                 <class>BSeller_SkyHub_Model</class>
+                <resourceModel>bseller_skyhub_resource</resourceModel>
             </bseller_skyhub>
+            <bseller_skyhub_resource>
+                <class>BSeller_SkyHub_Model_Resource</class>
+                <entities>
+                    <product_attributes_mapping>
+                        <table>bseller_skyhub_product_attributes_mapping</table>
+                    </product_attributes_mapping>
+                </entities>
+            </bseller_skyhub_resource>
         </models>
+        <resources>
+            <bseller_skyhub_setup>
+                <setup>
+                    <module>BSeller_SkyHub</module>
+                    <class>BSeller_SkyHub_Model_Resource_Setup</class>
+                </setup>
+            </bseller_skyhub_setup>
+        </resources>
         <events>
             <catalog_entity_attribute_save_after>
                 <observers>

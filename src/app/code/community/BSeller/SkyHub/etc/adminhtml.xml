@@ -7,17 +7,33 @@
                     <title>SkyHub Integration</title>
                     <sort_order>900</sort_order>
                     <children>
-                        <catalog_product_attributes>
+                        <catalog_product_attributes translate="title" module="bseller_skyhub">
                             <title>Product Attributes</title>
                             <sort_order>10</sort_order>
                             <children>
-                                <mapping>
+                                <mapping translate="title" module="bseller_skyhub">
                                     <title>Attributes Mapping</title>
                                     <sort_order>10</sort_order>
                                     <action>adminhtml/bseller_skyhub_product/mapAttributes</action>
                                 </mapping>
                             </children>
                         </catalog_product_attributes>
+                        <queues translate="title" module="bseller_skyhub">
+                            <title>Queues Management</title>
+                            <sort_order>800</sort_order>
+                            <children>
+                                <pending_products translate="title" module="bseller_skyhub">
+                                    <title>Integration Pending Products</title>
+                                    <sort_order>10</sort_order>
+                                    <action>adminhtml/bseller_skyhub_queue/pendingProducts</action>
+                                </pending_products>
+                                <error_products translate="title" module="bseller_skyhub">
+                                    <title>Products With Integration Errors</title>
+                                    <sort_order>20</sort_order>
+                                    <action>adminhtml/bseller_skyhub_queue/errorProducts</action>
+                                </error_products>
+                            </children>
+                        </queues>
                         <configuration translate="title" module="bseller_skyhub">
                             <title>Configuration</title>
                             <sort_order>900</sort_order>
@@ -38,6 +54,30 @@
                                 <title>SkyHub Integration</title>
                                 <sort_order>900</sort_order>
                                 <children>
+                                    <catalog_product_attributes translate="title" module="bseller_skyhub">
+                                        <title>Product Attributes</title>
+                                        <sort_order>10</sort_order>
+                                        <children>
+                                            <mapping translate="title" module="bseller_skyhub">
+                                                <title>Attributes Mapping</title>
+                                                <sort_order>10</sort_order>
+                                            </mapping>
+                                        </children>
+                                    </catalog_product_attributes>
+                                    <queues translate="title" module="bseller_skyhub">
+                                        <title>Queues Management</title>
+                                        <sort_order>800</sort_order>
+                                        <children>
+                                            <pending_products translate="title" module="bseller_skyhub">
+                                                <title>Integration Pending Products</title>
+                                                <sort_order>10</sort_order>
+                                            </pending_products>
+                                            <error_products translate="title" module="bseller_skyhub">
+                                                <title>Products with Error</title>
+                                                <sort_order>20</sort_order>
+                                            </error_products>
+                                        </children>
+                                    </queues>
                                     <configuration translate="title" module="bseller_skyhub">
                                         <title>Configuration</title>
                                         <sort_order>900</sort_order>

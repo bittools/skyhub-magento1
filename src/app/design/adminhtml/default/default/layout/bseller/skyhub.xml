@@ -1,4 +1,17 @@
 <?xml version="1.0"?>
 <layout>
+    <!-- Catalog Product Attributes Mapping -->
+    <adminhtml_bseller_skyhub_product_mapattributes>
+        <label>Catalog Product Attributes Mapping</label>
+    </adminhtml_bseller_skyhub_product_mapattributes>
 
+    <!-- Integration Pending Products -->
+    <adminhtml_bseller_skyhub_queue_pendingproducts>
+        <label>Integration Pending Products</label>
+    </adminhtml_bseller_skyhub_queue_pendingproducts>
+
+    <!-- Products With Integration Error -->
+    <adminhtml_bseller_skyhub_queue_errorproducts>
+        <label>Products With Integration Errors</label>
+    </adminhtml_bseller_skyhub_queue_errorproducts>
 </layout>
