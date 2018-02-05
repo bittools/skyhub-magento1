@@ -1,2 +1,3 @@
-src/app/code/community/BSeller/SkyHub  app/code/community/BSeller/SkyHub
-src/app/etc/modules/BSeller_SkyHub.xml app/etc/modules/BSeller_SkyHub.xml
+src/app/code/community/BSeller/SkyHub   app/code/community/BSeller/SkyHub
+src/app/etc/modules/BSeller_SkyHub.xml  app/etc/modules/BSeller_SkyHub.xml
+src/app/locale/pt_BR/BSeller/SkyHub.csv app/locale/pt_BR/BSeller/SkyHub.csv
