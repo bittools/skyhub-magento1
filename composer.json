@@ -1,0 +1,6 @@
+{
+    "require": {
+        "tiagosampaio/skyhub-php": "dev-develop"
+    },
+    "minimum-stability": "dev"
+}
