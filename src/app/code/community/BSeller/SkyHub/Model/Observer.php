@@ -14,7 +14,7 @@
 class BSeller_SkyHub_Model_Observer
 {
 
-    use BSeller_SkyHub_Trait_Processors;
+    use BSeller_SkyHub_Trait_Integrator;
 
 
     /**

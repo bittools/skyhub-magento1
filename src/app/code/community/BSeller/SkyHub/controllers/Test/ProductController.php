@@ -3,7 +3,7 @@
 class BSeller_SkyHub_Test_ProductController extends BSeller_SkyHub_Controller_Front_Action
 {
 
-    use BSeller_SkyHub_Trait_Processors;
+    use BSeller_SkyHub_Trait_Integrator;
 
 
     public function attributesAction()
@@ -21,6 +21,16 @@ class BSeller_SkyHub_Test_ProductController extends BSeller_SkyHub_Controller_Fr
             
             break;
         }
+    }
+    
+    
+    public function entityAction()
+    {
+        $productId = $this->getRequest()->getParam('id');
+        
+        /** @var Mage_Catalog_Model_Product $product */
+        $product = Mage::getModel('catalog/product')->load($productId);
+        
     }
 
 }

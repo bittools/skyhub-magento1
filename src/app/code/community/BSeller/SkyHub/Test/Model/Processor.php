@@ -3,7 +3,7 @@
 class BSeller_SkyHub_Test_Model_Processor extends EcomDev_PHPUnit_Test_Case
 {
 
-    use BSeller_SkyHub_Trait_Processors;
+    use BSeller_SkyHub_Trait_Integrator;
 
 
     /**

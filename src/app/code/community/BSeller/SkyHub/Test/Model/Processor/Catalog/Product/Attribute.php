@@ -4,7 +4,7 @@ class BSeller_SkyHub_Test_Model_Processor_Catalog_Product_Attribute extends Ecom
 {
 
     use BSeller_SkyHub_Trait_Service,
-        BSeller_SkyHub_Trait_Processors;
+        BSeller_SkyHub_Trait_Integrator;
 
 
     /**

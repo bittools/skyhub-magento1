@@ -1,6 +1,6 @@
 <?php
 
-abstract class BSeller_SkyHub_Model_Processor
+abstract class BSeller_SkyHub_Model_Integrator_IntegratorAbstract
 {
 
     use BSeller_SkyHub_Trait_Service,
@@ -8,7 +8,7 @@ abstract class BSeller_SkyHub_Model_Processor
 
 
     /**
-     * BSeller_SkyHub_Model_Processor constructor.
+     * BSeller_SkyHub_Model_Integrator constructor.
      */
     public function __construct()
     {
