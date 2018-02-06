@@ -51,8 +51,13 @@ $table = $this->newTable($tableName)
          'nullable' => false,
          'default'  => true,
      ])
+     ->addColumn('editable', $this::TYPE_BOOLEAN, 1, [
+         'nullable' => false,
+         'default'  => true,
+     ])
 ;
 
+$this->addTimestamps($table);
 $conn->createTable($table);
 
 $this->addIndex(['skyhub_code', 'attribute_id'], $tableName);

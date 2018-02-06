@@ -16,7 +16,17 @@
 class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Setup
 {
     
-    use BSeller_SkyHub_Trait_Config;
+    use BSeller_SkyHub_Trait_Data,
+        BSeller_SkyHub_Trait_Config;
+    
+    /** @var Mage_Eav_Model_Resource_Entity_Attribute_Collection */
+    protected $attributeCollection;
+    
+    /** @var array */
+    protected $productAttributes = [];
+    
+    /** @var array */
+    protected $entityTypes       = [];
     
     
     /**
@@ -33,18 +43,125 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
      */
     public function installSkyHubRequiredAttributes()
     {
-        $attributes = (array) $this->getSkyHubFixedAttributes();
+        $attributes = (array)  $this->getSkyHubFixedAttributes();
+        $table      = (string) $this->getTable('bseller_skyhub/product_attributes_mapping');
         
         /** @var array $attribute */
-        foreach ($attributes as $skyhubCode => $attribute) {
-            $sku = $attribute['sku'];
-            $label = $attribute['sku'];
-            $type = $attribute['sku'];
-            $description = $attribute['sku'];
-            $validation = $attribute['sku'];
-            $magentoCode = $attribute['sku'];
+        foreach ($attributes as $skyhubCode => $data) {
+            $label       = $this->arrayExtract($data, 'label');
+            $type        = $this->arrayExtract($data, 'type');
+            $description = $this->arrayExtract($data, 'description');
+            $validation  = $this->arrayExtract($data, 'validation');
+            $magentoCode = $this->arrayExtract($data, 'attribute_code');
+            $enabled     = (bool) $this->arrayExtract($data, 'required', true);
+            $required    = (bool) $this->arrayExtract($data, 'required', true);
+            $editable    = (bool) $this->arrayExtract($data, 'editable', true);
+            
+            if (empty($skyhubCode) || empty($type)) {
+                continue;
+            }
+            
+            $attributeData = [
+                'skyhub_code'        => $skyhubCode,
+                'skyhub_label'       => $label,
+                'skyhub_description' => $description,
+                'enabled'            => $enabled,
+                'type'               => $type,
+                'validation'         => $validation,
+                'required'           => $required,
+                'editable'           => $editable,
+            ];
+            
+            /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+            if ($attribute = $this->getAttributeByCode($magentoCode)) {
+                $attributeData['attribute_id'] = $attribute->getId();
+            }
+            
+            $this->getConnection()->beginTransaction();
+            
+            try {
+                /** @var Varien_Db_Select $select */
+                $select = $this->getConnection()
+                               ->select()
+                               ->from($table, 'id')
+                               ->where('skyhub_code = :skyhub_code')
+                               ->limit(1);
+    
+                $id = $this->getConnection()->fetchOne($select, [':skyhub_code' => $skyhubCode]);
+    
+                if ($id) {
+                    $this->getConnection()->update($table, $attributeData, "id = {$id}");
+                    $this->getConnection()->commit();
+                    continue;
+                }
+    
+                $this->getConnection()->insert($table, $attributeData);
+                $this->getConnection()->commit();
+            } catch (Exception $e) {
+                $this->getConnection()->rollBack();
+            }
         }
         
         return $this;
+    }
+    
+    
+    /**
+     * @param string $attributeCode
+     *
+     * @return bool|Mage_Eav_Model_Entity_Attribute
+     */
+    protected function getAttributeByCode($attributeCode)
+    {
+        $this->initAttributeCollection();
+        
+        if (!isset($this->productAttributes[$attributeCode])) {
+            return false;
+        }
+    
+        return $this->productAttributes[$attributeCode];
+    }
+    
+    
+    /**
+     * @return Mage_Eav_Model_Resource_Entity_Attribute_Collection
+     */
+    protected function initAttributeCollection()
+    {
+        if (!empty($this->attributeCollection)) {
+            return $this->attributeCollection;
+        }
+        
+        $entityType = $this->getEntityTypeId(Mage_Catalog_Model_Product::ENTITY);
+        
+        /** @var Mage_Eav_Model_Resource_Entity_Attribute_Collection $collection */
+        $this->attributeCollection = Mage::getResourceModel('eav/entity_attribute_collection');
+        $this->attributeCollection->setEntityTypeFilter($entityType->getId());
+        
+        /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+        foreach ($this->attributeCollection as $attribute) {
+            $this->productAttributes[$attribute->getAttributeCode()] = $attribute;
+        }
+        
+        return $this->attributeCollection;
+    }
+    
+    
+    /**
+     * @param string $code
+     *
+     * @return Mage_Eav_Model_Entity_Type
+     */
+    protected function getEntityTypeId($code)
+    {
+        if (isset($this->entityTypes[$code])) {
+            return $this->entityTypes[$code];
+        }
+        
+        $type = Mage::getModel('eav/entity_type')->loadByCode($code);
+    
+        $this->entityTypes[$code] = $type;
+        
+        return $type;
     }
 }

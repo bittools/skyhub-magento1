@@ -17,24 +17,27 @@
         <attributes>
             <sku>
                 <label>Product Sku</label>
-                <description/>
+                <description>The product's main SKU (Stock Keeping Unit).</description>
                 <type>string</type>
                 <attribute_code>sku</attribute_code>
                 <validation/>
+                <required>1</required>
             </sku>
             <name>
                 <label>Product Name</label>
-                <description/>
+                <description>The product's name.</description>
                 <type>string</type>
                 <attribute_code>name</attribute_code>
                 <validation/>
+                <required>1</required>
             </name>
             <description>
                 <label>Product Description</label>
-                <description/>
+                <description>The product's description.</description>
                 <type>string</type>
                 <attribute_code>description</attribute_code>
                 <validation/>
+                <required>1</required>
             </description>
             <status>
                 <label>Product Status</label>
@@ -42,67 +45,97 @@
                 <type>boolean</type>
                 <attribute_code>status</attribute_code>
                 <validation/>
+                <required>1</required>
             </status>
+            <qty>
+                <label>Product Stock Quantity</label>
+                <description>The product's stock quantity available in store.</description>
+                <type>decimal</type>
+                <attribute_code/>
+                <validation/>
+                <enabled>1</enabled>
+                <editable>0</editable>
+                <required>1</required>
+            </qty>
             <price>
                 <label>Product Price</label>
                 <description/>
                 <type>decimal</type>
                 <attribute_code>price</attribute_code>
                 <validation/>
+                <required>1</required>
             </price>
             <promotional_price>
                 <label>Product Promotional Price</label>
                 <description/>
                 <type>decimal</type>
                 <attribute_code>special_price</attribute_code>
+                <validation/>
+                <required>1</required>
             </promotional_price>
             <cost>
                 <label>Product Cost</label>
                 <description/>
                 <type>decimal</type>
                 <attribute_code>cost</attribute_code>
+                <validation/>
+                <required>1</required>
             </cost>
             <weight>
                 <label>Product Weight</label>
                 <description/>
                 <type>decimal</type>
                 <attribute_code>weight</attribute_code>
+                <validation/>
+                <required>1</required>
             </weight>
             <height>
                 <label>Product Height</label>
                 <description/>
                 <type>decimal</type>
                 <attribute_code>height</attribute_code>
+                <validation/>
+                <required>1</required>
             </height>
             <width>
                 <label>Product Width</label>
                 <description/>
                 <type>decimal</type>
                 <attribute_code>width</attribute_code>
+                <validation/>
+                <required>1</required>
             </width>
             <length>
                 <label>Product Length</label>
                 <description/>
                 <type>decimal</type>
                 <attribute_code>length</attribute_code>
+                <validation/>
+                <required>1</required>
             </length>
             <brand>
                 <label>Product Brand</label>
                 <description/>
                 <type>string</type>
                 <attribute_code>brand</attribute_code>
+                <validation/>
+                <required>1</required>
             </brand>
             <ean>
                 <label>Product EAN</label>
                 <description/>
                 <type>string</type>
                 <attribute_code>ean</attribute_code>
+                <validation/>
+                <required>1</required>
             </ean>
             <nbm>
                 <label>Product NBM</label>
                 <description/>
                 <type>string</type>
                 <attribute_code>nbm</attribute_code>
+                <validation/>
+                <required>1</required>
             </nbm>
         </attributes>
     </skyhub>
