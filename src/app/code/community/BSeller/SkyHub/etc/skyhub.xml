@@ -41,7 +41,7 @@
             </description>
             <status>
                 <label>Product Status</label>
-                <description/>
+                <description>The product status that identifies if the product is enabled or disabled.</description>
                 <type>boolean</type>
                 <attribute_code>status</attribute_code>
                 <validation/>
@@ -59,7 +59,7 @@
             </qty>
             <price>
                 <label>Product Price</label>
-                <description/>
+                <description>The product's current price.</description>
                 <type>decimal</type>
                 <attribute_code>price</attribute_code>
                 <validation/>
@@ -67,7 +67,7 @@
             </price>
             <promotional_price>
                 <label>Product Promotional Price</label>
-                <description/>
+                <description>The product's current promotional price.</description>
                 <type>decimal</type>
                 <attribute_code>special_price</attribute_code>
                 <validation/>
@@ -75,7 +75,7 @@
             </promotional_price>
             <cost>
                 <label>Product Cost</label>
-                <description/>
+                <description>The product's cost.</description>
                 <type>decimal</type>
                 <attribute_code>cost</attribute_code>
                 <validation/>
@@ -83,7 +83,7 @@
             </cost>
             <weight>
                 <label>Product Weight</label>
-                <description/>
+                <description>The product's weight (in centimeters always).</description>
                 <type>decimal</type>
                 <attribute_code>weight</attribute_code>
                 <validation/>
@@ -91,7 +91,7 @@
             </weight>
             <height>
                 <label>Product Height</label>
-                <description/>
+                <description>The product's height (in centimeters always).</description>
                 <type>decimal</type>
                 <attribute_code>height</attribute_code>
                 <validation/>
@@ -99,7 +99,7 @@
             </height>
             <width>
                 <label>Product Width</label>
-                <description/>
+                <description>The product's width (in centimeters always).</description>
                 <type>decimal</type>
                 <attribute_code>width</attribute_code>
                 <validation/>
@@ -107,7 +107,7 @@
             </width>
             <length>
                 <label>Product Length</label>
-                <description/>
+                <description>The product's length (in centimeters always).</description>
                 <type>decimal</type>
                 <attribute_code>length</attribute_code>
                 <validation/>
@@ -115,7 +115,7 @@
             </length>
             <brand>
                 <label>Product Brand</label>
-                <description/>
+                <description>The product's brand.</description>
                 <type>string</type>
                 <attribute_code>brand</attribute_code>
                 <validation/>
@@ -123,7 +123,7 @@
             </brand>
             <ean>
                 <label>Product EAN</label>
-                <description/>
+                <description>The product's valid EAN number.</description>
                 <type>string</type>
                 <attribute_code>ean</attribute_code>
                 <validation/>
@@ -131,7 +131,7 @@
             </ean>
             <nbm>
                 <label>Product NBM</label>
-                <description/>
+                <description>The product's valid NBM.</description>
                 <type>string</type>
                 <attribute_code>nbm</attribute_code>
                 <validation/>
