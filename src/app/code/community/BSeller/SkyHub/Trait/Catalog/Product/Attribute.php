@@ -54,7 +54,9 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
         
         /** @var Mage_Eav_Model_Resource_Entity_Attribute_Collection $collection */
         $this->attributeCollection = Mage::getResourceModel('eav/entity_attribute_collection');
-        $this->attributeCollection->setEntityTypeFilter($entityType->getId());
+        $this->attributeCollection
+            ->setEntityTypeFilter($entityType->getId())
+            ->setOrder('attribute_code', 'ASC');
         
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         foreach ($this->attributeCollection as $attribute) {

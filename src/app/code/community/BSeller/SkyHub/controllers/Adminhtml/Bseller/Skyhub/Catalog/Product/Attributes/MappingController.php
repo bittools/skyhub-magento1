@@ -65,10 +65,43 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
     }
     
     
+    public function saveAction()
+    {
+        $id          = (int) $this->getRequest()->getPost('id');
+        $attributeId = (int) $this->getRequest()->getPost('attribute_id');
+    
+        /**
+         * @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mapping
+         * @var Mage_Eav_Model_Entity_Attribute                         $attribute
+         */
+        $mapping   = $this->getMapping($id);
+        $attribute = $this->getEntityAttribute($attributeId);
+        
+        if (!$mapping->getId() || !$attribute->getId()) {
+            $this->_redirect('*/*/');
+            return;
+        }
+        
+        $mapping->setAttributeId($attribute->getId());
+        $mapping->save();
+        
+        $this->_getSession()
+             ->addSuccess($this->__(
+                 'SkyHub Attribute `%s` successfully linked to Magento attribute `%s`.',
+                 $mapping->getSkyhubCode(),
+                 $attribute->getAttributeCode()
+             ));
+        
+        $this->_redirect('*/*');
+    }
+    
+    
     /**
      * @param int $id
      *
      * @return BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping
+     *
+     * @throws Mage_Core_Exception
      */
     protected function getMapping($id)
     {
@@ -79,6 +112,19 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
         Mage::register('current_attributes_mapping', $mapping, true);
         
         return $mapping;
+    }
+    
+    
+    /**
+     * @param int $attributeId
+     *
+     * @return Mage_Eav_Model_Entity_Attribute
+     */
+    protected function getEntityAttribute($attributeId)
+    {
+        /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+        $attribute = Mage::getModel('eav/entity_attribute')->load((int) $attributeId);
+        return $attribute;
     }
 
 }

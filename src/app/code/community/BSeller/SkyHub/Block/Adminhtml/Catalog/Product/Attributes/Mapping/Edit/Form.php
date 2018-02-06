@@ -16,12 +16,26 @@ class BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Attributes_Mapping_Edit_For
 {
     
     /**
+     * Init form
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setId('block_form');
+    }
+    
+    
+    /**
      * @return $this
      */
     protected function _prepareForm()
     {
         /** @var Varien_Data_Form $form */
-        $form = new Varien_Data_Form();
+        $form = new Varien_Data_Form([
+            'id'     => 'edit_form',
+            'action' => $this->getData('action'),
+            'method' => 'post'
+        ]);
     
         /** @var Varien_Data_Form_Element_Fieldset $fieldset */
         $fieldset = $form->addFieldset('general', [
@@ -30,34 +44,32 @@ class BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Attributes_Mapping_Edit_For
         
         $fieldset->addField('id', 'hidden', [
             'name'  => 'id',
-            'value' => $this->getMapping()->getId(),
         ]);
         
         $fieldset->addField('skyhub_code', 'label', [
             'name'  => 'skyhub_code',
             'label' => $this->__('SkyHub Code'),
-            'value' => $this->getMapping()->getSkyhubCode(),
         ]);
         
         $fieldset->addField('skyhub_label', 'label', [
             'name'  => 'skyhub_label',
             'label' => $this->__('SkyHub Label'),
-            'value' => $this->getMapping()->getSkyhubLabel(),
         ]);
         
         $fieldset->addField('skyhub_description', 'label', [
             'name'  => 'skyhub_description',
             'label' => $this->__('SkyHub Description'),
-            'value' => $this->getMapping()->getSkyhubDescription(),
         ]);
         
         $fieldset->addField('attribute_id', 'select', [
-            'name'    => 'attribute_id',
-            'label'   => $this->__('Related Attribute'),
-            'value'   => $this->getMapping()->getAttributeId(),
-            'options' => Mage::getModel('bseller_skyhub/system_config_source_catalog_product_attributes')->toArray(),
+            'name'     => 'attribute_id',
+            'label'    => $this->__('Related Attribute'),
+            'required' => true,
+            'options'  => Mage::getModel('bseller_skyhub/system_config_source_catalog_product_attributes')->toArray(),
         ]);
-        
+    
+        $form->setValues($this->getMapping()->getData());
+        $form->setUseContainer(true);
         $this->setForm($form);
         
         return $this;
@@ -78,5 +90,4 @@ class BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Attributes_Mapping_Edit_For
         
         return $mapping;
     }
-
 }

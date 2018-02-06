@@ -61,4 +61,6 @@ $this->addTimestamps($table);
 $conn->createTable($table);
 
 $this->addIndex(['skyhub_code', 'attribute_id'], $tableName);
-$this->addForeignKey($tableName, 'attribute_id', 'eav/attribute', 'attribute_id');
+$this->addForeignKey(
+    $tableName, 'attribute_id', 'eav/attribute', 'attribute_id', $this::FK_ACTION_SET_NULL, $this::FK_ACTION_SET_NULL
+);

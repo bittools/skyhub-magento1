@@ -24,7 +24,9 @@ class BSeller_SkyHub_Model_System_Config_Source_Catalog_Product_Attributes
     protected function optionsKeyValue()
     {
         $attributes = (array) $this->getProductAttributes();
-        $options    = [];
+        $options    = [
+            '' => $this->__('-- Select One Attribute --'),
+        ];
         
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         foreach ($attributes as $attribute) {
@@ -34,5 +36,4 @@ class BSeller_SkyHub_Model_System_Config_Source_Catalog_Product_Attributes
         
         return $options;
     }
-
 }

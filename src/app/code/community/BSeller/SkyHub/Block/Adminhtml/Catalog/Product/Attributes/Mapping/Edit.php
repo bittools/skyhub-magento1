@@ -18,6 +18,7 @@ class BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Attributes_Mapping_Edit
     protected $_blockGroup = 'bseller_skyhub';
     protected $_controller = 'adminhtml_catalog_product_attributes_mapping';
     protected $_mode       = 'edit';
+    protected $_objectId   = 'id';
     
     
     /**
@@ -28,5 +29,22 @@ class BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Attributes_Mapping_Edit
         parent::__construct();
         $this->removeButton('delete');
     }
-
+    
+    
+    /**
+     * @return string
+     */
+    public function getHeaderText()
+    {
+        return $this->__('Edit Product Attribute Mapping');
+    }
+    
+    
+    /**
+     * @return string
+     */
+    public function getFormActionUrl()
+    {
+        return $this->getUrl('*/*/save');
+    }
 }
