@@ -1,0 +1,11 @@
+tr.not-editable td {
+    color: #aaa !important;
+}
+
+tr.linked td {
+    color: green;
+}
+
+tr.unlinked td {
+    color: red;
+}

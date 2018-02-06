@@ -6,6 +6,11 @@
         </BSeller_SkyHub>
     </modules>
     <global>
+        <blocks>
+            <bseller_skyhub>
+                <class>BSeller_SkyHub_Block</class>
+            </bseller_skyhub>
+        </blocks>
         <helpers>
             <bseller_skyhub>
                 <class>BSeller_SkyHub_Helper</class>
@@ -63,6 +68,13 @@
                 </bseller_skyhub>
             </modules>
         </translate>
+        <layout>
+            <updates>
+                <bseller_skyhub>
+                    <file>bseller/skyhub.xml</file>
+                </bseller_skyhub>
+            </updates>
+        </layout>
     </frontend>
     <adminhtml>
         <translate>
@@ -74,6 +86,13 @@
                 </bseller_skyhub>
             </modules>
         </translate>
+        <layout>
+            <updates>
+                <bseller_skyhub>
+                    <file>bseller/skyhub.xml</file>
+                </bseller_skyhub>
+            </updates>
+        </layout>
     </adminhtml>
     <admin>
         <routers>

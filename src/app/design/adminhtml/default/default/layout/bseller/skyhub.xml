@@ -3,6 +3,10 @@
     <!-- Catalog Product Attributes Mapping -->
     <adminhtml_bseller_skyhub_product_mapattributes>
         <label>Catalog Product Attributes Mapping</label>
+        <update handle="ADD_STYLES"/>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_catalog_product_attributes_mapping"/>
+        </reference>
     </adminhtml_bseller_skyhub_product_mapattributes>
 
     <!-- Integration Pending Products -->
@@ -14,4 +18,12 @@
     <adminhtml_bseller_skyhub_queue_errorproducts>
         <label>Products With Integration Errors</label>
     </adminhtml_bseller_skyhub_queue_errorproducts>
+
+    <ADD_STYLES>
+        <reference name="head">
+            <action method="addCss">
+                <name>bseller/skyhub/css/styles.css</name>
+            </action>
+        </reference>
+    </ADD_STYLES>
 </layout>
