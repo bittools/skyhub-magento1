@@ -11,12 +11,45 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
+
+/**
+ * @method $this setSkyhubCode(string $code)
+ * @method $this setSkyhubLabel(string $label)
+ * @method $this setSkyhubDescription(string $description)
+ * @method $this setAttributeId(int $id)
+ *
+ * @method string getSkyhubCode()
+ * @method string getSkyhubLabel()
+ * @method string getSkyhubDescription()
+ * @method int    getAttributeId()
+ */
 class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Core_Model_Abstract
 {
     
     public function _construct()
     {
         $this->_init('bseller_skyhub/catalog_product_attributes_mapping');
+    }
+    
+    
+    /**
+     * @return bool|Mage_Eav_Model_Entity_Attribute
+     */
+    public function getAttribute()
+    {
+        if (!$this->getAttributeId()) {
+            return false;
+        }
+        
+        if ($this->hasData('attribute')) {
+            return $this->getData('attribute');
+        }
+    
+        /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+        $attribute = Mage::getModel('eav/entity_attribute')->load((int) $this->getAttributeId());
+        $this->setData('attribute', $attribute);
+        
+        return $attribute;
     }
     
 }

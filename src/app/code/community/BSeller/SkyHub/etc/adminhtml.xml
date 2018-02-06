@@ -7,17 +7,17 @@
                     <title>SkyHub Integration</title>
                     <sort_order>900</sort_order>
                     <children>
-                        <catalog_product_attributes translate="title" module="bseller_skyhub">
+                        <catalog_product_attributes_mapping translate="title" module="bseller_skyhub">
                             <title>Product Attributes</title>
                             <sort_order>10</sort_order>
                             <children>
-                                <mapping translate="title" module="bseller_skyhub">
+                                <grid translate="title" module="bseller_skyhub">
                                     <title>Attributes Mapping</title>
                                     <sort_order>10</sort_order>
-                                    <action>adminhtml/bseller_skyhub_product/mapAttributes</action>
-                                </mapping>
+                                    <action>adminhtml/bseller_skyhub_catalog_product_attributes_mapping</action>
+                                </grid>
                             </children>
-                        </catalog_product_attributes>
+                        </catalog_product_attributes_mapping>
                         <queues translate="title" module="bseller_skyhub">
                             <title>Queues Management</title>
                             <sort_order>800</sort_order>

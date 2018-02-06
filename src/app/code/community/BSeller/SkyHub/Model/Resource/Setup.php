@@ -17,16 +17,8 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
 {
     
     use BSeller_SkyHub_Trait_Data,
-        BSeller_SkyHub_Trait_Config;
-    
-    /** @var Mage_Eav_Model_Resource_Entity_Attribute_Collection */
-    protected $attributeCollection;
-    
-    /** @var array */
-    protected $productAttributes = [];
-    
-    /** @var array */
-    protected $entityTypes       = [];
+        BSeller_SkyHub_Trait_Config,
+        BSeller_SkyHub_Trait_Catalog_Product_Attribute;
     
     
     /**
@@ -103,65 +95,5 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
         }
         
         return $this;
-    }
-    
-    
-    /**
-     * @param string $attributeCode
-     *
-     * @return bool|Mage_Eav_Model_Entity_Attribute
-     */
-    protected function getAttributeByCode($attributeCode)
-    {
-        $this->initAttributeCollection();
-        
-        if (!isset($this->productAttributes[$attributeCode])) {
-            return false;
-        }
-    
-        return $this->productAttributes[$attributeCode];
-    }
-    
-    
-    /**
-     * @return Mage_Eav_Model_Resource_Entity_Attribute_Collection
-     */
-    protected function initAttributeCollection()
-    {
-        if (!empty($this->attributeCollection)) {
-            return $this->attributeCollection;
-        }
-        
-        $entityType = $this->getEntityTypeId(Mage_Catalog_Model_Product::ENTITY);
-        
-        /** @var Mage_Eav_Model_Resource_Entity_Attribute_Collection $collection */
-        $this->attributeCollection = Mage::getResourceModel('eav/entity_attribute_collection');
-        $this->attributeCollection->setEntityTypeFilter($entityType->getId());
-        
-        /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        foreach ($this->attributeCollection as $attribute) {
-            $this->productAttributes[$attribute->getAttributeCode()] = $attribute;
-        }
-        
-        return $this->attributeCollection;
-    }
-    
-    
-    /**
-     * @param string $code
-     *
-     * @return Mage_Eav_Model_Entity_Type
-     */
-    protected function getEntityTypeId($code)
-    {
-        if (isset($this->entityTypes[$code])) {
-            return $this->entityTypes[$code];
-        }
-        
-        $type = Mage::getModel('eav/entity_type')->loadByCode($code);
-    
-        $this->entityTypes[$code] = $type;
-        
-        return $type;
     }
 }
