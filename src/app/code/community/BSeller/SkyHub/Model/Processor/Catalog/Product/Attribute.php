@@ -10,11 +10,11 @@ class BSeller_SkyHub_Model_Processor_Catalog_Product_Attribute extends BSeller_S
 
 
     /**
-     * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+     * @param Mage_Eav_Model_Entity_Attribute $attribute
      *
      * @return bool|HandlerDefault|HandlerException
      */
-    public function create(Mage_Catalog_Model_Resource_Eav_Attribute $attribute)
+    public function create(Mage_Eav_Model_Entity_Attribute $attribute)
     {
         if (!$this->canIntegrateAttribute($attribute)) {
             return false;
@@ -27,11 +27,11 @@ class BSeller_SkyHub_Model_Processor_Catalog_Product_Attribute extends BSeller_S
 
 
     /**
-     * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+     * @param Mage_Eav_Model_Entity_Attribute $attribute
      *
      * @return bool|HandlerDefault|HandlerException
      */
-    public function update(Mage_Catalog_Model_Resource_Eav_Attribute $attribute)
+    public function update(Mage_Eav_Model_Entity_Attribute $attribute)
     {
         if (!$this->canIntegrateAttribute($attribute)) {
             return false;
@@ -44,11 +44,11 @@ class BSeller_SkyHub_Model_Processor_Catalog_Product_Attribute extends BSeller_S
 
 
     /**
-     * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+     * @param Mage_Eav_Model_Entity_Attribute $attribute
      *
      * @return bool
      */
-    protected function canIntegrateAttribute(Mage_Catalog_Model_Resource_Eav_Attribute $attribute)
+    protected function canIntegrateAttribute(Mage_Eav_Model_Entity_Attribute $attribute)
     {
         return (bool) ($attribute->getId() && $attribute->getAttributeCode() && $attribute->getFrontendLabel());
     }

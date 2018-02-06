@@ -9,3 +9,18 @@ tr.linked td {
 tr.unlinked td {
     color: red;
 }
+
+tr.not-editable td.magento-code {
+    background-image: none;
+}
+
+td.magento-code {
+    background-image: url('../images/magento-logo.png');
+    background-repeat: no-repeat;
+    background-size: 23px 23px;
+    padding-left: 25px;
+}
+
+td.skyhub-code {
+
+}

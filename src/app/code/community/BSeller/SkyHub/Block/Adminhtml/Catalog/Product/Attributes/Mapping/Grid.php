@@ -54,15 +54,17 @@ class BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Attributes_Mapping_Grid
         ));
         
         $this->addColumn('skyhub_code', array(
-            'header'    => $this->__('SkyHub Code'),
-            'width'     => '150px',
-            'align'     => 'left',
+            'header'           => $this->__('SkyHub Code'),
+            'width'            => '150px',
+            'align'            => 'left',
+            'column_css_class' => 'skyhub-code',
         ));
     
         $this->addColumn('attribute_code', array(
-            'header'    => $this->__('Magento Attribute Code'),
-            'width'     => '150px',
-            'align'     => 'left',
+            'header'           => $this->__('Magento Attribute Code'),
+            'width'            => '150px',
+            'align'            => 'left',
+            'column_css_class' => 'magento-code',
         ));
         
         $this->addColumn('skyhub_label', array(

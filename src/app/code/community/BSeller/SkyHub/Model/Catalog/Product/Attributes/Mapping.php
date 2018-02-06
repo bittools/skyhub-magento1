@@ -17,11 +17,13 @@
  * @method $this setSkyhubLabel(string $label)
  * @method $this setSkyhubDescription(string $description)
  * @method $this setAttributeId(int $id)
+ * @method $this setEditable(bool $flag)
  *
  * @method string getSkyhubCode()
  * @method string getSkyhubLabel()
  * @method string getSkyhubDescription()
  * @method int    getAttributeId()
+ * @method bool   getEditable()
  */
 class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Core_Model_Abstract
 {
