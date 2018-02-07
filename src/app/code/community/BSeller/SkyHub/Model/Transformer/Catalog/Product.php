@@ -14,7 +14,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
     public function convert(Mage_Catalog_Model_Product $product)
     {
         /** @var \SkyHub\Api\EntityInterface\Catalog\Product $interface */
-        $interface = $this->api()->productAttribute()->entityInterface();
+        $interface = $this->api()->product()->entityInterface();
         $interface->setSku($product->getSku())
             ->setName($product->getName())
             ->setDescription($product->getDescription())

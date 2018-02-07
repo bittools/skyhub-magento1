@@ -21,3 +21,5 @@
 "Magento Attribute Code","Código de Atributo no Magento"
 "SkyHub Label","Nome na SkyHub"
 "SkyHub Description","Descrição do Atributo"
+"BSeller SkyHub - Unlinked Attributes","BSeller SkyHub - Atributos Não Relacionados"
+"You have required attributes which are not mapped with your Magento attributes: ""%s"".","Você possui atributos obrigatórios na SkyHub que não estão mapeados com seus atributos Magento: ""%s""."

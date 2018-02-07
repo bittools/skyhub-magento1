@@ -1,6 +1,6 @@
 <?php
 
-class BSeller_SkyHub_Controller_Admin_Action extends Mage_Adminhtml_Controller_Action
+class BSeller_SkyHub_Controller_Admin_Action extends BSeller_Core_Controller_Adminhtml_Action
 {
     
     /**

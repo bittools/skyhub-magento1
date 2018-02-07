@@ -3,7 +3,8 @@
 class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Model_Integrator_IntegratorAbstract
 {
     
-    use BSeller_SkyHub_Trait_Transformers;
+    use BSeller_SkyHub_Trait_Transformers,
+        BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
     
     
     /**
@@ -130,18 +131,6 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
             return false;
         }
         
-        return true;
-    }
-    
-    
-    /**
-     * @param Mage_Catalog_Model_Product $product
-     *
-     * @return bool
-     */
-    public function canIntegrateProduct(Mage_Catalog_Model_Product $product)
-    {
-        /** @todo Validate Product for Create and Update methods only. */
         return true;
     }
     

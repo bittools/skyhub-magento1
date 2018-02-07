@@ -42,7 +42,22 @@ class BSeller_SkyHub_Test_ProductController extends BSeller_SkyHub_Controller_Fr
             
             return;
         }
-        
+    }
+    
+    
+    public function listAction()
+    {
+        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $response */
+        $response = $this->catalogProductIntegrator()->products();
+    
+        /** @var \SkyHub\Api\Handler\Response\HandlerException $response */
+        if ($response->exception()) {
+            $this->getResponse()
+                ->setHttpResponseCode($response->code())
+                ->setBody($response->message());
+            
+            return;
+        }
     }
 
 }
