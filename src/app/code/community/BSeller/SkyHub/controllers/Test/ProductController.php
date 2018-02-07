@@ -31,8 +31,18 @@ class BSeller_SkyHub_Test_ProductController extends BSeller_SkyHub_Controller_Fr
         /** @var Mage_Catalog_Model_Product $product */
         $product = Mage::getModel('catalog/product')->load($productId);
         
-        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $integrator */
-        $integrator = $this->catalogProductIntegrator()->product($product->getSku());
+        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $response */
+        $response = $this->catalogProductIntegrator()->product($product->getSku());
+    
+        /** @var \SkyHub\Api\Handler\Response\HandlerException $response */
+        if ($response->exception()) {
+            $this->getResponse()
+                ->setHttpResponseCode($response->code())
+                ->setBody($response->message());
+            
+            return;
+        }
+        
     }
 
 }
