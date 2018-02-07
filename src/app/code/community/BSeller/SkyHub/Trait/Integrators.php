@@ -1,6 +1,6 @@
 <?php
 
-trait BSeller_SkyHub_Trait_Integrator
+trait BSeller_SkyHub_Trait_Integrators
 {
 
     /**
