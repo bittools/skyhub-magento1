@@ -23,22 +23,6 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         $this->prepareMappedAttributes($product, $interface);
         $this->prepareSpecificationAttributes($product, $interface);
         
-        /*
-        $interface->setSku($product->getSku())
-            ->setName($product->getName())
-            ->setDescription($product->getDescription())
-            ->setBrand('')
-            ->setCost((float) $product->getCost())
-            ->setPrice((float) $product->getPrice())
-            ->setPromotionalPrice((float) $product->getFinalPrice())
-            ->setWeight((float) $product->getWeight())
-            ->setWidth((float) $product->getWeight())
-            ->setHeight(1)
-            ->setLength(1)
-            ->setStatus((bool) $product->getStatus())
-        ;
-        */
-        
         $this->prepareProductImages($product, $interface);
 
         return $interface;
@@ -200,6 +184,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
      * @return array|bool|mixed|string
      *
      * @throws Mage_Core_Model_Store_Exception
+     * @throws Mage_Core_Exception
      */
     protected function extractProductData(Mage_Catalog_Model_Product $product, Mage_Eav_Model_Entity_Attribute $attribute)
     {
@@ -220,15 +205,28 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                 return $data;
             } catch (Exception $e) {}
         }
+        
+        switch ($attribute->getAttributeCode()) {
+            case 'status':
+                if ($data == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
+                    return true;
+                }
+                
+                if ($data == Mage_Catalog_Model_Product_Status::STATUS_DISABLED) {
+                    return false;
+                }
+                
+                break;
+        }
     
         /**
          * Attribute is from type select.
          */
-        if ($attribute->getFrontend()->getInputType() == 'select') {
+        if (in_array($attribute->getFrontend()->getInputType(), ['select', 'multiselect'])) {
             $data = $attribute->getSource()->getOptionText($data);
         }
         
-        if (!empty($data)) {
+        if (!is_null($data)) {
             return $data;
         }
         
