@@ -22,10 +22,10 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         
         /** @var Product $interface */
         $interface = $this->api()->product()->entityInterface();
-        $this->prepareMappedAttributes($product, $interface);
-        $this->prepareSpecificationAttributes($product, $interface);
-        
-        $this->prepareProductImages($product, $interface);
+        $this->prepareMappedAttributes($product, $interface)
+             ->prepareSpecificationAttributes($product, $interface)
+             ->prepareProductCategories($product, $interface)
+             ->prepareProductImages($product, $interface);
 
         return $interface;
     }
@@ -46,6 +46,50 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         }
         
         return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param Product                    $interface
+     *
+     * @return $this
+     *
+     * @throws Mage_Core_Exception
+     */
+    public function prepareProductCategories(Mage_Catalog_Model_Product $product, Product $interface)
+    {
+        /** @var Mage_Catalog_Model_Resource_Category_Collection $categories */
+        $categories = $product->getCategoryCollection();
+        $categories->addAttributeToSelect([
+            'name',
+        ]);
+        
+        /** @var Mage_Catalog_Model_Category $category */
+        foreach ($categories as $category) {
+            $interface->addCategory($category->getId(), $this->extractProductCategoryPathString($category));
+        }
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Category $category
+     *
+     * @return string
+     * @throws Mage_Core_Model_Store_Exception
+     */
+    protected function extractProductCategoryPathString(Mage_Catalog_Model_Category $category)
+    {
+        $ids            = array_reverse(explode(',', $category->getPathInStore()));
+        $categoryPieces = [];
+        
+        foreach ($ids as $id) {
+            $categoryPieces[] = $category->getResource()->getAttributeRawValue($id, 'name', $this->getStore());
+        }
+        
+        return implode(' > ', $categoryPieces);
     }
     
     
