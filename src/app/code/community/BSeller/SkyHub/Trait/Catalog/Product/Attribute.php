@@ -18,10 +18,13 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     protected $attributeCollection;
     
     /** @var array */
-    protected $productAttributes = [];
+    protected $productAttributes   = [];
     
     /** @var array */
-    protected $entityTypes       = [];
+    protected $attributesWhitelist = [];
+    
+    /** @var array */
+    protected $entityTypes         = [];
     
     
     /**
@@ -38,6 +41,42 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
         }
         
         return $this->productAttributes[$attributeCode];
+    }
+    
+    
+    /**
+     * @param int $attributeId
+     *
+     * @return bool|Mage_Eav_Model_Entity_Attribute
+     */
+    protected function getAttributeById($attributeId)
+    {
+        $this->initAttributeCollection();
+        
+        /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+        foreach ($this->productAttributes as $attribute) {
+            if ($attributeId == $attribute->getId()) {
+                return $attribute;
+            }
+        }
+        
+        return false;
+    }
+    
+    
+    /**
+     * @return array
+     */
+    protected function getAllAttributeIds()
+    {
+        $attributeIds = [];
+        
+        /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+        foreach ($this->productAttributes as $attribute) {
+            $attributeIds[$attribute->getId()] = $attribute;
+        }
+        
+        return $attributeIds;
     }
     
     
@@ -93,5 +132,99 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
         $this->entityTypes[$code] = $type;
         
         return $type;
+    }
+    
+    
+    /**
+     * @return array
+     */
+    protected function getProductAttributeWhitelist()
+    {
+        if (!$this->attributesWhitelist) {
+            $this->attributesWhitelist = Mage::getModel('catalog/product')->getAttributes();
+        }
+        
+        return $this->attributesWhitelist;
+    }
+    
+    
+    /**
+     * @return array
+     */
+    protected function getProductAttributeBlacklist()
+    {
+        return [
+            'entity_id',
+            'special_price',
+            'attribute_set_id',
+            'options_container',
+            'media_gallery',
+            'thumbnail',
+            'small_image',
+            'image',
+            'msrp_display_actual_price_type',
+            'msrp_enabled',
+            'special_from_date',
+            'special_to_date',
+            'updated_at',
+            'created_at',
+            'visibility',
+            'url_path',
+            'url_key',
+            'entity_type_id',
+            'type_id',
+        ];
+    }
+    
+    
+    /**
+     * @param string $attributeCode
+     *
+     * @return bool
+     */
+    protected function isAttributeCodeInBlacklist($attributeCode)
+    {
+        $blacklist = $this->getProductAttributeBlacklist();
+        return in_array($attributeCode, $blacklist);
+    }
+    
+    
+    /**
+     * @param string $attributeCode
+     *
+     * @return bool
+     */
+    protected function isAttributeCodeInWhiteList($attributeCode)
+    {
+        $whitelist = $this->getProductAttributeWhitelist();
+        
+        /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+        foreach ($whitelist as $attribute) {
+            if ($attributeCode == $attribute->getAttributeCode()) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    
+    /**
+     * @param string $attributeCode
+     *
+     * @return bool
+     */
+    protected function isAttributeIdInWhiteList($attributeId)
+    {
+        $whitelist = $this->getProductAttributeWhitelist();
+        
+        /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+        foreach ($whitelist as $attribute) {
+            if ($attributeId == $attribute->getId()) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

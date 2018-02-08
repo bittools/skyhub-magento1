@@ -18,15 +18,23 @@
  * @method $this setSkyhubDescription(string $description)
  * @method $this setAttributeId(int $id)
  * @method $this setEditable(bool $flag)
+ * @method $this setType(string $type)
  *
  * @method string getSkyhubCode()
  * @method string getSkyhubLabel()
  * @method string getSkyhubDescription()
  * @method int    getAttributeId()
  * @method bool   getEditable()
+ * @method string getType()
  */
 class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Core_Model_Abstract
 {
+    
+    const DATA_TYPE_STRING   = 'string';
+    const DATA_TYPE_BOOLEAN  = 'boolean';
+    const DATA_TYPE_DECIMAL  = 'decimal';
+    const DATA_TYPE_INTEGER  = 'integer';
+    
     
     public function _construct()
     {

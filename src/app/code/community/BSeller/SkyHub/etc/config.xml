@@ -42,7 +42,7 @@
             <catalog_entity_attribute_save_after>
                 <observers>
                     <bseller_skyhub_update_attribute_after_save>
-                        <class>bseller_skyhub/observer</class>
+                        <class>bseller_skyhub/observer_integration</class>
                         <method>updateProductAttribute</method>
                     </bseller_skyhub_update_attribute_after_save>
                 </observers>

@@ -24,10 +24,22 @@ class BSeller_SkyHub_Model_Resource_Catalog_Product_Attributes_Mapping_Collectio
     /**
      * @return $this
      */
+    public function setMappedAttributesFilter()
+    {
+        $this->addFieldToFilter('attribute_id', ['notnull' => true]);
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @return $this
+     */
     public function setPendingAttributesFilter()
     {
         $this->addFieldToFilter('attribute_id', ['null' => true]);
         $this->addFieldToFilter('editable', 1);
+        
         return $this;
     }
     
