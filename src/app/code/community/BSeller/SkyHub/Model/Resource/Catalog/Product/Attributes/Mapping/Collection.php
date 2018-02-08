@@ -26,7 +26,16 @@ class BSeller_SkyHub_Model_Resource_Catalog_Product_Attributes_Mapping_Collectio
      */
     public function setMappedAttributesFilter()
     {
-        $this->addFieldToFilter('attribute_id', ['notnull' => true]);
+        $this->addFieldToFilter(
+            [
+                'attribute_id',
+                'editable',
+            ],
+            [
+                ['notnull' => true],
+                ['eq' => 0]
+            ]
+        );
         
         return $this;
     }

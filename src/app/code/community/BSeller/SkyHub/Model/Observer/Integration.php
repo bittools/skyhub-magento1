@@ -41,10 +41,10 @@ class BSeller_SkyHub_Model_Observer_Integration
             /** Attribute is being updated. */
             $processor->update($attribute);
             return;
+        } else {
+            /** Otherwise attribute is being created. */
+            $processor->create($attribute);
         }
-
-        /** Otherwise attribute is being created. */
-        $processor->create($attribute);
     }
     
     

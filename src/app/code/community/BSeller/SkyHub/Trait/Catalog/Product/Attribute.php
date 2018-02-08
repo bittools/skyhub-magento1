@@ -26,15 +26,19 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     /** @var array */
     protected $entityTypes         = [];
     
+    /** @var Mage_Catalog_Model_Product */
+    protected $product;
+    
     
     /**
-     * @param string $attributeCode
+     * @param Mage_Catalog_Model_Product $product
+     * @param string                     $attributeCode
      *
-     * @return bool|Mage_Eav_Model_Entity_Attribute
+     * @return bool
      */
-    protected function getAttributeByCode($attributeCode)
+    protected function getAttributeByCode(Mage_Catalog_Model_Product $product, $attributeCode)
     {
-        $this->initAttributeCollection();
+        $this->initProductAttributes($product);
         
         if (!isset($this->productAttributes[$attributeCode])) {
             return false;
@@ -45,13 +49,14 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     
     
     /**
-     * @param int $attributeId
+     * @param Mage_Catalog_Model_Product $product
+     * @param int                        $attributeId
      *
      * @return bool|Mage_Eav_Model_Entity_Attribute
      */
-    protected function getAttributeById($attributeId)
+    protected function getAttributeById(Mage_Catalog_Model_Product $product, $attributeId)
     {
-        $this->initAttributeCollection();
+        $this->initProductAttributes($product);
         
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         foreach ($this->productAttributes as $attribute) {
@@ -81,38 +86,58 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     
     
     /**
-     * @return Mage_Eav_Model_Resource_Entity_Attribute_Collection
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return array
      */
-    protected function initAttributeCollection()
+    protected function initProductAttributes(Mage_Catalog_Model_Product $product = null)
     {
-        if (!empty($this->attributeCollection)) {
-            return $this->attributeCollection;
+        /** @var Mage_Catalog_Model_Product $product */
+        $product = $this->getProduct($product);
+        
+        if (!empty($this->productAttributes)) {
+            return $this->productAttributes;
         }
         
-        $entityType = $this->getEntityTypeId(Mage_Catalog_Model_Product::ENTITY);
-        
-        /** @var Mage_Eav_Model_Resource_Entity_Attribute_Collection $collection */
-        $this->attributeCollection = Mage::getResourceModel('eav/entity_attribute_collection');
-        $this->attributeCollection
-            ->setEntityTypeFilter($entityType->getId())
-            ->setOrder('attribute_code', 'ASC');
-        
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        foreach ($this->attributeCollection as $attribute) {
+        foreach ($product->getAttributes() as $attribute) {
             $this->productAttributes[$attribute->getAttributeCode()] = $attribute;
         }
         
-        return $this->attributeCollection;
+        return $this->productAttributes;
     }
     
     
     /**
      * @return array
      */
-    protected function getProductAttributes()
+    protected function getProductAttributes(
+        Mage_Catalog_Model_Product $product,
+        array $ids = [],
+        array $excludeIds = []
+    )
     {
-        $this->initAttributeCollection();
-        return $this->productAttributes;
+        $this->initProductAttributes($product);
+        
+        $attributes = [];
+        
+        /**
+         * @var string                          $code
+         * @var Mage_Eav_Model_Entity_Attribute $attribute
+         */
+        foreach ($this->productAttributes as $code => $attribute) {
+            if (!empty($ids) && !in_array($attribute->getId(), $ids)) {
+                continue;
+            }
+            
+            if (!empty($excludeIds) && in_array($attribute->getId(), $excludeIds)) {
+                continue;
+            }
+            
+            $attributes[$code] = $attribute;
+        }
+        
+        return $attributes;
     }
     
     
@@ -127,7 +152,9 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
             return $this->entityTypes[$code];
         }
         
-        $type = Mage::getModel('eav/entity_type')->loadByCode($code);
+        /** @var Mage_Eav_Model_Entity_Type $type */
+        $type = Mage::getModel('eav/entity_type');
+        $type->loadByCode($code);
         
         $this->entityTypes[$code] = $type;
         
@@ -141,7 +168,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     protected function getProductAttributeWhitelist()
     {
         if (!$this->attributesWhitelist) {
-            $this->attributesWhitelist = Mage::getModel('catalog/product')->getAttributes();
+            $this->attributesWhitelist = $this->initProductAttributes();
         }
         
         return $this->attributesWhitelist;
@@ -226,5 +253,36 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
         }
         
         return false;
+    }
+    
+    
+    /**
+     * @param null|string|int|Mage_Catalog_Model_Product $product
+     *
+     * @return Mage_Catalog_Model_Product
+     */
+    protected function getProduct($product = null)
+    {
+        if ($product instanceof Mage_Catalog_Model_Product) {
+            $this->product = $product;
+            return $this->product;
+        }
+        
+        if ($product) {
+            /** @var Mage_Catalog_Model_Product $productModel */
+            $productModel = Mage::getModel('catalog/product');
+    
+            if (!empty($product)) {
+                $productModel->load((int) $product);
+            }
+    
+            if (!$productModel->getId()) {
+                $productModel->load((string) $product, 'sku');
+            }
+    
+            $this->product = $productModel;
+        }
+        
+        return $this->product;
     }
 }
