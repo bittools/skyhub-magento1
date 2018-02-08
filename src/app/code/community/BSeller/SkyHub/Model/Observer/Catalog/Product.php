@@ -11,43 +11,41 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-class BSeller_SkyHub_Model_Observer_Integration
+class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model_Observer_Abstract
 {
-
-    use BSeller_SkyHub_Trait_Data,
-        BSeller_SkyHub_Trait_Integrators,
-        BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
-
-
+    
     /**
      * @param Varien_Event_Observer $observer
      */
-    public function updateProductAttribute(Varien_Event_Observer $observer)
+    public function integrateProduct(Varien_Event_Observer $observer)
     {
-        /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
-        $attribute = $observer->getData('attribute');
-
-        if (!$attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute) {
+        /** @var Mage_Catalog_Model_Product $product */
+        $product = $observer->getData('product');
+        
+        if (!($product instanceof Mage_Catalog_Model_Product) || !$product->getId()) {
             return;
         }
-
-        /** @var BSeller_SkyHub_Model_Integrator_Catalog_Product_Attribute $processor */
-        $processor = $this->catalogProductAttributeIntegrator();
-
-        /**
-         * Call method according to product attribute's operation: update or creation.
-         */
-        if ($attribute->getOrigData('attribute_code')) {
-            /** Attribute is being updated. */
-            $processor->update($attribute);
-            return;
-        } else {
-            /** Otherwise attribute is being created. */
-            $processor->create($attribute);
+        
+        /** @var \SkyHub\Api\Handler\Response\HandlerAbstract $exists */
+        $exists = $this->catalogProductIntegratorMiddleware()
+                       ->integrator()
+                       ->product($product->getSku());
+        
+        if ($exists->success()) {
+            /** Update Product */
+            $this->catalogProductIntegratorMiddleware()->update($product);
+        }
+        
+        if ($exists->exception()) {
+            /** Create Product */
+            $this->catalogProductIntegratorMiddleware()->create($product);
         }
     }
     
     
+    /**
+     * @param Varien_Event_Observer $observer
+     */
     public function addIntegrateButtonToProductEditPage(Varien_Event_Observer $observer)
     {
         /** @var Mage_Adminhtml_Block_Catalog_Product_Edit $block */
@@ -66,7 +64,7 @@ class BSeller_SkyHub_Model_Observer_Integration
         if (!$this->canIntegrateProduct($product)) {
             return;
         }
-    
+        
         /** @var Mage_Adminhtml_Block_Widget_Button $backButton */
         $backButton = $block->getChild('back_button');
         
@@ -77,12 +75,12 @@ class BSeller_SkyHub_Model_Observer_Integration
         /** @var Mage_Adminhtml_Block_Widget_Button $button */
         $button = $block->getLayout()->createBlock('adminhtml/widget_button');
         $button->setData([
-             'label'   => Mage::helper('catalog')->__('Integrate With SkyHub'),
-             'onclick' => "setLocation('{$this->getIntegrateUrl($block)}')",
-             'class'   => 'success'
-         ]);
-    
-        $backButton->setBeforeHtml($button->toHtml());
+            'label'   => Mage::helper('catalog')->__('Integrate With SkyHub'),
+            'onclick' => "setLocation('{$this->getIntegrateUrl($block)}')",
+            'class'   => 'success'
+        ]);
+        
+        $backButton->setData('before_html', $button->toHtml());
     }
     
     

@@ -22,5 +22,4 @@ trait BSeller_SkyHub_Trait_Integrators
         $integrator = Mage::getModel('bseller_skyhub/integrator_catalog_product');
         return $integrator;
     }
-
 }

@@ -41,12 +41,20 @@
         <events>
             <catalog_entity_attribute_save_after>
                 <observers>
-                    <bseller_skyhub_update_attribute_after_save>
-                        <class>bseller_skyhub/observer_integration</class>
-                        <method>updateProductAttribute</method>
-                    </bseller_skyhub_update_attribute_after_save>
+                    <bseller_skyhub_integrate_catalog_product_attribute>
+                        <class>bseller_skyhub/observer_catalog_product_attribute</class>
+                        <method>integrateProductAttribute</method>
+                    </bseller_skyhub_integrate_catalog_product_attribute>
                 </observers>
             </catalog_entity_attribute_save_after>
+            <catalog_product_save_after>
+                <observers>
+                    <bseller_skyhub_integrate_catalog_product>
+                        <class>bseller_skyhub/observer_catalog_product</class>
+                        <method>integrateProduct</method>
+                    </bseller_skyhub_integrate_catalog_product>
+                </observers>
+            </catalog_product_save_after>
         </events>
     </global>
     <frontend>
@@ -97,7 +105,7 @@
             <adminhtml_block_html_before>
                 <observers>
                     <bseller_skyhub_add_integration_button_to_product_edit_page>
-                        <class>bseller_skyhub/observer_integration</class>
+                        <class>bseller_skyhub/observer_catalog_product</class>
                         <method>addIntegrateButtonToProductEditPage</method>
                     </bseller_skyhub_add_integration_button_to_product_edit_page>
                 </observers>
@@ -138,6 +146,9 @@
                 <api_key>wxVMVTkf_csx17LioTjY</api_key>
                 <api_token>bZa6Ml0zgS</api_token>
             </service>
+            <catalog_product_integration>
+                <method>2</method>
+            </catalog_product_integration>
         </bseller_skyhub>
     </default>
     <phpunit>

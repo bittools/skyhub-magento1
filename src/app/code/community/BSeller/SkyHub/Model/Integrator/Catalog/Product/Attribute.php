@@ -3,8 +3,7 @@
 use SkyHub\Api\Handler\Response\HandlerDefault;
 use SkyHub\Api\Handler\Response\HandlerException;
 
-class BSeller_SkyHub_Model_Integrator_Catalog_Product_Attribute
-    extends BSeller_SkyHub_Model_Integrator_IntegratorAbstract
+class BSeller_SkyHub_Model_Integrator_Catalog_Product_Attribute extends BSeller_SkyHub_Model_Integrator_Abstract
 {
 
     use BSeller_SkyHub_Trait_Transformers;

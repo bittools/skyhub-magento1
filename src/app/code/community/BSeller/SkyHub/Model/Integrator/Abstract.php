@@ -1,6 +1,6 @@
 <?php
 
-abstract class BSeller_SkyHub_Model_Integrator_IntegratorAbstract
+abstract class BSeller_SkyHub_Model_Integrator_Abstract implements BSeller_SkyHub_Model_Integrator_Interface
 {
 
     use BSeller_SkyHub_Trait_Service,

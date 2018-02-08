@@ -11,11 +11,8 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-class BSeller_SkyHub_Model_Observer_Notification
+class BSeller_SkyHub_Model_Observer_Notification extends BSeller_SkyHub_Model_Observer_Abstract
 {
-    
-    use BSeller_SkyHub_Trait_Data;
-    
     
     /**
      * @param Varien_Event_Observer $observer

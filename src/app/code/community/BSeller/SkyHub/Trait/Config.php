@@ -53,6 +53,17 @@ trait BSeller_SkyHub_Trait_Config
 
 
     /**
+     * @param string $field
+     *
+     * @return string|integer
+     */
+    protected function getCatalogProductIntegrationConfig($field)
+    {
+        return $this->getSkyHubModuleConfig($field, 'catalog_product_integration');
+    }
+
+
+    /**
      * @return boolean
      */
     protected function isModuleEnabled()
@@ -67,6 +78,15 @@ trait BSeller_SkyHub_Trait_Config
     protected function isLogEnabled()
     {
         return (bool) $this->getLogConfig('enabled');
+    }
+    
+    
+    /**
+     * @return int
+     */
+    protected function getCatalogProductIntegrationMethod()
+    {
+        return (int) $this->getCatalogProductIntegrationConfig('method');
     }
 
 

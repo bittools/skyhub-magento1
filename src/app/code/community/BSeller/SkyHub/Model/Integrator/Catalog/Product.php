@@ -1,6 +1,6 @@
 <?php
 
-class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Model_Integrator_IntegratorAbstract
+class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Model_Integrator_Abstract
 {
     
     use BSeller_SkyHub_Trait_Transformers,
