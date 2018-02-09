@@ -38,6 +38,19 @@ class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes extends BSe
 
 
     /**
+     * @param int $id
+     *
+     * @return string
+     */
+    public function getAttributeAutoUrl($id)
+    {
+        return $this->getUrl('adminhtml/bseller_skyhub_catalog_product_attributes_mapping/createAutomatically', [
+            'id' => $id
+        ]);
+    }
+
+
+    /**
      * @return BSeller_SkyHub_Model_Resource_Catalog_Product_Attributes_Mapping_Collection
      */
     public function getPendingAttributesCollection()

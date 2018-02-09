@@ -44,14 +44,18 @@ td.skyhub-code {
     padding: 10px;
 }
 
-.notification-global .skyhub-notification-container ul.unmapped-attribute-list {
+.skyhub-notification-container .unmapped-attribute-table {
     padding: 10px;
 }
 
-.notification-global .skyhub-notification-container ul.unmapped-attribute-list li {
+.skyhub-notification-container .unmapped-attribute-table tr {
 
 }
 
-.notification-global .skyhub-notification-container ul.unmapped-attribute-list li a {
+.skyhub-notification-container .unmapped-attribute-table td {
+
+}
+
+.skyhub-notification-container .unmapped-attribute-table td a {
 
 }

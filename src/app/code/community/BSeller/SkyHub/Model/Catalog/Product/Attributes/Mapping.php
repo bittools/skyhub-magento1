@@ -19,6 +19,7 @@
  * @method $this setAttributeId(int $id)
  * @method $this setEditable(bool $flag)
  * @method $this setType(string $type)
+ * @method $this setInput(string $inputType)
  *
  * @method string getSkyhubCode()
  * @method string getSkyhubLabel()
@@ -26,6 +27,7 @@
  * @method int    getAttributeId()
  * @method bool   getEditable()
  * @method string getType()
+ * @method string getInput()
  */
 class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Core_Model_Abstract
 {
@@ -34,7 +36,11 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
     const DATA_TYPE_BOOLEAN  = 'boolean';
     const DATA_TYPE_DECIMAL  = 'decimal';
     const DATA_TYPE_INTEGER  = 'integer';
-    
+
+    const INPUT_TYPE_TEXT        = 'text';
+    const INPUT_TYPE_SELECT      = 'select';
+    const INPUT_TYPE_MULTISELECT = 'multiselect';
+
     
     public function _construct()
     {
@@ -61,5 +67,70 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
         
         return $attribute;
     }
-    
+
+
+    /**
+     * @return string
+     */
+    public function getSkyhubLabelTranslated()
+    {
+        return $this->__($this->getSkyhubLabel());
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getInputType()
+    {
+        $type = $this->getInput();
+
+        if (!$type || !in_array($type, $this->getValidInputTypes())) {
+            $type = self::INPUT_TYPE_TEXT;
+        }
+
+        return $type;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getDataType()
+    {
+        $type = $this->getType();
+
+        if (!$type || !in_array($type, $this->getValidDataTypes())) {
+            $type = self::INPUT_TYPE_TEXT;
+        }
+
+        return $type;
+    }
+
+
+    /**
+     * @return array
+     */
+    protected function getValidInputTypes()
+    {
+        return [
+            self::INPUT_TYPE_TEXT,
+            self::INPUT_TYPE_MULTISELECT,
+            self::INPUT_TYPE_SELECT,
+        ];
+    }
+
+
+    /**
+     * @return array
+     */
+    protected function getValidDataTypes()
+    {
+        return [
+            self::DATA_TYPE_BOOLEAN,
+            self::DATA_TYPE_DECIMAL,
+            self::DATA_TYPE_INTEGER,
+            self::DATA_TYPE_STRING,
+        ];
+    }
 }

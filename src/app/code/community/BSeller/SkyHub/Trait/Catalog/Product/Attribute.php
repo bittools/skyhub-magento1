@@ -308,4 +308,40 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
         
         return $this->product;
     }
+
+
+
+
+
+    /**
+     * @param string $code
+     * @param array  $attributeData
+     *
+     * @return Mage_Eav_Model_Entity_Attribute
+     */
+    protected function createProductAttribute($code, array $attributeData)
+    {
+        /** @var Mage_Eav_Model_Entity_Setup $installer */
+        $installer = Mage::getModel('eav/entity_setup', 'core_setup');
+        $installer->startSetup();
+        $installer->addAttribute(Mage_Catalog_Model_Product::ENTITY, $code, $attributeData);
+        $installer->endSetup();
+
+        return $this->loadProductAttribute($code);
+    }
+
+
+    /**
+     * @param $code
+     *
+     * @return Mage_Eav_Model_Entity_Attribute
+     *
+     * @throws Mage_Core_Exception
+     */
+    protected function loadProductAttribute($code)
+    {
+        /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+        $attribute = Mage::getModel('eav/entity_attribute')->loadByCode(Mage_Catalog_Model_Product::ENTITY, $code);
+        return $attribute;
+    }
 }

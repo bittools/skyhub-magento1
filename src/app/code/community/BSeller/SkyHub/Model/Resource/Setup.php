@@ -37,11 +37,16 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
     {
         $attributes = (array)  $this->getSkyHubFixedAttributes();
         $table      = (string) $this->getTable('bseller_skyhub/product_attributes_mapping');
-        
+
+        $defaultDataType  = BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping::DATA_TYPE_STRING;
+        $defaultInputType = BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping::INPUT_TYPE_TEXT;
+
         /** @var array $attribute */
-        foreach ($attributes as $skyhubCode => $data) {
+        foreach ($attributes as $identifier => $data) {
+            $skyhubCode  = $this->arrayExtract($data, 'code');
             $label       = $this->arrayExtract($data, 'label');
-            $type        = $this->arrayExtract($data, 'type');
+            $type        = $this->arrayExtract($data, 'type', $defaultDataType);
+            $input       = $this->arrayExtract($data, 'input', $defaultInputType);
             $description = $this->arrayExtract($data, 'description');
             $validation  = $this->arrayExtract($data, 'validation');
             $magentoCode = $this->arrayExtract($data, 'attribute_code');
@@ -59,6 +64,7 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
                 'skyhub_description' => $description,
                 'enabled'            => $enabled,
                 'type'               => $type,
+                'input'              => $input,
                 'validation'         => $validation,
                 'required'           => $required,
                 'editable'           => $editable,

@@ -40,6 +40,9 @@ $table = $this->newTable($tableName)
      ->addColumn('type', $this::TYPE_TEXT, 255, [
          'nullable' => false,
      ])
+     ->addColumn('input', $this::TYPE_TEXT, 255, [
+         'nullable' => false,
+     ])
      ->addColumn('validation', $this::TYPE_TEXT, null, [
          'nullable' => true,
      ])

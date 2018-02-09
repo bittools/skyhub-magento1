@@ -4,20 +4,35 @@
 <?php if ($this->canShow()): ?>
     <div class="skyhub-notification notification-global notification-global-warning">
         <div class="skyhub-notification-container">
-            <strong style="color:dodgerblue"><?php echo $this->__('Unlinked Attributes:') ?></strong>
+            <strong style="color:dodgerblue"><?php echo $this->__('Unlinked Attributes') ?>:</strong>
             <span><?php echo $this->__('You have SkyHub required attributes which are not mapped with your Magento attributes:') ?></span>
-            <ul class="unmapped-attribute-list">
+            <table class="unmapped-attribute-table">
+                <colset>
+                    <col width="200"/>
+                    <col width="200"/>
+                    <col width="250"/>
+                </colset>
+                <tbody>
                 <?php
                 /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $attribute */
                 foreach ($this->getPendingAttributesCollection() as $attribute):
                     ?>
-                    <li>
-                        <?php echo sprintf('%s (%s)', $attribute->getSkyhubLabel(), $attribute->getSkyhubCode()) ?>
-                        - <a href="<?php echo $this->getMappingManagerUrl($attribute->getId()) ?>" target="_blank"><?php echo $this->__('Edit') ?></a></li>
+                <tr>
+                    <td class="a-left">
+                        <?php echo sprintf('%s (%s)', $attribute->getSkyhubLabelTranslated(), $attribute->getSkyhubCode()) ?>
+                    </td>
+                    <td class="a-center">
+                        <a href="<?php echo $this->getMappingManagerUrl($attribute->getId()) ?>"><?php echo $this->__('Edit Attribute Mapping') ?></a>
+                    </td>
+                    <td class="a-center">
+                        <a href="<?php echo $this->getAttributeAutoUrl($attribute->getId()) ?>"><?php echo $this->__('Create and Map a New Attribute Automatically') ?></a>
+                    </td>
+                </tr>
                 <?php endforeach; ?>
-            </ul>
+                </tbody>
+            </table>
             <span><?php echo $this->__('The first step to start using the module is configuring them.') ?></span>
-            <span><?php echo $this->__('You can manage them in the <a href="%s" target="_blank">Attributes Mapping Manager</a> page.', $this->getMappingManagerUrl()) ?></span>
+            <span><?php echo $this->__('You can manage them in the <a href="%s">Attributes Mapping Manager</a> page.', $this->getMappingManagerUrl()) ?></span>
         </div>
     </div>
 <?php endif; ?>
