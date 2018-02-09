@@ -108,7 +108,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     {
         /** @var Mage_Eav_Model_Resource_Entity_Attribute_Collection $collection */
         $collection = Mage::getResourceModel('eav/entity_attribute_collection');
-        $collection->setEntityTypeFilter($this->getEntityTypeId(Mage_Catalog_Model_Product::ENTITY));
+        $collection->setEntityTypeFilter($this->getEntityType(Mage_Catalog_Model_Product::ENTITY));
 
         return $collection;
     }
@@ -156,7 +156,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
      *
      * @return Mage_Eav_Model_Entity_Type
      */
-    protected function getEntityTypeId($code)
+    protected function getEntityType($code)
     {
         if (isset($this->entityTypes[$code])) {
             return $this->entityTypes[$code];
@@ -310,17 +310,31 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     }
 
 
-
-
-
     /**
      * @param string $code
      * @param array  $attributeData
      *
      * @return Mage_Eav_Model_Entity_Attribute
+     *
+     * @throws Mage_Core_Exception
      */
     protected function createProductAttribute($code, array $attributeData)
     {
+        $groupName = 'BSeller SkyHub';
+
+        /** @var BSeller_SkyHub_Model_Resource_Eav_Entity_Attribute_Set $resource */
+        $resource = Mage::getResourceModel('bseller_skyhub/eav_entity_attribute_set');
+        $result   = $resource->setupEntityAttributeGroups(
+            $this->getEntityType(Mage_Catalog_Model_Product::ENTITY)->getId(),
+            $groupName
+        );
+
+        if (!$result) {
+            Mage::throwException($this->__('The attribute group could not be created.'));
+        }
+
+        $attributeData['group'] = $groupName;
+
         /** @var Mage_Eav_Model_Entity_Setup $installer */
         $installer = Mage::getModel('eav/entity_setup', 'core_setup');
         $installer->startSetup();
@@ -328,6 +342,37 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
         $installer->endSetup();
 
         return $this->loadProductAttribute($code);
+    }
+
+
+    /**
+     * @param string $groupName
+     *
+     * @return $this
+     */
+    protected function initSkyHubAttributeGroup($groupName)
+    {
+        /** @var Mage_Eav_Model_Resource_Entity_Attribute_Set_Collection $setCollection */
+        $setCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
+        $setCollection->setEntityTypeFilter($this->getEntityType(Mage_Catalog_Model_Product::ENTITY)->getId());
+
+        /** @var Mage_Eav_Model_Entity_Attribute_Set $attributeSet */
+        foreach ($setCollection as $attributeSet) {
+            try {
+                /** @var Mage_Eav_Model_Entity_Attribute_Group $group */
+                $group = Mage::getModel('eav/entity_attribute_group');
+                $group->setAttributeSetId($attributeSet->getId())
+                    ->setAttributeGroupName($groupName)
+                    ->setSortOrder(900)
+                ;
+
+                $group->save();
+            } catch (Exception $e) {
+                Mage::logException($e);
+            }
+        }
+
+        return $this;
     }
 
 

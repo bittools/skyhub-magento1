@@ -131,7 +131,6 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
 
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         $attribute = $this->createProductAttribute($mapping->getSkyhubCode(), [
-            'group'           => 'General',
             'label'           => $mapping->getSkyhubLabel(),
             'input'           => $mapping->getInputType(),
             'type'            => 'varchar',
