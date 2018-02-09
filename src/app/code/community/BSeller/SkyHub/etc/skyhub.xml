@@ -20,167 +20,255 @@
                 <label>Product Sku</label>
                 <description>The product's main SKU (Stock Keeping Unit).</description>
                 <cast_type>string</cast_type>
-                <backend_type>string</backend_type>
-                <input>text</input>
                 <attribute_code>sku</attribute_code>
                 <validation/>
-                <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>sku</attribute_code>
+                    <label>SKU</label>
+                    <backend_model>catalog/product_attribute_backend_sku</backend_model>
+                    <type>static</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </sku>
             <name>
                 <code>name</code>
                 <label>Product Name</label>
                 <description>The product's name.</description>
                 <cast_type>string</cast_type>
-                <backend_type>string</backend_type>
-                <input>text</input>
-                <attribute_code>name</attribute_code>
                 <validation/>
-                <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>name</attribute_code>
+                    <label>Product Name</label>
+                    <backend_model/>
+                    <type>varchar</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </name>
             <description>
                 <code>description</code>
                 <label>Product Description</label>
                 <description>The product's description.</description>
                 <cast_type>string</cast_type>
-                <backend_type>string</backend_type>
-                <input>text</input>
-                <attribute_code>description</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>description</attribute_code>
+                    <label>Product Description</label>
+                    <backend_model/>
+                    <type>varchar</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </description>
             <status>
                 <code>status</code>
                 <label>Product Status</label>
                 <description>The product status that identifies if the product is enabled or disabled.</description>
                 <cast_type>boolean</cast_type>
-                <backend_type>int</backend_type>
-                <input>select</input>
-                <attribute_code>status</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>status</attribute_code>
+                    <label>Product Status</label>
+                    <backend_model/>
+                    <type>int</type>
+                    <input>select</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </status>
             <qty>
                 <code>qty</code>
                 <label>Product Stock Quantity</label>
                 <description>The product's stock quantity available in store.</description>
                 <cast_type>float</cast_type>
-                <backend_type>string</backend_type>
+                <type>varchar</type>
                 <input>text</input>
                 <attribute_code/>
                 <validation/>
                 <enabled>1</enabled>
                 <editable>0</editable>
                 <required>1</required>
+                <attribute_install_config/>
             </qty>
             <price>
                 <code>price</code>
                 <label>Product Price</label>
                 <description>The product's current price.</description>
                 <cast_type>float</cast_type>
-                <backend_type>decimal</backend_type>
-                <input>text</input>
-                <attribute_code>price</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>price</attribute_code>
+                    <label>Product Price</label>
+                    <backend_model/>
+                    <type>decimal</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </price>
             <promotional_price>
                 <code>promotional_price</code>
                 <label>Product Promotional Price</label>
                 <description>The product's current promotional price.</description>
                 <cast_type>float</cast_type>
-                <backend_type>decimal</backend_type>
-                <input>text</input>
-                <attribute_code>special_price</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>special_price</attribute_code>
+                    <label>Product Promotional Price</label>
+                    <backend_model/>
+                    <type>decimal</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </promotional_price>
             <cost>
                 <code>cost</code>
                 <label>Product Cost</label>
                 <description>The product's cost.</description>
                 <cast_type>float</cast_type>
-                <backend_type>decimal</backend_type>
-                <input>text</input>
-                <attribute_code>cost</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>cost</attribute_code>
+                    <label>Product Cost</label>
+                    <backend_model/>
+                    <type>decimal</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </cost>
             <weight>
                 <code>weight</code>
                 <label>Product Weight</label>
                 <description>The product's weight (in centimeters always).</description>
                 <cast_type>float</cast_type>
-                <backend_type>decimal</backend_type>
-                <input>text</input>
-                <attribute_code>weight</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>weight</attribute_code>
+                    <label>Product Weight</label>
+                    <backend_model/>
+                    <type>decimal</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </weight>
             <height>
                 <code>height</code>
                 <label>Product Height</label>
                 <description>The product's height (in centimeters always).</description>
                 <cast_type>float</cast_type>
-                <backend_type>decimal</backend_type>
-                <input>text</input>
-                <attribute_code>height</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>height</attribute_code>
+                    <label>Product Height</label>
+                    <backend_model/>
+                    <type>decimal</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </height>
             <width>
                 <code>width</code>
                 <label>Product Width</label>
                 <description>The product's width (in centimeters always).</description>
                 <cast_type>float</cast_type>
-                <backend_type>decimal</backend_type>
-                <input>text</input>
-                <attribute_code>width</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>width</attribute_code>
+                    <label>Product Width</label>
+                    <backend_model/>
+                    <type>decimal</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </width>
             <length>
                 <code>length</code>
                 <label>Product Length</label>
                 <description>The product's length (in centimeters always).</description>
                 <cast_type>float</cast_type>
-                <backend_type>decimal</backend_type>
-                <input>text</input>
-                <attribute_code>length</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>length</attribute_code>
+                    <label>Product Length</label>
+                    <backend_model/>
+                    <type>decimal</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </length>
             <brand>
                 <code>brand</code>
                 <label>Product Brand</label>
                 <description>The product's brand.</description>
                 <cast_type>string</cast_type>
-                <backend_type>int</backend_type>
-                <input>select</input>
-                <attribute_code>brand</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>brand</attribute_code>
+                    <label>Product Brand</label>
+                    <backend_model/>
+                    <type>int</type>
+                    <input>select</input>
+                    <source_model/>
+                    <required>1</required>
+                    <source>eav/entity_attribute_source_table</source>
+                </attribute_install_config>
             </brand>
             <ean>
                 <code>ean</code>
                 <label>Product EAN</label>
                 <description>The product's valid EAN number.</description>
                 <cast_type>string</cast_type>
-                <backend_type>string</backend_type>
-                <input>text</input>
-                <attribute_code>ean</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>ean</attribute_code>
+                    <label>Product EAN</label>
+                    <backend_model/>
+                    <type>varchar</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </ean>
             <nbm>
                 <code>nbm</code>
                 <label>Product NBM</label>
                 <description>The product's valid NBM.</description>
                 <cast_type>string</cast_type>
-                <backend_type>string</backend_type>
+                <type>varchar</type>
                 <input>text</input>
                 <attribute_code>nbm</attribute_code>
                 <validation/>
                 <required>1</required>
+                <attribute_install_config>
+                    <attribute_code>nbm</attribute_code>
+                    <label>Product NBM</label>
+                    <backend_model/>
+                    <type>varchar</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>1</required>
+                </attribute_install_config>
             </nbm>
         </attributes>
     </skyhub>

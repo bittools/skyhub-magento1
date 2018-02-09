@@ -39,23 +39,19 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
         $table      = (string) $this->getTable('bseller_skyhub/product_attributes_mapping');
 
         $defaultDataType  = BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping::DATA_TYPE_STRING;
-        $defaultInputType = BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping::INPUT_TYPE_TEXT;
 
         /** @var array $attribute */
         foreach ($attributes as $identifier => $data) {
             $skyhubCode  = $this->arrayExtract($data, 'code');
             $label       = $this->arrayExtract($data, 'label');
             $castType    = $this->arrayExtract($data, 'cast_type', $defaultDataType);
-            $backendType = $this->arrayExtract($data, 'backend_type', 'text');
-            $input       = $this->arrayExtract($data, 'input', $defaultInputType);
             $description = $this->arrayExtract($data, 'description');
             $validation  = $this->arrayExtract($data, 'validation');
-            $magentoCode = $this->arrayExtract($data, 'attribute_code');
             $enabled     = (bool) $this->arrayExtract($data, 'required', true);
             $required    = (bool) $this->arrayExtract($data, 'required', true);
             $editable    = (bool) $this->arrayExtract($data, 'editable', true);
             
-            if (empty($skyhubCode) || empty($castType) || empty($backendType)) {
+            if (empty($skyhubCode) || empty($castType)) {
                 continue;
             }
             
@@ -65,12 +61,13 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
                 'skyhub_description' => $description,
                 'enabled'            => $enabled,
                 'cast_type'          => $castType,
-                'backend_type'       => $backendType,
-                'input_type'         => $input,
                 'validation'         => $validation,
                 'required'           => $required,
                 'editable'           => $editable,
             ];
+
+            $installConfig = (array) $this->arrayExtract($data, 'attribute_install_config', []);
+            $magentoCode   = $this->arrayExtract($installConfig, 'attribute_code');
             
             /** @var Mage_Eav_Model_Entity_Attribute $attribute */
             if ($attribute = $this->getAttributeByCode($magentoCode)) {

@@ -31,6 +31,9 @@
  */
 class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Core_Model_Abstract
 {
+
+    use BSeller_SkyHub_Trait_Config;
+
     
     const DATA_TYPE_STRING   = 'string';
     const DATA_TYPE_BOOLEAN  = 'boolean';
@@ -105,6 +108,21 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
         }
 
         return $type;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getAttributeInstallConfig()
+    {
+        $config = (array) $this->getSkyHubConfig()->getAttributeInstallConfig($this->getSkyhubCode());
+
+        foreach ($config as $key => $value) {
+            $config[$key] = (''==$value) ? null : $value;
+        }
+
+        return $config;
     }
 
 

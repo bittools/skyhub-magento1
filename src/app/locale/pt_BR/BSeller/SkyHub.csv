@@ -25,7 +25,7 @@
 "You have SkyHub required attributes which are not mapped with your Magento attributes:","Você possui atributos obrigatórios na SkyHub que não estão mapeados com seus atributos Magento:"
 "The first step to start using the module is configuring them.","O primeiro passo para começar a utilizar o módulo é configurá-los."
 "You can manage them in the <a href=""%s"">Attributes Mapping Manager</a> page.","Você pode gerenciá-los na página <a href=""%s"">Gerenciar de Mapeamento de Attributes</a>."
-"Edit Attribute Mapping","Editar Mapeamento do Atributo"
+"Attribute Map Manually","Mapear Atributo Manualmente"
 "Create and Map a New Attribute Automatically","Criar e Mapear o Atributo Automaticamente"
 "Edit Product Attribute Mapping","Editar Mapeamento de Atributo de Produto"
 "General Information","Informações Gerais"

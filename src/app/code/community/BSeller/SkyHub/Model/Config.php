@@ -16,6 +16,26 @@ class BSeller_SkyHub_Model_Config
     
     /** @var Mage_Core_Model_Config_Base */
     protected $config;
+
+    /** @var array */
+    protected $attributes = [];
+
+
+    /**
+     * @param string $code
+     *
+     * @return array
+     */
+    public function getAttributeInstallConfig($code)
+    {
+        $this->getSkyHubFixedAttributes();
+
+        if (!isset($this->attributes[$code], $this->attributes[$code]['attribute_install_config'])) {
+            return [];
+        }
+
+        return (array) $this->attributes[$code]['attribute_install_config'];
+    }
     
     
     /**
@@ -23,7 +43,11 @@ class BSeller_SkyHub_Model_Config
      */
     public function getSkyHubFixedAttributes()
     {
-        return (array) $this->getConfig()->getNode('skyhub/attributes')->asArray();
+        if (empty($this->attributes)) {
+            $this->attributes = (array) $this->getConfig()->getNode('skyhub/attributes')->asArray();
+        }
+
+        return (array) $this->attributes;
     }
     
     

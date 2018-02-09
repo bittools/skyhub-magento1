@@ -15,7 +15,8 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
     extends BSeller_SkyHub_Controller_Admin_Action
 {
 
-    use BSeller_SkyHub_Trait_Catalog_Product_Attribute;
+    use BSeller_SkyHub_Trait_Catalog_Product_Attribute,
+        BSeller_SkyHub_Trait_Config;
 
     
     /**
@@ -129,11 +130,10 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
             return;
         }
 
-        /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        $attribute = $this->createProductAttribute($mapping->getSkyhubCode(), [
+        $config = [
             'label'           => $mapping->getSkyhubLabel(),
-            'input'           => $mapping->getInputType(),
-            'type'            => $mapping->getBackendType(),
+            'type'            => 'varchar',
+            'input'           => 'text',
             'required'        => 0,
             'visible_on_front'=> 0,
             'filterable'      => 0,
@@ -147,7 +147,20 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
                 'Created automatically by BSeller SkyHub module.',
                 $mapping->getSkyhubDescription()
             ),
-        ]);
+        ];
+
+        $installConfig = (array) $mapping->getAttributeInstallConfig();
+
+        foreach ($installConfig as $configKey => $itemValue) {
+            if (is_null($itemValue)) {
+                continue;
+            }
+
+            $config[$configKey] = $itemValue;
+        }
+
+        /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+        $attribute = $this->createProductAttribute($mapping->getSkyhubCode(), (array) $config);
 
         if (!$attribute || !$attribute->getId()) {
             $this->_getSession()->addError('There was a problem when trying to create the attribute.');
