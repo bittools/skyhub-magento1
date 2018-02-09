@@ -19,7 +19,6 @@
  * @method $this setAttributeId(int $id)
  * @method $this setEditable(bool $flag)
  * @method $this setCastType(string $type)
- * @method $this setBackendType(string $type)
  *
  * @method string getSkyhubCode()
  * @method string getSkyhubLabel()
@@ -27,7 +26,6 @@
  * @method int    getAttributeId()
  * @method bool   getEditable()
  * @method string getCastType()
- * @method string getBackendType()
  */
 class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Core_Model_Abstract
 {
@@ -40,11 +38,7 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
     const DATA_TYPE_DECIMAL  = 'decimal';
     const DATA_TYPE_INTEGER  = 'integer';
 
-    const INPUT_TYPE_TEXT        = 'text';
-    const INPUT_TYPE_SELECT      = 'select';
-    const INPUT_TYPE_MULTISELECT = 'multiselect';
 
-    
     public function _construct()
     {
         $this->_init('bseller_skyhub/catalog_product_attributes_mapping');
@@ -84,27 +78,12 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
     /**
      * @return string
      */
-    public function getInputType()
-    {
-        $type = $this->getData('input_type');
-
-        if (!$type || !in_array($type, $this->getValidInputTypes())) {
-            $type = self::INPUT_TYPE_TEXT;
-        }
-
-        return $type;
-    }
-
-
-    /**
-     * @return string
-     */
     public function getDataType()
     {
         $type = $this->getCastType();
 
         if (!$type || !in_array($type, $this->getValidDataTypes())) {
-            $type = self::INPUT_TYPE_TEXT;
+            $type = self::DATA_TYPE_STRING;
         }
 
         return $type;
@@ -127,15 +106,28 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
 
 
     /**
-     * @return array
+     * @param string|int|bool|float $value
+     *
+     * @return bool|float|int|string
      */
-    protected function getValidInputTypes()
+    public function castValue($value)
     {
-        return [
-            self::INPUT_TYPE_TEXT,
-            self::INPUT_TYPE_MULTISELECT,
-            self::INPUT_TYPE_SELECT,
-        ];
+        switch ($this->getDataType()) {
+            case self::DATA_TYPE_INTEGER:
+                return (int) $value;
+                break;
+            case self::DATA_TYPE_DECIMAL:
+                return (float) $value;
+                break;
+            case self::DATA_TYPE_BOOLEAN:
+                return (bool) $value;
+                break;
+            case self::DATA_TYPE_STRING:
+                return (string) $value;
+                break;
+            default:
+                return $value;
+        }
     }
 
 

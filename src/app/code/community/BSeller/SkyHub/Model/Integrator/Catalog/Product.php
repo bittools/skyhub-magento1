@@ -5,7 +5,10 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
     
     use BSeller_SkyHub_Trait_Transformers,
         BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
-    
+
+    /** @var string */
+    protected $eventType = 'catalog_product';
+
     
     /**
      * @param Mage_Catalog_Model_Product $product
@@ -17,11 +20,23 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
         if (!$this->canIntegrateProduct($product)) {
             return false;
         }
-        
+
         /** @var \SkyHub\Api\EntityInterface\Catalog\Product $interface */
         $interface = $this->productTransformer()
                           ->convert($product);
-        return $interface->create();
+
+        $this->eventMethod = 'create';
+        $this->eventParams = [
+            'product'   => $product,
+            'interface' => $interface,
+        ];
+
+        $this->beforeIntegration();
+        $response = $interface->create();
+        $this->eventParams[] = $response;
+        $this->afterIntegration();
+
+        return $response;
     }
     
     
@@ -39,7 +54,19 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
         /** @var \SkyHub\Api\EntityInterface\Catalog\Product $interface */
         $interface = $this->productTransformer()
                           ->convert($product);
-        return $interface->update();
+
+        $this->eventMethod = 'update';
+        $this->eventParams = [
+            'product'   => $product,
+            'interface' => $interface,
+        ];
+
+        $this->beforeIntegration();
+        $response = $interface->update();
+        $this->eventParams[] = $response;
+        $this->afterIntegration();
+
+        return $response;
     }
     
     
@@ -53,14 +80,20 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
         if (!$this->validateSku($sku)) {
             return false;
         }
+
+        $this->eventMethod = 'product';
         
         /** @var \SkyHub\Api\EntityInterface\Catalog\Product $interface */
         $interface = $this->api()
                           ->product()
                           ->entityInterface();
         $interface->setSku($sku);
-        
-        return $interface->product();
+
+        $this->beforeIntegration();
+        $response = $interface->product();
+        $this->afterIntegration();
+
+        return $response;
     }
     
     
@@ -74,12 +107,17 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
         if (!is_null($statusFilter) || !is_bool($statusFilter)) {
             return false;
         }
+
+        $this->eventMethod = 'products';
         
         /** @var \SkyHub\Api\EntityInterface\Catalog\Product $interface */
         $interface = $this->api()
                           ->product()
                           ->entityInterface();
+
+        $this->beforeIntegration();
         $interface->setStatus($statusFilter);
+        $this->afterIntegration();
         
         return $interface->products();
     }
@@ -94,8 +132,14 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
         $interface = $this->api()
                           ->product()
                           ->entityInterface();
-        
-        return $interface->urls();
+
+        $this->eventMethod = 'urls';
+
+        $this->beforeIntegration();
+        $response = $interface->urls();
+        $this->afterIntegration();
+
+        return $response;
     }
     
     
@@ -115,8 +159,14 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
                           ->product()
                           ->entityInterface();
         $interface->setSku($sku);
-        
-        return $interface->delete();
+
+        $this->eventMethod = 'urls';
+
+        $this->beforeIntegration();
+        $response = $interface->delete();
+        $this->afterIntegration();
+
+        return $response;
     }
     
     
@@ -133,5 +183,4 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
         
         return true;
     }
-    
 }

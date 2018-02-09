@@ -82,11 +82,11 @@ trait BSeller_SkyHub_Trait_Config
     
     
     /**
-     * @return int
+     * @return string
      */
     protected function getCatalogProductIntegrationMethod()
     {
-        return (int) $this->getCatalogProductIntegrationConfig('method');
+        return (string) $this->getCatalogProductIntegrationConfig('method');
     }
 
 

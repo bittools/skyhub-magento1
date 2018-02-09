@@ -27,6 +27,12 @@
                     <product_attributes_mapping>
                         <table>bseller_skyhub_product_attributes_mapping</table>
                     </product_attributes_mapping>
+                    <queue>
+                        <table>bseller_skyhub_queue</table>
+                    </queue>
+                    <queue_result>
+                        <table>bseller_skyhub_queue_result</table>
+                    </queue_result>
                 </entities>
             </bseller_skyhub_resource>
         </models>
@@ -139,7 +145,7 @@
                 <api_token>bZa6Ml0zgS</api_token>
             </service>
             <catalog_product_integration>
-                <method>2</method>
+                <method>queue</method>
             </catalog_product_integration>
         </bseller_skyhub>
     </default>

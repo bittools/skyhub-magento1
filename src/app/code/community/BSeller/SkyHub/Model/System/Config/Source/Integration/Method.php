@@ -15,9 +15,9 @@ class BSeller_SkyHub_Model_System_Config_Source_Integration_Method
     extends BSeller_Core_Model_System_Config_Source_Abstract
 {
     
-    const INTEGRATION_METHOD_QUEUE   = 1;
-    const INTEGRATION_METHOD_ON_SAVE = 2;
-    const INTEGRATION_METHOD_BOTH    = 3;
+    const INTEGRATION_METHOD_QUEUE   = 'queue';
+    const INTEGRATION_METHOD_ON_SAVE = 'on_save';
+    const INTEGRATION_METHOD_BOTH    = 'both';
     
     
     /**
@@ -28,7 +28,7 @@ class BSeller_SkyHub_Model_System_Config_Source_Integration_Method
         return [
             self::INTEGRATION_METHOD_QUEUE   => $this->__('Only With Queues'),
             self::INTEGRATION_METHOD_ON_SAVE => $this->__('On Entity Save'),
-            self::INTEGRATION_METHOD_BOTH    => $this->__('Anyone'),
+            self::INTEGRATION_METHOD_BOTH    => $this->__('Both Queue and On Save'),
         ];
     }
     

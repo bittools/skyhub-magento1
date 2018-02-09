@@ -64,3 +64,45 @@ $this->addIndex(['skyhub_code', 'attribute_id'], $tableName);
 $this->addForeignKey(
     $tableName, 'attribute_id', 'eav/attribute', 'attribute_id', $this::FK_ACTION_SET_NULL, $this::FK_ACTION_SET_NULL
 );
+
+
+//**********************************************************************************************************************
+// Install bseller_skyhub/queue
+//**********************************************************************************************************************
+$tableName = (string) $this->getTable('bseller_skyhub/queue');
+$table = $this->newTable($tableName)
+    ->addColumn('entity_id', $this::TYPE_INTEGER, 10, [
+        'nullable' => true,
+    ])
+    ->addColumn('entity_type', $this::TYPE_TEXT, 255, [
+        'nullable' => true,
+    ])
+    ->addColumn('method', $this::TYPE_TEXT, 255, [
+        'nullable' => true,
+    ])
+    ->addColumn('status', $this::TYPE_INTEGER, 2, [
+        'nullable' => false,
+        'default'  => 0,
+    ])
+    ->addColumn('messages', $this::TYPE_TEXT, null, [
+        'nullable' => true,
+    ])
+    ->addColumn('can_process', $this::TYPE_INTEGER, 1, [
+        'nullable' => false,
+        'default'  => 0,
+    ])
+;
+
+$this->addCustomTimestamp($table, 'process_after', [], 'Schedule the process to run after this time if needed.');
+$this->addTimestamps($table);
+$conn->createTable($table);
+
+$this->addIndex('entity_id',   $tableName, $this::INDEX_TYPE_INDEX);
+$this->addIndex('entity_type', $tableName, $this::INDEX_TYPE_INDEX);
+$this->addIndex(['entity_id', 'entity_type'], $tableName);
+
+
+//**********************************************************************************************************************
+// Install bseller_skyhub/queue_result
+//**********************************************************************************************************************
+// $tableName = (string) $this->getTable('bseller_skyhub/queue_result');

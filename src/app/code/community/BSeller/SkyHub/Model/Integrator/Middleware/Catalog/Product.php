@@ -14,16 +14,42 @@
 class BSeller_SkyHub_Model_Integrator_Middleware_Catalog_Product
     extends BSeller_SkyHub_Model_Integrator_Middleware_Abstract
 {
-    
+
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
+     */
     public function update(Mage_Catalog_Model_Product $product)
     {
-        return $this->integrator()->update($product);
+        $response = true;
+
+        if ($this->canIntegrate($this->method())) {
+            $response = $this->integrator()->update($product);
+        } else {
+            $this->queue($this->method(), $product->getId(), $this->entityType(), 'update');
+        }
+
+        return $response;
     }
-    
-    
+
+
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
+     */
     public function create(Mage_Catalog_Model_Product $product)
     {
-        return $this->integrator()->create($product);
+        $response = true;
+
+        if ($this->canIntegrate($this->method())) {
+            $response = $this->integrator()->create($product);
+        } else {
+            $this->queue($this->method(), $product->getId(), $this->entityType(), 'create');
+        }
+
+        return $response;
     }
     
     
@@ -35,4 +61,21 @@ class BSeller_SkyHub_Model_Integrator_Middleware_Catalog_Product
         return $this->catalogProductIntegrator();
     }
 
+
+    /**
+     * @return string
+     */
+    public function method()
+    {
+        return $this->getCatalogProductIntegrationMethod();
+    }
+
+
+    /**
+     * @return string
+     */
+    public function entityType()
+    {
+        return BSeller_SkyHub_Model_Queue::ENTITY_TYPE_CATALOG_PRODUCT;
+    }
 }
