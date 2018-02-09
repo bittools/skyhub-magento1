@@ -21,24 +21,23 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
     {
         /** @var Mage_Catalog_Model_Product $product */
         $product = $observer->getData('product');
-        
+
         if (!($product instanceof Mage_Catalog_Model_Product) || !$product->getId()) {
             return;
         }
-        
+
         /** @var \SkyHub\Api\Handler\Response\HandlerAbstract $exists */
-        $exists = $this->catalogProductIntegratorMiddleware()
-                       ->integrator()
+        $exists = $this->catalogProductIntegrator()
                        ->product($product->getSku());
-        
+
         if ($exists->success()) {
             /** Update Product */
-            $this->catalogProductIntegratorMiddleware()->update($product);
+            $this->catalogProductIntegrator()->update($product);
         }
-        
+
         if ($exists->exception()) {
             /** Create Product */
-            $this->catalogProductIntegratorMiddleware()->create($product);
+            $this->catalogProductIntegrator()->create($product);
         }
     }
     
@@ -50,28 +49,28 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
     {
         /** @var Mage_Adminhtml_Block_Catalog_Product_Edit $block */
         $block = $observer->getData('block');
-        
+
         if (!($block instanceof Mage_Adminhtml_Block_Catalog_Product_Edit)) {
             return;
         }
-        
+
         $product = $block->getProduct();
-        
+
         if (!$product || !($product instanceof Mage_Catalog_Model_Product)) {
             return;
         }
-        
+
         if (!$this->canIntegrateProduct($product)) {
             return;
         }
-        
+
         /** @var Mage_Adminhtml_Block_Widget_Button $backButton */
         $backButton = $block->getChild('back_button');
-        
+
         if (!($backButton instanceof Mage_Adminhtml_Block_Widget_Button)) {
             return;
         }
-        
+
         /** @var Mage_Adminhtml_Block_Widget_Button $button */
         $button = $block->getLayout()->createBlock('adminhtml/widget_button');
         $button->setData([
@@ -79,7 +78,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
             'onclick' => "setLocation('{$this->getIntegrateUrl($block)}')",
             'class'   => 'success'
         ]);
-        
+
         $backButton->setData('before_html', $button->toHtml());
     }
     

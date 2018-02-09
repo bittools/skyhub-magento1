@@ -3,7 +3,7 @@
 class BSeller_SkyHub_Test_QueueController extends BSeller_SkyHub_Controller_Front_Action
 {
 
-    use BSeller_SkyHub_Trait_Integration_Middlewares;
+    use BSeller_SkyHub_Trait_Integrators;
 
 
     public function productQueueCreateAction()
@@ -14,16 +14,16 @@ class BSeller_SkyHub_Test_QueueController extends BSeller_SkyHub_Controller_Fron
     }
 
 
-    public function productIntegrateMiddlewareCreateAction()
+    public function productIntegrateCreateAction()
     {
-        $this->catalogProductIntegratorMiddleware()
+        $this->catalogProductIntegrator()
             ->create($this->product());
     }
 
 
-    public function productIntegrateMiddlewareUpdateAction()
+    public function productIntegrateUpdateAction()
     {
-        $this->catalogProductIntegratorMiddleware()
+        $this->catalogProductIntegrator()
             ->update($this->product());
     }
 
