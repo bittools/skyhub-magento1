@@ -110,14 +110,6 @@
                     </bseller_skyhub_add_integration_button_to_product_edit_page>
                 </observers>
             </adminhtml_block_html_before>
-            <controller_action_predispatch>
-                <observers>
-                    <bseller_skyhub_add_admin_notification>
-                        <class>bseller_skyhub/observer_notification</class>
-                        <method>manageAdminNotification</method>
-                    </bseller_skyhub_add_admin_notification>
-                </observers>
-            </controller_action_predispatch>
         </events>
     </adminhtml>
     <admin>

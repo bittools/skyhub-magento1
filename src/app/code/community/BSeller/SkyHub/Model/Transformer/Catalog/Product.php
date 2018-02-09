@@ -18,7 +18,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
      */
     public function convert(Mage_Catalog_Model_Product $product)
     {
-        $this->initProductAttributes($product);
+        $this->initProductAttributes();
         
         /** @var Product $interface */
         $interface = $this->api()->product()->entityInterface();
@@ -183,7 +183,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                     break;
                 default:
                     /** @var Mage_Eav_Model_Entity_Attribute|bool $attribute */
-                    if (!$attribute = $this->getAttributeById($product, $mappedAttribute->getAttributeId())) {
+                    if (!$attribute = $this->getAttributeById($mappedAttribute->getAttributeId())) {
                         $attribute = Mage::getModel('eav/entity_attribute')->load($mappedAttribute->getAttributeId());
                     }
                     

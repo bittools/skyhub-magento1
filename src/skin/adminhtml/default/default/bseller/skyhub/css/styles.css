@@ -24,3 +24,34 @@ td.magento-code {
 td.skyhub-code {
 
 }
+
+.skyhub-notification.notification-global {
+    background-image: url('../images/skyhub-logo.png');
+    background-repeat: no-repeat;
+    background-size: 100px;
+    background-position-y: center;
+    background-position-x: 35px;
+    padding-left: 145px;
+}
+
+.notification-global .skyhub-logo-container {
+    float: left;
+    display: block;
+    padding: 5px;
+}
+
+.notification-global .skyhub-notification-container {
+    padding: 10px;
+}
+
+.notification-global .skyhub-notification-container ul.unmapped-attribute-list {
+    padding: 10px;
+}
+
+.notification-global .skyhub-notification-container ul.unmapped-attribute-list li {
+
+}
+
+.notification-global .skyhub-notification-container ul.unmapped-attribute-list li a {
+
+}

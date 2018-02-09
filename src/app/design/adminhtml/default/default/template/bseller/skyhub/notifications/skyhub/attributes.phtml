@@ -1,0 +1,23 @@
+<?php
+/** @var BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes $this */
+?>
+<?php if ($this->canShow()): ?>
+    <div class="skyhub-notification notification-global notification-global-warning">
+        <div class="skyhub-notification-container">
+            <strong style="color:dodgerblue"><?php echo $this->__('Unlinked Attributes:') ?></strong>
+            <span><?php echo $this->__('You have SkyHub required attributes which are not mapped with your Magento attributes:') ?></span>
+            <ul class="unmapped-attribute-list">
+                <?php
+                /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $attribute */
+                foreach ($this->getPendingAttributesCollection() as $attribute):
+                    ?>
+                    <li>
+                        <?php echo sprintf('%s (%s)', $attribute->getSkyhubLabel(), $attribute->getSkyhubCode()) ?>
+                        - <a href="<?php echo $this->getMappingManagerUrl($attribute->getId()) ?>" target="_blank"><?php echo $this->__('Edit') ?></a></li>
+                <?php endforeach; ?>
+            </ul>
+            <span><?php echo $this->__('The first step to start using the module is configuring them.') ?></span>
+            <span><?php echo $this->__('You can manage them in the <a href="%s" target="_blank">Attributes Mapping Manager</a> page.', $this->getMappingManagerUrl()) ?></span>
+        </div>
+    </div>
+<?php endif; ?>

@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
 <layout>
+    <default>
+        <update handle="ADD_STYLES"/>
+        <reference name="notifications">
+            <block type="bseller_skyhub/adminhtml_notifications_skyhub_attributes" name="bseller.skyhub.notifications.attributes.mapping"/>
+        </reference>
+    </default>
+
     <!-- Catalog Product Attributes Mapping -->
     <adminhtml_bseller_skyhub_catalog_product_attributes_mapping_index>
         <label>Catalog Product Attributes Mapping</label>
