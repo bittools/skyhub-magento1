@@ -19,7 +19,8 @@
                 <code>sku</code>
                 <label>Product Sku</label>
                 <description>The product's main SKU (Stock Keeping Unit).</description>
-                <type>string</type>
+                <cast_type>string</cast_type>
+                <backend_type>string</backend_type>
                 <input>text</input>
                 <attribute_code>sku</attribute_code>
                 <validation/>
@@ -29,7 +30,8 @@
                 <code>name</code>
                 <label>Product Name</label>
                 <description>The product's name.</description>
-                <type>string</type>
+                <cast_type>string</cast_type>
+                <backend_type>string</backend_type>
                 <input>text</input>
                 <attribute_code>name</attribute_code>
                 <validation/>
@@ -39,7 +41,8 @@
                 <code>description</code>
                 <label>Product Description</label>
                 <description>The product's description.</description>
-                <type>string</type>
+                <cast_type>string</cast_type>
+                <backend_type>string</backend_type>
                 <input>text</input>
                 <attribute_code>description</attribute_code>
                 <validation/>
@@ -49,7 +52,8 @@
                 <code>status</code>
                 <label>Product Status</label>
                 <description>The product status that identifies if the product is enabled or disabled.</description>
-                <type>boolean</type>
+                <cast_type>boolean</cast_type>
+                <backend_type>int</backend_type>
                 <input>select</input>
                 <attribute_code>status</attribute_code>
                 <validation/>
@@ -59,7 +63,8 @@
                 <code>qty</code>
                 <label>Product Stock Quantity</label>
                 <description>The product's stock quantity available in store.</description>
-                <type>decimal</type>
+                <cast_type>float</cast_type>
+                <backend_type>string</backend_type>
                 <input>text</input>
                 <attribute_code/>
                 <validation/>
@@ -71,7 +76,8 @@
                 <code>price</code>
                 <label>Product Price</label>
                 <description>The product's current price.</description>
-                <type>decimal</type>
+                <cast_type>float</cast_type>
+                <backend_type>decimal</backend_type>
                 <input>text</input>
                 <attribute_code>price</attribute_code>
                 <validation/>
@@ -81,7 +87,8 @@
                 <code>promotional_price</code>
                 <label>Product Promotional Price</label>
                 <description>The product's current promotional price.</description>
-                <type>decimal</type>
+                <cast_type>float</cast_type>
+                <backend_type>decimal</backend_type>
                 <input>text</input>
                 <attribute_code>special_price</attribute_code>
                 <validation/>
@@ -91,7 +98,8 @@
                 <code>cost</code>
                 <label>Product Cost</label>
                 <description>The product's cost.</description>
-                <type>decimal</type>
+                <cast_type>float</cast_type>
+                <backend_type>decimal</backend_type>
                 <input>text</input>
                 <attribute_code>cost</attribute_code>
                 <validation/>
@@ -101,7 +109,8 @@
                 <code>weight</code>
                 <label>Product Weight</label>
                 <description>The product's weight (in centimeters always).</description>
-                <type>decimal</type>
+                <cast_type>float</cast_type>
+                <backend_type>decimal</backend_type>
                 <input>text</input>
                 <attribute_code>weight</attribute_code>
                 <validation/>
@@ -111,7 +120,8 @@
                 <code>height</code>
                 <label>Product Height</label>
                 <description>The product's height (in centimeters always).</description>
-                <type>decimal</type>
+                <cast_type>float</cast_type>
+                <backend_type>decimal</backend_type>
                 <input>text</input>
                 <attribute_code>height</attribute_code>
                 <validation/>
@@ -121,7 +131,8 @@
                 <code>width</code>
                 <label>Product Width</label>
                 <description>The product's width (in centimeters always).</description>
-                <type>decimal</type>
+                <cast_type>float</cast_type>
+                <backend_type>decimal</backend_type>
                 <input>text</input>
                 <attribute_code>width</attribute_code>
                 <validation/>
@@ -131,7 +142,8 @@
                 <code>length</code>
                 <label>Product Length</label>
                 <description>The product's length (in centimeters always).</description>
-                <type>decimal</type>
+                <cast_type>float</cast_type>
+                <backend_type>decimal</backend_type>
                 <input>text</input>
                 <attribute_code>length</attribute_code>
                 <validation/>
@@ -141,7 +153,8 @@
                 <code>brand</code>
                 <label>Product Brand</label>
                 <description>The product's brand.</description>
-                <type>string</type>
+                <cast_type>string</cast_type>
+                <backend_type>int</backend_type>
                 <input>select</input>
                 <attribute_code>brand</attribute_code>
                 <validation/>
@@ -151,7 +164,8 @@
                 <code>ean</code>
                 <label>Product EAN</label>
                 <description>The product's valid EAN number.</description>
-                <type>string</type>
+                <cast_type>string</cast_type>
+                <backend_type>string</backend_type>
                 <input>text</input>
                 <attribute_code>ean</attribute_code>
                 <validation/>
@@ -161,7 +175,8 @@
                 <code>nbm</code>
                 <label>Product NBM</label>
                 <description>The product's valid NBM.</description>
-                <type>string</type>
+                <cast_type>string</cast_type>
+                <backend_type>string</backend_type>
                 <input>text</input>
                 <attribute_code>nbm</attribute_code>
                 <validation/>

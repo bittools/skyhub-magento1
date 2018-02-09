@@ -133,7 +133,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
         $attribute = $this->createProductAttribute($mapping->getSkyhubCode(), [
             'label'           => $mapping->getSkyhubLabel(),
             'input'           => $mapping->getInputType(),
-            'type'            => 'varchar',
+            'type'            => $mapping->getBackendType(),
             'required'        => 0,
             'visible_on_front'=> 0,
             'filterable'      => 0,

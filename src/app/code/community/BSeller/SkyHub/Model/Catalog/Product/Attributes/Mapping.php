@@ -18,16 +18,16 @@
  * @method $this setSkyhubDescription(string $description)
  * @method $this setAttributeId(int $id)
  * @method $this setEditable(bool $flag)
- * @method $this setType(string $type)
- * @method $this setInput(string $inputType)
+ * @method $this setCastType(string $type)
+ * @method $this setBackendType(string $type)
  *
  * @method string getSkyhubCode()
  * @method string getSkyhubLabel()
  * @method string getSkyhubDescription()
  * @method int    getAttributeId()
  * @method bool   getEditable()
- * @method string getType()
- * @method string getInput()
+ * @method string getCastType()
+ * @method string getBackendType()
  */
 class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Core_Model_Abstract
 {
@@ -83,7 +83,7 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
      */
     public function getInputType()
     {
-        $type = $this->getInput();
+        $type = $this->getData('input_type');
 
         if (!$type || !in_array($type, $this->getValidInputTypes())) {
             $type = self::INPUT_TYPE_TEXT;
@@ -98,7 +98,7 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
      */
     public function getDataType()
     {
-        $type = $this->getType();
+        $type = $this->getCastType();
 
         if (!$type || !in_array($type, $this->getValidDataTypes())) {
             $type = self::INPUT_TYPE_TEXT;

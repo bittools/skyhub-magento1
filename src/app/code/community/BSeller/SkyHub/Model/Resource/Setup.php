@@ -45,7 +45,8 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
         foreach ($attributes as $identifier => $data) {
             $skyhubCode  = $this->arrayExtract($data, 'code');
             $label       = $this->arrayExtract($data, 'label');
-            $type        = $this->arrayExtract($data, 'type', $defaultDataType);
+            $castType    = $this->arrayExtract($data, 'cast_type', $defaultDataType);
+            $backendType = $this->arrayExtract($data, 'backend_type', 'text');
             $input       = $this->arrayExtract($data, 'input', $defaultInputType);
             $description = $this->arrayExtract($data, 'description');
             $validation  = $this->arrayExtract($data, 'validation');
@@ -54,7 +55,7 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
             $required    = (bool) $this->arrayExtract($data, 'required', true);
             $editable    = (bool) $this->arrayExtract($data, 'editable', true);
             
-            if (empty($skyhubCode) || empty($type)) {
+            if (empty($skyhubCode) || empty($castType) || empty($backendType)) {
                 continue;
             }
             
@@ -63,8 +64,9 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
                 'skyhub_label'       => $label,
                 'skyhub_description' => $description,
                 'enabled'            => $enabled,
-                'type'               => $type,
-                'input'              => $input,
+                'cast_type'          => $castType,
+                'backend_type'       => $backendType,
+                'input_type'         => $input,
                 'validation'         => $validation,
                 'required'           => $required,
                 'editable'           => $editable,
