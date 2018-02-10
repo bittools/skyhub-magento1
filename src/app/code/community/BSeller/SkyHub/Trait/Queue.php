@@ -40,4 +40,13 @@ trait BSeller_SkyHub_Trait_Queue
         return $this;
     }
 
+
+    /**
+     * @return BSeller_SkyHub_Model_Resource_Queue
+     */
+    protected function getQueueResource()
+    {
+        return Mage::getResourceModel('bseller_skyhub/queue');
+    }
+
 }

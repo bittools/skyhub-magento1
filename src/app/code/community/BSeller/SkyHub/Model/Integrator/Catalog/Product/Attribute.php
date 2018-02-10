@@ -13,23 +13,35 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product_Attribute extends BSeller_
     /**
      * @param Mage_Eav_Model_Entity_Attribute $attribute
      *
-     * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
+     * @return bool|HandlerDefault|HandlerException
      */
     public function createOrUpdate(Mage_Eav_Model_Entity_Attribute $attribute)
     {
         $exists = $this->productAttributeExists($attribute->getId());
 
+        $eventParams = [
+            'attribute' => $attribute
+        ];
+
+        Mage::dispatchEvent('bseller_skyhub_catalog_product_attribute_integrate_before', $eventParams);
+
         if (true == $exists) {
             /** Update Product Attribute */
-            return $this->update($attribute);
+            $response = $this->update($attribute);
+            $eventParams['method'] = 'update';
+        } else {
+            /** Create Product Attribute */
+            $response = $this->create($attribute);
+            $eventParams['method'] = 'create';
+
+            if ($response->success()) {
+                $this->registerProductAttributeEntity($attribute->getId());
+            }
         }
 
-        /** Create Product Attribute */
-        $response = $this->create($attribute);
+        $eventParams['response'] = $response;
 
-        if ($response->success()) {
-            $this->registerProductAttributeEntity($attribute->getId());
-        }
+        Mage::dispatchEvent('bseller_skyhub_catalog_product_attribute_integrate_after', $eventParams);
 
         return $response;
     }
