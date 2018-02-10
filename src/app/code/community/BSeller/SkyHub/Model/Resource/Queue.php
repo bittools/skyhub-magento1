@@ -82,8 +82,8 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
         /** @var Varien_Db_Select $select */
         $select = $this->getReadConnection()
             ->select()
-            ->from($this->getMainTable())
-            ->where('status IN (?)', imploe(',', $integrableStatuses))
+            ->from($this->getMainTable(), 'entity_id')
+            ->where('status IN (?)', implode(',', $integrableStatuses))
             ->where('can_process = 1')
             ->where('process_after <= ?', now())
             ->where('entity_type = ?', (string) $entityType)
