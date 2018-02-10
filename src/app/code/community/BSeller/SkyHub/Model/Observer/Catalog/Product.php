@@ -26,19 +26,8 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
             return;
         }
 
-        /** @var \SkyHub\Api\Handler\Response\HandlerAbstract $exists */
-        $exists = $this->catalogProductIntegrator()
-                       ->product($product->getSku());
-
-        if ($exists->success()) {
-            /** Update Product */
-            $this->catalogProductIntegrator()->update($product);
-        }
-
-        if ($exists->exception()) {
-            /** Create Product */
-            $this->catalogProductIntegrator()->create($product);
-        }
+        /** Create or Update Product */
+        $this->catalogProductIntegrator()->createOrUpdate($product);
     }
     
     

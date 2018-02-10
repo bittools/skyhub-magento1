@@ -3,11 +3,31 @@
 class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Model_Integrator_Abstract
 {
     
-    use BSeller_SkyHub_Trait_Transformers,
+    use BSeller_SkyHub_Trait_Data,
+        BSeller_SkyHub_Trait_Transformers,
         BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
 
     /** @var string */
     protected $eventType = 'catalog_product';
+
+
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
+     */
+    public function createOrUpdate(Mage_Catalog_Model_Product $product)
+    {
+        $exists = $this->productExists($product->getId());
+
+        if (true == $exists) {
+            /** Update Product */
+            return $this->update($product);
+        }
+
+        /** Create Product */
+        return $this->create($product);
+    }
 
     
     /**

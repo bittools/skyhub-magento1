@@ -15,11 +15,6 @@
 class BSeller_SkyHub_Model_Queue extends BSeller_Core_Model_Abstract
 {
 
-    const ENTITY_TYPE_CATALOG_PRODUCT_ATTRIBUTE = 'catalog_product_attribute';
-    const ENTITY_TYPE_CATALOG_PRODUCT           = 'catalog_product';
-    const ENTITY_TYPE_CATALOG_CATEGORY          = 'catalog_category';
-    const ENTITY_TYPE_SALES_ORDER               = 'sales_product';
-
     const STATUS_PENDING = 1;
     const STATUS_FAIL    = 2;
     const STATUS_RETRY   = 3;

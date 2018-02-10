@@ -28,19 +28,8 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
             $this->redirectProductList();
             return;
         }
-        
-        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $process */
-        $process = $this->catalogProductIntegrator()->product($product->getSku());
-        
-        if ($process->exception()) {
-            /** Create Product */
-            $response = $this->createProduct($product);
-        }
-        
-        if ($process->success()) {
-            /** Update Product */
-            $response = $this->updateProduct($product);
-        }
+
+        $response = $this->catalogProductIntegrator()->createOrUpdate($product);
     
         /**
          * After the product to be integrated, we show the information.
@@ -55,31 +44,11 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
         
         $this->redirectProductEdit($product->getId());
     }
-    
-    
+
+
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param $productId
      *
-     * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
-     */
-    protected function createProduct(Mage_Catalog_Model_Product $product)
-    {
-        return $this->catalogProductIntegrator()->create($product);
-    }
-    
-    
-    /**
-     * @param Mage_Catalog_Model_Product $product
-     *
-     * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
-     */
-    protected function updateProduct(Mage_Catalog_Model_Product $product)
-    {
-        return $this->catalogProductIntegrator()->update($product);
-    }
-    
-    
-    /**
      * @return void
      */
     protected function redirectProductEdit($productId)
@@ -97,5 +66,4 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
         $this->_redirect('adminhtml/catalog_product');
         return;
     }
-    
 }
