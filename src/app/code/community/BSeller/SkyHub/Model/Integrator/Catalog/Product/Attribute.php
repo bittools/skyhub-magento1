@@ -6,7 +6,33 @@ use SkyHub\Api\Handler\Response\HandlerException;
 class BSeller_SkyHub_Model_Integrator_Catalog_Product_Attribute extends BSeller_SkyHub_Model_Integrator_Abstract
 {
 
-    use BSeller_SkyHub_Trait_Transformers;
+    use BSeller_SkyHub_Trait_Entity,
+        BSeller_SkyHub_Trait_Transformers;
+
+
+    /**
+     * @param Mage_Eav_Model_Entity_Attribute $attribute
+     *
+     * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
+     */
+    public function createOrUpdate(Mage_Eav_Model_Entity_Attribute $attribute)
+    {
+        $exists = $this->productAttributeExists($attribute->getId());
+
+        if (true == $exists) {
+            /** Update Product Attribute */
+            return $this->update($attribute);
+        }
+
+        /** Create Product Attribute */
+        $response = $this->create($attribute);
+
+        if ($response->success()) {
+            $this->registerProductAttributeEntity($attribute->getId());
+        }
+
+        return $response;
+    }
 
 
     /**

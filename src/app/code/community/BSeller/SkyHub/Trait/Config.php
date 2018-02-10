@@ -57,10 +57,12 @@ trait BSeller_SkyHub_Trait_Config
      *
      * @return string|integer
      */
+    /*
     protected function getCatalogProductIntegrationConfig($field)
     {
         return $this->getSkyHubModuleConfig($field, 'catalog_product_integration');
     }
+    */
 
 
     /**
@@ -84,10 +86,12 @@ trait BSeller_SkyHub_Trait_Config
     /**
      * @return string
      */
+    /*
     protected function getCatalogProductIntegrationMethod()
     {
         return (string) $this->getCatalogProductIntegrationConfig('method');
     }
+    */
 
 
     /**

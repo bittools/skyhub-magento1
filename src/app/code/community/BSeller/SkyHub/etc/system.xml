@@ -98,6 +98,7 @@
                         </api_token>
                     </fields>
                 </service>
+                <!--
                 <catalog_product_integration translate="label" module="bseller_skyhub">
                     <label>Product Integration Configuration</label>
                     <sort_order>40</sort_order>
@@ -117,6 +118,7 @@
                         </method>
                     </fields>
                 </catalog_product_integration>
+                -->
             </groups>
         </bseller_skyhub>
     </sections>

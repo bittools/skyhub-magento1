@@ -13,7 +13,7 @@
  */
 class BSeller_SkyHub_Model_Observer_Catalog_Product_Attribute extends BSeller_SkyHub_Model_Observer_Abstract
 {
-    
+
     /**
      * @param Varien_Event_Observer $observer
      */
@@ -26,18 +26,6 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product_Attribute extends BSeller_Sk
             return;
         }
 
-        /** @var BSeller_SkyHub_Model_Integrator_Catalog_Product_Attribute $integrator */
-        $integrator = $this->catalogProductAttributeIntegrator();
-
-        /**
-         * Call method according to product attribute's operation: update or creation.
-         */
-        if ($attribute->getOrigData('attribute_code')) {
-            /** Attribute is being updated. */
-            $integrator->update($attribute);
-        } else {
-            /** Otherwise attribute is being created. */
-            $integrator->create($attribute);
-        }
+        $this->catalogProductAttributeIntegrator()->createOrUpdate($attribute);
     }
 }

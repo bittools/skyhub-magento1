@@ -58,12 +58,16 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
             ->where('entity_type = ?', (string) $entityType)
             ->limit(1);
 
-        $result = $this->getReadConnection()->fetchOne($select);
+        try {
+            $result = $this->getReadConnection()->fetchOne($select);
 
-        if (!$result) {
-            return false;
+            if ($result) {
+                return (int) $result;
+            }
+        } catch (Exception $e) {
+            Mage::logException($e);
         }
 
-        return (int) $result;
+        return false;
     }
 }

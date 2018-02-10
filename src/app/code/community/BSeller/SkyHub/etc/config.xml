@@ -132,6 +132,18 @@
             </adminhtml>
         </routers>
     </admin>
+    <crontab>
+        <jobs>
+            <bseller_skyhub_catalog_product_attributes_queue_create>
+                <schedule>
+                    <config_path>bseller_skyhub/cron/catalog_product_attributes_queue_create</config_path>
+                </schedule>
+                <run>
+                    <model>bseller_skyhub/cron_catalog_product_attribute::createAttributesQueue</model>
+                </run>
+            </bseller_skyhub_catalog_product_attributes_queue_create>
+        </jobs>
+    </crontab>
     <default>
         <bseller_skyhub>
             <general>
@@ -147,9 +159,14 @@
                 <api_key>wxVMVTkf_csx17LioTjY</api_key>
                 <api_token>bZa6Ml0zgS</api_token>
             </service>
+            <cron>
+                <catalog_product_attributes_queue_create>* * * * *</catalog_product_attributes_queue_create>
+            </cron>
+            <!--
             <catalog_product_integration>
                 <method>queue</method>
             </catalog_product_integration>
+            -->
         </bseller_skyhub>
     </default>
     <phpunit>

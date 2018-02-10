@@ -8,6 +8,7 @@ trait BSeller_SkyHub_Trait_Queue
      *
      * @return bool
      */
+    /**
     protected function canQueue($method)
     {
         switch ($method) {
@@ -19,27 +20,22 @@ trait BSeller_SkyHub_Trait_Queue
                 return false;
         }
     }
+    **/
 
 
     /**
-     * @param string        $method
-     * @param int           $entityId
+     * @param int|array     $entityIds
      * @param string        $entityType
-     * @param string        $action
      * @param bool          $canProcess
      * @param null|string   $processAfter
      *
      * @return $this
      */
-    protected function queue($method, $entityId, $entityType, $action, $canProcess = true, $processAfter = null)
+    protected function queue($entityIds, $entityType, $canProcess = true, $processAfter = null)
     {
-        if (!$this->canQueue($method)) {
-            return $this;
-        }
-
         /** @var BSeller_SkyHub_Model_Resource_Queue $resource */
         $resource = Mage::getResourceSingleton('bseller_skyhub/queue');
-        $resource->queue($entityId, $entityType, $action, $canProcess, $processAfter);
+        $resource->queue($entityIds, $entityType, $canProcess, $processAfter);
 
         return $this;
     }

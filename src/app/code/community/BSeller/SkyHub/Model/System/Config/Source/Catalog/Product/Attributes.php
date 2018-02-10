@@ -23,7 +23,7 @@ class BSeller_SkyHub_Model_System_Config_Source_Catalog_Product_Attributes
      */
     protected function optionsKeyValue()
     {
-        $attributes = $this->getAllProductAttributes();
+        $attributes = $this->getProductAttributesCollection();
         $options    = [
             '' => $this->__('-- Select One Attribute --'),
         ];

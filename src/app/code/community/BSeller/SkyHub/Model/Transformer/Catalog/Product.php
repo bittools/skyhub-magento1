@@ -107,7 +107,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
          * Let's get the processed attributes to exclude'em from the specification list.
          */
         $processedAttributeIds = (array) $product->getData('processed_attributes');
-        $remainingAttributes   = (array) $this->getProductAttributes($product, [], array_keys($processedAttributeIds));
+        $remainingAttributes   = (array) $this->getProductAttributes([], array_keys($processedAttributeIds));
     
         /** @var Mage_Eav_Model_Entity_Attribute $specificationAttribute */
         foreach ($remainingAttributes as $attribute) {

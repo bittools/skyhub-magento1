@@ -39,7 +39,7 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
         }
         
         if ($response->exception()) {
-            $this->_getSession()->addSuccess($this->__('There was a problem when trying to integrate the product.'));
+            $this->_getSession()->addError($this->__('There was a problem when trying to integrate the product.'));
         }
         
         $this->redirectProductEdit($product->getId());

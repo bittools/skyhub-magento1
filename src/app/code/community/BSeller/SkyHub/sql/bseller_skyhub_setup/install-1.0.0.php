@@ -99,9 +99,6 @@ $table = $this->newTable($tableName)
     ->addColumn('entity_type', $this::TYPE_TEXT, 255, [
         'nullable' => true,
     ])
-    ->addColumn('method', $this::TYPE_TEXT, 255, [
-        'nullable' => true,
-    ])
     ->addColumn('status', $this::TYPE_INTEGER, 2, [
         'nullable' => false,
         'default'  => 0,

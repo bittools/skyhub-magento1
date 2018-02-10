@@ -12,13 +12,12 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     /**
      * @param int|array   $entityIds
      * @param string      $entityType
-     * @param string      $method
      * @param bool        $canProcess
      * @param null|string $processAfter
      *
      * @return $this
      */
-    public function queue($entityIds, $entityType, $method, $canProcess = true, $processAfter = null)
+    public function queue($entityIds, $entityType, $canProcess = true, $processAfter = null)
     {
         $entityIds = (array) $entityIds;
         $entityIds = array_filter($entityIds, function (&$value) {
@@ -36,7 +35,6 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
             $items[] = [
                 'entity_id'     => (int) $entityId,
                 'entity_type'   => (string) $entityType,
-                'method'        => (string) $method,
                 'status'        => BSeller_SkyHub_Model_Queue::STATUS_PENDING,
                 'can_process'   => (bool) $canProcess,
                 'process_after' => empty($processAfter) ? now() : $processAfter,

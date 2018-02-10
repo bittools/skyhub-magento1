@@ -3,7 +3,7 @@
 class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Model_Integrator_Abstract
 {
     
-    use BSeller_SkyHub_Trait_Data,
+    use BSeller_SkyHub_Trait_Entity,
         BSeller_SkyHub_Trait_Transformers,
         BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
 
@@ -26,7 +26,13 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
         }
 
         /** Create Product */
-        return $this->create($product);
+        $response = $this->create($product);
+
+        if ($response->success()) {
+            $this->registerProductEntity($product->getId());
+        }
+
+        return $response;
     }
 
     
