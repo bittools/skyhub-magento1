@@ -19,6 +19,18 @@ class BSeller_SkyHub_Model_Resource_Catalog_Product_Attributes_Mapping_Collectio
     {
         $this->_init('bseller_skyhub/catalog_product_attributes_mapping');
     }
+
+
+    /**
+     * @param string $code
+     *
+     * @return Varien_Object
+     */
+    public function getBySkyHubCode($code)
+    {
+        $this->load();
+        return $this->getItemByColumnValue('skyhub_code', $code);
+    }
     
     
     /**

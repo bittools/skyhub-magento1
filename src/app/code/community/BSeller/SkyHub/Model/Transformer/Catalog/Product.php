@@ -2,7 +2,7 @@
 
 use SkyHub\Api\EntityInterface\Catalog\Product;
 
-class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Model_Transformer_TransformerAbstract
+class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Model_Transformer_Abstract
 {
 
     use BSeller_SkyHub_Trait_Service,
@@ -25,9 +25,33 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         $this->prepareMappedAttributes($product, $interface)
              ->prepareSpecificationAttributes($product, $interface)
              ->prepareProductCategories($product, $interface)
-             ->prepareProductImages($product, $interface);
+             ->prepareProductImages($product, $interface)
+             ->prepareProductVariations($product, $interface);
 
         return $interface;
+    }
+
+
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param Product                    $interface
+     *
+     * @return $this
+     */
+    protected function prepareProductVariations(Mage_Catalog_Model_Product $product, Product $interface)
+    {
+        switch($product->getTypeId()) {
+            case Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE:
+                /** @var BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurable $creator */
+                $creator = Mage::getModel('bseller_skyhub/transformer_catalog_product_variation_type_configurable');
+                $creator->create($product, $interface);
+                break;
+            case Mage_Catalog_Model_Product_Type::TYPE_SIMPLE:
+            default:
+                return $this;
+        }
+
+        return $this;
     }
     
     

@@ -2,8 +2,7 @@
 
 use SkyHub\Api\EntityInterface\Catalog\Product\Attribute;
 
-class BSeller_SkyHub_Model_Transformer_Catalog_Product_Attribute
-    extends BSeller_SkyHub_Model_Transformer_TransformerAbstract
+class BSeller_SkyHub_Model_Transformer_Catalog_Product_Attribute extends BSeller_SkyHub_Model_Transformer_Abstract
 {
 
     use BSeller_SkyHub_Trait_Service;

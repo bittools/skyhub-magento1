@@ -1,0 +1,8 @@
+<?php
+
+abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Abstract
+    extends BSeller_SkyHub_Model_Transformer_Abstract
+    implements BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Interface
+{
+
+}

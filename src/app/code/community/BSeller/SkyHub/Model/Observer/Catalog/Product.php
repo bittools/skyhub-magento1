@@ -22,7 +22,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         /** @var Mage_Catalog_Model_Product $product */
         $product = $observer->getData('product');
 
-        if (!($product instanceof Mage_Catalog_Model_Product) || !$product->getId()) {
+        if (!$this->canIntegrateProduct($product)) {
             return;
         }
 

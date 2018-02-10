@@ -14,6 +14,9 @@
 trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
 {
 
+    use BSeller_SkyHub_Trait_Catalog_Product;
+
+
     /**
      * @param Mage_Catalog_Model_Product $product
      *
@@ -25,10 +28,21 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
             return false;
         }
 
+        if (!$product->getSku()) {
+            return false;
+        }
+
+        $visibity = $this->productAttributeRawValue($product, 'visibility');
+        if ($visibity == Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE) {
+            return false;
+        }
+
+        /**
         switch ($this->getCatalogProductIntegrationMethod()) {
             case BSeller_SkyHub_Model_System_Config_Source_Integration_Method::INTEGRATION_METHOD_QUEUE:
                 return false;
         }
+        **/
         
         return true;
     }

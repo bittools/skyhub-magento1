@@ -14,7 +14,8 @@
 class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_Controller_Admin_Action
 {
     
-    use BSeller_SkyHub_Trait_Integrators;
+    use BSeller_SkyHub_Trait_Integrators,
+        BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
     
     
     public function integrateAction()
@@ -23,8 +24,9 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
         
         /** @var Mage_Catalog_Model_Product $product */
         $product = Mage::getModel('catalog/product')->load($productId);
-        
-        if (!$product->getId()) {
+
+        if (!$this->canIntegrateProduct($product)) {
+            $this->_getSession()->addNotice($this->__('This product cannot be integrated.'));
             $this->redirectProductList();
             return;
         }
