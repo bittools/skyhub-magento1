@@ -98,6 +98,32 @@
                         </api_token>
                     </fields>
                 </service>
+                <cron translate="label" module="bseller_skyhub">
+                    <label>Cron Configuration</label>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                        <catalog_product_attributes_queue_create>
+                            <label>Product Attributes Queue Generate</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </catalog_product_attributes_queue_create>
+                        <catalog_product_attributes_queue_execute>
+                            <label>Product Attributes Queue Execute</label>
+                            <sort_order>20</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </catalog_product_attributes_queue_execute>
+                    </fields>
+                </cron>
                 <!--
                 <catalog_product_integration translate="label" module="bseller_skyhub">
                     <label>Product Integration Configuration</label>
