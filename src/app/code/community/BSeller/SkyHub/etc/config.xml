@@ -88,6 +88,14 @@
                     </bseller_skyhub_delete_catalog_category>
                 </observers>
             </catalog_category_delete_after>
+            <catalog_category_tree_move_after>
+                <observers>
+                    <bseller_skyhub_delete_catalog_category>
+                        <class>bseller_skyhub/observer_catalog_category</class>
+                        <method>integrateCategory</method>
+                    </bseller_skyhub_delete_catalog_category>
+                </observers>
+            </catalog_category_tree_move_after>
         </events>
     </global>
     <frontend>
