@@ -13,6 +13,8 @@
  */
 class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model_Observer_Abstract
 {
+
+    use BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
     
     /**
      * @param Varien_Event_Observer $observer

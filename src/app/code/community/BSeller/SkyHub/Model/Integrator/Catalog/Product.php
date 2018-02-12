@@ -186,7 +186,7 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
                           ->entityInterface();
         $interface->setSku($sku);
 
-        $this->eventMethod = 'urls';
+        $this->eventMethod = 'delete';
 
         $this->beforeIntegration();
         $response = $interface->delete();

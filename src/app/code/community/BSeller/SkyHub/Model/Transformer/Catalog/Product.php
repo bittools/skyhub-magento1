@@ -6,6 +6,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
 {
 
     use BSeller_SkyHub_Trait_Service,
+        BSeller_SkyHub_Trait_Catalog_Category,
         BSeller_SkyHub_Trait_Catalog_Product_Attribute;
     
     
@@ -51,6 +52,10 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                 $creator = Mage::getModel('bseller_skyhub/transformer_catalog_product_variation_type_grouped');
                 $creator->create($product, $interface);
                 break;
+            case Mage_Catalog_Model_Product_Type::TYPE_BUNDLE:
+                /** @todo Create the bundle integration. */
+            case Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL:
+                /** @todo Create the bundle integration. */
             case Mage_Catalog_Model_Product_Type::TYPE_SIMPLE:
             default:
                 return $this;
@@ -96,29 +101,13 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         
         /** @var Mage_Catalog_Model_Category $category */
         foreach ($categories as $category) {
-            $interface->addCategory($category->getId(), $this->extractProductCategoryPathString($category));
+            $interface->addCategory(
+                $category->getId(),
+                $this->extractProductCategoryPathString($category)
+            );
         }
         
         return $this;
-    }
-    
-    
-    /**
-     * @param Mage_Catalog_Model_Category $category
-     *
-     * @return string
-     * @throws Mage_Core_Model_Store_Exception
-     */
-    protected function extractProductCategoryPathString(Mage_Catalog_Model_Category $category)
-    {
-        $ids            = array_reverse(explode(',', $category->getPathInStore()));
-        $categoryPieces = [];
-        
-        foreach ($ids as $id) {
-            $categoryPieces[] = $category->getResource()->getAttributeRawValue($id, 'name', $this->getStore());
-        }
-        
-        return implode(' > ', $categoryPieces);
     }
     
     

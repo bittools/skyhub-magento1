@@ -22,4 +22,14 @@ trait BSeller_SkyHub_Trait_Transformers
         $transformer = Mage::getSingleton('bseller_skyhub/transformer_catalog_product');
         return $transformer;
     }
+
+    /**
+     * @return BSeller_SkyHub_Model_Transformer_Catalog_Category
+     */
+    public function categoryTransformer()
+    {
+        /** @var BSeller_SkyHub_Model_Transformer_Catalog_Category $transformer */
+        $transformer = Mage::getSingleton('bseller_skyhub/transformer_catalog_category');
+        return $transformer;
+    }
 }

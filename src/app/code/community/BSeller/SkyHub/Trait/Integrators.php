@@ -13,6 +13,7 @@ trait BSeller_SkyHub_Trait_Integrators
         return $integrator;
     }
 
+
     /**
      * @return BSeller_SkyHub_Model_Integrator_Catalog_Product
      */
@@ -20,6 +21,17 @@ trait BSeller_SkyHub_Trait_Integrators
     {
         /** @var BSeller_SkyHub_Model_Integrator_Catalog_Product $integrator */
         $integrator = Mage::getModel('bseller_skyhub/integrator_catalog_product');
+        return $integrator;
+    }
+
+
+    /**
+     * @return BSeller_SkyHub_Model_Integrator_Catalog_Category
+     */
+    protected function catalogCategoryIntegrator()
+    {
+        /** @var BSeller_SkyHub_Model_Integrator_Catalog_Category $integrator */
+        $integrator = Mage::getModel('bseller_skyhub/integrator_catalog_category');
         return $integrator;
     }
 }
