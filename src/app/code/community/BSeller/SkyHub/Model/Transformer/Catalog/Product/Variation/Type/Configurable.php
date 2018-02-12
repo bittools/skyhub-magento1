@@ -23,11 +23,12 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         $typeInstance = $product->getTypeInstance();
 
         /** @var array $configurationOptions */
+        /**
         $configurationOptions = $typeInstance->getConfigurableOptions($product);
 
         $options = [];
 
-        /** @var array $option */
+        /** @var array $option * /
         foreach ($configurationOptions as $optionId => $configurationOption) {
             foreach ($configurationOption as $item) {
                 $attributeCode = $item['attribute_code'];
@@ -41,19 +42,23 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
                 ];
             }
         }
+        */
 
-        foreach ($options as $sku => $option) {
-            $productId = $product->getResource()->getIdBySku($sku);
+        $childrenIds = (array) $typeInstance->getChildrenIds($product->getId());
+        $childrenIds = (array) array_pop($childrenIds);
 
-            if (!$productId) {
-                continue;
-            }
+        if (empty($childrenIds)) {
+            return $this;
+        }
 
-            /** @var Mage_Catalog_Model_Product $childProduct */
-            $childProduct = Mage::getModel('catalog/product')->load($productId);
+        /** @var Mage_Catalog_Model_Resource_Product_Collection $childrenCollection */
+        $childrenCollection = Mage::getResourceModel('catalog/product_collection');
+        $childrenCollection->addFieldToFilter('entity_id', ['in' => $childrenIds]);
 
+        /** @var Mage_Catalog_Model_Product $child */
+        foreach ($childrenCollection as $child) {
             /** @var Product\Variation $variation */
-            $variation = $this->addVariation($childProduct, $interface);
+            $variation = $this->addVariation($child, $interface);
         }
 
         return $this;
@@ -72,13 +77,10 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         $typeInstance = $product->getTypeInstance();
 
         /** @var Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute_Collection $configurableAttributes */
-        $configurableAttributes = $typeInstance->getConfigurableAttributes($product);
+        $configurableAttributes = $typeInstance->getUsedProductAttributes($product);
 
-        /** @var Mage_Catalog_Model_Product_Type_Configurable_Attribute $configurableAttribute */
-        foreach ($configurableAttributes as $configurableAttribute) {
-            /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
-            $attribute = $configurableAttribute->getProductAttribute();
-
+        /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
+        foreach ($configurableAttributes as $attribute) {
             if (!$attribute || !$attribute->getAttributeId()) {
                 continue;
             }
