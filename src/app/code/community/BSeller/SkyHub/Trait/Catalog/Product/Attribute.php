@@ -212,6 +212,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
             'url_key',
             'entity_type_id',
             'type_id',
+//            'category_ids',
         ];
     }
     

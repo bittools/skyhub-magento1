@@ -46,6 +46,11 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                 $creator = Mage::getModel('bseller_skyhub/transformer_catalog_product_variation_type_configurable');
                 $creator->create($product, $interface);
                 break;
+            case Mage_Catalog_Model_Product_Type::TYPE_GROUPED:
+                /** @var BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Grouped $creator */
+                $creator = Mage::getModel('bseller_skyhub/transformer_catalog_product_variation_type_grouped');
+                $creator->create($product, $interface);
+                break;
             case Mage_Catalog_Model_Product_Type::TYPE_SIMPLE:
             default:
                 return $this;
