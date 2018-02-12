@@ -87,7 +87,8 @@
                         <method>deleteCategory</method>
                     </bseller_skyhub_delete_catalog_category>
                 </observers>
-            </catalogcatalog_category_delete_aft     </events>
+            </catalog_category_delete_after>
+        </events>
     </global>
     <frontend>
         <routers>
