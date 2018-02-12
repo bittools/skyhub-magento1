@@ -31,6 +31,23 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         /** Create or Update Product */
         $this->catalogProductIntegrator()->createOrUpdate($product);
     }
+
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function deleteProduct(Varien_Event_Observer $observer)
+    {
+        /** @var Mage_Catalog_Model_Product $product */
+        $product = $observer->getData('product');
+
+        if (!$this->canIntegrateProduct($product)) {
+            return;
+        }
+
+        /** Create or Update Product */
+        $this->catalogProductIntegrator()->delete($product->getSku());
+    }
     
     
     /**
