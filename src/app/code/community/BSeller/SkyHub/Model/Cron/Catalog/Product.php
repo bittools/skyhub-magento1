@@ -106,8 +106,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
     protected function getProductCollection()
     {
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
-        $collection = Mage::getResourceModel('catalog/product_collection')
-            ->addAttributeToSelect(['visibility']);
+        $collection = Mage::getResourceModel('catalog/product_collection');
         return $collection;
     }
 

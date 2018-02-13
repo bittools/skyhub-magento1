@@ -43,6 +43,13 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
             return false;
         }
 
+        if (!$product->hasData('visibility')) {
+            $visibility = $product->getResource()
+                ->getAttributeRawValue($product->getId(), 'visibility', $product->getStore());
+
+            $product->setData('visibility', $visibility);
+        }
+
         if (!$bypassVisibleCheck && !$product->isVisibleInSiteVisibility()) {
             return false;
         }
