@@ -248,11 +248,6 @@
                 <catalog_categories_queue_create>0 3 */1 * *</catalog_categories_queue_create>
                 <catalog_categories_queue_execute>10 3 */1 * *</catalog_categories_queue_execute>
             </cron>
-            <!--
-            <catalog_product_integration>
-                <method>queue</method>
-            </catalog_product_integration>
-            -->
         </bseller_skyhub>
     </default>
     <phpunit>

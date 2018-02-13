@@ -29,7 +29,7 @@ trait BSeller_SkyHub_Trait_Config
      */
     protected function getGeneralConfig($field)
     {
-        return $this->getSkyHubModuleConfig($field, 'service');
+        return $this->getSkyHubModuleConfig($field, 'general');
     }
 
 
