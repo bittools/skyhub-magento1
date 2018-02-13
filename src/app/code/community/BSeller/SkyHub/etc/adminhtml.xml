@@ -19,19 +19,24 @@
                             </children>
                         </catalog_product_attributes_mapping>
                         <queues translate="title" module="bseller_skyhub">
-                            <title>Queues Management</title>
+                            <title>Queues Tracking</title>
                             <sort_order>800</sort_order>
                             <children>
-                                <pending_products translate="title" module="bseller_skyhub">
-                                    <title>Integration Pending Products</title>
+                                <products_queue translate="title" module="bseller_skyhub">
+                                    <title>Products Queue</title>
                                     <sort_order>10</sort_order>
-                                    <action>adminhtml/bseller_skyhub_queue/pendingProducts</action>
-                                </pending_products>
-                                <error_products translate="title" module="bseller_skyhub">
-                                    <title>Products With Integration Errors</title>
+                                    <action>adminhtml/bseller_skyhub_queue/productsQueue</action>
+                                </products_queue>
+                                <product_attributes_queue translate="title" module="bseller_skyhub">
+                                    <title>Product Attributes Queue</title>
                                     <sort_order>20</sort_order>
-                                    <action>adminhtml/bseller_skyhub_queue/errorProducts</action>
-                                </error_products>
+                                    <action>adminhtml/bseller_skyhub_queue/productAttributesQueue</action>
+                                </product_attributes_queue>
+                                <categories_queue translate="title" module="bseller_skyhub">
+                                    <title>Categories Queue</title>
+                                    <sort_order>30</sort_order>
+                                    <action>adminhtml/bseller_skyhub_queue/categoriesQueue</action>
+                                </categories_queue>
                             </children>
                         </queues>
                         <configuration translate="title" module="bseller_skyhub">

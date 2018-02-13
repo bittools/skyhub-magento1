@@ -12,10 +12,9 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 class BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Attributes_Mapping
-    extends BSeller_Core_Block_Adminhtml_Widget_Grid_Container
+    extends BSeller_SkyHub_Block_Adminhtml_Widget_Grid_Container
 {
 
-    protected $_blockGroup = 'bseller_skyhub';
     protected $_controller = 'adminhtml_catalog_product_attributes_mapping';
     
     

@@ -13,40 +13,56 @@
  */
 class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_QueueController extends BSeller_SkyHub_Controller_Admin_Action
 {
-    
+
     /**
+     * @param string|null $actionTitle
+     *
      * @return $this
      */
-    protected function init()
+    protected function init($actionTitle = null)
     {
-        parent::init();
-        $this->_title($this->__('Queue'));
+        parent::init('Queues Tracking');
+
+        if (!empty($actionTitle)) {
+            $this->_title($this->__($actionTitle));
+        }
+
         return $this;
     }
     
     
     /**
-     * Integration Pending Products
+     * Catalog Products Queue
      */
-    public function pendingProductsAction()
+    public function productsQueueAction()
     {
-        $this->init();
-        $this->_title($this->__('Integration Pending Products'));
-        $this->_setActiveMenu('bseller/bseller_skyhub/queues/pending_products');
+        $this->init('Catalog Products Queue');
+        $this->_setActiveMenu('bseller/bseller_skyhub/queues/products_queue');
         
         $this->renderLayout();
     }
-    
-    
+
+
     /**
-     * Products With Integration Errors
+     * Catalog Categories Queue
      */
-    public function errorProductsAction()
+    public function categoriesQueueAction()
     {
-        $this->init();
-        $this->_title($this->__('Products With Integration Errors'));
-        $this->_setActiveMenu('bseller/bseller_skyhub/queues/error_products');
-        
+        $this->init('Catalog Categories Queue');
+        $this->_setActiveMenu('bseller/bseller_skyhub/queues/categories_queue');
+
+        $this->renderLayout();
+    }
+
+
+    /**
+     * Catalog Product Attributes Queue
+     */
+    public function productAttributesQueueAction()
+    {
+        $this->init('Catalog Product Attributes Queue');
+        $this->_setActiveMenu('bseller/bseller_skyhub/queues/product_attributes_queue');
+
         $this->renderLayout();
     }
 

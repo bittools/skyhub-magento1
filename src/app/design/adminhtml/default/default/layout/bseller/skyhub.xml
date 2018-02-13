@@ -10,7 +10,7 @@
 
     <!-- Catalog Product Attributes Mapping -->
     <adminhtml_bseller_skyhub_catalog_product_attributes_mapping_index>
-        <label>Catalog Product Attributes Mapping</label>
+        <label>BSeller SkyHub Catalog Product Attributes Mapping</label>
         <update handle="ADD_STYLES"/>
         <reference name="content">
             <block type="bseller_skyhub/adminhtml_catalog_product_attributes_mapping"/>
@@ -19,7 +19,7 @@
 
     <!-- Catalog Product Attributes Mapping Edit -->
     <adminhtml_bseller_skyhub_catalog_product_attributes_mapping_edit>
-        <label>Catalog Product Attributes Mapping</label>
+        <label>BSeller SkyHub Catalog Product Attributes Mapping</label>
         <update handle="ADD_STYLES"/>
         <reference name="content">
             <block type="bseller_skyhub/adminhtml_catalog_product_attributes_mapping_edit"/>
@@ -28,13 +28,37 @@
 
     <!-- Integration Pending Products -->
     <adminhtml_bseller_skyhub_queue_pendingproducts>
-        <label>Integration Pending Products</label>
+        <label>BSeller SkyHub Integration Pending Products</label>
     </adminhtml_bseller_skyhub_queue_pendingproducts>
 
     <!-- Products With Integration Error -->
     <adminhtml_bseller_skyhub_queue_errorproducts>
-        <label>Products With Integration Errors</label>
+        <label>BSeller SkyHub Products With Integration Errors</label>
     </adminhtml_bseller_skyhub_queue_errorproducts>
+
+    <!-- Catalog Categories Queue -->
+    <adminhtml_bseller_skyhub_queue_categoriesqueue>
+        <label>BSeller SkyHub Products Queue</label>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_queue_catalog_category"/>
+        </reference>
+    </adminhtml_bseller_skyhub_queue_categoriesqueue>
+
+    <!-- Catalog Products Queue -->
+    <adminhtml_bseller_skyhub_queue_productsqueue>
+        <label>BSeller SkyHub Products Queue</label>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_queue_catalog_product"/>
+        </reference>
+    </adminhtml_bseller_skyhub_queue_productsqueue>
+
+    <!-- Catalog Product Attributes Queue -->
+    <adminhtml_bseller_skyhub_queue_productattributesqueue>
+        <label>BSeller SkyHub Product Attributes Queue</label>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_queue_catalog_product_attribute"/>
+        </reference>
+    </adminhtml_bseller_skyhub_queue_productattributesqueue>
 
     <ADD_STYLES>
         <reference name="head">

@@ -25,6 +25,8 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
             return;
         }
 
+        $categoryIds = $this->remoteRootCategory($categoryIds);
+
         $this->getQueueResource()->queue($categoryIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY);
 
         $schedule->setMessages(
@@ -49,6 +51,8 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
             $schedule->setMessages($this->__('No category to be integrated right now.'));
             return;
         }
+
+        $categoryIds = $this->remoteRootCategory($categoryIds);
 
         /** @var Mage_Catalog_Model_Resource_Category_Collection $collection */
         $collection = $this->getCategoryCollection()
@@ -96,6 +100,25 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
         /** @var Mage_Catalog_Model_Resource_Category_Collection $collection */
         $collection = Mage::getResourceModel('catalog/category_collection');
         return $collection;
+    }
+
+
+    /**
+     * @param array $categoryIds
+     *
+     * @return mixed
+     *
+     * @throws Mage_Core_Model_Store_Exception
+     */
+    protected function remoteRootCategory(array &$categoryIds)
+    {
+        foreach ($categoryIds as $key => $categoryId) {
+            if ($categoryId == Mage::app()->getStore()->getRootCategoryId()) {
+                unset($categoryIds[$key]);
+            }
+        }
+
+        return $categoryIds;
     }
 
 
