@@ -14,6 +14,10 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub
      */
     public function createAttributesQueue(Mage_Cron_Model_Schedule $schedule)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         $integrableIds = (array) array_keys($this->getIntegrableProductAttributes());
 
         try {
@@ -36,6 +40,10 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub
      */
     public function executeAttributesQueue(Mage_Cron_Model_Schedule $schedule)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         $attributeIds = (array) $this->getQueueResource()
             ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE);
 
@@ -67,4 +75,16 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub
         $schedule->setMessages($this->__('All product attributes were successfully integrated.'));
     }
 
+
+    /**
+     * @return bool
+     */
+    protected function canRun()
+    {
+        if (!$this->isCronCatalogProductAttributesEnabled()) {
+            return false;
+        }
+
+        return parent::canRun();
+    }
 }

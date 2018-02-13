@@ -8,6 +8,10 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
      */
     public function createCategoriesQueue(Mage_Cron_Model_Schedule $schedule)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         /** @var Varien_Db_Select $select */
         $select = $this->getCategoryCollection()->getSelect()
             ->reset('columns')
@@ -34,6 +38,10 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
      */
     public function executeCategoriesQueue(Mage_Cron_Model_Schedule $schedule)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         $categoryIds = (array) $this->getQueueResource()
             ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY);
 
@@ -90,4 +98,16 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
         return $collection;
     }
 
+
+    /**
+     * @return bool
+     */
+    protected function canRun()
+    {
+        if (!$this->isCronCatalogCategoriesEnabled()) {
+            return false;
+        }
+
+        return parent::canRun();
+    }
 }

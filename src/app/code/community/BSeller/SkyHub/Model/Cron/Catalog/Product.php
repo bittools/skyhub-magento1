@@ -8,6 +8,10 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
      */
     public function createProductsQueue(Mage_Cron_Model_Schedule $schedule)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         $queuedIds = (array) $this->getQueueResource()
             ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
 
@@ -54,6 +58,10 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
      */
     public function executeProductsQueue(Mage_Cron_Model_Schedule $schedule)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         $productIds = (array) $this->getQueueResource()
             ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
 
@@ -124,5 +132,18 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
         });
 
         return (array) $ids;
+    }
+
+
+    /**
+     * @return bool
+     */
+    protected function canRun()
+    {
+        if (!$this->isCronCatalogProductsEnabled()) {
+            return false;
+        }
+
+        return parent::canRun();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-class BSeller_SkyHub_Model_Cron_Sales_Order
+class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Abstract
 {
 
     use BSeller_Core_Trait_Data,
@@ -12,6 +12,10 @@ class BSeller_SkyHub_Model_Cron_Sales_Order
      */
     public function importOrders(Mage_Cron_Model_Schedule $schedule)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         $mock = '{
           "total": 1,
           "orders": [

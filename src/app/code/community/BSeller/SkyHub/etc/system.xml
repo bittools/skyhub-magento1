@@ -106,22 +106,102 @@
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
                     <fields>
-                        <catalog_product_attributes_queue_create>
-                            <label>Product Attributes Queue Generate</label>
+                        <!-- CATALOG PRODUCT ATTRIBUTES -->
+                        <catalog_product_attributes_queue_enabled>
+                            <label>Product Attributes Queue Enabled</label>
                             <sort_order>10</sort_order>
-                            <frontend_type>text</frontend_type>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </catalog_product_attributes_queue_create>
-                        <catalog_product_attributes_queue_execute>
-                            <label>Product Attributes Queue Execute</label>
+                        </catalog_product_attributes_queue_enabled>
+                        <catalog_product_attributes_queue_create>
+                            <label>Product Attributes Queue Generate</label>
                             <sort_order>20</sort_order>
                             <frontend_type>text</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <catalog_product_attributes_queue_enabled>1</catalog_product_attributes_queue_enabled>
+                            </depends>
+                        </catalog_product_attributes_queue_create>
+                        <catalog_product_attributes_queue_execute>
+                            <label>Product Attributes Queue Execute</label>
+                            <sort_order>30</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <catalog_product_attributes_queue_enabled>1</catalog_product_attributes_queue_enabled>
+                            </depends>
                         </catalog_product_attributes_queue_execute>
+                        <!-- CATALOG PRODUCTS -->
+                        <catalog_products_queue_enabled>
+                            <label>Products Queue Enabled</label>
+                            <sort_order>40</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </catalog_products_queue_enabled>
+                        <catalog_products_queue_create>
+                            <label>Products Queue Create</label>
+                            <sort_order>50</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <catalog_products_queue_enabled>1</catalog_products_queue_enabled>
+                            </depends>
+                        </catalog_products_queue_create>
+                        <catalog_products_queue_execute>
+                            <label>Products Queue Execute</label>
+                            <sort_order>60</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <catalog_products_queue_enabled>1</catalog_products_queue_enabled>
+                            </depends>
+                        </catalog_products_queue_execute>
+                        <!-- CATALOG CATEGORIES -->
+                        <catalog_categories_queue_enabled>
+                            <label>Categories Queue Enabled</label>
+                            <sort_order>70</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </catalog_categories_queue_enabled>
+                        <catalog_categories_queue_create>
+                            <label>Categories Queue Create</label>
+                            <sort_order>80</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <catalog_categories_queue_enabled>1</catalog_categories_queue_enabled>
+                            </depends>
+                        </catalog_categories_queue_create>
+                        <catalog_categories_queue_execute>
+                            <label>Categories Queue Execute</label>
+                            <sort_order>90</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <catalog_categories_queue_enabled>1</catalog_categories_queue_enabled>
+                            </depends>
+                        </catalog_categories_queue_execute>
                     </fields>
                 </cron>
                 <!--
