@@ -9,7 +9,7 @@ trait BSeller_SkyHub_Trait_Integrators
     protected function catalogProductAttributeIntegrator()
     {
         /** @var BSeller_SkyHub_Model_Integrator_Catalog_Product_Attribute $integrator */
-        $integrator = Mage::getModel('bseller_skyhub/integrator_catalog_product_attribute');
+        $integrator = Mage::getSingleton('bseller_skyhub/integrator_catalog_product_attribute');
         return $integrator;
     }
 
@@ -20,7 +20,7 @@ trait BSeller_SkyHub_Trait_Integrators
     protected function catalogProductIntegrator()
     {
         /** @var BSeller_SkyHub_Model_Integrator_Catalog_Product $integrator */
-        $integrator = Mage::getModel('bseller_skyhub/integrator_catalog_product');
+        $integrator = Mage::getSingleton('bseller_skyhub/integrator_catalog_product');
         return $integrator;
     }
 
@@ -31,7 +31,7 @@ trait BSeller_SkyHub_Trait_Integrators
     protected function catalogCategoryIntegrator()
     {
         /** @var BSeller_SkyHub_Model_Integrator_Catalog_Category $integrator */
-        $integrator = Mage::getModel('bseller_skyhub/integrator_catalog_category');
+        $integrator = Mage::getSingleton('bseller_skyhub/integrator_catalog_category');
         return $integrator;
     }
 }

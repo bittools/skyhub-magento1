@@ -68,11 +68,12 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
 
 
     /**
-     * @param string $entityType
+     * @param string   $entityType
+     * @param int|null $limit
      *
      * @return array
      */
-    public function getPendingEntityIds($entityType)
+    public function getPendingEntityIds($entityType, $limit = null)
     {
         $integrableStatuses = [
             BSeller_SkyHub_Model_Queue::STATUS_PENDING,
@@ -88,6 +89,10 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
             ->where('process_after <= ?', now())
             ->where('entity_type = ?', (string) $entityType)
         ;
+
+        if (!is_null($limit)) {
+            $select->limit((int) $limit);
+        }
 
         $ids = $this->getReadConnection()->fetchCol($select);
 

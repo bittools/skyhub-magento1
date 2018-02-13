@@ -156,7 +156,7 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
         }
 
         /** @var Varien_Object $galleryImage */
-        foreach ($product->getMediaGalleryImages() as $galleryImage) {
+        foreach ($gallery as $galleryImage) {
             $variation->addImage($galleryImage->getData('url'));
         }
 

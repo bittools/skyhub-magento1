@@ -52,6 +52,14 @@ class BSeller_SkyHub_Test_QueueController extends BSeller_SkyHub_Controller_Fron
     }
 
 
+    public function executeProductsByCronAction()
+    {
+        /** @var BSeller_SkyHub_Model_Cron_Catalog_Product $cron */
+        $cron = Mage::getModel('bseller_skyhub/cron_catalog_product');
+        $cron->executeProductsQueue(new Mage_Cron_Model_Schedule());
+    }
+
+
     /**
      * @return Mage_Catalog_Model_Product
      */

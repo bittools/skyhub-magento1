@@ -76,7 +76,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
             /** @var \SkyHub\Api\Handler\Response\HandlerInterface $response */
             $response = $this->catalogProductIntegrator()->createOrUpdate($product);
 
-            if ($response->exception()) {
+            if (!$response || $response->exception()) {
                 $errorIds[] = $product->getId();
                 continue;
             }
@@ -106,7 +106,8 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
     protected function getProductCollection()
     {
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
-        $collection = Mage::getResourceModel('catalog/product_collection');
+        $collection = Mage::getResourceModel('catalog/product_collection')
+            ->addAttributeToSelect(['visibility']);
         return $collection;
     }
 

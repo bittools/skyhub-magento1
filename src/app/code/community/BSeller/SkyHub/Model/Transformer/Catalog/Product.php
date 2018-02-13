@@ -73,8 +73,28 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
      */
     public function prepareProductImages(Mage_Catalog_Model_Product $product, Product $interface)
     {
+        if (!$product->getMediaGalleryImages()) {
+            /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode(
+                Mage_Catalog_Model_Product::ENTITY,
+                'media_gallery'
+            );
+
+            /** @var Mage_Catalog_Model_Product_Attribute_Backend_Media $media */
+            Mage::getModel('catalog/product_attribute_backend_media')
+                ->setAttribute($attribute)
+                ->afterLoad($product);
+        }
+
+        /** @var Varien_Data_Collection|null $gallery */
+        $gallery = $product->getMediaGalleryImages();
+
+        if (!$gallery || !$gallery->getSize()) {
+            return $this;
+        }
+
         /** @var Varien_Object $image */
-        foreach ($product->getMediaGalleryImages() as $image) {
+        foreach ($gallery as $image) {
             $url = $image->getData('url');
             $interface->addImage($url);
         }
