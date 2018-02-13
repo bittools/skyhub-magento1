@@ -3,7 +3,8 @@
 class BSeller_SkyHub_Model_Cron_Sales_Order
 {
 
-    use BSeller_SkyHub_Trait_Service;
+    use BSeller_Core_Trait_Data,
+        BSeller_SkyHub_Trait_Service;
 
 
     /**
@@ -141,19 +142,12 @@ class BSeller_SkyHub_Model_Cron_Sales_Order
         $order->setGrandTotal((float) $totalOrdered);
         $order->setShippingAmount($shippingCost);
         $order->setIncrementId($code);
+        $order->setState($order::STATE_NEW, true, $this->__('Order created from SkyHub.'));
 
         /** Bind Customer */
         $customer = $this->bindCustomer($data['customer'], $order);
 
-        /**
-         * @var Mage_Sales_Model_Order_Address $billingAddress
-         * @var Mage_Sales_Model_Order_Address $shippingAddress
-         */
-        $billingAddress  = $this->createAddress($data['billing_address'], $customer);
-        $shippingAddress = $this->createAddress($data['shipping_address'], $customer);
-
-        $order->setBillingAddress($billingAddress)
-            ->setShippingAddress($shippingAddress);
+        $this->bindOrderAddresses($data['billing_address'], $data['shipping_address'], $order);
 
         /** Create Order Items */
         $this->createItems($data['items'], $order);
@@ -310,6 +304,29 @@ class BSeller_SkyHub_Model_Cron_Sales_Order
     protected function createShippingMethod()
     {
 
+    }
+
+
+    /**
+     * @param array                  $billing
+     * @param array                  $shipping
+     * @param Mage_Sales_Model_Order $order
+     *
+     * @return Mage_Sales_Model_Order
+     */
+    protected function bindOrderAddresses(array $billing, array $shipping, Mage_Sales_Model_Order $order)
+    {
+        /**
+         * @var Mage_Sales_Model_Order_Address $billingAddress
+         * @var Mage_Sales_Model_Order_Address $shippingAddress
+         */
+        $billingAddress  = $this->createOrderAddress($billing);
+        $shippingAddress = $this->createOrderAddress($shipping);
+
+        $order->setBillingAddress($billingAddress)
+            ->setShippingAddress($shippingAddress);
+
+        return $order;
     }
 
 
