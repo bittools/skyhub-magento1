@@ -113,7 +113,8 @@ class BSeller_SkyHub_Model_Cron_Sales_Order
         foreach ($orders['orders'] as $orderData) {
             /** @var Mage_Sales_Model_Order $order */
             $order = $this->createOrder($orderData);
-            $order->save();
+            $order->place()
+                ->save();
         }
     }
 
@@ -129,20 +130,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order
         $order = Mage::getModel('sales/order');
         $order->setStoreId($this->getStore()->getId());
 
-        $code = $data['code'];
-        $channel = $data['channel'];
-        $placedAt = $data['placed_at'];
-        $updatedAt = $data['updated_at'];
-        $totalOrdered = $data['total_ordered'];
-        $interest = $data['interest'];
-        $shippingCost = $data['shipping_cost'];
-        $shippingMethod = $data['shipping_method'];
-        $estimatedDelivery = $data['estimated_delivery'];
-
-        $order->setGrandTotal((float) $totalOrdered);
-        $order->setShippingAmount($shippingCost);
-        $order->setIncrementId($code);
-        $order->setState($order::STATE_NEW, true, $this->__('Order created from SkyHub.'));
+        $this->bindBaseOrderData($data, $order);
 
         /** Bind Customer */
         $customer = $this->bindCustomer($data['customer'], $order);
@@ -163,6 +151,48 @@ class BSeller_SkyHub_Model_Cron_Sales_Order
 
 
     /**
+     * @param                        $data
+     * @param Mage_Sales_Model_Order $order
+     *
+     * @return Mage_Sales_Model_Order
+     */
+    protected function bindBaseOrderData($data, Mage_Sales_Model_Order $order)
+    {
+        $code = $data['code'];
+        $channel = $data['channel'];
+        $placedAt = $data['placed_at'];
+        $updatedAt = $data['updated_at'];
+        $totalOrdered = $data['total_ordered'];
+        $interest = $data['interest'];
+        $shippingCost = $data['shipping_cost'];
+        $shippingMethod = $data['shipping_method'];
+        $estimatedDelivery = $data['estimated_delivery'];
+
+        $order->setIncrementId($code);
+        $order->setState($order::STATE_NEW, true, $this->__('Order created from SkyHub.'));
+
+        $order->setBaseCurrencyCode($this->getStore()->getBaseCurrencyCode())
+            ->setOrderCurrencyCode($this->getStore()->getCurrentCurrencyCode());
+
+        $order->setBaseSubtotal((float) $totalOrdered)
+            ->setSubtotal((float) $totalOrdered)
+            ->setBaseGrandTotal((float) $totalOrdered)
+            ->setGrandTotal((float) $totalOrdered)
+            ->setBaseShippingAmount((float) $shippingCost)
+            ->setShippingAmount((float) $shippingCost)
+            ->setBaseDiscountAmount(0)
+            ->setDiscountAmount(0)
+            ->setBaseDiscountInvoiced(0)
+            ->setDiscountInvoiced(0)
+            ->setBaseTaxAmount(0)
+            ->setTaxAmount(0)
+        ;
+
+        return $order;
+    }
+
+
+    /**
      * @param array                  $data
      * @param Mage_Sales_Model_Order $order
      *
@@ -173,7 +203,9 @@ class BSeller_SkyHub_Model_Cron_Sales_Order
         /** @var array $itemData */
         foreach ($data as $itemData) {
             /** @var Mage_Sales_Model_Order_Item $item */
-            $item         = Mage::getModel('sales/order_item');
+            $item = Mage::getModel('sales/order_item');
+            $item->setStoreId($this->getStore()->getId());
+
             $productId    = $itemData['product_id'];
             $price        = (float) $itemData['original_price'];
             $specialPrice = (float) $itemData['special_price'];
@@ -185,7 +217,11 @@ class BSeller_SkyHub_Model_Cron_Sales_Order
             $product = Mage::getModel('catalog/product');
             $product->loadByAttribute('sku', $productId);
 
+            $item->setProductId($product->getId());
+            $item->setProductType($product->getTypeId());
             $item->setName($product->getName());
+            $item->setSku($product->getSku());
+            $item->setOriginalPrice((float) $price);
             $item->setPrice((float) $price);
             $item->setRowTotal((float) $price);
             $item->setDiscountAmount((float) $discount);
