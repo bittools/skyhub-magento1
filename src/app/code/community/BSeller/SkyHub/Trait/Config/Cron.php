@@ -33,6 +33,23 @@ trait BSeller_SkyHub_Trait_Config_Cron
 
 
     /**
+     * @param int $default
+     *
+     * @return bool
+     */
+    protected function getCatalogProductQueueExecuteLimit($default = 500)
+    {
+        $quantity = (int) $this->getCronConfig('catalog_products_queue_execute_limit');
+
+        if (!$quantity) {
+            $quantity = $default;
+        }
+
+        return (int) $quantity;
+    }
+
+
+    /**
      * @return bool
      */
     protected function isCronCatalogCategoriesEnabled()

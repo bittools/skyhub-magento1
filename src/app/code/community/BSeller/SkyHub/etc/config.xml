@@ -241,8 +241,9 @@
                 <catalog_product_attributes_queue_execute>11 2 */1 * *</catalog_product_attributes_queue_execute>
                 <!-- CATALOG PRODUCTS -->
                 <catalog_products_queue_enabled>1</catalog_products_queue_enabled>
-                <catalog_products_queue_create>*/15 * * * *</catalog_products_queue_create>
+                <catalog_products_queue_create>*/13 * * * *</catalog_products_queue_create>
                 <catalog_products_queue_execute>*/30 * * * *</catalog_products_queue_execute>
+                <catalog_products_queue_execute_limit>500</catalog_products_queue_execute_limit>
                 <!-- CATALOG CATEGORIES -->
                 <catalog_categories_queue_enabled>1</catalog_categories_queue_enabled>
                 <catalog_categories_queue_create>0 3 */1 * *</catalog_categories_queue_create>

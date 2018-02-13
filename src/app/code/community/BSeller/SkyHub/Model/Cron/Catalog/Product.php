@@ -27,7 +27,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
             $collection->addFieldToFilter('entity_id', ['nin' => $queuedIds]);
         }
 
-        $limit = 500;
+        $limit = (int) $this->getCatalogProductQueueExecuteLimit();
 
         /** @var Varien_Db_Select $select */
         $select = $collection->getSelect()
@@ -70,6 +70,14 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = $this->getProductCollection()
             ->addFieldToFilter('entity_id', ['in' => $productIds]);
+
+        /**
+         * Set limitation.
+         */
+        $limit = (int) $this->getCatalogProductQueueExecuteLimit();
+        if ($limit) {
+            $collection->getSelect()->limit((int) $limit);
+        }
 
         if (!$collection->getSize()) {
             $schedule->setMessages($this->__('No product to be integrated this time.'));

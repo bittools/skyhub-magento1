@@ -102,7 +102,7 @@
                         </api_token>
                     </fields>
                 </service>
-                <cron translate="label" module="bseller_skyhub">
+                <cron translate="label comment" module="bseller_skyhub">
                     <label>Cron Configuration</label>
                     <sort_order>100</sort_order>
                     <show_in_default>1</show_in_default>
@@ -174,10 +174,23 @@
                                 <catalog_products_queue_enabled>1</catalog_products_queue_enabled>
                             </depends>
                         </catalog_products_queue_execute>
+                        <catalog_products_queue_execute_limit>
+                            <label>Products Queue Execute Limit Quantity</label>
+                            <sort_order>70</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number validate-greater-than-zero</validate>
+                            <comment><![CDATA[The amount of products to be queued and integrated per time. The default quantity is 500 at time.]]></comment>
+                            <depends>
+                                <catalog_products_queue_enabled>1</catalog_products_queue_enabled>
+                            </depends>
+                        </catalog_products_queue_execute_limit>
                         <!-- CATALOG CATEGORIES -->
                         <catalog_categories_queue_enabled>
                             <label>Categories Queue Enabled</label>
-                            <sort_order>70</sort_order>
+                            <sort_order>80</sort_order>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <show_in_default>1</show_in_default>
@@ -186,7 +199,7 @@
                         </catalog_categories_queue_enabled>
                         <catalog_categories_queue_create>
                             <label>Categories Queue Create</label>
-                            <sort_order>80</sort_order>
+                            <sort_order>90</sort_order>
                             <frontend_type>text</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
