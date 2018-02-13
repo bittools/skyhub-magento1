@@ -11,6 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
+
 class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_QueueController extends BSeller_SkyHub_Controller_Admin_Action
 {
 

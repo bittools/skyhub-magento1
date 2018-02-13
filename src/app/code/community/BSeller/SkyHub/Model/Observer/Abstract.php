@@ -11,6 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
+
 abstract class BSeller_SkyHub_Model_Observer_Abstract
 {
     

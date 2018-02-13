@@ -11,6 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
+
 class BSeller_SkyHub_Model_Resource_Catalog_Product_Attributes_Mapping extends BSeller_Core_Model_Resource_Abstract
 {
     

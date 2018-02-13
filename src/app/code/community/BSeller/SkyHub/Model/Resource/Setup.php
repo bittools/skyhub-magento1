@@ -1,6 +1,4 @@
 <?php
-
-
 /**
  * BSeller Platform | B2W - Companhia Digital
  *
@@ -13,6 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
+
 class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Setup
 {
     

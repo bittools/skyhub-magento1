@@ -11,6 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
+
 class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_MappingController
     extends BSeller_SkyHub_Controller_Admin_Action
 {

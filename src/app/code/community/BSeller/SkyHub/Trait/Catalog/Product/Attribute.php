@@ -11,6 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
+
 trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
 {
     

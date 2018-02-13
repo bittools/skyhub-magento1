@@ -11,6 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
+
 class BSeller_SkyHub_Model_System_Config_Source_Data_Types extends BSeller_Core_Model_System_Config_Source_Abstract
 {
     

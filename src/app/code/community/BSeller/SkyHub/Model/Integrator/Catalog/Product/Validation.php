@@ -11,6 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
+
 trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
 {
 
