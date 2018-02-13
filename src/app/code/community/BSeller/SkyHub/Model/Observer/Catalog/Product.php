@@ -21,6 +21,10 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     public function integrateProduct(Varien_Event_Observer $observer)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         /** @var Mage_Catalog_Model_Product $product */
         $product = $observer->getData('product');
 
@@ -38,6 +42,10 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     public function deleteProduct(Varien_Event_Observer $observer)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         /** @var Mage_Catalog_Model_Product $product */
         $product = $observer->getData('product');
 
@@ -55,6 +63,10 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     public function addIntegrateButtonToProductEditPage(Varien_Event_Observer $observer)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         /** @var Mage_Adminhtml_Block_Catalog_Product_Edit $block */
         $block = $observer->getData('block');
 

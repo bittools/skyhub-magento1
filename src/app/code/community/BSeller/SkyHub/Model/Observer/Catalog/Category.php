@@ -22,6 +22,10 @@ class BSeller_SkyHub_Model_Observer_Catalog_Category extends BSeller_SkyHub_Mode
      */
     public function integrateCategory(Varien_Event_Observer $observer)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         /** @var Mage_Catalog_Model_Category $category */
         $category = $observer->getData('category');
 
@@ -39,6 +43,10 @@ class BSeller_SkyHub_Model_Observer_Catalog_Category extends BSeller_SkyHub_Mode
      */
     public function deleteCategory(Varien_Event_Observer $observer)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         /** @var Mage_Catalog_Model_Category $category */
         $category = $observer->getData('category');
 

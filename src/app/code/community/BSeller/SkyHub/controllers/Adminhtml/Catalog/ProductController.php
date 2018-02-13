@@ -21,6 +21,11 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
     public function integrateAction()
     {
         $productId = (int) $this->getRequest()->getParam('product_id');
+
+        if (!$this->isModuleEnabled()) {
+            $this->redirectProductEdit($productId);
+            return;
+        }
         
         /** @var Mage_Catalog_Model_Product $product */
         $product = Mage::getModel('catalog/product')->load($productId);

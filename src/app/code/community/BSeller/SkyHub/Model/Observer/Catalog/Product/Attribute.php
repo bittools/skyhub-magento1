@@ -19,6 +19,10 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product_Attribute extends BSeller_Sk
      */
     public function integrateProductAttribute(Varien_Event_Observer $observer)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
         $attribute = $observer->getData('attribute');
 
