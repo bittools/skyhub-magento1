@@ -1,0 +1,12 @@
+<?php
+/** @var BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Configuration $this */
+?>
+<?php if ($this->canShow()): ?>
+    <div class="skyhub-notification notification-global notification-global-warning">
+        <div class="skyhub-notification-container">
+            <strong style="color:dodgerblue"><?php echo $this->__('Module Not Configured') ?>:</strong>
+            <span><?php echo $this->__('The module for integration with SkyHub is not properly configured.') ?></span>
+            <span><?php echo $this->__('You can configure the module going to <a href="%s">BSeller SkyHub Configuration</a> page.', $this->getConfigurationUrl()) ?></span>
+        </div>
+    </div>
+<?php endif; ?>

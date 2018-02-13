@@ -3,6 +3,7 @@
     <default>
         <update handle="ADD_STYLES"/>
         <reference name="notifications">
+            <block type="bseller_skyhub/adminhtml_notifications_skyhub_configuration" name="bseller.skyhub.notifications.configuration"/>
             <block type="bseller_skyhub/adminhtml_notifications_skyhub_attributes" name="bseller.skyhub.notifications.attributes.mapping"/>
         </reference>
     </default>

@@ -37,3 +37,6 @@
 "Product Brand","Marca do Produto"
 "Product EAN","EAN do Produto"
 "Product NBM","NBM do Produto"
+"Module Not Configured","Módulo Não Configurado"
+"The module for integration with SkyHub is not properly configured.","O módulo de integração com o SkyHub não está configurado corretamente."
+"You can configure the module going to <a href=""%s"">BSeller SkyHub Configuration</a> page.","Você pode configurá-lo navegando até a página de <a href=""%s"">Configuração do BSeller SkyHub</a>."

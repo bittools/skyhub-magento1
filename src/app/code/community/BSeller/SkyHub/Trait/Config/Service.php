@@ -49,4 +49,29 @@ trait BSeller_SkyHub_Trait_Config_Service
         return (string) $this->getServiceConfig('api_token');
     }
 
+
+    /**
+     * @return bool
+     */
+    protected function isConfigurationOk()
+    {
+        if (!$this->getServiceBaseUri()) {
+            return false;
+        }
+
+        if (!$this->getServiceEmail()) {
+            return false;
+        }
+
+        if (!$this->getServiceApiKey()) {
+            return false;
+        }
+
+        if (!$this->getServiceApiToken()) {
+            return false;
+        }
+
+        return true;
+    }
+
 }
