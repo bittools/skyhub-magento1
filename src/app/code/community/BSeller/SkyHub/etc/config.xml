@@ -200,6 +200,23 @@
                     <model>bseller_skyhub/cron_catalog_product::executeProductsQueue</model>
                 </run>
             </bseller_skyhub_catalog_products_queue_execute>
+            <!-- CATALOG CATEGORY -->
+            <bseller_skyhub_catalog_categories_queue_create>
+                <schedule>
+                    <config_path>bseller_skyhub/cron/catalog_categories_queue_create</config_path>
+                </schedule>
+                <run>
+                    <model>bseller_skyhub/cron_catalog_category::createCategoriesQueue</model>
+                </run>
+            </bseller_skyhub_catalog_categories_queue_create>
+            <bseller_skyhub_catalog_categories_queue_execute>
+                <schedule>
+                    <config_path>bseller_skyhub/cron/catalog_categories_queue_execute</config_path>
+                </schedule>
+                <run>
+                    <model>bseller_skyhub/cron_catalog_categories::executeCategoriesQueue</model>
+                </run>
+            </bseller_skyhub_catalog_categories_queue_execute>
         </jobs>
     </crontab>
     <default>
@@ -222,6 +239,8 @@
                 <catalog_product_attributes_queue_execute>11 2 */1 * *</catalog_product_attributes_queue_execute>
                 <catalog_products_queue_create>*/15 * * * *</catalog_products_queue_create>
                 <catalog_products_queue_execute>*/30 * * * *</catalog_products_queue_execute>
+                <catalog_categories_queue_create>* * */1 * *</catalog_categories_queue_create>
+                <catalog_categories_queue_execute>* * */1 * *</catalog_categories_queue_execute>
             </cron>
             <!--
             <catalog_product_integration>

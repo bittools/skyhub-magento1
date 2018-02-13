@@ -23,7 +23,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
             $collection->addFieldToFilter('entity_id', ['nin' => $queuedIds]);
         }
 
-        $limit = 1;
+        $limit = 500;
 
         /** @var Varien_Db_Select $select */
         $select = $collection->getSelect()
