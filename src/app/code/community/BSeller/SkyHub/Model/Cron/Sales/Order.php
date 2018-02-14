@@ -16,6 +16,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Ab
 {
 
     use BSeller_Core_Trait_Data,
+        BSeller_SkyHub_Trait_Customer,
         BSeller_SkyHub_Trait_Service;
 
 
@@ -131,139 +132,71 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Ab
 
         /** @var array $order */
         foreach ($orders['orders'] as $orderData) {
+            $info = new Varien_Object([
+                'increment_id'      => 'SKYHUB-'.$orderData['code'],
+                'send_confirmation' => 0
+            ]);
+            
+            $billingAddress  = new Varien_Object($orderData['billing_address']);
+            $shippingAddress = new Varien_Object($orderData['shipping_address']);
+    
             /** @var Mage_Customer_Model_Customer $customer */
             $customer  = $this->getCustomer($orderData['customer']);
-            $orderInfo = new Varien_Object();
-            $orderInfo->setData('billing_address', $orderData['billing_address']);
-            $orderInfo->setData('shipping_address', $orderData['shipping_address']);
             
+            /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
+            $creation = Mage::getModel('bseller_skyhub/support_sales_order_create', $this->getStore());
+            $creation->setOrderInfo($info)
+                     ->setCustomer($customer)
+                     ->setShippingMethod('flatrate_flatrate')
+                     ->setPaymentMethod('checkmo')
+                     ->addOrderAddress('billing', $billingAddress)
+                     ->addOrderAddress('shipping', $shippingAddress)
+                     ->setComment('This order was automatically created by SkyHub import process.')
+            ;
             
-            /** @var BSeller_SkyHub_Helper_Order $helper */
-            $helper = Mage::helper('bseller_skyhub/order');
-            $order  = $helper->setOrderInfo($orderInfo, $customer)
-                             ->create();
+            $products = $this->getProducts((array) $orderData['items']);
             
+            if (empty($products)) {
+                continue;
+            }
             
-            /** @var Mage_Sales_Model_Order $order */
-            // $order = $this->createOrder($orderData);
-            // $order->place()
-            //    ->save();
-        }
-    }
-
-
-    /**
-     * @param array $data
-     *
-     * @return Mage_Sales_Model_Order
-     */
-    protected function createOrder(array $data)
-    {
-        /** @var Mage_Sales_Model_Order $order */
-        $order = Mage::getModel('sales/order');
-        $order->setStoreId($this->getStore()->getId());
-
-        $this->bindBaseOrderData($data, $order);
-
-        /** Bind Customer */
-        $customer = $this->bindCustomer($data['customer'], $order);
-
-        $this->bindOrderAddresses($data['billing_address'], $data['shipping_address'], $order);
-
-        /** Create Order Items */
-        $this->createItems($data['items'], $order);
-
-        /** Create Order Payment */
-        $this->createPayment($data['payments'], $order);
-
-        return $order;
-
-        /** @var Mage_Sales_Model_Quote $quote */
-        // $incrementId = Mage::getModel('sales/quote')->reserveOrderId();
-    }
-
-
-    /**
-     * @param                        $data
-     * @param Mage_Sales_Model_Order $order
-     *
-     * @return Mage_Sales_Model_Order
-     */
-    protected function bindBaseOrderData($data, Mage_Sales_Model_Order $order)
-    {
-        $code = $data['code'];
-        $channel = $data['channel'];
-        $placedAt = $data['placed_at'];
-        $updatedAt = $data['updated_at'];
-        $totalOrdered = $data['total_ordered'];
-        $interest = $data['interest'];
-        $shippingCost = $data['shipping_cost'];
-        $shippingMethod = $data['shipping_method'];
-        $estimatedDelivery = $data['estimated_delivery'];
-
-        $order->setIncrementId($code);
-        $order->setState($order::STATE_NEW, true, $this->__('Order created from SkyHub.'));
-
-        $order->setBaseCurrencyCode($this->getStore()->getBaseCurrencyCode())
-            ->setOrderCurrencyCode($this->getStore()->getCurrentCurrencyCode());
-
-        $order->setBaseSubtotal((float) $totalOrdered)
-            ->setSubtotal((float) $totalOrdered)
-            ->setBaseGrandTotal((float) $totalOrdered)
-            ->setGrandTotal((float) $totalOrdered)
-            ->setBaseShippingAmount((float) $shippingCost)
-            ->setShippingAmount((float) $shippingCost)
-            ->setBaseDiscountAmount(0)
-            ->setDiscountAmount(0)
-            ->setBaseDiscountInvoiced(0)
-            ->setDiscountInvoiced(0)
-            ->setBaseTaxAmount(0)
-            ->setTaxAmount(0)
-        ;
-
-        return $order;
-    }
-
-
-    /**
-     * @param array                  $data
-     * @param Mage_Sales_Model_Order $order
-     *
-     * @return Mage_Sales_Model_Order
-     */
-    protected function createItems(array $data, Mage_Sales_Model_Order $order)
-    {
-        /** @var array $itemData */
-        foreach ($data as $itemData) {
-            /** @var Mage_Sales_Model_Order_Item $item */
-            $item = Mage::getModel('sales/order_item');
-            $item->setStoreId($this->getStore()->getId());
-
-            $productId    = $itemData['product_id'];
-            $price        = (float) $itemData['original_price'];
-            $specialPrice = (float) $itemData['special_price'];
-            $finalPrice   = (float) ($price - $specialPrice);
-            $discount     = (float) ($price * (($price / $finalPrice) - 1));
-            $qty          = (float) $itemData['qty'];
-
             /** @var Mage_Catalog_Model_Product $product */
-            $product = Mage::getModel('catalog/product');
-            $product->loadByAttribute('sku', $productId);
-
-            $item->setProductId($product->getId());
-            $item->setProductType($product->getTypeId());
-            $item->setName($product->getName());
-            $item->setSku($product->getSku());
-            $item->setOriginalPrice((float) $price);
-            $item->setPrice((float) $price);
-            $item->setRowTotal((float) $price);
-            $item->setDiscountAmount((float) $discount);
-            $item->setQtyOrdered((float) $qty);
-
-            $order->addItem($item);
+            foreach ($products as $product) {
+                $creation->addProduct($product);
+            }
+    
+            /** @var Mage_Sales_Model_Order $order */
+            $order = $creation->create();
         }
-
-        return $order;
+    }
+    
+    
+    /**
+     * @param array $items
+     *
+     * @return array
+     */
+    protected function getProducts(array $items)
+    {
+        $products = [];
+    
+        foreach ($items as $item) {
+            $sku = $item['product_id'];
+        
+            /** @var Mage_Catalog_Model_Product $product */
+            $product   = Mage::getModel('catalog/product');
+            $productId = (int) $product->getResource()->getIdBySku($sku);
+        
+            if (!$productId) {
+                continue;
+            }
+        
+            $product->load($productId);
+        
+            $products[] = $product;
+        }
+        
+        return $products;
     }
 
 
@@ -274,7 +207,11 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Ab
      *
      * @throws Exception
      */
-    protected function getCustomer(array $data)
+    protected function getCustomer(
+        array $data,
+        Varien_Object $billingAddress = null,
+        Varien_Object $shippingAddress = null
+    )
     {
         $email = $data['email'];
 
@@ -284,19 +221,24 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Ab
         $customer->loadByEmail($email);
 
         if (!$customer->getId()) {
+            $data['billing_address'] = $billingAddress;
+            $data['shipping_address'] = $shippingAddress;
+            
             $this->createCustomer($data, $customer);
-            $customer->save();
         }
         
         return $customer;
     }
-
-
+    
+    
     /**
      * @param array                        $data
      * @param Mage_Customer_Model_Customer $customer
      *
      * @return Mage_Customer_Model_Customer
+     *
+     * @throws Exception
+     * @throws Mage_Core_Model_Store_Exception
      */
     protected function createCustomer(array $data, Mage_Customer_Model_Customer $customer)
     {
@@ -309,15 +251,12 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Ab
         $vatNumber   = $data['vat_number'];
         $phones      = $data['phones'];
 
-        $names = (array) explode(' ', $name);
+        /** @var Varien_Object $nameObject */
+        $nameObject = $this->breakName($name);
 
-        $firstname  = ucwords(array_shift($names));
-        $lastname   = ucwords(array_pop($names));
-        $middlename = ucwords(implode(' ', $names));
-
-        $customer->setFirstname($firstname);
-        $customer->setLastname($lastname);
-        $customer->setMiddlename($middlename);
+        $customer->setFirstname($nameObject->getData('firstname'));
+        $customer->setLastname($nameObject->getData('lastname'));
+        $customer->setMiddlename($nameObject->getData('middlename'));
         $customer->setEmail($email);
         $customer->setDob($dateOfBirth);
         $customer->setTaxvat($vatNumber);
@@ -336,89 +275,39 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Ab
                 $customer->setGender(2);
                 break;
         }
+    
+        $customer->save();
+        
+        /** @var Varien_Object $billing */
+        if ($billing = $data['billing_address']) {
+            $address = $this->createCustomerAddress($billing);
+            $address->setCustomer($customer);
+        }
+        
+        /** @var Varien_Object $billing */
+        if ($shipping = $data['shipping_address']) {
+            $address = $this->createCustomerAddress($shipping);
+            $address->setCustomer($customer);
+        }
 
         return $customer;
     }
-
-
+    
+    
     /**
-     * @param array                  $paymentData
-     * @param Mage_Sales_Model_Order $order
+     * @param Varien_Object $addressObject
      *
-     * @return Mage_Sales_Model_Order
+     * @return Mage_Customer_Model_Address
      */
-    protected function createPayment(array $paymentData = [], Mage_Sales_Model_Order $order)
+    protected function createCustomerAddress(Varien_Object $addressObject)
     {
-        foreach ($paymentData as $data) {
-            /** @var Mage_Sales_Model_Order_Payment $payment */
-            $payment = Mage::getModel('sales/order_payment');
-            $payment->setMethod('checkmo');
-            $order->setPayment($payment);
-
-            break;
-        }
-
-        return $order;
-    }
-
-
-    protected function createShippingMethod()
-    {
-
-    }
-
-
-    /**
-     * @param array                  $billing
-     * @param array                  $shipping
-     * @param Mage_Sales_Model_Order $order
-     *
-     * @return Mage_Sales_Model_Order
-     */
-    protected function bindOrderAddresses(array $billing, array $shipping, Mage_Sales_Model_Order $order)
-    {
+        /** @var Mage_Customer_Model_Address $address */
+        $address = Mage::getModel('customer/address');
+    
         /**
-         * @var Mage_Sales_Model_Order_Address $billingAddress
-         * @var Mage_Sales_Model_Order_Address $shippingAddress
+         * @todo Create customer address algorithm based on $addressObject.
          */
-        $billingAddress  = $this->createOrderAddress($billing);
-        $shippingAddress = $this->createOrderAddress($shipping);
-
-        $order->setBillingAddress($billingAddress)
-            ->setShippingAddress($shippingAddress);
-
-        return $order;
-    }
-
-
-    /**
-     * @param array $data
-     *
-     * @return Mage_Sales_Model_Order_Address
-     */
-    protected function createOrderAddress(array $data)
-    {
-        /** @var Mage_Sales_Model_Order_Address $address */
-        $address = Mage::getModel('sales/order_address');
-
-        $countryId    = 'BR';
-        $city         = $data['city'];
-        $region       = $data['region'];
-        $postcode     = $data['postcode'];
-        $street       = $data['street'];
-        $number       = $data['number'];
-        $neighborhood = $data['neighborhood'];
-
-        $address->setCountryId($countryId);
-        $address->setCity($city);
-        $address->setRegion($region);
-        $address->setPostcode($postcode);
-        $address->setStreet([
-            $street,
-            $number,
-            $neighborhood
-        ]);
-
+        
         return $address;
     }
 
