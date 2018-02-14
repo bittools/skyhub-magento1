@@ -368,12 +368,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "7be416f731863fef6bb32134fc9c73c525acc6d6"
+                "reference": "4de97e8d0ff6d4822f0b4d1486b63edf9028eac8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/7be416f731863fef6bb32134fc9c73c525acc6d6",
-                "reference": "7be416f731863fef6bb32134fc9c73c525acc6d6",
+                "url": "https://api.github.com/repos/symfony/console/zipball/4de97e8d0ff6d4822f0b4d1486b63edf9028eac8",
+                "reference": "4de97e8d0ff6d4822f0b4d1486b63edf9028eac8",
                 "shasum": ""
             },
             "require": {
@@ -428,7 +428,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-01-31T10:41:42+00:00"
+            "time": "2018-02-09T15:48:09+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -495,12 +495,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tiagosampaio/skyhub-php.git",
-                "reference": "b82b61242c0a066bf64972cc6b910a09744ec631"
+                "reference": "3684410f0ab50de16f450c750911934c872d20ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tiagosampaio/skyhub-php/zipball/b82b61242c0a066bf64972cc6b910a09744ec631",
-                "reference": "b82b61242c0a066bf64972cc6b910a09744ec631",
+                "url": "https://api.github.com/repos/tiagosampaio/skyhub-php/zipball/3684410f0ab50de16f450c750911934c872d20ee",
+                "reference": "3684410f0ab50de16f450c750911934c872d20ee",
                 "shasum": ""
             },
             "require": {
@@ -533,7 +533,7 @@
                 }
             ],
             "description": "This is the official PHP SDK for integration with SkyHub.",
-            "time": "2018-02-05T16:17:13+00:00"
+            "time": "2018-02-13T02:02:22+00:00"
         }
     ],
     "packages-dev": [],

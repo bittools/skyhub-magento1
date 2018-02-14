@@ -124,13 +124,30 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Ab
 
         /** @var array $order */
         $orders = json_decode($mock, true);
+        
+        if (!isset($orders['orders'])) {
+            return;
+        }
 
         /** @var array $order */
         foreach ($orders['orders'] as $orderData) {
+            /** @var Mage_Customer_Model_Customer $customer */
+            $customer  = $this->getCustomer($orderData['customer']);
+            $orderInfo = new Varien_Object();
+            $orderInfo->setData('billing_address', $orderData['billing_address']);
+            $orderInfo->setData('shipping_address', $orderData['shipping_address']);
+            
+            
+            /** @var BSeller_SkyHub_Helper_Order $helper */
+            $helper = Mage::helper('bseller_skyhub/order');
+            $order  = $helper->setOrderInfo($orderInfo, $customer)
+                             ->create();
+            
+            
             /** @var Mage_Sales_Model_Order $order */
-            $order = $this->createOrder($orderData);
-            $order->place()
-                ->save();
+            // $order = $this->createOrder($orderData);
+            // $order->place()
+            //    ->save();
         }
     }
 
@@ -252,13 +269,12 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Ab
 
     /**
      * @param array                  $data
-     * @param Mage_Sales_Model_Order $order
      *
-     * @return Mage_Sales_Model_Order
+     * @return Mage_Customer_Model_Customer
      *
      * @throws Exception
      */
-    protected function bindCustomer(array $data, Mage_Sales_Model_Order $order)
+    protected function getCustomer(array $data)
     {
         $email = $data['email'];
 
@@ -271,15 +287,8 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Ab
             $this->createCustomer($data, $customer);
             $customer->save();
         }
-
-        $order->setCustomerId($customer->getId());
-        $order->setCustomerDob($customer->getDob());
-        $order->setCustomerEmail($customer->getEmail());
-        $order->setCustomerFirstname($customer->getFirstname());
-        $order->setCustomerLastname($customer->getLastname());
-        $order->setCustomerGender($customer->getGender());
-
-        return $order;
+        
+        return $customer;
     }
 
 
