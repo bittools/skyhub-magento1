@@ -23,10 +23,14 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
     /**
      * @return $this
      */
-    protected function init()
+    protected function init($actionTitle = null)
     {
-        parent::init();
-        $this->_title($this->__('Product'));
+        parent::init('Product Attributes');
+    
+        if (!empty($actionTitle)) {
+            $this->_title($this->__($actionTitle));
+        }
+        
         return $this;
     }
     
@@ -36,9 +40,8 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
      */
     public function indexAction()
     {
-        $this->init();
+        $this->init('Attributes Mapping');
         
-        $this->_title($this->__('Attributes Mapping'));
         $this->_setActiveMenu('bseller/bseller_skyhub/catalog_product_attributes_mapping/grid');
         
         $this->renderLayout();
@@ -50,7 +53,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
      */
     public function editAction()
     {
-        $this->init();
+        $this->init('Attributes Mapping Edit');
     
         $id = $this->getRequest()->getParam('id', null);
     
@@ -69,7 +72,6 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
             return;
         }
         
-        $this->_title($this->__('Attributes Mapping Edit'));
         $this->_setActiveMenu('bseller/bseller_skyhub/catalog_product_attributes_mapping/grid');
     
         $this->renderLayout();
