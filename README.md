@@ -1,4 +1,4 @@
-# BSeller_Core
+# BSeller_SkyHub
 
 O objetivo deste módulo é disponibilizar uma melhor integração entre a plataforma Magento Commerce e o serviço de integrações aos principais marketplaces SkyHub.
 É de extrema importância que todos os módulos sejam extendidos do **BSeller_SkyHub** para que se mantenha uma homogeneidade de desenvolvimento. 
