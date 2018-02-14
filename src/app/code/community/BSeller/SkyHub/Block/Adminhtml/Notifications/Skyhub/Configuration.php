@@ -15,7 +15,8 @@
 /**
  * Class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Configuration
  */
-class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Configuration extends BSeller_Core_Block_Adminhtml_Template
+class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Configuration
+    extends BSeller_SkyHub_Block_Adminhtml_Notifications_Abstract
 {
 
     use BSeller_SkyHub_Trait_Config;

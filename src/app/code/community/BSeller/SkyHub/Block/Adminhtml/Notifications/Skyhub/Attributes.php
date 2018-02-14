@@ -15,7 +15,8 @@
 /**
  * Class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes
  */
-class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes extends BSeller_Core_Block_Adminhtml_Template
+class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes
+    extends BSeller_SkyHub_Block_Adminhtml_Notifications_Abstract
 {
 
     protected function _construct()
@@ -81,5 +82,4 @@ class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes extends BSe
 
         return $collection;
     }
-
 }
