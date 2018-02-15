@@ -16,7 +16,8 @@
 class BSeller_SkyHub_Model_Support_Sales_Order_Create
 {
     
-    use BSeller_SkyHub_Trait_Customer;
+    use BSeller_SkyHub_Trait_Helper,
+        BSeller_SkyHub_Trait_Customer;
     
     
     /** @var Mage_Core_Model_Store */
@@ -25,8 +26,11 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     /** @var array */
     private $orderData = [];
     
-    /** @var Mage_Catalog_Model_Product */
-    private $products;
+    /** @var array */
+    private $products = [];
+    
+    /** @var Mage_Adminhtml_Model_Sales_Order_Create */
+    protected $createModel;
     
     
     /**
@@ -61,8 +65,8 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     {
         $data = [
             'order' => [
-                'increment_id'      => $order['increment_id'],
-                'send_confirmation' => $order['send_confirmation']
+                'increment_id'      => $order->getData('increment_id'),
+                'send_confirmation' => $order->getData('send_confirmation')
             ],
         ];
         
@@ -105,8 +109,11 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         
         $data = [
             'products' => [
-                (int) $product->getId() => [
-                    'qty' => (int) $qty
+                [
+                    'model'  => $product,
+                    'config' => [
+                        'qty' => (float) ($qty ? $qty : 1)
+                    ],
                 ]
             ]
         ];
@@ -226,30 +233,64 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     
     
     /**
+     * @return $this
+     */
+    public function reset()
+    {
+        $this->createModel = null;
+        $this->orderData   = [];
+        $this->products    = [];
+        $this->store       = null;
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @return Mage_Sales_Model_Quote
+     */
+    public function getQuote()
+    {
+        return $this->getOrderCreateModel()->getQuote();
+    }
+    
+    
+    /**
+     * @return $this
+     */
+    protected function resetQuote()
+    {
+        $this->getQuote()
+             ->setTotalsCollectedFlag(false);
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @return BSeller_SkyHub_Model_Adminhtml_Session_Quote
+     */
+    protected function getSession()
+    {
+        /** @var BSeller_SkyHub_Model_Adminhtml_Session_Quote $session */
+        $session = Mage::getSingleton('bseller_skyhub/adminhtml_session_quote');
+        return $session;
+    }
+    
+    
+    /**
      * Retrieve order create model
      *
      * @return  Mage_Adminhtml_Model_Sales_Order_Create
      */
     protected function getOrderCreateModel()
     {
-        /** @var Mage_Adminhtml_Model_Sales_Order_Create $create */
-        $create = Mage::getSingleton('adminhtml/sales_order_create');
+        if (!$this->createModel) {
+            /** @var BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create $create */
+            $this->createModel = Mage::getModel('bseller_skyhub/adminhtml_sales_order_create');
+        }
         
-        return $create;
-    }
-    
-    
-    /**
-     * Retrieve session object
-     *
-     * @return Mage_Adminhtml_Model_Session_Quote
-     */
-    protected function getSession()
-    {
-        /** @var Mage_Adminhtml_Model_Session_Quote $session */
-        $session = Mage::getSingleton('adminhtml/session_quote');
-        
-        return $session;
+        return $this->createModel;
     }
     
     
@@ -264,12 +305,12 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     {
         /* Get/identify customer */
         if (!empty($data['customer_id'])) {
-            $this->getSession()->setCustomerId((int) $data['customer_id']);
+            $this->getSession()->setCustomerId((int) $this->arrayExtract($data, 'customer_id'));
         }
         
         /* Get/identify store */
         if (!empty($data['store_id'])) {
-            $this->getSession()->setStoreId((int) $data['store_id']);
+            $this->getSession()->setStoreId((int) $this->arrayExtract($data, 'store_id'));
         }
         
         return $this;
@@ -284,14 +325,19 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         $orderData = $this->orderData;
         
         if (!empty($orderData)) {
-            
-            $this->initSession($orderData['session']);
+            $this->initSession($this->arrayExtract($orderData, 'session'));
             
             try {
                 $this->processQuote($orderData);
-                if (!empty($orderData['payment'])) {
-                    $this->getOrderCreateModel()->setPaymentData($orderData['payment']);
-                    $this->getOrderCreateModel()->getQuote()->getPayment()->addData($orderData['payment']);
+                $payment = $this->arrayExtract($orderData, 'payment');
+                
+                if (!empty($payment)) {
+                    $this->getOrderCreateModel()
+                         ->setPaymentData($payment);
+                    
+                    $this->getQuote()
+                         ->getPayment()
+                         ->addData($payment);
                 }
                 
                 /** This can be necessary. */
@@ -301,7 +347,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 
                 /** @var Mage_Sales_Model_Order $order */
                 $order = $this->getOrderCreateModel()
-                              ->importPostData($orderData['order'])
+                              ->importPostData($this->arrayExtract($orderData, 'order'))
                               ->createOrder();
                 
                 $this->getSession()->clear();
@@ -309,7 +355,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 
                 return $order;
             } catch (Exception $e) {
-                Mage::log("Order save error...");
+                Mage::logException($e);
             }
         }
         
@@ -359,36 +405,50 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     protected function processQuote($data = array())
     {
+        $order = (array) $this->arrayExtract($data, 'order', []);
+        
         /* Saving order data */
-        if (!empty($data['order'])) {
-            $orderData = $data['order'];
-            
-            $this->getOrderCreateModel()->importPostData($orderData);
-            $this->getOrderCreateModel()->getQuote()->setReservedOrderId($orderData['increment_id']);
+        if (!empty($order)) {
+            $this->getOrderCreateModel()->importPostData($order);
+            $this->getQuote()
+                 ->setReservedOrderId($this->arrayExtract($order, 'increment_id'));
         }
         
-        $this->getOrderCreateModel()->getBillingAddress();
-        $this->getOrderCreateModel()->setShippingAsBilling(true);
+        // $this->getOrderCreateModel()->getBillingAddress();
+        // $this->getOrderCreateModel()->getShippingAddress();
         
         /* Just like adding products from Magento admin grid */
-        if (!empty($data['products'])) {
-            $this->getOrderCreateModel()->addProducts($data['products']);
+        $products = (array) $this->arrayExtract($data, 'products', []);
+        
+        /** @var array $product */
+        foreach ($products as $item) {
+            $this->getOrderCreateModel()
+                 ->addProduct($item['model'], $item['config']);
         }
         
         /* Collect shipping rates */
-        $this->getOrderCreateModel()->collectShippingRates();
+        $this->resetQuote()
+             ->getOrderCreateModel()
+             ->collectShippingRates();
         
         /* Add payment data */
-        if (!empty($data['payment'])) {
-            $this->getOrderCreateModel()->getQuote()->getPayment()->addData($data['payment']);
+        $payment = $this->arrayExtract($data, 'payment', []);
+        if (!empty($payment)) {
+            $this->getOrderCreateModel()
+                 ->getQuote()
+                 ->getPayment()
+                 ->addData($payment);
         }
         
         $this->getOrderCreateModel()
              ->initRuleData()
              ->saveQuote();
         
-        if (!empty($data['payment'])) {
-            $this->getOrderCreateModel()->getQuote()->getPayment()->addData($data['payment']);
+        if (!empty($payment)) {
+            $this->getOrderCreateModel()
+                 ->getQuote()
+                 ->getPayment()
+                 ->addData($payment);
         }
         
         return $this;

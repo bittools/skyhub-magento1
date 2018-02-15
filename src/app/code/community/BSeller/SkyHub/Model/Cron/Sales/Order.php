@@ -118,206 +118,39 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Ab
             }
           ]
         }';
+    
+        /** @var array $order */
+        $orders = json_decode($mock, true);
 
         /** @var \SkyHub\Api\EntityInterface\Sales\Order\Queue $interface */
         // $interface = $this->api()->queue()->entityInterface();
-        // $interface->orders();
-
-        /** @var array $order */
-        $orders = json_decode($mock, true);
+        $interface = $this->api()->order()->entityInterface();
+        $result    = $interface->orders();
         
-        if (!isset($orders['orders'])) {
+        if ($result->exception() || $result->invalid()) {
             return;
         }
+        
+        /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
+        $orders = $result->json();
 
         /** @var array $order */
         foreach ($orders['orders'] as $orderData) {
-            $info = new Varien_Object([
-                'increment_id'      => 'SKYHUB-'.$orderData['code'],
-                'send_confirmation' => 0
-            ]);
-            
-            $billingAddress  = new Varien_Object($orderData['billing_address']);
-            $shippingAddress = new Varien_Object($orderData['shipping_address']);
-    
-            /** @var Mage_Customer_Model_Customer $customer */
-            $customer  = $this->getCustomer($orderData['customer']);
-            
-            /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
-            $creation = Mage::getModel('bseller_skyhub/support_sales_order_create', $this->getStore());
-            $creation->setOrderInfo($info)
-                     ->setCustomer($customer)
-                     ->setShippingMethod('flatrate_flatrate')
-                     ->setPaymentMethod('checkmo')
-                     ->addOrderAddress('billing', $billingAddress)
-                     ->addOrderAddress('shipping', $shippingAddress)
-                     ->setComment('This order was automatically created by SkyHub import process.')
-            ;
-            
-            $products = $this->getProducts((array) $orderData['items']);
-            
-            if (empty($products)) {
-                continue;
+            try {
+                $order = $this->getIntegrator()->importOrder($orderData);
+            } catch (Exception $e) {
+                Mage::logException($e);
             }
-            
-            /** @var Mage_Catalog_Model_Product $product */
-            foreach ($products as $product) {
-                $creation->addProduct($product);
-            }
-    
-            /** @var Mage_Sales_Model_Order $order */
-            $order = $creation->create();
         }
     }
     
     
     /**
-     * @param array $items
-     *
-     * @return array
+     * @return BSeller_SkyHub_Model_Integrator_Sales_Order
      */
-    protected function getProducts(array $items)
+    protected function getIntegrator()
     {
-        $products = [];
-    
-        foreach ($items as $item) {
-            $sku = $item['product_id'];
-        
-            /** @var Mage_Catalog_Model_Product $product */
-            $product   = Mage::getModel('catalog/product');
-            $productId = (int) $product->getResource()->getIdBySku($sku);
-        
-            if (!$productId) {
-                continue;
-            }
-        
-            $product->load($productId);
-        
-            $products[] = $product;
-        }
-        
-        return $products;
-    }
-
-
-    /**
-     * @param array                  $data
-     *
-     * @return Mage_Customer_Model_Customer
-     *
-     * @throws Exception
-     */
-    protected function getCustomer(
-        array $data,
-        Varien_Object $billingAddress = null,
-        Varien_Object $shippingAddress = null
-    )
-    {
-        $email = $data['email'];
-
-        /** @var Mage_Customer_Model_Customer $customer */
-        $customer = Mage::getModel('customer/customer');
-        $customer->setStore($this->getStore());
-        $customer->loadByEmail($email);
-
-        if (!$customer->getId()) {
-            $data['billing_address'] = $billingAddress;
-            $data['shipping_address'] = $shippingAddress;
-            
-            $this->createCustomer($data, $customer);
-        }
-        
-        return $customer;
-    }
-    
-    
-    /**
-     * @param array                        $data
-     * @param Mage_Customer_Model_Customer $customer
-     *
-     * @return Mage_Customer_Model_Customer
-     *
-     * @throws Exception
-     * @throws Mage_Core_Model_Store_Exception
-     */
-    protected function createCustomer(array $data, Mage_Customer_Model_Customer $customer)
-    {
-        $customer->setStore(Mage::app()->getStore());
-
-        $dateOfBirth = $data['date_of_birth'];
-        $email       = $data['email'];
-        $gender      = $data['gender'];
-        $name        = $data['name'];
-        $vatNumber   = $data['vat_number'];
-        $phones      = $data['phones'];
-
-        /** @var Varien_Object $nameObject */
-        $nameObject = $this->breakName($name);
-
-        $customer->setFirstname($nameObject->getData('firstname'));
-        $customer->setLastname($nameObject->getData('lastname'));
-        $customer->setMiddlename($nameObject->getData('middlename'));
-        $customer->setEmail($email);
-        $customer->setDob($dateOfBirth);
-        $customer->setTaxvat($vatNumber);
-
-        /** @var string $phone */
-        foreach ($phones as $phone) {
-            $customer->setTelephone($phone);
-            break;
-        }
-
-        switch ($gender) {
-            case 'male':
-                $customer->setGender(1);
-                break;
-            case 'female':
-                $customer->setGender(2);
-                break;
-        }
-    
-        $customer->save();
-        
-        /** @var Varien_Object $billing */
-        if ($billing = $data['billing_address']) {
-            $address = $this->createCustomerAddress($billing);
-            $address->setCustomer($customer);
-        }
-        
-        /** @var Varien_Object $billing */
-        if ($shipping = $data['shipping_address']) {
-            $address = $this->createCustomerAddress($shipping);
-            $address->setCustomer($customer);
-        }
-
-        return $customer;
-    }
-    
-    
-    /**
-     * @param Varien_Object $addressObject
-     *
-     * @return Mage_Customer_Model_Address
-     */
-    protected function createCustomerAddress(Varien_Object $addressObject)
-    {
-        /** @var Mage_Customer_Model_Address $address */
-        $address = Mage::getModel('customer/address');
-    
-        /**
-         * @todo Create customer address algorithm based on $addressObject.
-         */
-        
-        return $address;
-    }
-
-
-    /**
-     * @return Mage_Core_Model_Store
-     */
-    protected function getStore()
-    {
-        return Mage::app()->getDefaultStoreView();
+        return Mage::getModel('bseller_skyhub/integrator_sales_order');
     }
 
 }

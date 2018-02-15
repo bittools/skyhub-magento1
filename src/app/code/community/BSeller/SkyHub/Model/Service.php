@@ -79,5 +79,4 @@ class BSeller_SkyHub_Model_Service
 
         return $this;
     }
-
 }

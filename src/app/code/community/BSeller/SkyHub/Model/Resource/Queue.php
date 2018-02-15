@@ -57,9 +57,9 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
         $deleteSets = array_chunk($entityIds, 1000);
         
         foreach ($deleteSets as $deleteIds) {
+            $this->beginTransaction();
+            
             try {
-                $this->beginTransaction();
-    
                 $deleteIds = implode(',', $deleteIds);
                 $where     = new Zend_Db_Expr("entity_id IN ($deleteIds) AND entity_type = '{$entityType}'");
                 
