@@ -53,13 +53,23 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
                 'created_at'    => now(),
             ];
         }
-
-        try {
-            $ids   = implode(',', $entityIds);
-            $where = new Zend_Db_Expr("entity_id IN ($ids) AND entity_type = '{$entityType}'");
-            $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
-        } catch (Exception $e) {
-            Mage::logException($e);
+        
+        $deleteSets = array_chunk($entityIds, 1000);
+        
+        foreach ($deleteSets as $deleteIds) {
+            try {
+                $this->beginTransaction();
+    
+                $deleteIds = implode(',', $deleteIds);
+                $where     = new Zend_Db_Expr("entity_id IN ($deleteIds) AND entity_type = '{$entityType}'");
+                
+                $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
+        
+                $this->commit();
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $this->rollBack();
+            }
         }
 
         /** @var array $item */
