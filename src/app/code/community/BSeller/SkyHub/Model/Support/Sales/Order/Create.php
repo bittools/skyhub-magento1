@@ -24,13 +24,10 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     private $store;
     
     /** @var array */
-    private $orderData = [];
+    private $data = [];
     
-    /** @var array */
-    private $products = [];
-    
-    /** @var Mage_Adminhtml_Model_Sales_Order_Create */
-    protected $createModel;
+    /** @var BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create */
+    protected $creator;
     
     
     /**
@@ -105,11 +102,9 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function addProduct(Mage_Catalog_Model_Product $product, $qty = 1)
     {
-        $this->products[$product->getId()] = $product;
-        
         $data = [
             'products' => [
-                [
+                (int) $product->getId() => [
                     'model'  => $product,
                     'config' => [
                         'qty' => (float) ($qty ? $qty : 1)
@@ -237,10 +232,9 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function reset()
     {
-        $this->createModel = null;
-        $this->orderData   = [];
-        $this->products    = [];
-        $this->store       = null;
+        $this->creator = null;
+        $this->data    = [];
+        $this->store   = null;
         
         return $this;
     }
@@ -251,7 +245,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function getQuote()
     {
-        return $this->getOrderCreateModel()->getQuote();
+        return $this->getOrderCreator()->getQuote();
     }
     
     
@@ -283,14 +277,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      *
      * @return  Mage_Adminhtml_Model_Sales_Order_Create
      */
-    protected function getOrderCreateModel()
+    protected function getOrderCreator()
     {
-        if (!$this->createModel) {
-            /** @var BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create $create */
-            $this->createModel = Mage::getModel('bseller_skyhub/adminhtml_sales_order_create');
+        if (!$this->creator) {
+            $this->creator = Mage::getModel('bseller_skyhub/adminhtml_sales_order_create');
         }
         
-        return $this->createModel;
+        return $this->creator;
     }
     
     
@@ -322,7 +315,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function create()
     {
-        $orderData = $this->orderData;
+        $orderData = $this->data;
         
         if (!empty($orderData)) {
             $this->initSession($this->arrayExtract($orderData, 'session'));
@@ -332,7 +325,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 $payment = $this->arrayExtract($orderData, 'payment');
                 
                 if (!empty($payment)) {
-                    $this->getOrderCreateModel()
+                    $this->getOrderCreator()
                          ->setPaymentData($payment);
                     
                     $this->getQuote()
@@ -346,7 +339,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 Mage::app()->getStore()->setConfig(Mage_Sales_Model_Order::XML_PATH_EMAIL_ENABLED, "0");
                 
                 /** @var Mage_Sales_Model_Order $order */
-                $order = $this->getOrderCreateModel()
+                $order = $this->getOrderCreator()
                               ->importPostData($this->arrayExtract($orderData, 'order'))
                               ->createOrder();
                 
@@ -372,8 +365,10 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
          * @var int                        $productId
          * @var Mage_Catalog_Model_Product $product
          */
+        $products = $this->arrayExtract($this->data, 'products');
+        
         foreach ($this->products as $productId => $product) {
-            $item = $this->getOrderCreateModel()->getQuote()->getItemByProduct($product);
+            $item = $this->getOrderCreator()->getQuote()->getItemByProduct($product);
     
             $options = [
                 [
@@ -409,43 +404,43 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         
         /* Saving order data */
         if (!empty($order)) {
-            $this->getOrderCreateModel()->importPostData($order);
+            $this->getOrderCreator()->importPostData($order);
             $this->getQuote()
                  ->setReservedOrderId($this->arrayExtract($order, 'increment_id'));
         }
         
-        // $this->getOrderCreateModel()->getBillingAddress();
-        // $this->getOrderCreateModel()->getShippingAddress();
+        // $this->getOrderCreator()->getBillingAddress();
+        // $this->getOrderCreator()->getShippingAddress();
         
         /* Just like adding products from Magento admin grid */
         $products = (array) $this->arrayExtract($data, 'products', []);
         
         /** @var array $product */
         foreach ($products as $item) {
-            $this->getOrderCreateModel()
+            $this->getOrderCreator()
                  ->addProduct($item['model'], $item['config']);
         }
         
         /* Collect shipping rates */
         $this->resetQuote()
-             ->getOrderCreateModel()
+             ->getOrderCreator()
              ->collectShippingRates();
         
         /* Add payment data */
         $payment = $this->arrayExtract($data, 'payment', []);
         if (!empty($payment)) {
-            $this->getOrderCreateModel()
+            $this->getOrderCreator()
                  ->getQuote()
                  ->getPayment()
                  ->addData($payment);
         }
         
-        $this->getOrderCreateModel()
+        $this->getOrderCreator()
              ->initRuleData()
              ->saveQuote();
         
         if (!empty($payment)) {
-            $this->getOrderCreateModel()
+            $this->getOrderCreator()
                  ->getQuote()
                  ->getPayment()
                  ->addData($payment);
@@ -462,7 +457,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     protected function merge(array $data = [])
     {
-        $this->orderData = array_merge_recursive($this->orderData, $data);
+        $this->data = array_merge_recursive($this->data, $data);
         
         return $this;
     }

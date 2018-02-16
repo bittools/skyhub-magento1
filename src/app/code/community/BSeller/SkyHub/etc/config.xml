@@ -231,6 +231,15 @@
                     <model>bseller_skyhub/cron_catalog_categories::executeCategoriesQueue</model>
                 </run>
             </bseller_skyhub_catalog_categories_queue_execute>
+            <!-- SALES ORDER QUEUE -->
+            <bseller_skyhub_sales_order_import>
+                <schedule>
+                    <config_path>bseller_skyhub/cron/sales_order_queue_import_expression</config_path>
+                </schedule>
+                <run>
+                    <model>bseller_skyhub/cron_sales_order_queue::importNext</model>
+                </run>
+            </bseller_skyhub_sales_order_import>
         </jobs>
     </crontab>
     <default>
@@ -262,6 +271,11 @@
                 <catalog_categories_queue_enabled>1</catalog_categories_queue_enabled>
                 <catalog_categories_queue_create>0 3 */1 * *</catalog_categories_queue_create>
                 <catalog_categories_queue_execute>10 3 */1 * *</catalog_categories_queue_execute>
+                <!-- SALES ORDER -->
+                <sales_order_update_enabled>1</sales_order_update_enabled>
+                <!-- SALES ORDER QUEUE -->
+                <sales_order_queue_import_enabled>1</sales_order_queue_import_enabled>
+                <sales_order_queue_import_expression>*/10 * * * *</sales_order_queue_import_expression>
             </cron>
         </bseller_skyhub>
     </default>

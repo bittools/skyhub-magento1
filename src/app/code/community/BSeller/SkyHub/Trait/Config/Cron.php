@@ -68,5 +68,22 @@ trait BSeller_SkyHub_Trait_Config_Cron
     {
         return (bool) $this->getCronConfig('catalog_categories_queue_enabled');
     }
-
+    
+    
+    /**
+     * @return bool
+     */
+    protected function isCronSalesOrderQueueEnabled()
+    {
+        return (bool) $this->getCronConfig('sales_order_queue_import_enabled');
+    }
+    
+    
+    /**
+     * @return bool
+     */
+    protected function isCronSalesOrderEnabled()
+    {
+        return (bool) $this->getCronConfig('sales_order_update_enabled');
+    }
 }

@@ -28,7 +28,9 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
      */
     public function importOrder(array $data)
     {
-        $incrementId = $this->getOrderIncrementId($data['code']);
+        $code        = $this->arrayExtract($data, 'code');
+        $channel     = $this->arrayExtract($data, 'channel');
+        $incrementId = $this->getOrderIncrementId($code);
         
         /** @var BSeller_SkyHub_Model_Resource_Sales_Order $orderResource */
         $orderResource = Mage::getResourceModel('bseller_skyhub/sales_order');
@@ -84,6 +86,11 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
         /** @var Mage_Sales_Model_Order $order */
         $order = $creation->create();
     
+        $order->setData('skyhub_code', $code);
+        $order->setData('skyhub_marketplace', $channel);
+    
+        $order->getResource()->save($order);
+        
         return $order;
     }
     
@@ -238,7 +245,7 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
      */
     protected function getOrderIncrementId($code)
     {
-        return 'SKYHUB-'.$code;
+        return $code;
     }
     
 }
