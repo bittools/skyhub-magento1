@@ -112,10 +112,18 @@ $table = $this->newTable($tableName)
     ->addColumn('entity_type', $this::TYPE_TEXT, 255, [
         'nullable' => false,
     ])
+    ->addColumn('store_id', $this::TYPE_INTEGER, 10, [
+        'unsigned' => true,
+        'nullable' => false,
+        'primary'  => true,
+        'default'  => 0,
+    ])
 ;
 
 $this->addTimestamps($table);
 $conn->createTable($table);
+
+$this->addForeignKey($tableName, 'store_id', 'core/store', 'store_id');
 
 $this->addIndex('entity_id',   $tableName, $this::INDEX_TYPE_INDEX);
 $this->addIndex('entity_type', $tableName, $this::INDEX_TYPE_INDEX);

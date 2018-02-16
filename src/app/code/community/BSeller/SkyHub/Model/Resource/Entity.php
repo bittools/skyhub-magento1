@@ -24,10 +24,11 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
     /**
      * @param integer $entityId
      * @param string  $entityType
+     * @param int     $storeId
      *
      * @return bool
      */
-    public function createEntity($entityId, $entityType)
+    public function createEntity($entityId, $entityType, $storeId = 0)
     {
         $entityExists = $this->entityExists($entityId, $entityType);
 
@@ -40,6 +41,7 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
             $this->_getWriteAdapter()->insert($this->getMainTable(), [
                 'entity_id'   => (int)    $entityId,
                 'entity_type' => (string) $entityType,
+                'store_id'    => (int)    Mage::app()->getStore($storeId)->getId(),
                 'created_at'  => now(),
             ]);
             $this->commit();
@@ -57,10 +59,11 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
     /**
      * @param integer $entityId
      * @param string  $entityType
+     * @param integer $storeId
      *
      * @return bool|string
      */
-    public function entityExists($entityId, $entityType)
+    public function entityExists($entityId, $entityType, $storeId = 0)
     {
         /** @var Varien_Db_Select $select */
         $select = $this->getReadConnection()
@@ -68,6 +71,7 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
             ->from($this->getMainTable(), 'entity_id')
             ->where('entity_id = ?', (int) $entityId)
             ->where('entity_type = ?', (string) $entityType)
+            ->where('store_id = ?', (int) Mage::app()->getStore($storeId)->getId())
             ->limit(1);
 
         try {
