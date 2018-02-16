@@ -62,10 +62,10 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
      */
     protected function canRun()
     {
-        if (!$this->isCronSalesOrderEnabled()) {
+        if (!$this->getCronConfig()->salesOrderQueue()->isEnabled()) {
             return false;
         }
-        
+
         return parent::canRun();
     }
 }

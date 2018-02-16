@@ -39,7 +39,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
             $collection->addFieldToFilter('entity_id', ['nin' => $queuedIds]);
         }
 
-        $limit = (int) $this->getCatalogProductQueueExecuteLimit();
+        $limit = $this->getCronConfig()->catalogProduct()->getQueueExecuteLimit();
 
         /** @var Varien_Db_Select $select */
         $select = $collection->getSelect()
@@ -86,7 +86,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
         /**
          * Set limitation.
          */
-        $limit = (int) $this->getCatalogProductQueueExecuteLimit();
+        $limit = $this->getCronConfig()->catalogProduct()->getQueueExecuteLimit();
         if ($limit) {
             $collection->getSelect()->limit((int) $limit);
         }
@@ -113,11 +113,13 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
         }
 
         if (!empty($successIds)) {
-            $this->getQueueResource()->removeFromQueue($successIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
+            $this->getQueueResource()
+                ->removeFromQueue($successIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
         }
 
         if (!empty($errorIds)) {
-            $this->getQueueResource()->setFailedEntityIds($errorIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
+            $this->getQueueResource()
+                ->setFailedEntityIds($errorIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
         }
 
         $schedule->setMessages($this->__(

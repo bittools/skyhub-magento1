@@ -20,4 +20,10 @@ interface BSeller_SkyHub_Model_Cron_Config_Interface
      */
     public function isEnabled();
 
+
+    /**
+     * @param string $field
+     * @return mixed
+     */
+    public function getGroupConfig($field);
 }
