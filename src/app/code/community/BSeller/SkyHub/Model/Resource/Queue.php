@@ -32,10 +32,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     public function queue($entityIds, $entityType, $canProcess = true, $processAfter = null)
     {
         $entityIds = (array) $entityIds;
-        $entityIds = array_filter($entityIds, function (&$value) {
-            $value = (int) $value;
-            return $value;
-        });
+        $entityIds = $this->filterEntityIds($entityIds);
 
         if (empty($entityIds)) {
             return $this;

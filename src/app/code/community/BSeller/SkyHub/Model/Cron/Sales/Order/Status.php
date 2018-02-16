@@ -14,10 +14,73 @@
  
 class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_Cron_Sales_Abstract
 {
-    
-    public function updateOrderStatuses(Mage_Cron_Model_Schedule $schedule)
-    {
 
+    /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     */
+    public function createOrderStatusQueue(Mage_Cron_Model_Schedule $schedule)
+    {
+        $deniedStates = [
+            Mage_Sales_Model_Order::STATE_CANCELED,
+            Mage_Sales_Model_Order::STATE_CLOSED,
+            Mage_Sales_Model_Order::STATE_COMPLETE,
+        ];
+
+        /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
+        $collection = $this->getOrderCollection()
+            ->addFieldToFilter('state', ['nin' => $deniedStates]);
+
+        /** @var Varien_Db_Select $select */
+        $select = $collection->getSelect()
+            ->reset('columns')
+            ->columns('entity_id');
+
+        $orderIds = (array) $this->getQueueResource()
+            ->getReadConnection()
+            ->fetchCol($select);
+
+        if (empty($orderIds)) {
+            $schedule->setMessages($this->__('No order to queue.'));
+            return;
+        }
+
+        $this->getQueueResource()->queue($orderIds, BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER);
+
+        $schedule->setMessages($this->__('Order IDs Queued: %s.', implode(',', $orderIds)));
+    }
+
+
+    /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     */
+    public function executeOrderStatusQueue(Mage_Cron_Model_Schedule $schedule)
+    {
+        $orderIds = (array) $this->getQueueResource()
+            ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER, 50);
+
+        if (empty($orderIds)) {
+            return;
+        }
+
+        /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
+        $collection = $this->getOrderCollection()
+            ->addFieldToFilter('entity_id', ['in' => $orderIds]);
+
+        /** @var Mage_Sales_Model_Order $order */
+        foreach ($collection as $order) {
+
+        }
+    }
+
+
+    /**
+     * @return Mage_Sales_Model_Resource_Order_Collection
+     */
+    protected function getOrderCollection()
+    {
+        /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
+        $collection = Mage::getResourceModel('sales/order_collection');
+        return $collection;
     }
 
     

@@ -11,6 +11,14 @@ abstract class BSeller_SkyHub_Model_Cron_Sales_Abstract extends BSeller_SkyHub_M
         return Mage::getSingleton('bseller_skyhub/integrator_sales_order_queue');
     }
 
+    /**
+     * @return BSeller_SkyHub_Model_Integrator_Sales_Order
+     */
+    protected function getOrderIntegrator()
+    {
+        return Mage::getSingleton('bseller_skyhub/integrator_sales_order');
+    }
+
 
     /**
      * @return BSeller_SkyHub_Model_Processor_Sales_Order

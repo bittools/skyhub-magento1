@@ -20,17 +20,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
      */
     public function syncAllOrders(Mage_Cron_Model_Schedule $schedule)
     {
-        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $response */
-        $response = $this->api()->order()->orders();
-
-        if ($response->exception() || $response->invalid()) {
-            $schedule->setStatus($this->__('Some error has occurred with the integration.'));
-            return;
-        }
-
-        /** @var \SkyHub\Api\Handler\Response\HandlerDefault $response */
-        $orders = (array) $response->json();
-        $orders = (array) $orders['orders'];
+        $orders = (array) $this->getOrderIntegrator()->orders();
 
         foreach ($orders as $orderData) {
             /** @var Mage_Sales_Model_Order $order */
@@ -46,12 +36,14 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
 
             $this->getOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
 
-            if (!$order->getData('is_created')) {
-                continue;
-            }
+            $message = null;
 
-            $message  = $schedule->getMessages();
-            $message .= $this->__('Order ID %s was successfully created.', $order->getIncrementId());
+            if ($order->getData('is_created')) {
+                $message  = $schedule->getMessages();
+                $message .= $this->__('Order ID %s was successfully created.', $order->getIncrementId());
+            } elseif ($order->hasDataChanges()) {
+                $message .= $this->__('Order ID %s was updated.', $order->getIncrementId());
+            }
 
             $schedule->setMessages($message);
         }
