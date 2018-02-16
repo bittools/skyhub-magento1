@@ -240,6 +240,23 @@
                     <model>bseller_skyhub/cron_sales_order_queue::importNextOrders</model>
                 </run>
             </bseller_skyhub_sales_order_import>
+            <!-- SALES ORDER STATUS -->
+            <bseller_skyhub_sales_order_status_update_queue_create>
+                <schedule>
+                    <config_path>bseller_skyhub/cron/sales_order_status_queue_create</config_path>
+                </schedule>
+                <run>
+                    <model>bseller_skyhub/cron_sales_order_status::createOrderStatusQueue</model>
+                </run>
+            </bseller_skyhub_sales_order_status_update_queue_create>
+            <bseller_skyhub_sales_order_status_update_queue_execute>
+                <schedule>
+                    <config_path>bseller_skyhub/cron/sales_order_status_queue_execute</config_path>
+                </schedule>
+                <run>
+                    <model>bseller_skyhub/cron_sales_order_status::executeOrderStatusQueue</model>
+                </run>
+            </bseller_skyhub_sales_order_status_update_queue_execute>
         </jobs>
     </crontab>
     <default>
@@ -276,6 +293,10 @@
                 <!-- SALES ORDER QUEUE -->
                 <sales_order_queue_import_enabled>1</sales_order_queue_import_enabled>
                 <sales_order_queue_import_expression>*/10 * * * *</sales_order_queue_import_expression>
+                <!-- SALES ORDER STATUS QUEUE -->
+                <sales_order_status_queue_enabled>1</sales_order_status_queue_enabled>
+                <sales_order_status_queue_create>*/10 * * * *</sales_order_status_queue_create>
+                <sales_order_status_queue_execute>*/10 * * * *</sales_order_status_queue_execute>
             </cron>
         </bseller_skyhub>
     </default>

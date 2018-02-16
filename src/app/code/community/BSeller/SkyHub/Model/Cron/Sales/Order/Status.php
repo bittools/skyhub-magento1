@@ -70,7 +70,14 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
 
         /** @var Mage_Sales_Model_Order $order */
         foreach ($collection as $order) {
-            $this->getOrderIntegrator()->order($order->getId());
+            /** @var array $orderData */
+            $orderData = (array) $this->getOrderIntegrator()->order($order->getId());
+
+            $statusCode = $this->arrayExtract($orderData, 'status/code');
+            $statusType = $this->arrayExtract($orderData, 'status/type');
+            // $statusLabel = $this->arrayExtract($orderData, 'status/label');
+
+            $this->getOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
         }
     }
 
@@ -91,11 +98,10 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
      */
     protected function canRun()
     {
-        if (!$this->isCronSalesOrderEnabled()) {
+        if (!$this->isCronSalesOrderStatusEnabled()) {
             return false;
         }
         
         return parent::canRun();
     }
-
 }

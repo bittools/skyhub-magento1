@@ -40,6 +40,21 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order_Queue extends BSeller_SkyHub_M
 
 
     /**
+     * @param Mage_Sales_Model_Order $order
+     *
+     * @return bool
+     */
+    public function deleteByOrder(Mage_Sales_Model_Order $order)
+    {
+        if (!$order->getIncrementId()) {
+            return false;
+        }
+
+        return $this->delete($order->getIncrementId());
+    }
+
+
+    /**
      * @param string $orderCode
      *
      * @return bool

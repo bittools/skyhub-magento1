@@ -16,6 +16,9 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
 {
 
     /**
+     * This method is not mapped (being used) anywhere because it can be harmful to store performance.
+     * This is just a method created for tests and used when there's no order in the queue (SkyHub) to be consumed.
+     *
      * @param Mage_Cron_Model_Schedule $schedule
      */
     public function syncAllOrders(Mage_Cron_Model_Schedule $schedule)
@@ -23,8 +26,13 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
         $orders = (array) $this->getOrderIntegrator()->orders();
 
         foreach ($orders as $orderData) {
-            /** @var Mage_Sales_Model_Order $order */
-            $order = $this->getOrderProcessor()->createOrder($orderData);
+            try {
+                /** @var Mage_Sales_Model_Order $order */
+                $order = $this->getOrderProcessor()->createOrder($orderData);
+            } catch (Exception $e) {
+                Mage::logException($e);
+                continue;
+            }
 
             if (!$order || !$order->getId()) {
                 continue;
@@ -60,5 +68,4 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
         
         return parent::canRun();
     }
-
 }

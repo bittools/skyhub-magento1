@@ -36,4 +36,17 @@ abstract class BSeller_SkyHub_Model_Cron_Sales_Abstract extends BSeller_SkyHub_M
     {
         return Mage::getModel('bseller_skyhub/processor_sales_order_status');
     }
+
+
+    /**
+     * @return bool
+     */
+    protected function canRun()
+    {
+        if (!$this->isCronSalesOrderEnabled()) {
+            return false;
+        }
+
+        return parent::canRun();
+    }
 }

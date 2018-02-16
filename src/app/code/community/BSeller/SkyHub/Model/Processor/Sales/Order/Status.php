@@ -48,7 +48,12 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
          * If order is CANCELED in SkyHub.
          */
         if ($state == Mage_Sales_Model_Order::STATE_CANCELED) {
-            $this->cancelOrder($order);
+            try {
+                $this->cancelOrder($order);
+            } catch (Exception $e) {
+                return false;
+            }
+
             return $this;
         }
 
@@ -56,7 +61,12 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
          * If order is APPROVED in SkyHub.
          */
         if ($state == Mage_Sales_Model_Order::STATE_PROCESSING) {
-            $this->invoiceOrder($order);
+            try {
+                $this->invoiceOrder($order);
+            } catch (Exception $e) {
+                return false;
+            }
+
             return $this;
         }
 
