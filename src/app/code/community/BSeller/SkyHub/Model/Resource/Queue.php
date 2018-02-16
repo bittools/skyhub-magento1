@@ -129,7 +129,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
      */
     public function removeFromQueue($entityIds, $entityType)
     {
-        $entityIds = $this->filterEntityIds($entityIds);
+        $entityIds = $this->filterEntityIds((array) $entityIds);
 
         if (empty($entityIds)) {
             return $this;

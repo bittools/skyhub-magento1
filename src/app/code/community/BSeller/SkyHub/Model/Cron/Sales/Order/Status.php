@@ -69,6 +69,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
             ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER, 50);
 
         if (empty($orderIds)) {
+            $schedule->setMessages($this->__('No order in the queue to be processed.'));
             return;
         }
 
@@ -85,7 +86,14 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
             $statusType = $this->arrayExtract($orderData, 'status/type');
             // $statusLabel = $this->arrayExtract($orderData, 'status/label');
 
-            $this->getOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
+            $result = $this->getOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
+
+            if (false == $result) {
+                return;
+            }
+
+            $this->getQueueResource()
+                ->removeFromQueue($order->getId(), BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER);
         }
     }
 
