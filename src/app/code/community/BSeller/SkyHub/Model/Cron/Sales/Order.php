@@ -12,12 +12,49 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
  
-class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Abstract
+class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sales_Abstract
 {
-    
-    public function updateOrderStatuses()
+
+    /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     */
+    public function syncAllOrders(Mage_Cron_Model_Schedule $schedule)
     {
-    
+        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $response */
+        $response = $this->api()->order()->orders();
+
+        if ($response->exception() || $response->invalid()) {
+            $schedule->setStatus($this->__('Some error has occurred with the integration.'));
+            return;
+        }
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerDefault $response */
+        $orders = (array) $response->json();
+        $orders = (array) $orders['orders'];
+
+        foreach ($orders as $orderData) {
+            /** @var Mage_Sales_Model_Order $order */
+            $order = $this->getOrderProcessor()->createOrder($orderData);
+
+            if (!$order || !$order->getId()) {
+                continue;
+            }
+
+            $statusType  = $this->arrayExtract($orderData, 'status/type');
+            $statusCode  = $this->arrayExtract($orderData, 'status/code');
+            // $statusLabel = $this->arrayExtract($orderData, 'status/label');
+
+            $this->getOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
+
+            if (!$order->getData('is_created')) {
+                continue;
+            }
+
+            $message  = $schedule->getMessages();
+            $message .= $this->__('Order ID %s was successfully created.', $order->getIncrementId());
+
+            $schedule->setMessages($message);
+        }
     }
     
     

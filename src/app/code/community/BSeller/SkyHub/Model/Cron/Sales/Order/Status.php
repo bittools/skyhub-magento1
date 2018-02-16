@@ -11,27 +11,26 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-
-class BSeller_SkyHub_Model_Cron_Abstract
+ 
+class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_Cron_Sales_Abstract
 {
+    
+    public function updateOrderStatuses(Mage_Cron_Model_Schedule $schedule)
+    {
 
-    use BSeller_SkyHub_Trait_Data,
-        BSeller_SkyHub_Trait_Config,
-        BSeller_SkyHub_Trait_Queue,
-        BSeller_SkyHub_Trait_Service,
-        BSeller_SkyHub_Trait_Integrators;
+    }
 
-
+    
     /**
      * @return bool
      */
     protected function canRun()
     {
-        if (!$this->isModuleEnabled()) {
+        if (!$this->isCronSalesOrderEnabled()) {
             return false;
         }
-
-        return true;
+        
+        return parent::canRun();
     }
 
 }

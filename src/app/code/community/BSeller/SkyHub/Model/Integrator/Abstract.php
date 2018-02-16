@@ -15,7 +15,8 @@
 abstract class BSeller_SkyHub_Model_Integrator_Abstract implements BSeller_SkyHub_Model_Integrator_Interface
 {
 
-    use BSeller_SkyHub_Trait_Service,
+    use BSeller_SkyHub_Trait_Data,
+        BSeller_SkyHub_Trait_Service,
         BSeller_SkyHub_Trait_Config;
 
 

@@ -12,9 +12,10 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_Integrator_Abstract
+class BSeller_SkyHub_Model_Processor_Abstract
 {
 
-
+    use BSeller_SkyHub_Trait_Data,
+        BSeller_SkyHub_Trait_Customer;
 
 }

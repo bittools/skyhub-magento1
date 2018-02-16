@@ -16,7 +16,7 @@
 class BSeller_SkyHub_Model_Support_Sales_Order_Create
 {
     
-    use BSeller_SkyHub_Trait_Helper,
+    use BSeller_SkyHub_Trait_Data,
         BSeller_SkyHub_Trait_Customer;
     
     

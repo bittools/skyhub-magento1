@@ -237,7 +237,7 @@
                     <config_path>bseller_skyhub/cron/sales_order_queue_import_expression</config_path>
                 </schedule>
                 <run>
-                    <model>bseller_skyhub/cron_sales_order_queue::importNext</model>
+                    <model>bseller_skyhub/cron_sales_order_queue::importNextOrders</model>
                 </run>
             </bseller_skyhub_sales_order_import>
         </jobs>
