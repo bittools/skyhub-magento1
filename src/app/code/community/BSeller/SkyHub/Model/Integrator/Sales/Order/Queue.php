@@ -29,7 +29,7 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order_Queue extends BSeller_SkyHub_M
         }
 
         /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
-        $data = $result->json();
+        $data = $result->toArray();
 
         if (empty($data)) {
             return false;

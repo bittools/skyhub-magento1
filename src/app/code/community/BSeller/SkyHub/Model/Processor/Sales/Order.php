@@ -84,6 +84,11 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         /** @var Mage_Sales_Model_Order $order */
         $order = $creation->create();
     
+        $order->setData('bseller_skyhub', true);
+        $order->setData('bseller_skyhub_code', $code);
+        $order->setData('bseller_skyhub_channel', $channel);
+
+        /** Bizcommerce_SkyHub uses these fields. */
         $order->setData('skyhub_code', $code);
         $order->setData('skyhub_marketplace', $channel);
     

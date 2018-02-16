@@ -28,7 +28,9 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
 
         /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
         $collection = $this->getOrderCollection()
-            ->addFieldToFilter('state', ['nin' => $deniedStates]);
+            ->addFieldToFilter('state', ['nin' => $deniedStates])
+            ->addFieldToFilter('bseller_skyhub', 1)
+        ;
 
         /** @var Varien_Db_Select $select */
         $select = $collection->getSelect()
@@ -68,7 +70,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
 
         /** @var Mage_Sales_Model_Order $order */
         foreach ($collection as $order) {
-
+            $this->getOrderIntegrator()->order($order->getId());
         }
     }
 

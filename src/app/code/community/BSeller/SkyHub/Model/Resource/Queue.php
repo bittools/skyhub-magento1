@@ -26,10 +26,11 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
      * @param string      $entityType
      * @param bool        $canProcess
      * @param null|string $processAfter
+     * @param int         $storeId
      *
      * @return $this
      */
-    public function queue($entityIds, $entityType, $canProcess = true, $processAfter = null)
+    public function queue($entityIds, $entityType, $canProcess = true, $processAfter = null, $storeId = 0)
     {
         $entityIds = (array) $entityIds;
         $entityIds = $this->filterEntityIds($entityIds);
@@ -47,6 +48,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
                 'status'        => BSeller_SkyHub_Model_Queue::STATUS_PENDING,
                 'can_process'   => (bool) $canProcess,
                 'process_after' => empty($processAfter) ? now() : $processAfter,
+                'store_id'      => (int) Mage::app()->getStore($storeId)->getId(),
                 'created_at'    => now(),
             ];
         }

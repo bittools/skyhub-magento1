@@ -36,10 +36,9 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
 
             $this->getOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
 
-            $message = null;
+            $message  = $schedule->getMessages();
 
             if ($order->getData('is_created')) {
-                $message  = $schedule->getMessages();
                 $message .= $this->__('Order ID %s was successfully created.', $order->getIncrementId());
             } elseif ($order->hasDataChanges()) {
                 $message .= $this->__('Order ID %s was updated.', $order->getIncrementId());

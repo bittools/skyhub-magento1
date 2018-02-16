@@ -34,13 +34,47 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
         }
 
         /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
-        $orders = $result->json();
+        $orders = $result->toArray();
 
         if (empty($orders) || !isset($orders['orders'])) {
             return false;
         }
 
         return (array) $orders['orders'];
+    }
+
+
+    /**
+     * @param int $orderId
+     *
+     * @return array|bool
+     */
+    public function order($orderId)
+    {
+        /** @var Mage_Sales_Model_Resource_Order $resource */
+        $resource    = Mage::getResourceModel('sales/order');
+        $incrementId = $resource->getIncrementId($orderId);
+
+        /** @var  $result */
+        $result = $this->getEntityInterface()->order($incrementId);
+
+        if ($result->exception() || $result->invalid()) {
+            return false;
+        }
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
+        $order = $result->toArray();
+
+        return (array) $order;
+    }
+
+
+    /**
+     * @return \SkyHub\Api\EntityInterface\Sales\Order
+     */
+    protected function getEntityInterface()
+    {
+        return $this->api()->order()->entityInterface();
     }
 
 }

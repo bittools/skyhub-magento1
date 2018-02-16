@@ -18,6 +18,40 @@
  */
 
 //**********************************************************************************************************************
+// Update sales/order
+//**********************************************************************************************************************
+$tables = [
+    $this->getTable('sales/order') => [
+        'bseller_skyhub' => [
+            'type'     => $this::TYPE_BOOLEAN,
+            'nullable' => true,
+            'default'  => false,
+            'comment'  => 'If Order Was Created By BSeller SkyHub',
+        ],
+        'bseller_skyhub_code' => [
+            'type'     => $this::TYPE_TEXT,
+            'size'     => 255,
+            'nullable' => true,
+            'default'  => false,
+            'comment'  => 'SkyHub Code',
+        ],
+        'bseller_skyhub_channel' => [
+            'type'     => $this::TYPE_TEXT,
+            'size'     => 255,
+            'nullable' => true,
+            'default'  => false,
+            'comment'  => 'SkyHub Code',
+        ],
+    ]
+];
+
+foreach ($tables as $tableName => $columns) {
+    foreach ($columns as $name => $definition) {
+        $conn->addColumn($tableName, $name, $definition);
+    }
+}
+
+//**********************************************************************************************************************
 // Install bseller_skyhub/product_attributes_mapping
 //**********************************************************************************************************************
 $tableName = (string) $this->getTable('bseller_skyhub/product_attributes_mapping');
@@ -110,15 +144,23 @@ $table = $this->newTable($tableName)
         'nullable' => false,
         'default'  => 0,
     ])
+    ->addColumn('store_id', $this::TYPE_INTEGER, 10, [
+        'unsigned' => true,
+        'nullable' => false,
+        'primary'  => true,
+        'default'  => 0,
+    ])
 ;
 
 $this->addCustomTimestamp($table, 'process_after', [], 'Schedule the process to run after this time if needed.');
 $this->addTimestamps($table);
 $conn->createTable($table);
 
+$this->addForeignKey($tableName, 'store_id', 'core/store', 'store_id');
+
 $this->addIndex('entity_id',   $tableName, $this::INDEX_TYPE_INDEX);
 $this->addIndex('entity_type', $tableName, $this::INDEX_TYPE_INDEX);
-$this->addIndex(['entity_id', 'entity_type'], $tableName);
+$this->addIndex(['entity_id', 'entity_type', 'store_id'], $tableName);
 
 
 //**********************************************************************************************************************
