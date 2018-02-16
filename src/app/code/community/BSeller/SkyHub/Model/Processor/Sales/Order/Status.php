@@ -44,10 +44,19 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
             return $this;
         }
 
+        /**
+         * If order is CANCELED in SkyHub.
+         */
         if ($state == Mage_Sales_Model_Order::STATE_CANCELED) {
             $this->cancelOrder($order);
-            $order->save();
+            return $this;
+        }
 
+        /**
+         * If order is APPROVED in SkyHub.
+         */
+        if ($state == Mage_Sales_Model_Order::STATE_PROCESSING) {
+            $this->invoiceOrder($order);
             return $this;
         }
 
@@ -115,12 +124,50 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
                 $this->__('Order is canceled in SkyHub but could not be canceled in Magento.')
             );
 
+            $order->save();
+
             return false;
         }
 
         $order->addStatusHistoryComment($this->__('Order canceled automatically by SkyHub.'));
 
-        $order->cancel();
+        $order->cancel()->save();
+
+        return true;
+    }
+
+
+    /**
+     * @param Mage_Sales_Model_Order $order
+     *
+     * @return bool
+     *
+     * @throws Exception
+     */
+    protected function invoiceOrder(Mage_Sales_Model_Order $order)
+    {
+        if (!$order->canInvoice()) {
+            $comment = $this->__('This order is APPROVED in SkyHub but cannot be invoiced in Magento.');
+            $order->addStatusHistoryComment($comment, true);
+            $order->save();
+
+            return false;
+        }
+
+        /** @var Mage_Sales_Model_Order_Invoice $invoice */
+        $invoice = $order->prepareInvoice();
+        $invoice->register();
+
+        $comment = $this->__('Invoiced automatically via SkyHub.');
+        $invoice->addComment($comment);
+        $order->addStatusHistoryComment($comment, true);
+        $order->setIsInProcess(true);
+
+        /** @var Mage_Core_Model_Resource_Transaction $transaction */
+        $transaction = Mage::getResourceModel('core/transaction');
+        $transaction->addObject($order)
+            ->addObject($invoice)
+            ->save();
 
         return true;
     }

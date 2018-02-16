@@ -18,7 +18,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     /**
      * @param array $data
      *
-     * @return Mage_Sales_Model_Order
+     * @return Mage_Sales_Model_Order|bool
      *
      * @throws Exception
      */
@@ -73,16 +73,20 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $products = $this->getProducts((array) $this->arrayExtract($data, 'items'));
     
         if (empty($products)) {
-            false;
+            return false;
         }
     
         /** @var Mage_Catalog_Model_Product $product */
         foreach ($products as $product) {
-            $creation->addProduct($product);
+            $creation->addProduct($product, $product->getData('qty'));
         }
     
         /** @var Mage_Sales_Model_Order $order */
         $order = $creation->create();
+
+        if (!$order) {
+            return false;
+        }
     
         $order->setData('bseller_skyhub', true);
         $order->setData('bseller_skyhub_code', $code);
@@ -111,7 +115,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         
         foreach ($items as $item) {
             $sku = $this->arrayExtract($item, 'product_id');
-            
+            $qty = $this->arrayExtract($item, 'qty');
+
             /** @var Mage_Catalog_Model_Product $product */
             $product   = Mage::getModel('catalog/product');
             $productId = (int) $product->getResource()->getIdBySku($sku);
@@ -121,7 +126,9 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             }
             
             $product->load($productId);
-            
+            $product->setData('qty', (float) $qty);
+            $product->setData('request_item', $item);
+
             $products[] = $product;
         }
         
