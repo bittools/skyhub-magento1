@@ -70,7 +70,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Queue extends BSeller_SkyHub_Model_C
      */
     protected function canRun()
     {
-        if (!$this->isCronSalesOrderQueueEnabled()) {
+        if (!$this->getCronConfig()->salesOrderQueue()->isEnabled()) {
             return false;
         }
         

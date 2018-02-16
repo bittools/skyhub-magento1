@@ -12,27 +12,24 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Model_Cron_Abstract
+abstract class BSeller_SkyHub_Model_Cron_Config_Abstract implements BSeller_SkyHub_Model_Cron_Config_Interface
 {
 
-    use BSeller_SkyHub_Trait_Data,
-        BSeller_SkyHub_Trait_Config,
-        BSeller_SkyHub_Trait_Queue,
-        BSeller_SkyHub_Trait_Service,
-        BSeller_SkyHub_Trait_Integrators,
-        BSeller_SkyHub_Trait_Config_Cron;
+    use BSeller_SkyHub_Trait_Config;
+
+
+    /** @var string */
+    protected $group = '';
+
+    /** @var string */
+    protected $enabledField = 'enabled';
 
 
     /**
      * @return bool
      */
-    protected function canRun()
+    public function isEnabled()
     {
-        if (!$this->isModuleEnabled()) {
-            return false;
-        }
-
-        return true;
+        return (bool) $this->getModuleConfig($this->enabledField, $this->group);
     }
-
 }

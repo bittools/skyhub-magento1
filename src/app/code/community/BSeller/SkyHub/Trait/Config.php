@@ -17,8 +17,7 @@ trait BSeller_SkyHub_Trait_Config
 
     use BSeller_Core_Trait_Config,
         BSeller_SkyHub_Trait_Config_Service,
-        BSeller_SkyHub_Trait_Config_Log,
-        BSeller_SkyHub_Trait_Config_Cron;
+        BSeller_SkyHub_Trait_Config_Log;
 
 
     /**

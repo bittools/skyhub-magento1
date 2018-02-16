@@ -160,7 +160,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
      */
     protected function canRun()
     {
-        if (!$this->isCronCatalogProductsEnabled()) {
+        if (!$this->getCronConfig()->catalogProduct()->isEnabled()) {
             return false;
         }
 

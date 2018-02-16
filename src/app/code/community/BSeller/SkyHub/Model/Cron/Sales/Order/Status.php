@@ -98,7 +98,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
      */
     protected function canRun()
     {
-        if (!$this->isCronSalesOrderStatusEnabled()) {
+        if (!$this->getCronConfig()->salesOrderStatus()->isEnabled()) {
             return false;
         }
         

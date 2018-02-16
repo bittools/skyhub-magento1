@@ -12,14 +12,12 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-trait BSeller_SkyHub_Trait_Config_Cron
+interface BSeller_SkyHub_Model_Cron_Config_Interface
 {
 
     /**
-     * @return BSeller_SkyHub_Model_Cron_Config
+     * @return bool
      */
-    protected function getCronConfig()
-    {
-        return Mage::getModel('bseller_skyhub/cron_config');
-    }
+    public function isEnabled();
+
 }

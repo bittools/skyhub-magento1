@@ -116,17 +116,17 @@
                         </api_token>
                     </fields>
                 </service>
-                <cron translate="label comment" module="bseller_skyhub">
-                    <label>Cron Configuration</label>
+                <!-- CATALOG PRODUCT ATTRIBUTES -->
+                <cron_catalog_product_attributes translate="label comment" module="bseller_skyhub">
+                    <label>Product Attributes Cron Configuration</label>
                     <sort_order>100</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
                     <fields>
-                        <!-- CATALOG PRODUCT ATTRIBUTES -->
-                        <catalog_product_attributes_queue_enabled>
-                            <label>Product Attributes Queue Enabled</label>
+                        <enabled>
+                            <label>Enabled</label>
                             <sort_order>10</sort_order>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_enabledisable</source_model>
@@ -134,7 +134,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Enable the products attribute integration via cron.]]></comment>
-                        </catalog_product_attributes_queue_enabled>
+                        </enabled>
                         <catalog_product_attributes_queue_create>
                             <label>Product Attributes Queue Generate</label>
                             <sort_order>20</sort_order>
@@ -144,7 +144,7 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Note that this must be a cron expression format.]]></comment>
                             <depends>
-                                <catalog_product_attributes_queue_enabled>1</catalog_product_attributes_queue_enabled>
+                                <enabled>1</enabled>
                             </depends>
                         </catalog_product_attributes_queue_create>
                         <catalog_product_attributes_queue_execute>
@@ -156,20 +156,30 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Note that this must be a cron expression format.]]></comment>
                             <depends>
-                                <catalog_product_attributes_queue_enabled>1</catalog_product_attributes_queue_enabled>
+                                <enabled>1</enabled>
                             </depends>
                         </catalog_product_attributes_queue_execute>
-                        <!-- CATALOG PRODUCTS -->
-                        <catalog_products_queue_enabled>
-                            <label>Products Queue Enabled</label>
-                            <sort_order>40</sort_order>
+                    </fields>
+                </cron_catalog_product_attributes>
+                <!-- CATALOG PRODUCTS -->
+                <cron_catalog_products translate="label comment" module="bseller_skyhub">
+                    <label>Products Cron Configuration</label>
+                    <sort_order>110</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                        <enabled>
+                            <label>Enabled</label>
+                            <sort_order>10</sort_order>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Enable the products integration via cron.]]></comment>
-                        </catalog_products_queue_enabled>
+                        </enabled>
                         <catalog_products_queue_create>
                             <label>Products Queue Create</label>
                             <sort_order>50</sort_order>
@@ -179,7 +189,7 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Note that this must be a cron expression format.]]></comment>
                             <depends>
-                                <catalog_products_queue_enabled>1</catalog_products_queue_enabled>
+                                <enabled>1</enabled>
                             </depends>
                         </catalog_products_queue_create>
                         <catalog_products_queue_execute>
@@ -191,7 +201,7 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Note that this must be a cron expression format.]]></comment>
                             <depends>
-                                <catalog_products_queue_enabled>1</catalog_products_queue_enabled>
+                                <enabled>1</enabled>
                             </depends>
                         </catalog_products_queue_execute>
                         <catalog_products_queue_execute_limit>
@@ -207,18 +217,28 @@
                                 <catalog_products_queue_enabled>1</catalog_products_queue_enabled>
                             </depends>
                         </catalog_products_queue_execute_limit>
-                        <!-- CATALOG CATEGORIES -->
-                        <catalog_categories_queue_enabled>
-                            <label>Categories Queue Enabled</label>
-                            <sort_order>80</sort_order>
+                    </fields>
+                </cron_catalog_products>
+                <!-- CATALOG CATEGORIES -->
+                <cron_catalog_categories translate="label comment" module="bseller_skyhub">
+                    <label>Categories Cron Configuration</label>
+                    <sort_order>120</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                        <enabled>
+                            <label>Enabled</label>
+                            <sort_order>10</sort_order>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Enable the categories integration via cron.]]></comment>
-                        </catalog_categories_queue_enabled>
-                        <catalog_categories_queue_create>
+                        </enabled>
+                        <queue_create>
                             <label>Categories Queue Create</label>
                             <sort_order>90</sort_order>
                             <frontend_type>text</frontend_type>
@@ -227,10 +247,10 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Note that this must be a cron expression format.]]></comment>
                             <depends>
-                                <catalog_categories_queue_enabled>1</catalog_categories_queue_enabled>
+                                <enabled>1</enabled>
                             </depends>
-                        </catalog_categories_queue_create>
-                        <catalog_categories_queue_execute>
+                        </queue_create>
+                        <queue_execute>
                             <label>Categories Queue Execute</label>
                             <sort_order>100</sort_order>
                             <frontend_type>text</frontend_type>
@@ -239,11 +259,89 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Note that this must be a cron expression format.]]></comment>
                             <depends>
-                                <catalog_categories_queue_enabled>1</catalog_categories_queue_enabled>
+                                <enabled>1</enabled>
                             </depends>
-                        </catalog_categories_queue_execute>
+                        </queue_execute>
                     </fields>
-                </cron>
+                </cron_catalog_categories>
+                <!-- SALES ORDER STATUS -->
+                <cron_sales_order_status translate="label comment" module="bseller_skyhub">
+                    <label>Order Status Cron Configuration</label>
+                    <sort_order>130</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                        <enabled>
+                            <label>Enabled</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Enable integration via cron.]]></comment>
+                        </enabled>
+                        <queue_create>
+                            <label>Queue Create</label>
+                            <sort_order>20</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Note that this must be a cron expression format.]]></comment>
+                            <depends>
+                                <enabled>1</enabled>
+                            </depends>
+                        </queue_create>
+                        <queue_execute>
+                            <label>Queue Execute</label>
+                            <sort_order>30</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Note that this must be a cron expression format.]]></comment>
+                            <depends>
+                                <enabled>1</enabled>
+                            </depends>
+                        </queue_execute>
+                    </fields>
+                </cron_sales_order_status>
+                <!-- SALES ORDER QUEUE -->
+                <cron_sales_order_queue translate="label comment" module="bseller_skyhub">
+                    <label>Order Queue Cron Configuration</label>
+                    <sort_order>140</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                        <enabled>
+                            <label>Enabled</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Enable integration via cron.]]></comment>
+                        </enabled>
+                        <expression>
+                            <label>Queue Execute</label>
+                            <sort_order>20</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Note that this must be a cron expression format.]]></comment>
+                            <depends>
+                                <enabled>1</enabled>
+                            </depends>
+                        </expression>
+                    </fields>
+                </cron_sales_order_queue>
                 <!--
                 <catalog_product_integration translate="label" module="bseller_skyhub">
                     <label>Product Integration Configuration</label>

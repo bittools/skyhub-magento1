@@ -183,7 +183,7 @@
             <!-- CATALOG PRODUCT ATTRIBUTE -->
             <bseller_skyhub_catalog_product_attributes_queue_create>
                 <schedule>
-                    <config_path>bseller_skyhub/cron/catalog_product_attributes_queue_create</config_path>
+                    <config_path>bseller_skyhub/cron_catalog_product_attributes/catalog_product_attributes_queue_create</config_path>
                 </schedule>
                 <run>
                     <model>bseller_skyhub/cron_catalog_product_attribute::createAttributesQueue</model>
@@ -191,7 +191,7 @@
             </bseller_skyhub_catalog_product_attributes_queue_create>
             <bseller_skyhub_catalog_product_attributes_queue_execute>
                 <schedule>
-                    <config_path>bseller_skyhub/cron/catalog_product_attributes_queue_execute</config_path>
+                    <config_path>bseller_skyhub/cron_catalog_product_attributes/catalog_product_attributes_queue_execute</config_path>
                 </schedule>
                 <run>
                     <model>bseller_skyhub/cron_catalog_product_attribute::executeAttributesQueue</model>
@@ -200,7 +200,7 @@
             <!-- CATALOG PRODUCT -->
             <bseller_skyhub_catalog_products_queue_create>
                 <schedule>
-                    <config_path>bseller_skyhub/cron/catalog_products_queue_create</config_path>
+                    <config_path>bseller_skyhub/cron_catalog_products/catalog_products_queue_create</config_path>
                 </schedule>
                 <run>
                     <model>bseller_skyhub/cron_catalog_product::createProductsQueue</model>
@@ -208,7 +208,7 @@
             </bseller_skyhub_catalog_products_queue_create>
             <bseller_skyhub_catalog_products_queue_execute>
                 <schedule>
-                    <config_path>bseller_skyhub/cron/catalog_products_queue_execute</config_path>
+                    <config_path>bseller_skyhub/cron_catalog_products/catalog_products_queue_execute</config_path>
                 </schedule>
                 <run>
                     <model>bseller_skyhub/cron_catalog_product::executeProductsQueue</model>
@@ -217,7 +217,7 @@
             <!-- CATALOG CATEGORY -->
             <bseller_skyhub_catalog_categories_queue_create>
                 <schedule>
-                    <config_path>bseller_skyhub/cron/catalog_categories_queue_create</config_path>
+                    <config_path>bseller_skyhub/cron_catalog_categories/catalog_categories_queue_create</config_path>
                 </schedule>
                 <run>
                     <model>bseller_skyhub/cron_catalog_category::createCategoriesQueue</model>
@@ -225,25 +225,25 @@
             </bseller_skyhub_catalog_categories_queue_create>
             <bseller_skyhub_catalog_categories_queue_execute>
                 <schedule>
-                    <config_path>bseller_skyhub/cron/catalog_categories_queue_execute</config_path>
+                    <config_path>bseller_skyhub/cron_catalog_categories/catalog_categories_queue_execute</config_path>
                 </schedule>
                 <run>
                     <model>bseller_skyhub/cron_catalog_categories::executeCategoriesQueue</model>
                 </run>
             </bseller_skyhub_catalog_categories_queue_execute>
             <!-- SALES ORDER QUEUE -->
-            <bseller_skyhub_sales_order_import>
+            <bseller_skyhub_sales_order_import_new_orders>
                 <schedule>
-                    <config_path>bseller_skyhub/cron/sales_order_queue_import_expression</config_path>
+                    <config_path>bseller_skyhub/cron_sales_order_queue/expression</config_path>
                 </schedule>
                 <run>
                     <model>bseller_skyhub/cron_sales_order_queue::importNextOrders</model>
                 </run>
-            </bseller_skyhub_sales_order_import>
+            </bseller_skyhub_sales_order_import_new_orders>
             <!-- SALES ORDER STATUS -->
             <bseller_skyhub_sales_order_status_update_queue_create>
                 <schedule>
-                    <config_path>bseller_skyhub/cron/sales_order_status_queue_create</config_path>
+                    <config_path>bseller_skyhub/cron_sales_order_status/queue_create</config_path>
                 </schedule>
                 <run>
                     <model>bseller_skyhub/cron_sales_order_status::createOrderStatusQueue</model>
@@ -251,7 +251,7 @@
             </bseller_skyhub_sales_order_status_update_queue_create>
             <bseller_skyhub_sales_order_status_update_queue_execute>
                 <schedule>
-                    <config_path>bseller_skyhub/cron/sales_order_status_queue_execute</config_path>
+                    <config_path>bseller_skyhub/cron_sales_order_status/queue_execute</config_path>
                 </schedule>
                 <run>
                     <model>bseller_skyhub/cron_sales_order_status::executeOrderStatusQueue</model>
@@ -274,30 +274,36 @@
                 <api_key>wxVMVTkf_csx17LioTjY</api_key>
                 <api_token>bZa6Ml0zgS</api_token>
             </service>
-            <cron>
+            <cron_catalog_product_attributes>
                 <!-- CATALOG PRODUCT ATTRIBUTES -->
-                <catalog_product_attributes_queue_enabled>1</catalog_product_attributes_queue_enabled>
+                <enabled>1</enabled>
                 <catalog_product_attributes_queue_create>3 2 */1 * *</catalog_product_attributes_queue_create>
                 <catalog_product_attributes_queue_execute>11 2 */1 * *</catalog_product_attributes_queue_execute>
+            </cron_catalog_product_attributes>
+            <cron_catalog_products>
                 <!-- CATALOG PRODUCTS -->
-                <catalog_products_queue_enabled>1</catalog_products_queue_enabled>
+                <enabled>1</enabled>
                 <catalog_products_queue_create>*/13 * * * *</catalog_products_queue_create>
                 <catalog_products_queue_execute>*/30 * * * *</catalog_products_queue_execute>
                 <catalog_products_queue_execute_limit>500</catalog_products_queue_execute_limit>
+            </cron_catalog_products>
+            <cron_catalog_categories>
                 <!-- CATALOG CATEGORIES -->
-                <catalog_categories_queue_enabled>1</catalog_categories_queue_enabled>
-                <catalog_categories_queue_create>0 3 */1 * *</catalog_categories_queue_create>
-                <catalog_categories_queue_execute>10 3 */1 * *</catalog_categories_queue_execute>
-                <!-- SALES ORDER -->
-                <sales_order_update_enabled>1</sales_order_update_enabled>
-                <!-- SALES ORDER QUEUE -->
-                <sales_order_queue_import_enabled>1</sales_order_queue_import_enabled>
-                <sales_order_queue_import_expression>*/10 * * * *</sales_order_queue_import_expression>
+                <enabled>1</enabled>
+                <queue_create>0 3 */1 * *</queue_create>
+                <queue_execute>10 3 */1 * *</queue_execute>
+            </cron_catalog_categories>
+            <cron_sales_order_status>
                 <!-- SALES ORDER STATUS QUEUE -->
-                <sales_order_status_queue_enabled>1</sales_order_status_queue_enabled>
-                <sales_order_status_queue_create>*/10 * * * *</sales_order_status_queue_create>
-                <sales_order_status_queue_execute>*/10 * * * *</sales_order_status_queue_execute>
-            </cron>
+                <enabled>1</enabled>
+                <queue_create>*/10 * * * *</queue_create>
+                <queue_execute>*/10 * * * *</queue_execute>
+            </cron_sales_order_status>
+            <cron_sales_order_queue>
+                <!-- SALES ORDER QUEUE -->
+                <enabled>1</enabled>
+                <expression>*/10 * * * *</expression>
+            </cron_sales_order_queue>
         </bseller_skyhub>
     </default>
     <phpunit>

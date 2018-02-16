@@ -12,14 +12,9 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-trait BSeller_SkyHub_Trait_Config_Cron
+class BSeller_SkyHub_Model_Cron_Config_Catalog_Product extends BSeller_SkyHub_Model_Cron_Config_Abstract
 {
 
-    /**
-     * @return BSeller_SkyHub_Model_Cron_Config
-     */
-    protected function getCronConfig()
-    {
-        return Mage::getModel('bseller_skyhub/cron_config');
-    }
+    protected $group = 'cron_catalog_products';
+
 }
