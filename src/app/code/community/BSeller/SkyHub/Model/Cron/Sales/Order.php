@@ -23,6 +23,10 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
      */
     public function syncAllOrders(Mage_Cron_Model_Schedule $schedule)
     {
+        if (!$this->canRun()) {
+            return;
+        }
+
         $orders = (array) $this->getOrderIntegrator()->orders();
 
         foreach ($orders as $orderData) {
@@ -58,14 +62,17 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
     
     
     /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     *
      * @return bool
      */
-    protected function canRun()
+    protected function canRun(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->getCronConfig()->salesOrderQueue()->isEnabled()) {
+            $schedule->setMessages($this->__('Sales Order Queue Cron is Disabled'));
             return false;
         }
 
-        return parent::canRun();
+        return parent::canRun($schedule);
     }
 }

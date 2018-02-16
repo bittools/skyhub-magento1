@@ -12,7 +12,7 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Model_Cron_Abstract
+abstract class BSeller_SkyHub_Model_Cron_Abstract
 {
 
     use BSeller_SkyHub_Trait_Data,
@@ -24,11 +24,14 @@ class BSeller_SkyHub_Model_Cron_Abstract
 
 
     /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     *
      * @return bool
      */
-    protected function canRun()
+    protected function canRun(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->isModuleEnabled()) {
+            $schedule->setMessages($this->__('Module is not enabled in configuration.'));
             return false;
         }
 

@@ -20,7 +20,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
      */
     public function createProductsQueue(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!$this->canRun()) {
+        if (!$this->canRun($schedule)) {
             return;
         }
 
@@ -39,16 +39,21 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
             $collection->addFieldToFilter('entity_id', ['nin' => $queuedIds]);
         }
 
-        $limit = $this->getCronConfig()->catalogProduct()->getQueueExecuteLimit();
-
         /** @var Varien_Db_Select $select */
         $select = $collection->getSelect()
-            ->limit((int) $limit)
             ->reset('columns')
             ->columns('entity_id')
             ->order('updated_at DESC')
             ->order('created_at DESC')
         ;
+
+        /**
+         * Set limitation.
+         */
+        $limit = $this->getCronConfig()->catalogProduct()->getQueueExecuteLimit();
+        if ($limit) {
+            $select->limit((int) $limit);
+        }
 
         $productIds = (array) $this->getQueueResource()->getReadConnection()->fetchCol($select);
 
@@ -70,7 +75,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
      */
     public function executeProductsQueue(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!$this->canRun()) {
+        if (!$this->canRun($schedule)) {
             return;
         }
 
@@ -158,14 +163,17 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
 
 
     /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     *
      * @return bool
      */
-    protected function canRun()
+    protected function canRun(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->getCronConfig()->catalogProduct()->isEnabled()) {
+            $schedule->setMessages($this->__('Catalog Product Cron is Disabled'));
             return false;
         }
 
-        return parent::canRun();
+        return parent::canRun($schedule);
     }
 }

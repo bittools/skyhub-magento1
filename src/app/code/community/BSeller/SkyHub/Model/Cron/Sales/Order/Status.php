@@ -20,6 +20,10 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
      */
     public function createOrderStatusQueue(Mage_Cron_Model_Schedule $schedule)
     {
+        if (!$this->canRun($schedule)) {
+            return;
+        }
+
         $deniedStates = [
             Mage_Sales_Model_Order::STATE_CANCELED,
             Mage_Sales_Model_Order::STATE_CLOSED,
@@ -57,6 +61,10 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
      */
     public function executeOrderStatusQueue(Mage_Cron_Model_Schedule $schedule)
     {
+        if (!$this->canRun($schedule)) {
+            return;
+        }
+
         $orderIds = (array) $this->getQueueResource()
             ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER, 50);
 
@@ -94,14 +102,17 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
 
     
     /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     *
      * @return bool
      */
-    protected function canRun()
+    protected function canRun(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->getCronConfig()->salesOrderStatus()->isEnabled()) {
+            $schedule->setMessages($this->__('Sales Order Status Cron is Disabled'));
             return false;
         }
         
-        return parent::canRun();
+        return parent::canRun($schedule);
     }
 }

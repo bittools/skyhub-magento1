@@ -26,7 +26,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub
      */
     public function createAttributesQueue(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!$this->canRun()) {
+        if (!$this->canRun($schedule)) {
             return;
         }
 
@@ -52,7 +52,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub
      */
     public function executeAttributesQueue(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!$this->canRun()) {
+        if (!$this->canRun($schedule)) {
             return;
         }
 
@@ -89,14 +89,17 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub
 
 
     /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     *
      * @return bool
      */
-    protected function canRun()
+    protected function canRun(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->getCronConfig()->catalogProductAttribute()->isEnabled()) {
+            $schedule->setMessages($this->__('Catalog Product Attribute Cron is Disabled'));
             return false;
         }
 
-        return parent::canRun();
+        return parent::canRun($schedule);
     }
 }

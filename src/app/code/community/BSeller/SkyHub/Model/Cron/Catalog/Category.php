@@ -20,7 +20,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
      */
     public function createCategoriesQueue(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!$this->canRun()) {
+        if (!$this->canRun($schedule)) {
             return;
         }
 
@@ -52,7 +52,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
      */
     public function executeCategoriesQueue(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!$this->canRun()) {
+        if (!$this->canRun($schedule)) {
             return;
         }
 
@@ -135,14 +135,17 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
 
 
     /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     *
      * @return bool
      */
-    protected function canRun()
+    protected function canRun(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->getCronConfig()->catalogCategory()->isEnabled()) {
+            $schedule->setMessages($this->__('Catalog Category Cron is Disabled'));
             return false;
         }
 
-        return parent::canRun();
+        return parent::canRun($schedule);
     }
 }
