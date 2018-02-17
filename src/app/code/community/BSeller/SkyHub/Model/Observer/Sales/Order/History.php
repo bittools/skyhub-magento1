@@ -45,6 +45,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
             return;
         }
 
+        /** @var boolean $result */
         $result = $this->orderIntegrator()->invoice($order->getId(), $invoiceKeyNumber);
 
         if (!$result) {
