@@ -29,5 +29,11 @@ class BSeller_SkyHub_Model_Adminhtml_Session_Quote extends Mage_Adminhtml_Model_
         
         return $this;
     }
+
+
+    public function getCustomer($forceReload=false, $useSetStore=false)
+    {
+        return parent::getCustomer($forceReload, $useSetStore);
+    }
     
 }

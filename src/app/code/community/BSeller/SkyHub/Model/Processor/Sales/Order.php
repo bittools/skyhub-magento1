@@ -41,6 +41,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             $order = Mage::getModel('sales/order')->load($orderId);
             return $order;
         }
+
+        $this->simulateStore($this->getStore());
         
         $info = new Varien_Object([
             'increment_id'      => $incrementId,
@@ -114,8 +116,15 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $products = [];
         
         foreach ($items as $item) {
-            $sku = $this->arrayExtract($item, 'product_id');
-            $qty = $this->arrayExtract($item, 'qty');
+            $sku          = $this->arrayExtract($item, 'product_id');
+            $qty          = $this->arrayExtract($item, 'qty');
+            $price        = (float) $this->arrayExtract($item, 'original_price');
+            $specialPrice = (float) $this->arrayExtract($item, 'special_price');
+
+            $finalPrice = $price;
+            if (!empty($specialPrice)) {
+                $finalPrice = $specialPrice;
+            }
 
             /** @var Mage_Catalog_Model_Product $product */
             $product   = Mage::getModel('catalog/product');
@@ -127,6 +136,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             
             $product->load($productId);
             $product->setData('qty', (float) $qty);
+            $product->setPrice($price);
+            $product->setFinalPrice($finalPrice);
             $product->setData('request_item', $item);
 
             $products[] = $product;
@@ -238,6 +249,18 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
          */
         
         return $address;
+    }
+
+
+    /**
+     * @param Mage_Core_Model_Store $store
+     *
+     * @return $this
+     */
+    protected function simulateStore(Mage_Core_Model_Store $store)
+    {
+        Mage::app()->setCurrentStore($store);
+        return $this;
     }
     
     

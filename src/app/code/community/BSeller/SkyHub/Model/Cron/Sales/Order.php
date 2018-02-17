@@ -23,7 +23,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
      */
     public function syncAllOrders(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!$this->canRun()) {
+        if (!$this->canRun($schedule)) {
             return;
         }
 

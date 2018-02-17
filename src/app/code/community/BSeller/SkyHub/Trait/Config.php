@@ -70,6 +70,10 @@ trait BSeller_SkyHub_Trait_Config
         $storeId = (int) $this->getSkyHubModuleConfig('default_store_id', 'cron_sales_order_queue');
 
         try {
+            if (Mage::app()->getStore($storeId)->isAdmin()) {
+                $storeId = Mage::app()->getDefaultStoreView()->getId();
+            }
+
             return Mage::app()->getStore($storeId);
         } catch (Exception $e) {}
 
