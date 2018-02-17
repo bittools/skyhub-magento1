@@ -67,7 +67,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $creation = Mage::getModel('bseller_skyhub/support_sales_order_create', $this->getStore());
         $creation->setOrderInfo($info)
                  ->setCustomer($customer)
-                 ->setShippingMethod('flatrate_flatrate', $shippingCost)
+                 ->setShippingMethod('bseller_skyhub_standard', $shippingCost)
                  ->setPaymentMethod('bseller_skyhub_standard')
                  ->addOrderAddress('billing', $billingAddress)
                  ->addOrderAddress('shipping', $shippingAddress)

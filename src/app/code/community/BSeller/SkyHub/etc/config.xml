@@ -314,6 +314,15 @@
                 <model>bseller_skyhub/payment_method_standard</model>
             </bseller_skyhub_standard>
         </payment>
+        <carriers>
+            <bseller_skyhub_standard>
+                <active>1</active>
+                <sallowspecific>0</sallowspecific>
+                <model>bseller_skyhub/shipping_carrier_standard</model>
+                <name>Standard</name>
+                <title>BSeller SkyHub</title>
+            </bseller_skyhub_standard>
+        </carriers>
     </default>
     <phpunit>
         <suite>
