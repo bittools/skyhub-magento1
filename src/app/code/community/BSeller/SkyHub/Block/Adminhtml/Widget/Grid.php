@@ -48,15 +48,15 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
         ));
 
         /** @var BSeller_SkyHub_Model_System_Config_Source_Entity_Types $source */
-        $source =Mage::getModel('bseller_skyhub/system_config_source_entity_types');
-        $this->addColumn('entity_type', array(
-            'header'       => $this->__('Entity Type'),
-            'align'        => 'left',
-            'width'        => '200px',
-            'type'         => 'options',
-            'filter_index' => 'main_table.entity_type',
-            'options'      => $source->toArray(),
-        ));
+//        $source =Mage::getModel('bseller_skyhub/system_config_source_entity_types');
+//        $this->addColumn('entity_type', array(
+//            'header'       => $this->__('Entity Type'),
+//            'align'        => 'left',
+//            'width'        => '200px',
+//            'type'         => 'options',
+//            'filter_index' => 'main_table.entity_type',
+//            'options'      => $source->toArray(),
+//        ));
 
         /** @var BSeller_SkyHub_Model_System_Config_Source_Queue_Status $source */
         $source = Mage::getModel('bseller_skyhub/system_config_source_queue_status');
@@ -98,6 +98,17 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
 
         parent::_prepareColumns();
         return $this;
+    }
+
+
+    /**
+     * @param $item
+     *
+     * @return bool|string
+     */
+    public function getRowUrl($item)
+    {
+        return false;
     }
 
 
