@@ -135,7 +135,7 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Enable the products attribute integration via cron.]]></comment>
                         </enabled>
-                        <catalog_product_attributes_queue_create>
+                        <queue_create>
                             <label>Product Attributes Queue Generate</label>
                             <sort_order>20</sort_order>
                             <frontend_type>text</frontend_type>
@@ -146,8 +146,8 @@
                             <depends>
                                 <enabled>1</enabled>
                             </depends>
-                        </catalog_product_attributes_queue_create>
-                        <catalog_product_attributes_queue_execute>
+                        </queue_create>
+                        <queue_execute>
                             <label>Product Attributes Queue Execute</label>
                             <sort_order>30</sort_order>
                             <frontend_type>text</frontend_type>
@@ -158,7 +158,7 @@
                             <depends>
                                 <enabled>1</enabled>
                             </depends>
-                        </catalog_product_attributes_queue_execute>
+                        </queue_execute>
                     </fields>
                 </cron_catalog_product_attributes>
                 <!-- CATALOG PRODUCTS -->
@@ -180,7 +180,7 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Enable the products integration via cron.]]></comment>
                         </enabled>
-                        <catalog_products_queue_create>
+                        <queue_create>
                             <label>Products Queue Create</label>
                             <sort_order>50</sort_order>
                             <frontend_type>text</frontend_type>
@@ -191,8 +191,8 @@
                             <depends>
                                 <enabled>1</enabled>
                             </depends>
-                        </catalog_products_queue_create>
-                        <catalog_products_queue_execute>
+                        </queue_create>
+                        <queue_execute>
                             <label>Products Queue Execute</label>
                             <sort_order>60</sort_order>
                             <frontend_type>text</frontend_type>
@@ -203,8 +203,8 @@
                             <depends>
                                 <enabled>1</enabled>
                             </depends>
-                        </catalog_products_queue_execute>
-                        <catalog_products_queue_execute_limit>
+                        </queue_execute>
+                        <queue_execute_limit>
                             <label>Products Queue Limit Quantity</label>
                             <sort_order>70</sort_order>
                             <frontend_type>text</frontend_type>
@@ -214,9 +214,9 @@
                             <validate>validate-number validate-greater-than-zero</validate>
                             <comment><![CDATA[The amount of products to be queued and integrated per time. The default quantity is 500 at time.]]></comment>
                             <depends>
-                                <catalog_products_queue_enabled>1</catalog_products_queue_enabled>
+                                <enabled>1</enabled>
                             </depends>
-                        </catalog_products_queue_execute_limit>
+                        </queue_execute_limit>
                     </fields>
                 </cron_catalog_products>
                 <!-- CATALOG CATEGORIES -->

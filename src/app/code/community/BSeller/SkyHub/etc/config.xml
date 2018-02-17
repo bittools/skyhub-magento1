@@ -183,7 +183,7 @@
             <!-- CATALOG PRODUCT ATTRIBUTE -->
             <bseller_skyhub_catalog_product_attributes_queue_create>
                 <schedule>
-                    <config_path>bseller_skyhub/cron_catalog_product_attributes/catalog_product_attributes_queue_create</config_path>
+                    <config_path>bseller_skyhub/cron_catalog_product_attributes/queue_create</config_path>
                 </schedule>
                 <run>
                     <model>bseller_skyhub/cron_catalog_product_attribute::createAttributesQueue</model>
@@ -191,7 +191,7 @@
             </bseller_skyhub_catalog_product_attributes_queue_create>
             <bseller_skyhub_catalog_product_attributes_queue_execute>
                 <schedule>
-                    <config_path>bseller_skyhub/cron_catalog_product_attributes/catalog_product_attributes_queue_execute</config_path>
+                    <config_path>bseller_skyhub/cron_catalog_product_attributes/queue_execute</config_path>
                 </schedule>
                 <run>
                     <model>bseller_skyhub/cron_catalog_product_attribute::executeAttributesQueue</model>
@@ -277,8 +277,8 @@
             <cron_catalog_product_attributes>
                 <!-- CATALOG PRODUCT ATTRIBUTES -->
                 <enabled>1</enabled>
-                <catalog_product_attributes_queue_create>3 2 */1 * *</catalog_product_attributes_queue_create>
-                <catalog_product_attributes_queue_execute>11 2 */1 * *</catalog_product_attributes_queue_execute>
+                <queue_create>3 2 */1 * *</queue_create>
+                <queue_execute>11 2 */1 * *</queue_execute>
             </cron_catalog_product_attributes>
             <cron_catalog_products>
                 <!-- CATALOG PRODUCTS -->
