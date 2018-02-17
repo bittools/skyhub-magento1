@@ -138,14 +138,16 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     
     /**
      * @param string $method
+     * @param float  $cost
      *
      * @return $this
      */
-    public function setShippingMethod($method = 'flatrate_flatrate')
+    public function setShippingMethod($method = 'flatrate_flatrate', $cost = 0.0000)
     {
         $data = [
             'order' => [
                 'shipping_method' => $method,
+                'shipping_cost'   => (float) $cost,
             ]
         ];
         

@@ -307,6 +307,13 @@
                 <approved_order_status>processing</approved_order_status>
             </cron_sales_order_queue>
         </bseller_skyhub>
+        <payment>
+            <bseller_skyhub_standard>
+                <active>1</active>
+                <sort_order>9000</sort_order>
+                <model>bseller_skyhub/payment_method_standard</model>
+            </bseller_skyhub_standard>
+        </payment>
     </default>
     <phpunit>
         <suite>
