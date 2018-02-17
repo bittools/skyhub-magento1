@@ -246,7 +246,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     protected function getStore()
     {
-        return Mage::app()->getDefaultStoreView();
+        return $this->getNewOrdersDefaultStore();
     }
     
     

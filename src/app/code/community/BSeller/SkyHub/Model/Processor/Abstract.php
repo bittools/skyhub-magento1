@@ -16,6 +16,7 @@ class BSeller_SkyHub_Model_Processor_Abstract
 {
 
     use BSeller_SkyHub_Trait_Data,
+        BSeller_SkyHub_Trait_Config,
         BSeller_SkyHub_Trait_Customer;
 
 }

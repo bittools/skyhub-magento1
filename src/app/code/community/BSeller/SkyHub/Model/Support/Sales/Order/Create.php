@@ -50,12 +50,10 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         
         $this->merge($data);
     }
-    
-    
+
+
     /**
-     * @param Varien_Object                $order
-     * @param Mage_Customer_Model_Customer $customer
-     *
+     * @param Varien_Object $order
      * @return $this
      */
     public function setOrderInfo(Varien_Object $order)

@@ -311,7 +311,7 @@
                 </cron_sales_order_status>
                 <!-- SALES ORDER QUEUE -->
                 <cron_sales_order_queue translate="label comment" module="bseller_skyhub">
-                    <label>Order Queue Cron Configuration</label>
+                    <label>Order Import Cron Configuration</label>
                     <sort_order>140</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
@@ -340,29 +340,38 @@
                                 <enabled>1</enabled>
                             </depends>
                         </expression>
-                    </fields>
-                </cron_sales_order_queue>
-                <!--
-                <catalog_product_integration translate="label" module="bseller_skyhub">
-                    <label>Product Integration Configuration</label>
-                    <sort_order>40</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <expanded>1</expanded>
-                    <fields>
-                        <method>
-                            <label>Integration Method</label>
-                            <sort_order>40</sort_order>
+                        <default_store_id>
+                            <label>Imported Orders Store View</label>
+                            <sort_order>30</sort_order>
                             <frontend_type>select</frontend_type>
-                            <source_model>bseller_skyhub/system_config_source_integration_method</source_model>
+                            <source_model>adminhtml/system_config_source_store</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </method>
+                            <comment><![CDATA[The default store which the order will be imported in.]]></comment>
+                        </default_store_id>
+                        <new_order_status>
+                            <label>New Order Status</label>
+                            <sort_order>40</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status_new</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[]]></comment>
+                        </new_order_status>
+                        <approved_order_status>
+                            <label>Approved Order Status</label>
+                            <sort_order>50</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status_processing</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[]]></comment>
+                        </approved_order_status>
                     </fields>
-                </catalog_product_integration>
-                -->
+                </cron_sales_order_queue>
             </groups>
         </bseller_skyhub>
     </sections>

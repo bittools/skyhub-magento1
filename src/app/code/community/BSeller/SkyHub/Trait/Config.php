@@ -51,6 +51,30 @@ trait BSeller_SkyHub_Trait_Config
     {
         return (bool) $this->getGeneralConfig('enabled');
     }
+
+
+    /**
+     * @return int
+     */
+    protected function getNewOrdersDefaultStoreId()
+    {
+        return $this->getNewOrdersDefaultStore()->getId();
+    }
+
+
+    /**
+     * @return Mage_Core_Model_Store
+     */
+    protected function getNewOrdersDefaultStore()
+    {
+        $storeId = (int) $this->getSkyHubModuleConfig('default_store_id', 'cron_sales_order_queue');
+
+        try {
+            return Mage::app()->getStore($storeId);
+        } catch (Exception $e) {}
+
+        return Mage::app()->getDefaultStoreView();
+    }
     
     
     /**

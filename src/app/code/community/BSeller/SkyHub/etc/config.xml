@@ -303,6 +303,8 @@
                 <!-- SALES ORDER QUEUE -->
                 <enabled>1</enabled>
                 <expression>*/10 * * * *</expression>
+                <new_order_status>pending</new_order_status>
+                <approved_order_status>processing</approved_order_status>
             </cron_sales_order_queue>
         </bseller_skyhub>
     </default>
