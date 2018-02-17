@@ -112,12 +112,20 @@
             </catalog_category_tree_move_after>
             <sales_order_status_history_save_after>
                 <observers>
-                    <bseller_skyhub_check_nfkey_status_history>
+                    <bseller_skyhub_integrate_nfkey_status_history>
                         <class>bseller_skyhub/observer_sales_order_history</class>
                         <method>sendTaxInvoiceKey</method>
-                    </bseller_skyhub_check_nfkey_status_history>
+                    </bseller_skyhub_integrate_nfkey_status_history>
                 </observers>
             </sales_order_status_history_save_after>
+            <sales_order_shipment_track_save_after>
+                <observers>
+                    <bseller_skyhub_integrate_shipment_track>
+                        <class>bseller_skyhub/observer_sales_order_shipment</class>
+                        <method>integrateOrderShipmentTracking</method>
+                    </bseller_skyhub_integrate_shipment_track>
+                </observers>
+            </sales_order_shipment_track_save_after>
         </events>
     </global>
     <frontend>

@@ -33,6 +33,7 @@ $tables = [
             'size'     => 255,
             'nullable' => true,
             'default'  => false,
+            'after'    => 'bseller_skyhub',
             'comment'  => 'SkyHub Code',
         ],
         'bseller_skyhub_channel' => [
@@ -40,6 +41,7 @@ $tables = [
             'size'     => 255,
             'nullable' => true,
             'default'  => false,
+            'after'    => 'bseller_skyhub_code',
             'comment'  => 'SkyHub Code',
         ],
         'bseller_skyhub_invoice_key' => [
@@ -47,6 +49,7 @@ $tables = [
             'size'     => 255,
             'nullable' => true,
             'default'  => null,
+            'after'    => 'bseller_skyhub_invoice_key',
             'comment'  => 'SkyHub Invoice Key',
         ],
     ]
