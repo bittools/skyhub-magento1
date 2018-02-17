@@ -37,4 +37,22 @@ abstract class BSeller_SkyHub_Model_Cron_Abstract
 
         return true;
     }
+
+
+    /**
+     * @return Mage_Core_Model_Store
+     */
+    protected function getStore()
+    {
+        return Mage::app()->getDefaultStoreView();
+    }
+
+
+    /**
+     * @return int
+     */
+    protected function getStoreId()
+    {
+        return $this->getStore()->getId();
+    }
 }

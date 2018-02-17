@@ -24,22 +24,35 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
             return;
         }
 
-        /** @var Varien_Db_Select $select */
-        $select = $this->getCategoryCollection()->getSelect()
-            ->reset('columns')
-            ->columns('entity_id');
+        $rootCategoryLevel = 1;
 
-        $categoryIds = (array) Mage::getSingleton('core/resource')->getConnection('read')
-            ->fetchCol($select);
+        /** @var Mage_Catalog_Model_Resource_Category_Collection $categories */
+        $categories = $this->getCategoryCollection()
+            ->addFieldToFilter('level', ['gt' => $rootCategoryLevel]);
 
-        if (empty($categoryIds)) {
+        if (!$categories->getSize()) {
             $schedule->setMessages($this->__('No category to be listed right now.'));
             return;
         }
 
-        $categoryIds = $this->remoteRootCategory($categoryIds);
+        $categoryIds = [];
 
-        $this->getQueueResource()->queue($categoryIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY);
+        /** @var Mage_Catalog_Model_Category $category */
+        foreach ($categories as $category) {
+            if ($category->isInRootCategoryList()) {
+                continue;
+            }
+
+            $this->getQueueResource()->queue(
+                $category->getId(),
+                BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
+                true,
+                null,
+                $category->getStoreId()
+            );
+
+            $categoryIds[] = $category->getId();
+        }
 
         $schedule->setMessages(
             $this->__('The categories were successfully queued. Category IDs: %s.', implode(',', $categoryIds))
@@ -64,8 +77,6 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
             return;
         }
 
-        $categoryIds = $this->remoteRootCategory($categoryIds);
-
         /** @var Mage_Catalog_Model_Resource_Category_Collection $collection */
         $collection = $this->getCategoryCollection()
             ->addFieldToFilter('entity_id', $categoryIds);
@@ -80,20 +91,24 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
 
             if (!$response || $response->exception()) {
                 $errorIds[] = $category->getId();
+
+                $this->getQueueResource()->setFailedEntityIds(
+                    $category->getId(),
+                    BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
+                    $response->message(),
+                    $category->getStoreId()
+                );
+
                 continue;
             }
 
+            $this->getQueueResource()->removeFromQueue(
+                $category->getId(),
+                BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
+                $category->getStoreId()
+            );
+
             $successIds[] = $category->getId();
-        }
-
-        if (!empty($successIds)) {
-            $this->getQueueResource()
-                ->removeFromQueue($successIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY);
-        }
-
-        if (!empty($errorIds)) {
-            $this->getQueueResource()
-                ->setFailedEntityIds($errorIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY);
         }
 
         $schedule->setMessages($this->__(
@@ -122,7 +137,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
      *
      * @throws Mage_Core_Model_Store_Exception
      */
-    protected function remoteRootCategory(array &$categoryIds)
+    protected function removeRootCategory(array &$categoryIds)
     {
         foreach ($categoryIds as $key => $categoryId) {
             if ($categoryId == Mage::app()->getStore()->getRootCategoryId()) {

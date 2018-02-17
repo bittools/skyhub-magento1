@@ -228,7 +228,7 @@
                     <config_path>bseller_skyhub/cron_catalog_categories/catalog_categories_queue_execute</config_path>
                 </schedule>
                 <run>
-                    <model>bseller_skyhub/cron_catalog_categories::executeCategoriesQueue</model>
+                    <model>bseller_skyhub/cron_catalog_category::executeCategoriesQueue</model>
                 </run>
             </bseller_skyhub_catalog_categories_queue_execute>
             <!-- SALES ORDER QUEUE -->

@@ -32,14 +32,29 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
      */
     public function queue($entityIds, $entityType, $canProcess = true, $processAfter = null, $storeId = 0)
     {
-        $entityIds = (array) $entityIds;
-        $entityIds = $this->filterEntityIds($entityIds);
+        $entityIds = $this->filterEntityIds((array) $entityIds);
 
         if (empty($entityIds)) {
             return $this;
         }
 
         $items = [];
+        
+        $deleteSets = array_chunk($entityIds, 1000);
+        
+        foreach ($deleteSets as $deleteIds) {
+            $this->beginTransaction();
+            
+            try {
+                $where = $this->getCondition($deleteIds, $entityType, $storeId);
+                $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
+        
+                $this->commit();
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $this->rollBack();
+            }
+        }
 
         foreach ($entityIds as $entityId) {
             $items[] = [
@@ -51,24 +66,6 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
                 'store_id'      => (int) Mage::app()->getStore($storeId)->getId(),
                 'created_at'    => now(),
             ];
-        }
-        
-        $deleteSets = array_chunk($entityIds, 1000);
-        
-        foreach ($deleteSets as $deleteIds) {
-            $this->beginTransaction();
-            
-            try {
-                $deleteIds = implode(',', $deleteIds);
-                $where     = new Zend_Db_Expr("entity_id IN ($deleteIds) AND entity_type = '{$entityType}'");
-                
-                $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
-        
-                $this->commit();
-            } catch (Exception $e) {
-                Mage::logException($e);
-                $this->rollBack();
-            }
         }
 
         /** @var array $item */
@@ -91,10 +88,11 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     /**
      * @param string   $entityType
      * @param int|null $limit
+     * @param int      $storeId
      *
      * @return array
      */
-    public function getPendingEntityIds($entityType, $limit = null)
+    public function getPendingEntityIds($entityType, $limit = null, $storeId = 0)
     {
         $integrableStatuses = [
             BSeller_SkyHub_Model_Queue::STATUS_PENDING,
@@ -107,6 +105,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
             ->from($this->getMainTable(), 'entity_id')
             ->where('status IN (?)', implode(',', $integrableStatuses))
             ->where('can_process = 1')
+            ->where('store_id IN (?)', $this->getStoreIds($storeId))
             ->where('process_after <= ?', now())
             ->where('entity_type = ?', (string) $entityType)
         ;
@@ -124,10 +123,11 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     /**
      * @param integer|array $entityIds
      * @param string        $entityType
+     * @param integer       $storeId
      *
      * @return $this
      */
-    public function removeFromQueue($entityIds, $entityType)
+    public function removeFromQueue($entityIds, $entityType, $storeId = 0)
     {
         $entityIds = $this->filterEntityIds((array) $entityIds);
 
@@ -135,9 +135,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
             return $this;
         }
 
-        $entityIds = implode(',', $entityIds);
-
-        $where = new Zend_Db_Expr("entity_id IN ({$entityIds}) AND entity_type = '{$entityType}'");
+        $where = $this->getCondition($entityIds, $entityType, $storeId);
         $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
 
         return $this;
@@ -147,12 +145,16 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     /**
      * @param integer|array $entityIds
      * @param string        $entityType
+     * @param string|null   $message
+     * @param integer       $storeId
      *
      * @return $this
      */
-    public function setFailedEntityIds($entityIds, $entityType)
+    public function setFailedEntityIds($entityIds, $entityType, $message = null, $storeId = 0)
     {
-        $this->updateQueueStatus($entityIds, $entityType, BSeller_SkyHub_Model_Queue::STATUS_FAIL);
+        $this->updateQueueStatus(
+            $entityIds, $entityType, BSeller_SkyHub_Model_Queue::STATUS_FAIL, $message, $storeId
+        );
         return $this;
     }
 
@@ -160,12 +162,16 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     /**
      * @param integer|array $entityIds
      * @param string        $entityType
+     * @param string|null   $message
+     * @param integer       $storeId
      *
      * @return $this
      */
-    public function setPendingEntityIds($entityIds, $entityType)
+    public function setPendingEntityIds($entityIds, $entityType, $message = null, $storeId = 0)
     {
-        $this->updateQueueStatus($entityIds, $entityType, BSeller_SkyHub_Model_Queue::STATUS_PENDING);
+        $this->updateQueueStatus(
+            $entityIds, $entityType, BSeller_SkyHub_Model_Queue::STATUS_PENDING, $message, $storeId
+        );
         return $this;
     }
 
@@ -173,26 +179,39 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     /**
      * @param integer|array $entityIds
      * @param string        $entityType
+     * @param string|null   $message
+     * @param integer       $storeId
      *
      * @return $this
      */
-    public function setRetryEntityIds($entityIds, $entityType)
+    public function setRetryEntityIds($entityIds, $entityType, $message = null, $storeId = 0)
     {
-        $this->updateQueueStatus($entityIds, $entityType, BSeller_SkyHub_Model_Queue::STATUS_RETRY);
+        $this->updateQueueStatus(
+            $entityIds, $entityType, BSeller_SkyHub_Model_Queue::STATUS_RETRY, $message, $storeId
+        );
         return $this;
     }
 
 
     /**
-     * @param int|array $entityIds
-     * @param string    $entityType
-     * @param int       $status
+     * @param int|array   $entityIds
+     * @param string      $entityType
+     * @param int         $status
+     * @param string|null $message
+     * @param integer     $storeId
      *
      * @return $this
      */
-    public function updateQueueStatus($entityIds, $entityType, $status)
+    public function updateQueueStatus($entityIds, $entityType, $status, $message = null, $storeId = 0)
     {
-        $this->updateQueues($entityIds, $entityType, ['status' => $status]);
+        $this->updateQueues(
+            $entityIds,
+            $entityType, [
+                'status'   => $status,
+                'messages' => $message,
+            ],
+            $storeId
+        );
         return $this;
     }
 
@@ -201,20 +220,20 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
      * @param integer|array $entityIds
      * @param string        $entityType
      * @param array         $binds
+     * @param integer       $storeId
      *
      * @return $this
      */
-    public function updateQueues($entityIds, $entityType, array $binds = [])
+    public function updateQueues($entityIds, $entityType, array $binds = [], $storeId = 0)
     {
-        $entityIds = $this->filterEntityIds($entityIds);
+        $entityIds = $this->filterEntityIds((array) $entityIds);
 
         if (empty($entityIds)) {
             return $this;
         }
 
-        $entityIds = implode(',', $entityIds);
+        $where = $this->getCondition($entityIds, $entityType, $storeId);
 
-        $where = new Zend_Db_Expr("entity_id IN ({$entityIds}) AND entity_type = '{$entityType}'");
         $this->_getWriteAdapter()
             ->update($this->getMainTable(), $binds, $where);
 
@@ -235,5 +254,41 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
         });
 
         return $entityIds;
+    }
+
+
+    /**
+     * @param array  $entityIds
+     * @param string $entityType
+     * @param int    $storeId
+     *
+     * @return Zend_Db_Expr
+     */
+    protected function getCondition(array $entityIds, $entityType, $storeId = 0)
+    {
+        $entityIds  = implode(',', $entityIds);
+        $conditions = [
+            "entity_id IN ({$entityIds})",
+            "entity_type = '{$entityType}'",
+            "store_id IN ({$this->getStoreIds($storeId)})"
+        ];
+
+        return new Zend_Db_Expr(implode(' AND ', $conditions));
+    }
+
+
+    /**
+     * @param int $storeId
+     *
+     * @return string
+     */
+    protected function getStoreIds($storeId = 0)
+    {
+        $storeId = (int) Mage::app()->getStore($storeId)->getId();
+
+        $storeIds = [0, $storeId];
+        $storeIds = array_unique($storeIds);
+
+        return implode(',', $storeIds);
     }
 }
