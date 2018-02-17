@@ -67,4 +67,15 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_QueueController extends BSeller_Sk
         $this->renderLayout();
     }
 
+
+    /**
+     * Sales Order Status Queue
+     */
+    public function salesOrderStatusQueueAction()
+    {
+        $this->init('Sales Order Status Queue');
+        $this->_setActiveMenu('bseller/bseller_skyhub/queues/sales_order_status_queue');
+
+        $this->renderLayout();
+    }
 }

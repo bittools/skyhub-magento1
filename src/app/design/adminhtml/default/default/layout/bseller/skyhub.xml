@@ -75,6 +75,14 @@
         </reference>
     </adminhtml_bseller_skyhub_queue_productattributesqueue>
 
+    <!-- Sales Order Status Queue -->
+    <adminhtml_bseller_skyhub_queue_salesorderstatusqueue>
+        <label>BSeller SkyHub Order Status Queue</label>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_queue_sales_order_status"/>
+        </reference>
+    </adminhtml_bseller_skyhub_queue_salesorderstatusqueue>
+
     <ADD_STYLES>
         <reference name="head">
             <action method="addCss">
