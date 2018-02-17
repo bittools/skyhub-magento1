@@ -75,6 +75,41 @@ trait BSeller_SkyHub_Trait_Config
 
         return Mage::app()->getDefaultStoreView();
     }
+
+
+    /**
+     * @return string
+     */
+    protected function getNewOrdersStatus()
+    {
+        $status = (string) $this->getSkyHubModuleConfig('new_order_status', 'cron_sales_order_queue');
+
+        if (empty($status)) {
+            /** @var Mage_Sales_Model_Order_Status $status */
+            $status = Mage::getModel('sales/order_status')->loadDefaultByState(Mage_Sales_Model_Order::STATE_NEW);
+            $status = $status->getId();
+        }
+
+        return $status;
+    }
+
+
+    /**
+     * @return string
+     */
+    protected function getApprovedOrdersStatus()
+    {
+        $status = (string) $this->getSkyHubModuleConfig('approved_order_status', 'cron_sales_order_queue');
+
+        if (empty($status)) {
+            /** @var Mage_Sales_Model_Order_Status $status */
+            $status = Mage::getModel('sales/order_status')
+                ->loadDefaultByState(Mage_Sales_Model_Order::STATE_PROCESSING);
+            $status = $status->getId();
+        }
+
+        return $status;
+    }
     
     
     /**

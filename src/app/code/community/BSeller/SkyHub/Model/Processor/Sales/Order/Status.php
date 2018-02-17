@@ -170,8 +170,10 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
 
         $comment = $this->__('Invoiced automatically via SkyHub.');
         $invoice->addComment($comment);
-        $order->addStatusHistoryComment($comment, true);
+
         $order->setIsInProcess(true);
+        $order->setStatus($this->getApprovedOrdersStatus());
+        $order->addStatusHistoryComment($comment, true);
 
         /** @var Mage_Core_Model_Resource_Transaction $transaction */
         $transaction = Mage::getResourceModel('core/transaction');
