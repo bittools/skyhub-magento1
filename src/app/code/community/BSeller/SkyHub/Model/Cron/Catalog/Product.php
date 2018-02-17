@@ -109,8 +109,15 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
             /** @var \SkyHub\Api\Handler\Response\HandlerInterface $response */
             $response = $this->catalogProductIntegrator()->createOrUpdate($product);
 
-            if (!$response || $response->exception()) {
+            if ($this->isErrorResponse($response)) {
                 $errorIds[] = $product->getId();
+
+                /** @var \SkyHub\Api\Handler\Response\HandlerException $response */
+                $this->getQueueResource()->setFailedEntityIds(
+                    $product->getId(),
+                    BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
+                    $response->message()
+                );
                 continue;
             }
 
@@ -120,11 +127,6 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
         if (!empty($successIds)) {
             $this->getQueueResource()
                 ->removeFromQueue($successIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
-        }
-
-        if (!empty($errorIds)) {
-            $this->getQueueResource()
-                ->setFailedEntityIds($errorIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
         }
 
         $schedule->setMessages($this->__(

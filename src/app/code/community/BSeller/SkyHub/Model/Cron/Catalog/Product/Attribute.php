@@ -72,8 +72,15 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub
             /** @var HandlerDefault|HandlerException $response */
             $response = $this->catalogProductAttributeIntegrator()->createOrUpdate($attribute);
 
-            if ($response->exception() || $response->invalid()) {
+            if ($this->isErrorResponse($response)) {
                 $failedQueueIds[] = $attribute->getId();
+
+                $this->getQueueResource()->setFailedEntityIds(
+                    $attribute->getId(),
+                    BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE,
+                    $response->message()
+                );
+
                 continue;
             }
 
@@ -81,8 +88,12 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub
         }
 
         $this->getQueueResource()
-            ->removeFromQueue($successQueueIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE)
-            ->setFailedEntityIds($failedQueueIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE);
+            ->removeFromQueue($successQueueIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE);
+
+        if (!empty($failedQueueIds)) {
+            $schedule->setMessages($this->__('Some attributes could not be integrated.'));
+            return;
+        }
 
         $schedule->setMessages($this->__('All product attributes were successfully integrated.'));
     }

@@ -43,7 +43,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
                 continue;
             }
 
-            $this->getQueueResource()->queue(
+            $this->queue(
                 $category->getId(),
                 BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
                 true,
@@ -89,7 +89,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
             /** @var bool|\SkyHub\Api\Handler\Response\HandlerInterface $response */
             $response = $this->catalogCategoryIntegrator()->createOrUpdate($category);
 
-            if (!$response || $response->exception()) {
+            if ($this->isErrorResponse($response)) {
                 $errorIds[] = $category->getId();
 
                 $this->getQueueResource()->setFailedEntityIds(

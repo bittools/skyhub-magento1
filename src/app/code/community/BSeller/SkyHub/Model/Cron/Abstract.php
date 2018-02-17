@@ -55,4 +55,27 @@ abstract class BSeller_SkyHub_Model_Cron_Abstract
     {
         return $this->getStore()->getId();
     }
+
+
+    /**
+     * @param \SkyHub\Api\Handler\Response\HandlerInterface $response
+     *
+     * @return bool
+     */
+    protected function isErrorResponse($response)
+    {
+        if (!$response) {
+            return true;
+        }
+
+        if ($response->invalid()) {
+            return true;
+        }
+
+        if ($response->exception()) {
+            return true;
+        }
+
+        return false;
+    }
 }
