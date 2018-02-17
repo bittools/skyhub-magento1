@@ -110,6 +110,14 @@
                     </bseller_skyhub_delete_catalog_category>
                 </observers>
             </catalog_category_tree_move_after>
+            <sales_order_status_history_save_after>
+                <observers>
+                    <bseller_skyhub_check_nfkey_status_history>
+                        <class>bseller_skyhub/observer_sales_order_history</class>
+                        <method>sendTaxInvoiceKey</method>
+                    </bseller_skyhub_check_nfkey_status_history>
+                </observers>
+            </sales_order_status_history_save_after>
         </events>
     </global>
     <frontend>
@@ -274,6 +282,9 @@
                 <api_key>wxVMVTkf_csx17LioTjY</api_key>
                 <api_token>bZa6Ml0zgS</api_token>
             </service>
+            <tax_invoice_key>
+                <pattern>Chave NFE: %d</pattern>
+            </tax_invoice_key>
             <cron_catalog_product_attributes>
                 <!-- CATALOG PRODUCT ATTRIBUTES -->
                 <enabled>1</enabled>

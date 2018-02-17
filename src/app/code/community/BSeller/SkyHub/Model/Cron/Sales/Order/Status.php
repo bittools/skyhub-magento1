@@ -80,7 +80,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
         /** @var Mage_Sales_Model_Order $order */
         foreach ($collection as $order) {
             /** @var array $orderData */
-            $orderData = (array) $this->getOrderIntegrator()->order($order->getId());
+            $orderData = (array) $this->orderIntegrator()->order($order->getId());
 
             $statusCode = $this->arrayExtract($orderData, 'status/code');
             $statusType = $this->arrayExtract($orderData, 'status/type');

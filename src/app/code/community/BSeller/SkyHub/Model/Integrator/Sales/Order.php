@@ -51,9 +51,7 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
      */
     public function order($orderId)
     {
-        /** @var Mage_Sales_Model_Resource_Order $resource */
-        $resource    = Mage::getResourceModel('sales/order');
-        $incrementId = $resource->getIncrementId($orderId);
+        $incrementId = $this->getOrderIncrementId($orderId);
 
         /** @var  $result */
         $result = $this->getEntityInterface()->order($incrementId);
@@ -66,6 +64,130 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
         $order = $result->toArray();
 
         return (array) $order;
+    }
+
+
+    /**
+     * @param int    $orderId
+     * @param string $invoiceKey
+     *
+     * @return bool
+     */
+    public function invoice($orderId, $invoiceKey)
+    {
+        $incrementId = $this->getOrderIncrementId($orderId);
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $result */
+        $result = $this->getEntityInterface()->invoice($incrementId, $invoiceKey);
+
+        if ($result->exception() || $result->invalid()) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    /**
+     * @param int $orderId
+     *
+     * @return bool
+     */
+    public function cancel($orderId)
+    {
+        $incrementId = $this->getOrderIncrementId($orderId);
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $result */
+        $result = $this->getEntityInterface()->cancel($incrementId);
+
+        if ($result->exception() || $result->invalid()) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    /**
+     * @param int $orderId
+     *
+     * @return bool
+     */
+    public function delivery($orderId)
+    {
+        $incrementId = $this->getOrderIncrementId($orderId);
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $result */
+        $result = $this->getEntityInterface()->delivery($incrementId);
+
+        if ($result->exception() || $result->invalid()) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    /**
+     * @param int $orderId
+     *
+     * @return array|bool|stdClass
+     */
+    public function shipmentLabels($orderId)
+    {
+        $incrementId = $this->getOrderIncrementId($orderId);
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $result */
+        $result = $this->getEntityInterface()->shipmentLabels($incrementId);
+
+        if ($result->exception() || $result->invalid()) {
+            return false;
+        }
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
+        return $result->toArray();
+    }
+
+
+    /**
+     * @param string $orderId
+     * @param array  $items
+     * @param string $trackCode
+     * @param string $trackCarrier
+     * @param string $trackMethod
+     * @param string $trackUrl
+     *
+     * @return array|bool|stdClass
+     */
+    public function shipment($orderId, array $items, $trackCode, $trackCarrier, $trackMethod, $trackUrl)
+    {
+        $incrementId = $this->getOrderIncrementId($orderId);
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $result */
+        $result = $this->getEntityInterface()
+            ->shipment($incrementId, $items, $trackCode, $trackCarrier, $trackMethod, $trackUrl);
+
+        if ($result->exception() || $result->invalid()) {
+            return false;
+        }
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
+        return $result->toArray();
+    }
+
+
+    /**
+     * @param int $orderId
+     *
+     * @return string
+     */
+    protected function getOrderIncrementId($orderId)
+    {
+        /** @var Mage_Sales_Model_Resource_Order $resource */
+        $resource    = Mage::getResourceModel('sales/order');
+        $incrementId = $resource->getIncrementId($orderId);
+
+        return $incrementId;
     }
 
 

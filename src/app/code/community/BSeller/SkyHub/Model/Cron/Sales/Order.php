@@ -27,7 +27,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
             return;
         }
 
-        $orders = (array) $this->getOrderIntegrator()->orders();
+        $orders = (array) $this->orderIntegrator()->orders();
 
         foreach ($orders as $orderData) {
             try {

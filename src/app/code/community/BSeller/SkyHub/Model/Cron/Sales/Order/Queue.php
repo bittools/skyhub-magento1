@@ -29,7 +29,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Queue extends BSeller_SkyHub_Model_C
 
         while ($count < $limit) {
             /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
-            $orderData = $this->getOrderQueueIntegrator()->nextOrder();
+            $orderData = $this->orderQueueIntegrator()->nextOrder();
 
             if (empty($orderData)) {
                 $schedule->setMessages($this->__('No order found in the queue.'));
@@ -53,7 +53,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Queue extends BSeller_SkyHub_Model_C
             $message .= $this->__('Order %s successfully created.', $order->getIncrementId());
 
             /** @var \SkyHub\Api\Handler\Response\HandlerDefault $isDeleted */
-            $isDeleted = $this->getOrderQueueIntegrator()->deleteByOrder($order);
+            $isDeleted = $this->orderQueueIntegrator()->deleteByOrder($order);
 
             if ($isDeleted->success()) {
                 $message .= ' ' . $this->__('It was also removed from queue.');

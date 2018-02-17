@@ -114,6 +114,15 @@ trait BSeller_SkyHub_Trait_Config
 
         return $status;
     }
+
+
+    /**
+     * @return string
+     */
+    protected function getTaxInvoiceKeyPattern()
+    {
+        return (string) $this->getSkyHubModuleConfig('pattern', 'tax_invoice_key');
+    }
     
     
     /**

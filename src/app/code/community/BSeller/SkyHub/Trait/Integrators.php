@@ -46,4 +46,22 @@ trait BSeller_SkyHub_Trait_Integrators
         $integrator = Mage::getSingleton('bseller_skyhub/integrator_catalog_category');
         return $integrator;
     }
+
+
+    /**
+     * @return BSeller_SkyHub_Model_Integrator_Sales_Order_Queue
+     */
+    protected function orderQueueIntegrator()
+    {
+        return Mage::getSingleton('bseller_skyhub/integrator_sales_order_queue');
+    }
+
+
+    /**
+     * @return BSeller_SkyHub_Model_Integrator_Sales_Order
+     */
+    protected function orderIntegrator()
+    {
+        return Mage::getSingleton('bseller_skyhub/integrator_sales_order');
+    }
 }
