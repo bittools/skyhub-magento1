@@ -87,3 +87,5 @@
 "Queue Create","Criação da Fila"
 "Order Status Cron Configuration","Configuração da Cron de Atualização de Status de Pedido"
 "Categories Cron Configuration","Configurações da Cron de Categorias"
+"Invoice Key Comment Pattern","Padrão do Comentário com a Chave da Nota Fiscal"
+"Invoice Key Configuration","Configuração da Chave de Nota Fiscal"

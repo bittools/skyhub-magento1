@@ -116,10 +116,28 @@
                         </api_token>
                     </fields>
                 </service>
+                <tax_invoice_key translate="label" module="bseller_skyhub">
+                    <label>Invoice Key Configuration</label>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                        <pattern>
+                            <label>Invoice Key Comment Pattern</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </pattern>
+                    </fields>
+                </tax_invoice_key>
                 <!-- CATALOG PRODUCT ATTRIBUTES -->
                 <cron_catalog_product_attributes translate="label comment" module="bseller_skyhub">
                     <label>Product Attributes Cron Configuration</label>
-                    <sort_order>100</sort_order>
+                    <sort_order>1000</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -164,7 +182,7 @@
                 <!-- CATALOG PRODUCTS -->
                 <cron_catalog_products translate="label comment" module="bseller_skyhub">
                     <label>Products Cron Configuration</label>
-                    <sort_order>110</sort_order>
+                    <sort_order>1100</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -222,7 +240,7 @@
                 <!-- CATALOG CATEGORIES -->
                 <cron_catalog_categories translate="label comment" module="bseller_skyhub">
                     <label>Categories Cron Configuration</label>
-                    <sort_order>120</sort_order>
+                    <sort_order>1200</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -267,7 +285,7 @@
                 <!-- SALES ORDER STATUS -->
                 <cron_sales_order_status translate="label comment" module="bseller_skyhub">
                     <label>Order Status Cron Configuration</label>
-                    <sort_order>130</sort_order>
+                    <sort_order>1300</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -312,7 +330,7 @@
                 <!-- SALES ORDER QUEUE -->
                 <cron_sales_order_queue translate="label comment" module="bseller_skyhub">
                     <label>Order Import Cron Configuration</label>
-                    <sort_order>140</sort_order>
+                    <sort_order>1400</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>

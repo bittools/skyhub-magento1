@@ -42,6 +42,13 @@ $tables = [
             'default'  => false,
             'comment'  => 'SkyHub Code',
         ],
+        'bseller_skyhub_invoice_key' => [
+            'type'     => $this::TYPE_TEXT,
+            'size'     => 255,
+            'nullable' => true,
+            'default'  => null,
+            'comment'  => 'SkyHub Invoice Key',
+        ],
     ]
 ];
 
