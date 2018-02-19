@@ -49,7 +49,7 @@ $tables = [
             'size'     => 255,
             'nullable' => true,
             'default'  => null,
-            'after'    => 'bseller_skyhub_invoice_key',
+            'after'    => 'bseller_skyhub_channel',
             'comment'  => 'SkyHub Invoice Key',
         ],
     ]
