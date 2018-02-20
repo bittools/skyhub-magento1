@@ -106,14 +106,14 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </api_key>
-                        <api_token>
-                            <label>API Token</label>
+                        <account_manager_key>
+                            <label>Account Manager Key</label>
                             <sort_order>40</sort_order>
                             <frontend_type>text</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </api_token>
+                        </account_manager_key>
                     </fields>
                 </service>
                 <tax_invoice_key translate="label" module="bseller_skyhub">

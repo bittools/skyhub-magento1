@@ -56,9 +56,9 @@ trait BSeller_SkyHub_Trait_Config_Service
     /**
      * @return string
      */
-    protected function getServiceApiToken()
+    protected function getServiceAccountManagerKey()
     {
-        return (string) $this->getServiceConfig('api_token');
+        return (string) $this->getServiceConfig('account_manager_key');
     }
 
 
@@ -79,7 +79,7 @@ trait BSeller_SkyHub_Trait_Config_Service
             return false;
         }
 
-        if (!$this->getServiceApiToken()) {
+        if (!$this->getServiceAccountManagerKey()) {
             return false;
         }
 

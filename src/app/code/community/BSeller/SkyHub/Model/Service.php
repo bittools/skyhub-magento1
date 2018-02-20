@@ -63,7 +63,7 @@ class BSeller_SkyHub_Model_Service
             $this->getServiceBaseUri(),
             $this->getServiceEmail(),
             $this->getServiceApiKey(),
-            $this->getServiceApiToken()
+            $this->getServiceAccountManagerKey()
         );
 
         if ($this->isLogEnabled()) {
