@@ -33,8 +33,16 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
         $exists = $this->productExists($product->getId());
 
         if (true == $exists) {
-            /** Update Product */
-            return $this->update($product);
+            /**
+             * Update Product
+             *
+             * @var bool|\SkyHub\Api\Handler\Response\HandlerInterface $response
+             */
+            $response = $this->update($product);
+            
+            if ($response && $response->success()) {
+                return $response;
+            }
         }
 
         /** Create Product */
