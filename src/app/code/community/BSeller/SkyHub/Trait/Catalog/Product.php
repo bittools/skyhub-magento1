@@ -41,7 +41,8 @@ trait BSeller_SkyHub_Trait_Catalog_Product
     
     
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param Mage_Catalog_Model_Product             $product
+     * @param Mage_Eav_Model_Entity_Attribute|string $attribute
      *
      * @return float|null
      */
