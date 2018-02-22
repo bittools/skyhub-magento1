@@ -45,13 +45,15 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
 
         return $interface;
     }
-
-
+    
+    
     /**
      * @param Mage_Catalog_Model_Product $product
      * @param Product                    $interface
      *
      * @return $this
+     *
+     * @throws Mage_Core_Exception
      */
     protected function prepareProductVariations(Mage_Catalog_Model_Product $product, Product $interface)
     {
@@ -84,6 +86,8 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
      * @param Product                    $interface
      *
      * @return $this
+     *
+     * @throws Mage_Core_Exception
      */
     public function prepareProductImages(Mage_Catalog_Model_Product $product, Product $interface)
     {
@@ -300,19 +304,27 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         $priceCode        = $mappedPrice->getAttribute()->getAttributeCode();
         $specialPriceCode = $mappedPromoPrice->getAttribute()->getAttributeCode();
     
+        /**
+         * Add Price.
+         */
         $price = $this->extractProductPrice($product, $priceCode);
         
         if (!empty($price)) {
             $interface->setPrice((float) $price);
-            $this->addProcessedAttribute($product, $mappedPrice->getAttribute());
         }
+        
+        $this->addProcessedAttribute($product, $mappedPrice->getAttribute());
     
+        /**
+         * Add Promotional Price.
+         */
         $specialPrice = $this->extractProductSpecialPrice($product, $specialPriceCode, $price);
         
         if (!empty($specialPrice)) {
             $interface->setPromotionalPrice((float) $specialPrice);
-            $this->addProcessedAttribute($product, $mappedPromoPrice->getAttribute());
         }
+    
+        $this->addProcessedAttribute($product, $mappedPromoPrice->getAttribute());
         
         return $this;
     }

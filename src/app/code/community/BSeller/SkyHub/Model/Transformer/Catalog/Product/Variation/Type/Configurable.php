@@ -6,7 +6,8 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
     extends BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Abstract
 {
 
-    use BSeller_SkyHub_Trait_Catalog_Product;
+    use BSeller_SkyHub_Trait_Catalog_Product,
+        BSeller_SkyHub_Trait_Eav_Option;
     
     
     /** @var array */
@@ -24,9 +25,6 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
     public function create(Mage_Catalog_Model_Product $product, Product $interface)
     {
         $this->prepareProductVariationAttributes($product, $interface);
-
-        /** @var Mage_Catalog_Model_Product_Type_Configurable $typeInstance */
-        $typeInstance = $product->getTypeInstance();
 
         /** @var array $configurationOptions */
         /**
@@ -50,24 +48,34 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         }
         */
 
-        $childrenIds = (array) $typeInstance->getChildrenIds($product->getId());
-        $childrenIds = (array) array_pop($childrenIds);
-
-        if (empty($childrenIds)) {
+        $children = $this->getChildrenProducts($product);
+        
+        if (empty($children)) {
             return $this;
         }
 
-        /** @var Mage_Catalog_Model_Resource_Product_Collection $childrenCollection */
-        $childrenCollection = Mage::getResourceModel('catalog/product_collection');
-        $childrenCollection->addFieldToFilter('entity_id', ['in' => $childrenIds]);
-
         /** @var Mage_Catalog_Model_Product $child */
-        foreach ($childrenCollection as $child) {
+        foreach ($children as $child) {
             /** @var Product\Variation $variation */
             $variation = $this->addVariation($child, $interface);
         }
 
         return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return array
+     */
+    protected function getChildrenProducts(Mage_Catalog_Model_Product $product)
+    {
+        /** @var Mage_Catalog_Model_Product_Type_Configurable $typeInstance */
+        $typeInstance = $product->getTypeInstance();
+        $usedProducts = $typeInstance->getUsedProducts(null, $product);
+        
+        return $usedProducts;
     }
 
 

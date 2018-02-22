@@ -82,7 +82,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product
             $attributeCode = 'special_price';
         }
     
-        $specialPrice = (float) $this->productAttributeRawValue($product, $attributeCode);
+        $specialPrice = $this->productAttributeRawValue($product, $attributeCode);
         
         $fromDate = $this->extractProductSpecialFromDate($product);
         $toDate   = $this->extractProductSpecialToDate($product);
