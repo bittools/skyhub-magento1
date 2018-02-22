@@ -90,16 +90,16 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
         $attributePrice        = $mappedPrice->getAttribute();
         $attributeSpecialPrice = $mappedSpecialPrice->getAttribute();
     
-        $price = $this->extractProductPrice($product, $mappedPrice->getAttribute()->getAttributeCode());
+        $price = $this->extractProductPrice($product, $attributePrice->getAttributeCode());
         
         if (!empty($price)) {
-            $variation->addSpecification($attributePrice->getAttributeCode(), (float) $price);
+            $variation->addSpecification($mappedPrice->getSkyhubCode(), (float) $price);
         }
         
         $specialPrice = $this->extractProductSpecialPrice($product, $attributeSpecialPrice, $price);
         
         if (!empty($specialPrice)) {
-            $variation->addSpecification($attributeSpecialPrice->getAttributeCode(), (float) $specialPrice);
+            $variation->addSpecification($mappedSpecialPrice->getSkyhubCode(), (float) $specialPrice);
         }
         
         return $this;
