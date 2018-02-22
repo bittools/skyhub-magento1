@@ -179,7 +179,8 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                     continue;
                 }
     
-                $interface->addSpecification($attribute->getFrontend()->getLabel(), $value);
+//                $interface->addSpecification($attribute->getFrontend()->getLabel(), $value);
+                $interface->addSpecification($attribute->getAttributeCode(), $value);
             } catch (Exception $e) {
                 Mage::logException($e);
             }
