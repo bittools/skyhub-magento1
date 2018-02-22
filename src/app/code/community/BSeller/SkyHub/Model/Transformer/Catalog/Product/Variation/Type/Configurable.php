@@ -7,13 +7,19 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
 {
 
     use BSeller_SkyHub_Trait_Catalog_Product;
-
-
+    
+    
+    /** @var array */
+    protected $configurableAttributes = [];
+    
+    
     /**
      * @param Mage_Catalog_Model_Product $product
      * @param Product                    $interface
      *
      * @return $this
+     *
+     * @throws Mage_Core_Exception
      */
     public function create(Mage_Catalog_Model_Product $product, Product $interface)
     {
@@ -92,5 +98,33 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
 
         return $this;
     }
-
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param Product\Variation          $variation
+     *
+     * @return $this
+     *
+     * @throws Mage_Core_Exception
+     */
+    protected function addSpecificationsToVariation(Mage_Catalog_Model_Product $product, Product\Variation $variation)
+    {
+        /** @var Mage_Eav_Model_Entity_Attribute $configurableAttribute */
+        foreach ($this->configurableAttributes as $configurableAttribute) {
+            $code  = $configurableAttribute->getAttributeCode();
+            $value = $this->productAttributeRawValue($product, $code);
+            $text  = $configurableAttribute->getSource()->getOptionText($value);
+            
+            if (!$text) {
+                continue;
+            }
+            
+            $variation->addSpecification($code, $text);
+        }
+        
+        parent::addSpecificationsToVariation($product, $variation);
+        
+        return $this;
+    }
 }

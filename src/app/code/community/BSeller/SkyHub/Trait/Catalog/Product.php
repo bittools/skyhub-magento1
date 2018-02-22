@@ -16,8 +16,8 @@ trait BSeller_SkyHub_Trait_Catalog_Product
 {
 
     /**
-     * @param Mage_Catalog_Model_Product $product
-     * @param                            $attribute
+     * @param Mage_Catalog_Model_Product             $product
+     * @param string|Mage_Eav_Model_Entity_Attribute $attribute
      * @return array|bool|mixed|string
      */
     protected function productAttributeRawValue(Mage_Catalog_Model_Product $product, $attribute)
@@ -25,10 +25,8 @@ trait BSeller_SkyHub_Trait_Catalog_Product
         if ($attribute instanceof Mage_Eav_Model_Entity_Attribute) {
             $attribute = $attribute->getAttributeCode();
         }
-
-        if ($product->hasData($attribute)) {
-            $data = $product->getData($attribute);
-        }
+    
+        $data = $product->getData($attribute);
 
         if (empty($data)) {
             try {
@@ -40,5 +38,144 @@ trait BSeller_SkyHub_Trait_Catalog_Product
 
         return $data;
     }
-
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return float|null
+     */
+    protected function extractProductPrice(Mage_Catalog_Model_Product $product, $attribute = null)
+    {
+        if ($attribute instanceof Mage_Eav_Model_Entity_Attribute) {
+            $attribute = $attribute->getAttributeCode();
+        }
+        
+        if (empty($attribute)) {
+            $attribute = 'price';
+        }
+        
+        $price = $this->productAttributeRawValue($product, $attribute);
+        
+        if (!empty($price)) {
+            return $price;
+        }
+        
+        return null;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param null|string                $attributeCode
+     * @param null|float                 $comparedPrice
+     *
+     * @return float|null
+     */
+    protected function extractProductSpecialPrice(
+        Mage_Catalog_Model_Product $product,
+        $attributeCode = null,
+        $comparedPrice = null
+    )
+    {
+        if (empty($attributeCode)) {
+            $attributeCode = 'special_price';
+        }
+    
+        $specialPrice = (float) $this->productAttributeRawValue($product, $attributeCode);
+        
+        $fromDate = $this->extractProductSpecialFromDate($product);
+        $toDate   = $this->extractProductSpecialToDate($product);
+        
+        if ($this->validateSpecialPrice($specialPrice, $comparedPrice, $fromDate, $toDate)) {
+            return $specialPrice;
+        }
+        
+        return null;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return string
+     */
+    protected function extractProductSpecialFromDate(Mage_Catalog_Model_Product $product, $attributeCode = null)
+    {
+        if (empty($attributeCode)) {
+            $attributeCode = 'special_from_date';
+        }
+    
+        return (string) $this->productAttributeRawValue($product, $attributeCode);
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return string
+     */
+    protected function extractProductSpecialToDate(Mage_Catalog_Model_Product $product, $attributeCode = null)
+    {
+        if (empty($attributeCode)) {
+            $attributeCode = 'special_to_date';
+        }
+    
+        return (string) $this->productAttributeRawValue($product, $attributeCode);
+    }
+    
+    
+    /**
+     * @param float       $specialPrice
+     * @param float       $price
+     * @param string|null $fromDate
+     * @param string|null $toDate
+     *
+     * @return bool
+     */
+    protected function validateSpecialPrice($specialPrice, $price = null, $fromDate = null, $toDate = null)
+    {
+        $specialPrice = (float) $specialPrice;
+        
+        if (empty($specialPrice)) {
+            return false;
+        }
+        
+        if (!is_null($price) && (((float) $price) <= $specialPrice)) {
+            return false;
+        }
+        
+        if (!empty($fromDate) && (strtotime(now()) < strtotime($fromDate))) {
+            return false;
+        }
+        
+        if (!empty($toDate) && (strtotime(now()) > strtotime($toDate))) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    
+    /**
+     * @param Mage_Eav_Model_Entity_Attribute $attribute
+     *
+     * @return bool
+     */
+    protected function validateProductAttribute(Mage_Eav_Model_Entity_Attribute $attribute)
+    {
+        if (!$attribute) {
+            return false;
+        }
+        
+        if (!$attribute->getAttributeId()) {
+            return false;
+        }
+        
+        if (!$attribute->getAttributeCode()) {
+            return false;
+        }
+        
+        return true;
+    }
 }

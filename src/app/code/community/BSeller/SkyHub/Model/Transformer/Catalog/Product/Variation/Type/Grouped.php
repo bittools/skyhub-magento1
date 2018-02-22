@@ -6,9 +6,6 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Grouped
     extends BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Abstract
 {
 
-    use BSeller_SkyHub_Trait_Catalog_Product;
-
-
     /**
      * @param Mage_Catalog_Model_Product $product
      * @param Product                    $interface

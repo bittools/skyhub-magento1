@@ -79,9 +79,13 @@ trait BSeller_SkyHub_Trait_Config_Service
             return false;
         }
 
+        /**
+         * Apparently this field is not required for integration.
+         *
         if (!$this->getServiceAccountManagerKey()) {
             return false;
         }
+        */
 
         return true;
     }

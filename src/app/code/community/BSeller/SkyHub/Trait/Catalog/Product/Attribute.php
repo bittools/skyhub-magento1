@@ -213,6 +213,16 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
             'url_key',
             'entity_type_id',
             'type_id',
+            'custom_design',
+            'custom_design_from',
+            'custom_design_to',
+            'custom_layout_update',
+            'is_recurring',
+            'gift_message_available',
+            'has_options',
+            'msrp',
+            'msrp_enabled',
+            'msrp_display_actual_price_type',
 //            'category_ids',
         ];
     }

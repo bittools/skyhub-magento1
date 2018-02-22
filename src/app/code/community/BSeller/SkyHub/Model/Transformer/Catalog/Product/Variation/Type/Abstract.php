@@ -6,28 +6,17 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
     extends BSeller_SkyHub_Model_Transformer_Abstract
     implements BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Interface
 {
-
-
-    /** @var BSeller_SkyHub_Model_Resource_Catalog_Product_Attributes_Mapping_Collection */
-    protected $mappedAttributesCollection;
-
-    /** @var array */
-    protected $configurableAttributes = [];
-
-
-    public function __construct()
-    {
-        $this->mappedAttributesCollection = Mage::getResourceModel(
-            'bseller_skyhub/catalog_product_attributes_mapping_collection'
-        );
-    }
-
-
+    
+    use BSeller_SkyHub_Trait_Catalog_Product,
+        BSeller_SkyHub_Trait_Catalog_Product_Attribute_Mapping;
+    
+    
     /**
      * @param Mage_Catalog_Model_Product $product
      * @param Product                    $interface
      *
      * @return Product\Variation
+     * @throws Mage_Core_Exception
      */
     protected function addVariation(Mage_Catalog_Model_Product $product, Product $interface)
     {
@@ -36,10 +25,11 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
 
         /**
          * EAN Attribute
+         *
+         * @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mapping
          */
 
-        /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mapping */
-        $mapping = $this->mappedAttributesCollection->getBySkyHubCode('ean');
+        $mapping = $this->getMappedAttribute('ean');
 
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         if ($mapping->getId() && $attribute = $mapping->getAttribute()) {
@@ -71,44 +61,96 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
      */
     protected function addSpecificationsToVariation(Mage_Catalog_Model_Product $product, Product\Variation $variation)
     {
-        /** @var Mage_Eav_Model_Entity_Attribute $configurableAttribute */
-        foreach ($this->configurableAttributes as $configurableAttribute) {
-            $code  = $configurableAttribute->getAttributeCode();
-            $value = $this->productAttributeRawValue($product, $code);
-            $text  = $configurableAttribute->getSource()->getOptionText($value);
-
-            if (!$text) {
-                continue;
-            }
-
-            $variation->addSpecification($code, $text);
+        $this->addMappedAttributesToProductVariation($product, $variation);
+        $this->addPricesToProductVariation($product, $variation);
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param Product\Variation          $variation
+     *
+     * @return $this
+     */
+    protected function addPricesToProductVariation(Mage_Catalog_Model_Product $product, Product\Variation $variation)
+    {
+        /**
+         * @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedPrice
+         * @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedSpecialPrice
+         */
+        $mappedPrice        = $this->getMappedAttribute('price');
+        $mappedSpecialPrice = $this->getMappedAttribute('promotional_price');
+    
+        /**
+         * @var Mage_Eav_Model_Entity_Attribute $attributePrice
+         * @var Mage_Eav_Model_Entity_Attribute $attributeSpecialPrice
+         */
+        $attributePrice        = $mappedPrice->getAttribute();
+        $attributeSpecialPrice = $mappedSpecialPrice->getAttribute();
+    
+        $price = $this->extractProductPrice($product, $mappedPrice->getAttribute()->getAttributeCode());
+        
+        if (!empty($price)) {
+            $variation->addSpecification($attributePrice->getAttributeCode(), (float) $price);
         }
-
-        $mapped = [
-            $this->mappedAttributesCollection->getBySkyHubCode('price'),
-            $this->mappedAttributesCollection->getBySkyHubCode('promotional_price'),
-        ];
-
-        /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $fixedAttribute */
-        foreach ($mapped as $fixedAttribute) {
+        
+        $specialPrice = $this->extractProductSpecialPrice($product, $attributeSpecialPrice, $price);
+        
+        if (!empty($specialPrice)) {
+            $variation->addSpecification($attributeSpecialPrice->getAttributeCode(), (float) $specialPrice);
+        }
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param Product\Variation          $variation
+     *
+     * @return $this
+     */
+    protected function addMappedAttributesToProductVariation(
+        Mage_Catalog_Model_Product $product,
+        Product\Variation $variation
+    )
+    {
+        /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedAttribute */
+        foreach ($this->getFixedMappedAttributes() as $mappedAttribute) {
             /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-            $attribute = $fixedAttribute->getAttribute();
-
-            if (!$attribute || !$attribute->getAttributeId()) {
+            $attribute = $mappedAttribute->getAttribute();
+        
+            if (!$this->validateProductAttribute($attribute)) {
                 continue;
             }
-
+        
             $code  = $attribute->getAttributeCode();
             $value = $this->productAttributeRawValue($product, $code);
-
+        
             if (empty($code) || empty($value)) {
                 continue;
             }
-
+        
             $variation->addSpecification($code, $value);
         }
-
+        
         return $this;
+    }
+    
+    
+    /**
+     * @return array
+     */
+    protected function getFixedMappedAttributes()
+    {
+        return [
+            'weight' => $this->getMappedAttribute('weight'),
+            'height' => $this->getMappedAttribute('height'),
+            'length' => $this->getMappedAttribute('length'),
+            'width'  => $this->getMappedAttribute('width'),
+        ];
     }
 
 
@@ -125,26 +167,29 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
 
         return (float) $stockItem->getQty();
     }
-
-
+    
+    
     /**
      * @param Mage_Catalog_Model_Product $product
      * @param Product\Variation          $variation
      *
      * @return $this
+     *
+     * @throws Mage_Core_Exception
      */
     protected function addImagesToVariation(Mage_Catalog_Model_Product $product, Product\Variation $variation)
     {
         if (!$product->getMediaGalleryImages()) {
             /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode(
+            $attribute = Mage::getModel('eav/entity_attribute');
+            $attribute->loadByCode(
                 Mage_Catalog_Model_Product::ENTITY,
                 'media_gallery'
             );
 
             /** @var Mage_Catalog_Model_Product_Attribute_Backend_Media $media */
-            Mage::getModel('catalog/product_attribute_backend_media')
-                ->setAttribute($attribute)
+            $media = Mage::getModel('catalog/product_attribute_backend_media');
+            $media->setAttribute($attribute)
                 ->afterLoad($product);
         }
 
@@ -162,5 +207,4 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
 
         return $this;
     }
-
 }

@@ -46,21 +46,21 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
     
     
     /**
-     * @return bool|Mage_Eav_Model_Entity_Attribute
+     * @return Mage_Eav_Model_Entity_Attribute
      */
     public function getAttribute()
     {
-        if (!$this->getAttributeId()) {
-            return false;
-        }
-        
         if ($this->hasData('attribute')) {
             return $this->getData('attribute');
         }
     
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        $attribute = Mage::getModel('eav/entity_attribute')->load((int) $this->getAttributeId());
-        $this->setData('attribute', $attribute);
+        $attribute = Mage::getModel('eav/entity_attribute');
+    
+        if ($this->getAttributeId()) {
+            $attribute->load((int) $this->getAttributeId());
+            $this->setData('attribute', $attribute);
+        }
         
         return $attribute;
     }

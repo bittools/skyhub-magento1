@@ -17,9 +17,11 @@ use SkyHub\Api\EntityInterface\Catalog\Product;
 class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Model_Transformer_Abstract
 {
 
-    use BSeller_SkyHub_Trait_Service,
+    use BSeller_SkyHub_Trait_Catalog_Product,
         BSeller_SkyHub_Trait_Catalog_Category,
-        BSeller_SkyHub_Trait_Catalog_Product_Attribute;
+        BSeller_SkyHub_Trait_Eav_Option,
+        BSeller_SkyHub_Trait_Catalog_Product_Attribute,
+        BSeller_SkyHub_Trait_Catalog_Product_Attribute_Mapping;
     
     
     /**
@@ -170,13 +172,17 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                 continue;
             }
             
-            $value = $this->extractProductData($product, $attribute);
-        
-            if (empty($value)) {
-                continue;
+            try {
+                $value = $this->extractProductData($product, $attribute);
+    
+                if (empty($value)) {
+                    continue;
+                }
+    
+                $interface->addSpecification($attribute->getFrontend()->getLabel(), $value);
+            } catch (Exception $e) {
+                Mage::logException($e);
             }
-        
-            $interface->addSpecification($attribute->getFrontend()->getLabel(), $value);
         }
         
         return $this;
@@ -208,12 +214,8 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
      */
     public function prepareMappedAttributes(Mage_Catalog_Model_Product $product, Product $interface)
     {
-        /** @var BSeller_SkyHub_Model_Resource_Catalog_Product_Attributes_Mapping_Collection $mappedAttributes */
-        $mappedAttributes    = $this->getMappedAttributesCollection();
-        $processedAttributes = [];
-    
         /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedAttribute */
-        foreach ($mappedAttributes as $mappedAttribute) {
+        foreach ($this->getMappedAttributes() as $mappedAttribute) {
             /** @var string $code */
             $code   = (string) $mappedAttribute->getSkyhubCode();
             $method = 'set'.preg_replace('/[^a-zA-Z]/', null, uc_words($code));
@@ -224,13 +226,9 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
             
             switch ($code) {
                 case 'qty':
-                    /** @var Mage_CatalogInventory_Model_Stock_Item $stockItem */
-                    $stockItem = Mage::getModel('cataloginventory/stock_item');
-                    $stockItem->loadByProduct($product);
-                    
-                    $value = (float) $stockItem->getQty();
-                    
-                    break;
+                case 'price':
+                case 'promotional_price':
+                    continue;
                 default:
                     /** @var Mage_Eav_Model_Entity_Attribute|bool $attribute */
                     if (!$attribute = $this->getAttributeById($mappedAttribute->getAttributeId())) {
@@ -241,14 +239,102 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                         continue;
                     }
                     
-                    $value = $this->getProductAttributeValue($product, $attribute, $mappedAttribute->getType());
-            }
+                    $value = $this->getProductAttributeValue($product, $attribute, $mappedAttribute->getCastType());
     
-            $processedAttributes[$attribute->getId()] = $attribute;
+                    $this->addProcessedAttribute($product, $attribute);
+    
+                    call_user_func([$interface, $method], $value);
+            }
+        }
+    
+        $this->prepareProductQty($product, $interface);
+        $this->prepareProductPrices($product, $interface);
         
-            call_user_func([$interface, $method], $value);
+        return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param Product                    $interface
+     *
+     * @return $this
+     */
+    protected function prepareProductQty(Mage_Catalog_Model_Product $product, Product $interface)
+    {
+        /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedAttribute */
+        $mappedAttribute = $this->getMappedAttribute('qty');
+        
+        if (!$mappedAttribute || !$mappedAttribute->getId()) {
+            return $this;
         }
         
+        /** @var Mage_CatalogInventory_Model_Stock_Item $stockItem */
+        $stockItem = Mage::getModel('cataloginventory/stock_item');
+        $stockItem->loadByProduct($product);
+    
+        $value = (float) $stockItem->getQty();
+        
+        $interface->setQty($value);
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param Product                    $interface
+     *
+     * @return $this
+     */
+    protected function prepareProductPrices(Mage_Catalog_Model_Product $product, Product $interface)
+    {
+        /**
+         * @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedPrice
+         * @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedPromoPrice
+         */
+        $mappedPrice      = $this->getMappedAttribute('price');
+        $mappedPromoPrice = $this->getMappedAttribute('promotional_price');
+        
+        $priceCode        = $mappedPrice->getAttribute()->getAttributeCode();
+        $specialPriceCode = $mappedPromoPrice->getAttribute()->getAttributeCode();
+    
+        $price = $this->extractProductPrice($product, $priceCode);
+        
+        if (!empty($price)) {
+            $interface->setPrice((float) $price);
+            $this->addProcessedAttribute($product, $mappedPrice->getAttribute());
+        }
+    
+        $specialPrice = $this->extractProductSpecialPrice($product, $specialPriceCode, $price);
+        
+        if (!empty($specialPrice)) {
+            $interface->setPromotionalPrice((float) $specialPrice);
+            $this->addProcessedAttribute($product, $mappedPromoPrice->getAttribute());
+        }
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product      $product
+     * @param Mage_Eav_Model_Entity_Attribute $attribute
+     *
+     * @return $this
+     */
+    protected function addProcessedAttribute(
+        Mage_Catalog_Model_Product $product,
+        Mage_Eav_Model_Entity_Attribute $attribute = null
+    )
+    {
+        if (!$attribute) {
+            return $this;
+        }
+        
+        $processedAttributes = (array) $product->getData('processed_attributes');
+        $processedAttributes[$attribute->getId()] = $attribute;
+    
         $product->setData('processed_attributes', $processedAttributes);
         
         return $this;
@@ -281,19 +367,6 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
     
     
     /**
-     * @return BSeller_SkyHub_Model_Resource_Catalog_Product_Attributes_Mapping_Collection
-     */
-    public function getMappedAttributesCollection()
-    {
-        /** @var BSeller_SkyHub_Model_Resource_Catalog_Product_Attributes_Mapping_Collection $collection */
-        $collection = Mage::getResourceModel('bseller_skyhub/catalog_product_attributes_mapping_collection');
-        $collection->setMappedAttributesFilter();
-        
-        return $collection;
-    }
-    
-    
-    /**
      * @param Mage_Catalog_Model_Product      $product
      * @param Mage_Eav_Model_Entity_Attribute $attribute
      *
@@ -301,27 +374,12 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
      *
      * @throws Mage_Core_Exception
      */
-    public function extractProductData(
-        Mage_Catalog_Model_Product $product,
-        Mage_Eav_Model_Entity_Attribute $attribute
-    )
+    public function extractProductData(Mage_Catalog_Model_Product $product, Mage_Eav_Model_Entity_Attribute $attribute)
     {
-        $data = null;
+        $data = $this->productAttributeRawValue($product, $attribute);
         
-        if ($product->hasData($attribute->getAttributeCode())) {
-            $data = $product->getData($attribute->getAttributeCode());
-        }
-        
-        if (empty($data)) {
-            try {
-                $data = $product->getResource()
-                                ->getAttributeRawValue(
-                                    $product->getId(),
-                                    $attribute->getAttributeCode(),
-                                    $this->getStore()
-                                );
-                return $data;
-            } catch (Exception $e) {}
+        if ((false === $data) || is_null($data)) {
+            return false;
         }
         
         switch ($attribute->getAttributeCode()) {
@@ -341,10 +399,14 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
          * Attribute is from type select.
          */
         if (in_array($attribute->getFrontend()->getInputType(), ['select', 'multiselect'])) {
-            $data = $attribute->getSource()->getOptionText($data);
+            try {
+                $data = $this->extractAttributeOptionValue($attribute, $data, $this->getStore());
+            } catch (Exception $e) {
+                // Mage::logException($e);
+            }
         }
         
-        if (!is_null($data)) {
+        if ((false !== $data) && !is_null($data)) {
             return $data;
         }
         
