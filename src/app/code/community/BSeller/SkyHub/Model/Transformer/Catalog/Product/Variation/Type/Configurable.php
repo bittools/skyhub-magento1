@@ -11,7 +11,10 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
     
     
     /** @var array */
-    protected $configurableAttributes = [];
+    protected $configurableAttributes    = [];
+
+    /** @var array */
+    protected $configurableAttributesPrices = [];
     
     
     /**
@@ -24,6 +27,9 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
      */
     public function create(Mage_Catalog_Model_Product $product, Product $interface)
     {
+        $this->configurableAttributes       = [];
+        $this->configurableAttributesPrices = [];
+
         $this->prepareProductVariationAttributes($product, $interface);
 
         /** @var array $configurationOptions */
@@ -162,12 +168,12 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
      */
     protected function addPricesToProductVariation(Mage_Catalog_Model_Product $product, Product\Variation $variation)
     {
-        $additionalPrice = (float) $this->getConfigurableProductAdditionalPrice($product);
-    
         /** @var Mage_Catalog_Model_Product $parentProduct */
         if (!$parentProduct = $this->getParentProduct($product)) {
             $parentProduct = $product;
         }
+
+        $parentProduct->setData('current_child', $product);
         
         /**
          * @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedPrice
@@ -182,87 +188,122 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
          */
         $attributePrice        = $mappedPrice->getAttribute();
         $attributeSpecialPrice = $mappedSpecialPrice->getAttribute();
-        
+
+        /**
+         * Add Price
+         */
 //        $price = $this->extractProductPrice($product, $attributePrice);
         $price = $this->extractProductPrice($parentProduct, $attributePrice);
         
         if (!empty($price)) {
-            $price = (float) array_sum([$price, $additionalPrice]);
+            $price = (float) $this->calculatePrice($parentProduct, (float) $price);
         } else {
             $price = null;
         }
     
         $variation->addSpecification($mappedPrice->getSkyhubCode(), $price);
-        
+
+        /**
+         * Add Special Price
+         */
 //        $specialPrice = $this->extractProductSpecialPrice($product, $attributeSpecialPrice, $price);
         $specialPrice = $this->extractProductSpecialPrice($parentProduct, $attributeSpecialPrice, $price);
         
         if (!empty($specialPrice)) {
-            $specialPrice = (float) array_sum([$specialPrice, $additionalPrice]);
+            $specialPrice = (float) $this->calculatePrice($parentProduct, (float) $specialPrice);
         } else {
             $specialPrice = null;
         }
     
-        $variation->addSpecification($mappedSpecialPrice->getSkyhubCode(), (float) $specialPrice);
+        $variation->addSpecification($mappedSpecialPrice->getSkyhubCode(), $specialPrice);
         
         return $this;
     }
-    
-    
+
+
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param Mage_Catalog_Model_Product $configurableProduct
+     * @param float                      $price
      *
      * @return float
      */
-    protected function getConfigurableProductAdditionalPrice(Mage_Catalog_Model_Product $product)
+    protected function calculatePrice(Mage_Catalog_Model_Product $configurableProduct, $price)
     {
-        $additionalPrice = 0;
-    
-        /** @var Mage_Catalog_Model_Product $parentProduct */
-        if (!$parentProduct = $this->getParentProduct($product)) {
-            return $additionalPrice;
+        /** @var array $priceData */
+        foreach ($this->getConfigurableAttributePrices($configurableProduct) as $priceData) {
+            $isPercent    = (bool)  $priceData['is_percent'];
+            $pricingValue = (float) $priceData['pricing_value'];
+
+            if (true === $isPercent) {
+                $price += ($price * ($pricingValue/100));
+            }
+
+            if (false === $isPercent) {
+                $price += $pricingValue;
+            }
         }
-        
-        $filter = (array) $this->getAttributesFilter($product);
-        
-        /** @var BSeller_SkyHub_Model_Resource_Catalog_Product_Configurable_Price $resource */
-        $resource           = Mage::getResourceModel('bseller_skyhub/catalog_product_configurable_price');
-        $configurablePrices = $resource->getConfigurableOptionPrices($parentProduct->getId(), $filter);
-    
-        /** @var array $configurablePrice */
-        foreach ($configurablePrices as $configurablePrice) {
-            $additionalPrice += (float) $this->arrayExtract($configurablePrice, 'pricing_value');
-        }
-        
-        return (float) $additionalPrice;
+
+        return (float) $price;
     }
-    
-    
+
+
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param Mage_Catalog_Model_Product $configurableProduct
      *
      * @return array
      */
-    protected function getAttributesFilter(Mage_Catalog_Model_Product $product)
+    protected function getConfigurableAttributePrices(Mage_Catalog_Model_Product $configurableProduct)
     {
-        $attributes = [];
-        
-        /** @var Mage_Catalog_Model_Product $parentProduct */
-        if (!$parentProduct = $this->getParentProduct($product)) {
-            return $attributes;
+        $prices = [];
+
+        /** @var Mage_Catalog_Model_Product $childProduct */
+        if (!$childProduct = $this->getCurrentChildProduct($configurableProduct)) {
+            return $prices;
         }
-    
-        $usedAttributes = $this->getConfigurableAttributes($parentProduct);
-    
-        /** @var Mage_Eav_Model_Entity_Attribute $usedAttribute */
-        foreach ($usedAttributes as $usedAttribute) {
-            $attributeId    = $usedAttribute->getId();
-            $attributeValue = $this->productAttributeRawValue($product, $usedAttribute->getAttributeCode()) ;
-        
-            $attributes[$attributeId] = $attributeValue;
+
+        /**
+         * @var integer $attributeId
+         * @var array   $pricesCollection
+         */
+        foreach ($this->extractConfigurableAttributePrices($configurableProduct) as $attributeId => $pricesCollection) {
+            /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+            $attribute      = Mage::getModel('eav/entity_attribute')->load($attributeId);
+            $attributeValue = $this->productAttributeRawValue($childProduct, $attribute);
+
+            /** @var array $priceData */
+            foreach ($pricesCollection as $priceData) {
+                $valueIndex = $this->arrayExtract($priceData, 'value_index', 0.0000);
+
+                if ($attributeValue != $valueIndex) {
+                    continue;
+                }
+
+                $prices[] = $priceData;
+            }
         }
-        
-        return $attributes;
+
+        return $prices;
+    }
+
+
+    /**
+     * @param Mage_Catalog_Model_Product $configurableProduct
+     *
+     * @return array
+     */
+    protected function extractConfigurableAttributePrices(Mage_Catalog_Model_Product $configurableProduct)
+    {
+        if (empty($this->configurableAttributesPrices)) {
+            $usedAttributes = (array) $configurableProduct->getData('_cache_instance_used_attributes');
+
+            /** @var Mage_Catalog_Model_Product_Type_Configurable_Attribute $usedAttribute */
+            foreach ($usedAttributes as $usedAttribute) {
+                $prices = (array) $usedAttribute->getData('prices');
+                $this->configurableAttributesPrices[$usedAttribute->getAttributeId()] = $prices;
+            }
+        }
+
+        return $this->configurableAttributesPrices;
     }
     
     
@@ -281,5 +322,23 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         }
         
         return $parentProduct;
+    }
+
+
+    /**
+     * @param Mage_Catalog_Model_Product $parentProduct
+     *
+     * @return bool|Mage_Catalog_Model_Product
+     */
+    protected function getCurrentChildProduct(Mage_Catalog_Model_Product $parentProduct)
+    {
+        /** @var Mage_Catalog_Model_Product $childProduct */
+        $childProduct = $parentProduct->getData('current_child');
+
+        if (!$childProduct || !$childProduct->getId()) {
+            return false;
+        }
+
+        return $childProduct;
     }
 }
