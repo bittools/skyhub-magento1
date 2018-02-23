@@ -54,8 +54,8 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Queue extends BSeller_SkyHub_Model_C
 
             /** @var \SkyHub\Api\Handler\Response\HandlerDefault $isDeleted */
             $isDeleted = $this->orderQueueIntegrator()->deleteByOrder($order);
-
-            if ($isDeleted->success()) {
+            
+            if ($isDeleted) {
                 $message .= ' ' . $this->__('It was also removed from queue.');
             }
 
