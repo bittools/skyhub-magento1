@@ -165,9 +165,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         $additionalPrice = (float) $this->getConfigurableProductAdditionalPrice($product);
     
         /** @var Mage_Catalog_Model_Product $parentProduct */
-        $parentProduct = $this->getParentProduct($product);
-        
-        if (!$parentProduct) {
+        if (!$parentProduct = $this->getParentProduct($product)) {
             $parentProduct = $product;
         }
         
@@ -221,9 +219,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         $additionalPrice = 0;
     
         /** @var Mage_Catalog_Model_Product $parentProduct */
-        $parentProduct = $this->getParentProduct($product);
-        
-        if (!$parentProduct) {
+        if (!$parentProduct = $this->getParentProduct($product)) {
             return $additionalPrice;
         }
         
@@ -252,9 +248,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         $attributes = [];
         
         /** @var Mage_Catalog_Model_Product $parentProduct */
-        $parentProduct = $this->getParentProduct($product);
-    
-        if (!$parentProduct) {
+        if (!$parentProduct = $this->getParentProduct($product)) {
             return $attributes;
         }
     
