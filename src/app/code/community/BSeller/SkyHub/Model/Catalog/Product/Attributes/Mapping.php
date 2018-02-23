@@ -139,7 +139,14 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
      */
     public function extractProductValue(Mage_Catalog_Model_Product $product)
     {
-        return $this->productAttributeRawValue($product, $this->getAttribute());
+        try {
+            $value = $this->productAttributeRawValue($product, $this->getAttribute());
+            return $value;
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+
+        return null;
     }
 
 

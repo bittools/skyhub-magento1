@@ -147,15 +147,13 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         
         return $this;
     }
-    
-    
+
+
     /**
      * @param Mage_Catalog_Model_Product $product
      * @param Product                    $interface
      *
      * @return $this
-     *
-     * @throws Mage_Core_Exception
      */
     public function prepareSpecificationAttributes(Mage_Catalog_Model_Product $product, Product $interface)
     {
@@ -207,15 +205,13 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         
         return true;
     }
-    
-    
+
+
     /**
      * @param Mage_Catalog_Model_Product $product
      * @param Product                    $interface
      *
      * @return $this
-     *
-     * @throws Mage_Core_Exception
      */
     public function prepareMappedAttributes(Mage_Catalog_Model_Product $product, Product $interface)
     {
@@ -237,13 +233,13 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                 default:
                     /** @var Mage_Eav_Model_Entity_Attribute|bool $attribute */
                     if (!$attribute = $this->getAttributeById($mappedAttribute->getAttributeId())) {
-                        $attribute = Mage::getModel('eav/entity_attribute')->load($mappedAttribute->getAttributeId());
+                        $attribute = $mappedAttribute->getAttribute();
                     }
                     
                     if (!$attribute) {
                         continue;
                     }
-                    
+
                     $value = $this->getProductAttributeValue($product, $attribute, $mappedAttribute->getCastType());
     
                     $this->addProcessedAttribute($product, $attribute);
@@ -360,15 +356,14 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         
         return $this;
     }
-    
-    
+
+
     /**
      * @param Mage_Catalog_Model_Product      $product
      * @param Mage_Eav_Model_Entity_Attribute $attribute
      * @param null|string                     $type
      *
      * @return array|bool|float|int|mixed|string
-     * @throws Mage_Core_Exception
      */
     public function getProductAttributeValue(
         Mage_Catalog_Model_Product $product,
@@ -385,15 +380,13 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         
         return $value;
     }
-    
-    
+
+
     /**
      * @param Mage_Catalog_Model_Product      $product
      * @param Mage_Eav_Model_Entity_Attribute $attribute
      *
      * @return array|bool|mixed|string
-     *
-     * @throws Mage_Core_Exception
      */
     public function extractProductData(Mage_Catalog_Model_Product $product, Mage_Eav_Model_Entity_Attribute $attribute)
     {

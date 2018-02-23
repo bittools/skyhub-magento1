@@ -32,29 +32,8 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
 
         $this->prepareProductVariationAttributes($product, $interface);
 
-        /** @var array $configurationOptions */
-        /**
-        $configurationOptions = $typeInstance->getConfigurableOptions($product);
-
-        $options = [];
-
-        /** @var array $option * /
-        foreach ($configurationOptions as $optionId => $configurationOption) {
-            foreach ($configurationOption as $item) {
-                $attributeCode = $item['attribute_code'];
-                $optionTitle   = $item['option_title'];
-                $isPercent     = $item['pricing_is_percent'];
-                $pricingValue  = $item['pricing_value'];
-                $sku           = $item['sku'];
-
-                $options[$sku][$attributeCode] = [
-                    'price' => $pricingValue
-                ];
-            }
-        }
-        */
-
-        $children = $this->getChildrenProducts($product);
+        /** @var array $children */
+        $children = (array) $this->getChildrenProducts($product);
         
         if (empty($children)) {
             return $this;
@@ -65,7 +44,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
             $child->setData('parent_product', $product);
             
             /** @var Product\Variation $variation */
-            $variation = $this->addVariation($child, $interface);
+            $this->addVariation($child, $interface);
         }
 
         return $this;

@@ -32,8 +32,8 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
         $mapping = $this->getMappedAttribute('ean');
 
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        if ($mapping->getId() && $attribute = $mapping->getAttribute()) {
-            $ean = $this->productAttributeRawValue($product, $attribute->getAttributeCode());
+        if ($mapping->getId() && $mapping->getAttribute()->getId()) {
+            $ean = $mapping->extractProductValue($product);
             $variation->setEan($ean);
         }
 
@@ -56,8 +56,6 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
      * @param Product\Variation          $variation
      *
      * @return $this
-     *
-     * @throws Mage_Core_Exception
      */
     protected function addSpecificationsToVariation(Mage_Catalog_Model_Product $product, Product\Variation $variation)
     {
@@ -119,15 +117,8 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
     {
         /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedAttribute */
         foreach ($this->getFixedMappedAttributes() as $mappedAttribute) {
-            /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-            $attribute = $mappedAttribute->getAttribute();
-        
-            if (!$this->validateProductAttribute($attribute)) {
-                continue;
-            }
-        
-            $code  = $attribute->getAttributeCode();
-            $value = $this->productAttributeRawValue($product, $code);
+            $value = $mappedAttribute->extractProductValue($product);
+            $code  = $mappedAttribute->getAttribute()->getAttributeCode();
         
             if (empty($code) || empty($value)) {
                 continue;
