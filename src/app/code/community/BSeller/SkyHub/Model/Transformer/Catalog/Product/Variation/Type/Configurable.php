@@ -189,17 +189,23 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         $price = $this->extractProductPrice($parentProduct, $attributePrice);
         
         if (!empty($price)) {
-            $price = array_sum([$price, $additionalPrice]);
-            $variation->addSpecification($mappedPrice->getSkyhubCode(), (float) $price);
+            $price = (float) array_sum([$price, $additionalPrice]);
+        } else {
+            $price = null;
         }
+    
+        $variation->addSpecification($mappedPrice->getSkyhubCode(), $price);
         
 //        $specialPrice = $this->extractProductSpecialPrice($product, $attributeSpecialPrice, $price);
         $specialPrice = $this->extractProductSpecialPrice($parentProduct, $attributeSpecialPrice, $price);
         
         if (!empty($specialPrice)) {
-            $specialPrice = array_sum([$specialPrice, $additionalPrice]);
-            $variation->addSpecification($mappedSpecialPrice->getSkyhubCode(), (float) $specialPrice);
+            $specialPrice = (float) array_sum([$specialPrice, $additionalPrice]);
+        } else {
+            $specialPrice = null;
         }
+    
+        $variation->addSpecification($mappedSpecialPrice->getSkyhubCode(), (float) $specialPrice);
         
         return $this;
     }

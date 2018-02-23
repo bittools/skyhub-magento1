@@ -220,6 +220,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
             'is_recurring',
             'gift_message_available',
             'has_options',
+            'required_options',
             'msrp',
             'msrp_enabled',
             'msrp_display_actual_price_type',

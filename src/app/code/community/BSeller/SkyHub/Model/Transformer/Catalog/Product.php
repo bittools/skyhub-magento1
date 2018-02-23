@@ -310,8 +310,12 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         $price = $this->extractProductPrice($product, $priceCode);
         
         if (!empty($price)) {
-            $interface->setPrice((float) $price);
+            $price = (float) $price;
+        } else {
+            null;
         }
+    
+        $interface->setPrice($price);
         
         $this->addProcessedAttribute($product, $mappedPrice->getAttribute());
     
@@ -321,8 +325,12 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         $specialPrice = $this->extractProductSpecialPrice($product, $specialPriceCode, $price);
         
         if (!empty($specialPrice)) {
-            $interface->setPromotionalPrice((float) $specialPrice);
+            $specialPrice = (float) $specialPrice;
+        } else {
+            $specialPrice = null;
         }
+        
+        $interface->setPromotionalPrice($specialPrice);
     
         $this->addProcessedAttribute($product, $mappedPromoPrice->getAttribute());
         
