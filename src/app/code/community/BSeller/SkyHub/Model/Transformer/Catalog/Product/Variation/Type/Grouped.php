@@ -26,22 +26,9 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Grouped
          */
         foreach ($collection as $productId => $childProduct) {
             /** @var Product\Variation $variation */
-            $variation = $this->addVariation($childProduct, $interface);
+            $this->addVariation($childProduct, $interface);
         }
 
         return $this;
     }
-
-
-    /**
-     * @param Mage_Catalog_Model_Product $product
-     * @param Product                    $interface
-     *
-     * @return $this
-     */
-    public function prepareProductVariationAttributes(Mage_Catalog_Model_Product $product, Product $interface)
-    {
-        return $this;
-    }
-
 }

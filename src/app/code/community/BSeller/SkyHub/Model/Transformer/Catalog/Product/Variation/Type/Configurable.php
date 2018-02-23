@@ -42,7 +42,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         /** @var Mage_Catalog_Model_Product $child */
         foreach ($children as $child) {
             $child->setData('parent_product', $product);
-            
+
             /** @var Product\Variation $variation */
             $this->addVariation($child, $interface);
         }

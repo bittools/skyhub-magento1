@@ -43,6 +43,11 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
              ->prepareProductImages($product, $interface)
              ->prepareProductVariations($product, $interface);
 
+        Mage::dispatchEvent('bseller_skyhub_product_convert_after', [
+            'product'   => $product,
+            'interface' => $interface,
+        ]);
+
         return $interface;
     }
     
@@ -59,14 +64,14 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
     {
         switch($product->getTypeId()) {
             case Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE:
-                /** @var BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurable $creator */
-                $creator = Mage::getModel('bseller_skyhub/transformer_catalog_product_variation_type_configurable');
-                $creator->create($product, $interface);
+                /** @var BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurable $variation */
+                $variation = Mage::getModel('bseller_skyhub/transformer_catalog_product_variation_type_configurable');
+                $variation->create($product, $interface);
                 break;
             case Mage_Catalog_Model_Product_Type::TYPE_GROUPED:
-                /** @var BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Grouped $creator */
-                $creator = Mage::getModel('bseller_skyhub/transformer_catalog_product_variation_type_grouped');
-                $creator->create($product, $interface);
+                /** @var BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Grouped $variation */
+                $variation = Mage::getModel('bseller_skyhub/transformer_catalog_product_variation_type_grouped');
+                $variation->create($product, $interface);
                 break;
             case Mage_Catalog_Model_Product_Type::TYPE_BUNDLE:
                 /** @todo Create the bundle integration. */
@@ -74,7 +79,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                 /** @todo Create the bundle integration. */
             case Mage_Catalog_Model_Product_Type::TYPE_SIMPLE:
             default:
-                return $this;
+                break;
         }
 
         return $this;

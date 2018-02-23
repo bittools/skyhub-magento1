@@ -47,6 +47,11 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
          */
         $this->addSpecificationsToVariation($product, $variation);
 
+        Mage::dispatchEvent('bseller_skyhub_product_variation_create_after', [
+            'product'   => $product,
+            'variation' => $variation,
+        ]);
+
         return $variation;
     }
 
