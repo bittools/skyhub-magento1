@@ -294,12 +294,42 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
     protected function extractConfigurableAttributePrices(Mage_Catalog_Model_Product $configurableProduct)
     {
         if (empty($this->configurableAttributesPrices)) {
-            $usedAttributes = (array) $configurableProduct->getData('_cache_instance_used_attributes');
+            /**
+             * CASE 1: When a product is just saved and the is being integrated via observer [after save event].
+             */
+            $usedAttributes = (array) $configurableProduct->getData('configurable_attributes_data');
 
-            /** @var Mage_Catalog_Model_Product_Type_Configurable_Attribute $usedAttribute */
+            if (empty($usedAttributes)) {
+                /**
+                 * CASE 2: Otherwise the product was loaded and being integrated via another way.
+                 */
+                $usedAttributes = (array) $configurableProduct->getData('_cache_instance_used_attributes');
+            }
+
+            /** @var Mage_Catalog_Model_Product_Type_Configurable_Attribute|array $usedAttribute */
             foreach ($usedAttributes as $usedAttribute) {
-                $prices = (array) $usedAttribute->getData('prices');
-                $this->configurableAttributesPrices[$usedAttribute->getAttributeId()] = $prices;
+                $attributeId = null;
+                $prices      = [];
+
+                if ($usedAttribute instanceof Mage_Catalog_Model_Product_Type_Configurable_Attribute) {
+                    /**
+                     * Refers to CASE 2 (product was loaded and integrated.)
+                     */
+                    $attributeId = $usedAttribute->getAttributeId();
+                    $prices      = $usedAttribute->getData('prices');
+                } elseif (isset($usedAttribute['attribute_id'])) {
+                    /**
+                     * Refers to CASE 1 (product was just saved and is being integrated via observer.)
+                     */
+                    $attributeId = $usedAttribute['attribute_id'];
+                    $prices      = $usedAttribute['values'];
+                }
+
+                if (empty($attributeId) || empty($prices)) {
+                    continue;
+                }
+
+                $this->configurableAttributesPrices[(int) $attributeId] = (array) $prices;
             }
         }
 
