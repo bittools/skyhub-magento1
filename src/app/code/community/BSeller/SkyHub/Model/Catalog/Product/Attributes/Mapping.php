@@ -30,7 +30,8 @@
 class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Core_Model_Abstract
 {
 
-    use BSeller_SkyHub_Trait_Config;
+    use BSeller_SkyHub_Trait_Config,
+        BSeller_SkyHub_Trait_Catalog_Product;
 
     
     const DATA_TYPE_STRING   = 'string';
@@ -128,6 +129,17 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
             default:
                 return $value;
         }
+    }
+
+
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return array|bool|mixed|string
+     */
+    public function extractProductValue(Mage_Catalog_Model_Product $product)
+    {
+        return $this->productAttributeRawValue($product, $this->getAttribute());
     }
 
 

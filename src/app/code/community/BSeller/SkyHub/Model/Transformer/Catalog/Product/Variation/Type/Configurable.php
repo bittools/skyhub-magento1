@@ -182,18 +182,13 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         $mappedPrice        = $this->getMappedAttribute('price');
         $mappedSpecialPrice = $this->getMappedAttribute('promotional_price');
         
-        /**
-         * @var Mage_Eav_Model_Entity_Attribute $attributePrice
-         * @var Mage_Eav_Model_Entity_Attribute $attributeSpecialPrice
-         */
-        $attributePrice        = $mappedPrice->getAttribute();
+        /** @var Mage_Eav_Model_Entity_Attribute $attributeSpecialPrice */
         $attributeSpecialPrice = $mappedSpecialPrice->getAttribute();
 
         /**
          * Add Price
          */
-//        $price = $this->extractProductPrice($product, $attributePrice);
-        $price = $this->extractProductPrice($parentProduct, $attributePrice);
+        $price = $mappedPrice->extractProductValue($parentProduct);
         
         if (!empty($price)) {
             $price = (float) $this->calculatePrice($parentProduct, (float) $price);
@@ -206,9 +201,8 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         /**
          * Add Special Price
          */
-//        $specialPrice = $this->extractProductSpecialPrice($product, $attributeSpecialPrice, $price);
         $specialPrice = $this->extractProductSpecialPrice($parentProduct, $attributeSpecialPrice, $price);
-        
+
         if (!empty($specialPrice)) {
             $specialPrice = (float) $this->calculatePrice($parentProduct, (float) $specialPrice);
         } else {
