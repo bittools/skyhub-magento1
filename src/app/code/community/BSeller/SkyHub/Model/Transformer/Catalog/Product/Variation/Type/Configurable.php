@@ -56,6 +56,8 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
 
         /** @var Mage_Catalog_Model_Product $child */
         foreach ($children as $child) {
+            $child->setData('parent_product', $product);
+            
             /** @var Product\Variation $variation */
             $variation = $this->addVariation($child, $interface);
         }
@@ -72,7 +74,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
     protected function getChildrenProducts(Mage_Catalog_Model_Product $product)
     {
         /** @var Mage_Catalog_Model_Product_Type_Configurable $typeInstance */
-        $typeInstance = $product->getTypeInstance();
+        $typeInstance = $product->getTypeInstance(true);
         $usedProducts = $typeInstance->getUsedProducts(null, $product);
         
         return $usedProducts;
@@ -87,24 +89,39 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
      */
     public function prepareProductVariationAttributes(Mage_Catalog_Model_Product $product, Product $interface)
     {
-        /** @var Mage_Catalog_Model_Product_Type_Configurable $typeInstance */
-        $typeInstance = $product->getTypeInstance();
-
-        /** @var Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute_Collection $configurableAttributes */
-        $configurableAttributes = $typeInstance->getUsedProductAttributes($product);
-
         /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
-        foreach ($configurableAttributes as $attribute) {
-            if (!$attribute || !$attribute->getAttributeId()) {
-                continue;
-            }
-
-            $this->configurableAttributes[] = $attribute;
-
+        foreach ($this->getConfigurableAttributes($product) as $attribute) {
             $interface->addVariationAttribute($attribute->getAttributeCode());
         }
 
         return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return array
+     */
+    protected function getConfigurableAttributes(Mage_Catalog_Model_Product $product)
+    {
+        if (empty($this->configurableAttributes)) {
+            /** @var Mage_Catalog_Model_Product_Type_Configurable $typeInstance */
+            $typeInstance = $product->getTypeInstance();
+    
+            /** @var Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute_Collection $configurableAttributes */
+            $configurableAttributes = $typeInstance->getUsedProductAttributes($product);
+            
+            foreach ($configurableAttributes as $attribute) {
+                if (!$attribute || !$attribute->getAttributeId()) {
+                    continue;
+                }
+    
+                $this->configurableAttributes[$attribute->getId()] = $attribute;
+            }
+        }
+        
+        return (array) $this->configurableAttributes;
     }
     
     
@@ -134,5 +151,135 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
         parent::addSpecificationsToVariation($product, $variation);
         
         return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param Product\Variation          $variation
+     *
+     * @return $this
+     */
+    protected function addPricesToProductVariation(Mage_Catalog_Model_Product $product, Product\Variation $variation)
+    {
+        $additionalPrice = (float) $this->getConfigurableProductAdditionalPrice($product);
+    
+        /** @var Mage_Catalog_Model_Product $parentProduct */
+        $parentProduct = $this->getParentProduct($product);
+        
+        if (!$parentProduct) {
+            $parentProduct = $product;
+        }
+        
+        /**
+         * @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedPrice
+         * @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedSpecialPrice
+         */
+        $mappedPrice        = $this->getMappedAttribute('price');
+        $mappedSpecialPrice = $this->getMappedAttribute('promotional_price');
+        
+        /**
+         * @var Mage_Eav_Model_Entity_Attribute $attributePrice
+         * @var Mage_Eav_Model_Entity_Attribute $attributeSpecialPrice
+         */
+        $attributePrice        = $mappedPrice->getAttribute();
+        $attributeSpecialPrice = $mappedSpecialPrice->getAttribute();
+        
+//        $price = $this->extractProductPrice($product, $attributePrice);
+        $price = $this->extractProductPrice($parentProduct, $attributePrice);
+        
+        if (!empty($price)) {
+            $price = array_sum([$price, $additionalPrice]);
+            $variation->addSpecification($mappedPrice->getSkyhubCode(), (float) $price);
+        }
+        
+//        $specialPrice = $this->extractProductSpecialPrice($product, $attributeSpecialPrice, $price);
+        $specialPrice = $this->extractProductSpecialPrice($parentProduct, $attributeSpecialPrice, $price);
+        
+        if (!empty($specialPrice)) {
+            $specialPrice = array_sum([$specialPrice, $additionalPrice]);
+            $variation->addSpecification($mappedSpecialPrice->getSkyhubCode(), (float) $specialPrice);
+        }
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return float
+     */
+    protected function getConfigurableProductAdditionalPrice(Mage_Catalog_Model_Product $product)
+    {
+        $additionalPrice = 0;
+    
+        /** @var Mage_Catalog_Model_Product $parentProduct */
+        $parentProduct = $this->getParentProduct($product);
+        
+        if (!$parentProduct) {
+            return $additionalPrice;
+        }
+        
+        $filter = (array) $this->getAttributesFilter($product);
+        
+        /** @var BSeller_SkyHub_Model_Resource_Catalog_Product_Configurable_Price $resource */
+        $resource           = Mage::getResourceModel('bseller_skyhub/catalog_product_configurable_price');
+        $configurablePrices = $resource->getConfigurableOptionPrices($parentProduct->getId(), $filter);
+    
+        /** @var array $configurablePrice */
+        foreach ($configurablePrices as $configurablePrice) {
+            $additionalPrice += (float) $this->arrayExtract($configurablePrice, 'pricing_value');
+        }
+        
+        return (float) $additionalPrice;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return array
+     */
+    protected function getAttributesFilter(Mage_Catalog_Model_Product $product)
+    {
+        $attributes = [];
+        
+        /** @var Mage_Catalog_Model_Product $parentProduct */
+        $parentProduct = $this->getParentProduct($product);
+    
+        if (!$parentProduct) {
+            return $attributes;
+        }
+    
+        $usedAttributes = $this->getConfigurableAttributes($parentProduct);
+    
+        /** @var Mage_Eav_Model_Entity_Attribute $usedAttribute */
+        foreach ($usedAttributes as $usedAttribute) {
+            $attributeId    = $usedAttribute->getId();
+            $attributeValue = $this->productAttributeRawValue($product, $usedAttribute->getAttributeCode()) ;
+        
+            $attributes[$attributeId] = $attributeValue;
+        }
+        
+        return $attributes;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return bool|Mage_Catalog_Model_Product
+     */
+    protected function getParentProduct(Mage_Catalog_Model_Product $product)
+    {
+        /** @var Mage_Catalog_Model_Product $parentProduct */
+        $parentProduct = $product->getData('parent_product');
+    
+        if (!$parentProduct || !$parentProduct->getId()) {
+            return false;
+        }
+        
+        return $parentProduct;
     }
 }
