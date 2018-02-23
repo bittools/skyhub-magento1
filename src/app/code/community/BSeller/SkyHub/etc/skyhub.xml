@@ -19,7 +19,7 @@
             <sku>
                 <code>sku</code>
                 <label>Product Sku</label>
-                <description>The product's main SKU (Stock Keeping Unit).</description>
+                <description>The products main SKU (Stock Keeping Unit).</description>
                 <cast_type>string</cast_type>
                 <attribute_code>sku</attribute_code>
                 <validation/>
@@ -36,7 +36,7 @@
             <name>
                 <code>name</code>
                 <label>Product Name</label>
-                <description>The product's name.</description>
+                <description>The products name.</description>
                 <cast_type>string</cast_type>
                 <validation/>
                 <attribute_install_config>
@@ -52,7 +52,7 @@
             <description>
                 <code>description</code>
                 <label>Product Description</label>
-                <description>The product's description.</description>
+                <description>The products description.</description>
                 <cast_type>string</cast_type>
                 <validation/>
                 <required>1</required>
@@ -86,7 +86,7 @@
             <qty>
                 <code>qty</code>
                 <label>Product Stock Quantity</label>
-                <description>The product's stock quantity available in store.</description>
+                <description>The products stock quantity available in store.</description>
                 <cast_type>float</cast_type>
                 <type>varchar</type>
                 <input>text</input>
@@ -100,7 +100,7 @@
             <price>
                 <code>price</code>
                 <label>Product Price</label>
-                <description>The product's current price.</description>
+                <description>The products current price.</description>
                 <cast_type>float</cast_type>
                 <validation/>
                 <required>1</required>
@@ -117,7 +117,7 @@
             <promotional_price>
                 <code>promotional_price</code>
                 <label>Product Promotional Price</label>
-                <description>The product's current promotional price.</description>
+                <description>The products current promotional price.</description>
                 <cast_type>float</cast_type>
                 <validation/>
                 <required>1</required>
@@ -134,7 +134,7 @@
             <cost>
                 <code>cost</code>
                 <label>Product Cost</label>
-                <description>The product's cost.</description>
+                <description>The products cost.</description>
                 <cast_type>float</cast_type>
                 <validation/>
                 <required>1</required>
@@ -151,7 +151,7 @@
             <weight>
                 <code>weight</code>
                 <label>Product Weight</label>
-                <description>The product's weight (in centimeters always).</description>
+                <description>The products weight (in centimeters always).</description>
                 <cast_type>float</cast_type>
                 <validation/>
                 <required>1</required>
@@ -168,7 +168,7 @@
             <height>
                 <code>height</code>
                 <label>Product Height</label>
-                <description>The product's height (in centimeters always).</description>
+                <description>The products height (in centimeters always).</description>
                 <cast_type>float</cast_type>
                 <validation/>
                 <required>1</required>
@@ -185,7 +185,7 @@
             <width>
                 <code>width</code>
                 <label>Product Width</label>
-                <description>The product's width (in centimeters always).</description>
+                <description>The products width (in centimeters always).</description>
                 <cast_type>float</cast_type>
                 <validation/>
                 <required>1</required>
@@ -202,7 +202,7 @@
             <length>
                 <code>length</code>
                 <label>Product Length</label>
-                <description>The product's length (in centimeters always).</description>
+                <description>The products length (in centimeters always).</description>
                 <cast_type>float</cast_type>
                 <validation/>
                 <required>1</required>
@@ -219,7 +219,7 @@
             <brand>
                 <code>brand</code>
                 <label>Product Brand</label>
-                <description>The product's brand.</description>
+                <description>The products brand.</description>
                 <cast_type>string</cast_type>
                 <validation/>
                 <required>1</required>
@@ -237,7 +237,7 @@
             <ean>
                 <code>ean</code>
                 <label>Product EAN</label>
-                <description>The product's valid EAN number.</description>
+                <description>The products valid EAN number.</description>
                 <cast_type>string</cast_type>
                 <validation/>
                 <required>1</required>
@@ -254,7 +254,7 @@
             <nbm>
                 <code>nbm</code>
                 <label>Product NBM</label>
-                <description>The product's valid NBM.</description>
+                <description>The products valid NBM.</description>
                 <cast_type>string</cast_type>
                 <type>varchar</type>
                 <input>text</input>
@@ -272,5 +272,45 @@
                 </attribute_install_config>
             </nbm>
         </attributes>
+        <catalog>
+            <product>
+                <attributes>
+                    <blacklist>
+                        <entity_id/>
+                        <special_price/>
+                        <attribute_set_id/>
+                        <options_container/>
+                        <media_gallery/>
+                        <thumbnail/>
+                        <small_image/>
+                        <image/>
+                        <msrp_display_actual_price_type/>
+                        <msrp_enabled/>
+                        <special_from_date/>
+                        <special_to_date/>
+                        <updated_at/>
+                        <created_at/>
+                        <visibility/>
+                        <url_path/>
+                        <url_key/>
+                        <entity_type_id/>
+                        <type_id/>
+                        <custom_design/>
+                        <custom_design_from/>
+                        <custom_design_to/>
+                        <custom_layout_update/>
+                        <is_recurring/>
+                        <recurring_profile/>
+                        <gift_message_available/>
+                        <has_options/>
+                        <required_options/>
+                        <tax_class_id/>
+                        <msrp/>
+                        <msrp_enabled/>
+                        <msrp_display_actual_price_type/>
+                    </blacklist>
+                </attributes>
+            </product>
+        </catalog>
     </skyhub>
 </config>

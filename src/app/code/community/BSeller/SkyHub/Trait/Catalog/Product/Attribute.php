@@ -193,39 +193,9 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
      */
     protected function getProductAttributeBlacklist()
     {
-        return [
-            'entity_id',
-            'special_price',
-            'attribute_set_id',
-            'options_container',
-            'media_gallery',
-            'thumbnail',
-            'small_image',
-            'image',
-            'msrp_display_actual_price_type',
-            'msrp_enabled',
-            'special_from_date',
-            'special_to_date',
-            'updated_at',
-            'created_at',
-            'visibility',
-            'url_path',
-            'url_key',
-            'entity_type_id',
-            'type_id',
-            'custom_design',
-            'custom_design_from',
-            'custom_design_to',
-            'custom_layout_update',
-            'is_recurring',
-            'gift_message_available',
-            'has_options',
-            'required_options',
-            'msrp',
-            'msrp_enabled',
-            'msrp_display_actual_price_type',
-//            'category_ids',
-        ];
+        /** @var BSeller_SkyHub_Model_Config $config */
+        $config = Mage::getSingleton('bseller_skyhub/config');
+        return $config->getBlacklistedAttributes();
     }
     
     
@@ -236,55 +206,10 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
      */
     protected function isAttributeCodeInBlacklist($attributeCode)
     {
-        $blacklist = $this->getProductAttributeBlacklist();
-        return in_array($attributeCode, $blacklist);
+        /** @var BSeller_SkyHub_Model_Config $config */
+        $config = Mage::getSingleton('bseller_skyhub/config');
+        return $config->isAttributeCodeInBlacklist($attributeCode);
     }
-    
-    
-    /**
-     * @param null|string|int|Mage_Catalog_Model_Product $product
-     *
-     * @return Mage_Catalog_Model_Product
-     */
-    /**
-    protected function getProduct($product = null)
-    {
-        if ($product instanceof Mage_Catalog_Model_Product) {
-            $this->product = $product;
-            return $this->product;
-        }
-
-        if (!$product) {
-            /** @var Mage_Catalog_Model_Resource_Product_Collection $collection * /
-            $collection = Mage::getResourceModel('catalog/product_collection');
-            $collection->getSelect()->limit(1);
-
-            /** @var Mage_Catalog_Model_Product $firstProduct * /
-            $firstProduct = $collection->getFirstItem();
-
-            if ($firstProduct && $firstProduct->getId()) {
-                return $firstProduct;
-            }
-        }
-
-        /** @var Mage_Catalog_Model_Product $productModel * /
-        $productModel = Mage::getModel('catalog/product');
-        
-        if ($product) {
-            if (!empty($product)) {
-                $productModel->load((int) $product);
-            }
-    
-            if (!$productModel->getId()) {
-                $productModel->load((string) $product, 'sku');
-            }
-        }
-
-        $this->product = $productModel;
-        
-        return $this->product;
-    }
-    */
 
 
     /**

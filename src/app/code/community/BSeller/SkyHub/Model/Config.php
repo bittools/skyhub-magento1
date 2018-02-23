@@ -20,6 +20,9 @@ class BSeller_SkyHub_Model_Config
 
     /** @var array */
     protected $attributes = [];
+    
+    /** @var array */
+    protected $blacklist = [];
 
 
     /**
@@ -49,6 +52,34 @@ class BSeller_SkyHub_Model_Config
         }
 
         return (array) $this->attributes;
+    }
+    
+    
+    /**
+     * @return array
+     */
+    public function getBlacklistedAttributes()
+    {
+        if (empty($this->blacklist)) {
+            $this->blacklist = (array) $this->getConfig()
+                                            ->getNode('skyhub/catalog/product/attributes/blacklist')
+                                            ->asArray();
+            $this->blacklist = array_keys($this->blacklist);
+        }
+        
+        return $this->blacklist;
+    }
+    
+    
+    /**
+     * @param string $attributeCode
+     *
+     * @return bool
+     */
+    public function isAttributeCodeInBlacklist($attributeCode)
+    {
+        $blacklist = $this->getBlacklistedAttributes();
+        return in_array($attributeCode, $blacklist);
     }
     
     
