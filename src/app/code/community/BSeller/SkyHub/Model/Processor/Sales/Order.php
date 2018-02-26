@@ -80,7 +80,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         }
     
         /** @var array $productData */
-        foreach ($products as $productData) {
+        foreach ((array) $products as $productData) {
             $creation->addProduct($productData);
         }
     

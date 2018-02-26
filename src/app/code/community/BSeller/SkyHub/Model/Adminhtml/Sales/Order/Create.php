@@ -15,7 +15,8 @@
 class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_Model_Sales_Order_Create
 {
     
-    use BSeller_SkyHub_Trait_Data;
+    use BSeller_SkyHub_Trait_Data,
+        BSeller_SkyHub_Trait_Catalog_Product;
     
 
     public function __construct()
@@ -58,12 +59,16 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
             $finalPrice = $price;
         }
         
-        $product->setData('price', $price)
-                ->setData('special_price', $specialPrice)
-                ->setData('final_price', $finalPrice)
-        ;
+        $product->addData([
+            'price'         => $price,
+            'special_price' => $specialPrice,
+            'final_price'   => $finalPrice,
+        ]);
         
         switch ($product->getTypeId()) {
+            case Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE:
+                $this->addProductConfigurable($product, $productData);
+                break;
             case Mage_Catalog_Model_Product_Type::TYPE_GROUPED:
                 $this->addProductGrouped($product, $productData);
                 break;
@@ -77,6 +82,58 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
     }
     
     
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param array                      $productData
+     *
+     * @return bool
+     */
+    protected function addProductConfigurable(Mage_Catalog_Model_Product $product, array $productData = [])
+    {
+        $qty = (float) $this->arrayExtract($productData, 'qty');
+        
+        /** @var Mage_Catalog_Model_Product_Type_Configurable $typeInstance */
+        $typeInstance = $product->getTypeInstance(true);
+        
+        /** @var Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute_Collection $attributes */
+        $attributes      = $typeInstance->getConfigurableAttributes($product);
+        $superAttributes = [];
+        $children        = (array) $this->arrayExtract($productData, 'children');
+        
+        /** @var Mage_Catalog_Model_Product_Type_Configurable_Attribute $attribute */
+        foreach ($attributes as $attribute) {
+            /** @var array $child */
+            foreach ($children as $child) {
+                $childId     = (int) $this->arrayExtract($child, 'product_id');
+                $attributeId = $attribute->getAttributeId();
+                $value       = $product->getResource()
+                                       ->getAttributeRawValue($childId, $attributeId, $product->getStore());
+    
+                if (!$value) {
+                    continue;
+                }
+                
+                $superAttributes[$attributeId] = $value;
+            }
+        }
+        
+        $config = [
+            'qty'             => $qty,
+            'super_attribute' => $superAttributes
+        ];
+        
+        $this->addProduct($product, $config);
+        
+        return true;
+    }
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param array                      $productData
+     *
+     * @return $this
+     */
     protected function addProductGrouped(Mage_Catalog_Model_Product $product, array $productData = [])
     {
         /** @var BSeller_SkyHub_Model_Catalog_Product_Type_Grouped $typeInstance */
@@ -109,6 +166,8 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
         ];
         
         $this->addProduct($product, $params);
+        
+        return $this;
     }
     
     
@@ -140,5 +199,4 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
         
         return !empty($result);
     }
-    
 }
