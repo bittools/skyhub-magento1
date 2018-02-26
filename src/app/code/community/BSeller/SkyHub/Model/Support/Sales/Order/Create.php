@@ -93,18 +93,24 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     
     /**
      * @param Mage_Catalog_Model_Product $product
-     * @param int                        $qty
      *
      * @return $this
      */
-    public function addProduct(Mage_Catalog_Model_Product $product, $qty = 1)
+    public function addProduct(array $data)
     {
+        $productId = (int)  $this->arrayExtract($data, 'product_id');
+        $qty       = (float) $this->arrayExtract($data, 'qty');
+        
+        if (!$productId) {
+            return $this;
+        }
+        
         $data = [
             'products' => [
-                (int) $product->getId() => [
-                    'model'  => $product,
-                    'config' => [
-                        'qty' => (float) ($qty ? $qty : 1)
+                [
+                    'product' => $data,
+                    'config'  => [
+                        'qty' => $qty ? $qty : 1,
                     ],
                 ]
             ]
@@ -274,7 +280,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     /**
      * Retrieve order create model
      *
-     * @return  Mage_Adminhtml_Model_Sales_Order_Create
+     * @return  BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create
      */
     protected function getOrderCreator()
     {
@@ -416,8 +422,8 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         
         /** @var array $product */
         foreach ($products as $item) {
-            $this->getOrderCreator()
-                 ->addProduct($item['model'], $item['config']);
+            $this->getOrderCreator()->addProductByData($item);
+                 // ->addProduct($item['model'], $item['config']);
         }
         
         /* Collect shipping rates */

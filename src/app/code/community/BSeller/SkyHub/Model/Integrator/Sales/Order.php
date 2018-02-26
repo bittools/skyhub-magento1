@@ -42,6 +42,23 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
 
         return (array) $orders['orders'];
     }
+    
+    
+    /**
+     * @param integer $orderId
+     *
+     * @return array|bool
+     */
+    public function orderByOrderId($orderId)
+    {
+        $incrementId = $this->getOrderIncrementId((int) $orderId);
+        
+        if (empty($incrementId)) {
+            return false;
+        }
+        
+        return $this->order($incrementId);
+    }
 
 
     /**
@@ -51,10 +68,8 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
      */
     public function order($orderId)
     {
-        $incrementId = $this->getOrderIncrementId($orderId);
-
         /** @var  $result */
-        $result = $this->getEntityInterface()->order($incrementId);
+        $result = $this->getEntityInterface()->order($orderId);
 
         if ($result->exception() || $result->invalid()) {
             return false;

@@ -75,14 +75,13 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         ;
     
         $products = $this->getProducts((array) $this->arrayExtract($data, 'items'));
-    
         if (empty($products)) {
             return false;
         }
     
-        /** @var Mage_Catalog_Model_Product $product */
-        foreach ($products as $product) {
-            $creation->addProduct($product, $product->getData('qty'));
+        /** @var array $productData */
+        foreach ($products as $productData) {
+            $creation->addProduct($productData);
         }
     
         /** @var Mage_Sales_Model_Order $order */
@@ -118,8 +117,10 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $products = [];
         
         foreach ($items as $item) {
-            $sku          = $this->arrayExtract($item, 'product_id');
+            $parentSku    = $this->arrayExtract($item, 'product_id');
+            $childSku     = $this->arrayExtract($item, 'id');
             $qty          = $this->arrayExtract($item, 'qty');
+            
             $price        = (float) $this->arrayExtract($item, 'original_price');
             $specialPrice = (float) $this->arrayExtract($item, 'special_price');
 
@@ -127,25 +128,62 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             if (!empty($specialPrice)) {
                 $finalPrice = $specialPrice;
             }
-
-            /** @var Mage_Catalog_Model_Product $product */
-            $product   = Mage::getModel('catalog/product');
-            $productId = (int) $product->getResource()->getIdBySku($sku);
-            
-            if (!$productId) {
+    
+            if (!$productId = $this->getProductIdBySku($parentSku)) {
                 continue;
             }
-            
-            $product->load($productId);
-            $product->setData('qty', (float) $qty);
-            $product->setPrice($price);
-            $product->setFinalPrice($finalPrice);
-            $product->setData('request_item', $item);
+    
+            $data = [
+                'product_id'    => (int)    $productId,
+                'product_sku'   => (string) $parentSku,
+                'qty'           => (float)  ($qty ? $qty : 1),
+                'price'         => (float)  $price,
+                'special_price' => (float)  $specialPrice,
+                'final_price'   => (float)  $finalPrice,
+            ];
+    
+            if ($childId = $this->getProductIdBySku($childSku)) {
+                $data['children'][] = [
+                    'product_id'  => (int)    $childId,
+                    'product_sku' => (string) $childSku,
+                ];
+            };
 
-            $products[] = $product;
+            $products[] = $data;
         }
         
         return $products;
+    }
+    
+    
+    /**
+     * @param string $sku
+     *
+     * @return bool|false|Mage_Catalog_Model_Product
+     */
+    protected function getProductBySku($sku)
+    {
+        $product   = Mage::getModel('catalog/product');
+        $productId = (int) $product->getResource()->getIdBySku($sku);
+        
+        if (!$productId) {
+            return false;
+        }
+        
+        $product->load($productId);
+        return $product;
+    }
+    
+    
+    /**
+     * @param string $sku
+     *
+     * @return false|int
+     */
+    protected function getProductIdBySku($sku)
+    {
+        $productId = Mage::getResourceSingleton('catalog/product')->getIdBySku($sku);
+        return $productId;
     }
     
     

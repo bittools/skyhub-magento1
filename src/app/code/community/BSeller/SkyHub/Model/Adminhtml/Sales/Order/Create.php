@@ -14,11 +14,131 @@
  
 class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_Model_Sales_Order_Create
 {
+    
+    use BSeller_SkyHub_Trait_Data;
+    
 
     public function __construct()
     {
         /** @var BSeller_SkyHub_Model_Adminhtml_Session_Quote $session */
         $this->_session = Mage::getSingleton('bseller_skyhub/adminhtml_session_quote');
+    }
+    
+    
+    /**
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function addProductByData(array $data = [])
+    {
+        $productData = (array) $this->arrayExtract($data, 'product');
+        $productId   = (int)   $this->arrayExtract($productData, 'product_id');
+        
+        if (!$productId) {
+            return false;
+        }
+    
+        /** @var Mage_Catalog_Model_Product $product */
+        $product = $this->getProduct($productId);
+        if (!$product->getId()) {
+            return false;
+        }
+        
+        $qty          = (float) $this->arrayExtract($productData, 'qty');
+        $price        = (float) $this->arrayExtract($productData, 'price');
+        $specialPrice = (float) $this->arrayExtract($productData, 'promotional_price');
+        $finalPrice   = (float) $this->arrayExtract($productData, 'final_price');
+        
+        if (!$finalPrice) {
+            $finalPrice = min($price, $specialPrice);
+        }
+        
+        if (!$finalPrice) {
+            $finalPrice = $price;
+        }
+        
+        $product->setData('price', $price)
+                ->setData('special_price', $specialPrice)
+                ->setData('final_price', $finalPrice)
+        ;
+        
+        switch ($product->getTypeId()) {
+            case Mage_Catalog_Model_Product_Type::TYPE_GROUPED:
+                $this->addProductGrouped($product, $productData);
+                break;
+            case Mage_Catalog_Model_Product_Type::TYPE_SIMPLE:
+            default:
+                $config = ['qty' => $qty];
+                $this->addProduct($product, $config);
+        }
+        
+        return true;
+    }
+    
+    
+    protected function addProductGrouped(Mage_Catalog_Model_Product $product, array $productData = [])
+    {
+        /** @var BSeller_SkyHub_Model_Catalog_Product_Type_Grouped $typeInstance */
+        $typeInstance = Mage::getModel('bseller_skyhub/catalog_product_type_grouped');
+        
+        $product->setTypeInstance($typeInstance)
+                ->setTypeInstance($typeInstance, true);
+        
+        $children    = (array) $this->arrayExtract($productData, 'children');
+        $qty         = (float) $this->arrayExtract($productData, 'qty');
+        
+        $childrenIds = [];
+        
+        /** @var array $child */
+        foreach ($children as $child) {
+            $childId = $this->arrayExtract($child, 'product_id');
+            
+            if (!$childId || !$this->validateProductId($childId)) {
+                continue;
+            }
+            
+            $childrenIds[$childId] = [
+                'qty'    => $qty,
+                'config' => $productData
+            ];
+        }
+        
+        $params = [
+            'super_group' => $childrenIds,
+        ];
+        
+        $this->addProduct($product, $params);
+    }
+    
+    
+    /**
+     * @param int $productId
+     *
+     * @return Mage_Catalog_Model_Product
+     */
+    protected function getProduct($productId)
+    {
+        /** @var Mage_Catalog_Model_Product $product */
+        $product = Mage::getModel('catalog/product');
+        $product->load((int) $productId);
+        
+        return $product;
+    }
+    
+    
+    /**
+     * @param int $productId
+     *
+     * @return bool
+     */
+    protected function validateProductId($productId)
+    {
+        /** @var Mage_Catalog_Model_Resource_Product $resource */
+        $resource = Mage::getResourceSingleton('catalog/product');
+        $result   = $resource->getProductsSku((array) $productId);
+        
+        return !empty($result);
     }
     
 }
