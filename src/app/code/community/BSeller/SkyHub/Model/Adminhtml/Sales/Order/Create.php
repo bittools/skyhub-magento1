@@ -30,14 +30,14 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
      * Initialize data for price rules
      *
      * @return Mage_Adminhtml_Model_Sales_Order_Create
-     * 
+     *
      * @throws Mage_Core_Exception
      */
     public function initRuleData()
     {
         Mage::register('rule_data', new Varien_Object(array(
-            'store_id'  => $this->_session->getStore()->getId(),
-            'website_id'  => $this->_session->getStore()->getWebsiteId(),
+            'store_id'          => $this->_session->getStore()->getId(),
+            'website_id'        => $this->_session->getStore()->getWebsiteId(),
             'customer_group_id' => $this->getCustomerGroupId(),
         )), true);
         
