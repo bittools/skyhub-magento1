@@ -340,6 +340,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     public function create()
     {
         $orderData = $this->data;
+        $order     = null;
         
         if (!empty($orderData)) {
             $this->initSession($this->arrayExtract($orderData, 'session'));
@@ -367,16 +368,15 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                               ->importPostData($this->arrayExtract($orderData, 'order'))
                               ->createOrder();
                 
-                $this->getSession()->clear();
-                Mage::unregister('rule_data');
-                
-                return $order;
             } catch (Exception $e) {
                 Mage::logException($e);
             }
+    
+            $this->getSession()->clear();
+            Mage::unregister('rule_data');
         }
-        
-        return null;
+    
+        return $order;
     }
     
     
