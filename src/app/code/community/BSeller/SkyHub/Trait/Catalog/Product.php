@@ -16,7 +16,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product
 {
 
     /**
-     * @param Mage_Catalog_Model_Product             $product
+     * @param BSeller_SkyHub_Model_Catalog_Product             $product
      * @param string|Mage_Eav_Model_Entity_Attribute $attribute
      * @return array|bool|mixed|string
      */
@@ -41,7 +41,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product
     
     
     /**
-     * @param Mage_Catalog_Model_Product             $product
+     * @param BSeller_SkyHub_Model_Catalog_Product             $product
      * @param Mage_Eav_Model_Entity_Attribute|string $attribute
      *
      * @return float|null
@@ -67,7 +67,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product
     
     
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param BSeller_SkyHub_Model_Catalog_Product $product
      * @param null|string                $attributeCode
      * @param null|float                 $comparedPrice
      *
@@ -97,7 +97,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product
     
     
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param BSeller_SkyHub_Model_Catalog_Product $product
      *
      * @return string
      */
@@ -112,7 +112,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product
     
     
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param BSeller_SkyHub_Model_Catalog_Product $product
      *
      * @return string
      */

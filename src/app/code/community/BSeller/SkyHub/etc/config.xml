@@ -61,6 +61,21 @@
                 </setup>
             </bseller_skyhub_setup>
         </resources>
+        <catalog>
+            <product>
+                <type>
+                    <configurable>
+                        <price_model>bseller_skyhub/catalog_product_type_configurable_price</price_model>
+                    </configurable>
+                    <grouped>
+                        <price_model>bseller_skyhub/catalog_product_type_grouped_price</price_model>
+                    </grouped>
+                    <simple>
+                        <price_model>bseller_skyhub/catalog_product_type_simple_price</price_model>
+                    </simple>
+                </type>
+            </product>
+        </catalog>
         <events>
             <catalog_entity_attribute_save_after>
                 <observers>
@@ -126,6 +141,15 @@
                     </bseller_skyhub_integrate_shipment_track>
                 </observers>
             </sales_order_shipment_track_save_after>
+            <sales_quote_item_set_product>
+                <observers>
+                    <bseller_skyhub_override_product_original_prices>
+                        <type>disabled</type>
+                        <class>bseller_skyhub/observer_sales_order_item</class>
+                        <method>overrideProductOriginalPrice</method>
+                    </bseller_skyhub_override_product_original_prices>
+                </observers>
+            </sales_quote_item_set_product>
         </events>
     </global>
     <frontend>

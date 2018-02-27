@@ -11,8 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-class BSeller_SkyHub_Model_Catalog_Product_Type_Grouped extends Mage_Catalog_Model_Product_Type_Grouped
+class BSeller_SkyHub_Model_Catalog_Product extends Mage_Catalog_Model_Product
 {
-    
-    use BSeller_SkyHub_Model_Catalog_Product_Type_Common;
+
 }

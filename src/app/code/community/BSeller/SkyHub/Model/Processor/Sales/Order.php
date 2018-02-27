@@ -159,11 +159,11 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     /**
      * @param string $sku
      *
-     * @return bool|false|Mage_Catalog_Model_Product
+     * @return bool|false|BSeller_SkyHub_Model_Catalog_Product
      */
     protected function getProductBySku($sku)
     {
-        $product   = Mage::getModel('catalog/product');
+        $product   = Mage::getModel('bseller_skyhub/catalog_product');
         $productId = (int) $product->getResource()->getIdBySku($sku);
         
         if (!$productId) {

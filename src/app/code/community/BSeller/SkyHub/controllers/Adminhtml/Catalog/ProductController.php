@@ -29,7 +29,7 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
         }
         
         /** @var Mage_Catalog_Model_Product $product */
-        $product = Mage::getModel('catalog/product')->load($productId);
+        $product = Mage::getModel('bseller_skyhub/catalog_product')->load($productId);
 
         if (!$this->canIntegrateProduct($product)) {
             $this->_getSession()->addNotice($this->__('This product cannot be integrated.'));

@@ -47,23 +47,19 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
         }
         
         $qty          = (float) $this->arrayExtract($productData, 'qty');
-        $price        = (float) $this->arrayExtract($productData, 'price');
-        $specialPrice = (float) $this->arrayExtract($productData, 'promotional_price');
-        $finalPrice   = (float) $this->arrayExtract($productData, 'final_price');
+//        $price        = (float) $this->arrayExtract($productData, 'price');
+//        $specialPrice = (float) $this->arrayExtract($productData, 'promotional_price');
+//        $finalPrice   = (float) $this->arrayExtract($productData, 'final_price');
         
-        if (!$finalPrice) {
-            $finalPrice = min($price, $specialPrice);
-        }
+//        if (!$finalPrice) {
+//            $finalPrice = min($price, $specialPrice);
+//        }
         
-        if (!$finalPrice) {
-            $finalPrice = $price;
-        }
+//        if (!$finalPrice) {
+//            $finalPrice = $price;
+//        }
         
-        $product->addData([
-            'price'         => $price,
-            'special_price' => $specialPrice,
-            'final_price'   => $finalPrice,
-        ]);
+        $this->registerCurrentData($product, $productData);
         
         switch ($product->getTypeId()) {
             case Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE:
@@ -83,19 +79,43 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
     
     
     /**
-     * @param Mage_Catalog_Model_Product $product
-     * @param array                      $productData
+     * @param BSeller_SkyHub_Model_Catalog_Product $product
+     * @param array                                $productData
+     *
+     * @return $this
+     * @throws Mage_Core_Exception
+     */
+    protected function registerCurrentData(Mage_Catalog_Model_Product $product, array $productData)
+    {
+        $key = 'skyhub_product_configuration';
+        $product->setData($key, (array) $productData);
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @param BSeller_SkyHub_Model_Catalog_Product $product
+     * @param array                                $productData
      *
      * @return bool
      */
     protected function addProductConfigurable(Mage_Catalog_Model_Product $product, array $productData = [])
     {
         $qty = (float) $this->arrayExtract($productData, 'qty');
+    
+        /** @var BSeller_SkyHub_Model_Catalog_Product_Type_Configurable $typeInstance */
+//        $typeInstance = Mage::getModel('bseller_skyhub/catalog_product_type_configurable');
+    
+        /** @var BSeller_SkyHub_Model_Catalog_Product_Type_Configurable_Price $priceModel */
+//        $priceModel = Mage::getModel('bseller_skyhub/catalog_product_type_configurable_price');
+//        $product->setPriceModel($priceModel);
         
-        /** @var Mage_Catalog_Model_Product_Type_Configurable $typeInstance */
-        $typeInstance = $product->getTypeInstance(true);
+//        $product->setTypeInstance($typeInstance)
+//                ->setTypeInstance($typeInstance, true);
         
         /** @var Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute_Collection $attributes */
+        $typeInstance    = $product->getTypeInstance(true);
         $attributes      = $typeInstance->getConfigurableAttributes($product);
         $superAttributes = [];
         $children        = (array) $this->arrayExtract($productData, 'children');
@@ -119,7 +139,8 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
         
         $config = [
             'qty'             => $qty,
-            'super_attribute' => $superAttributes
+            'config'          => $productData,
+            'super_attribute' => $superAttributes,
         ];
         
         $this->addProduct($product, $config);
@@ -129,7 +150,7 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
     
     
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param BSeller_SkyHub_Model_Catalog_Product $product
      * @param array                      $productData
      *
      * @return $this
@@ -137,10 +158,14 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
     protected function addProductGrouped(Mage_Catalog_Model_Product $product, array $productData = [])
     {
         /** @var BSeller_SkyHub_Model_Catalog_Product_Type_Grouped $typeInstance */
-        $typeInstance = Mage::getModel('bseller_skyhub/catalog_product_type_grouped');
+//        $typeInstance = Mage::getModel('bseller_skyhub/catalog_product_type_grouped');
+    
+        /** @var BSeller_SkyHub_Model_Catalog_Product_Type_Grouped_Price $priceModel */
+//        $priceModel = Mage::getModel('bseller_skyhub/catalog_product_type_grouped_price');
+//        $product->setPriceModel($priceModel);
         
-        $product->setTypeInstance($typeInstance)
-                ->setTypeInstance($typeInstance, true);
+//        $product->setTypeInstance($typeInstance)
+//                ->setTypeInstance($typeInstance, true);
         
         $children    = (array) $this->arrayExtract($productData, 'children');
         $qty         = (float) $this->arrayExtract($productData, 'qty');
@@ -155,13 +180,11 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
                 continue;
             }
             
-            $childrenIds[$childId] = [
-                'qty'    => $qty,
-                'config' => $productData
-            ];
+            $childrenIds[$childId] = $qty;
         }
         
         $params = [
+            'config'      => $productData,
             'super_group' => $childrenIds,
         ];
         
@@ -174,13 +197,16 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
     /**
      * @param int $productId
      *
-     * @return Mage_Catalog_Model_Product
+     * @return BSeller_SkyHub_Model_Catalog_Product
      */
     protected function getProduct($productId)
     {
-        /** @var Mage_Catalog_Model_Product $product */
-        $product = Mage::getModel('catalog/product');
-        $product->load((int) $productId);
+        /** @var BSeller_SkyHub_Model_Catalog_Product $product */
+        $product = Mage::getModel('bseller_skyhub/catalog_product');
+        
+        if ($productId) {
+            $product->load((int) $productId);
+        }
         
         return $product;
     }

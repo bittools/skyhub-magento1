@@ -92,7 +92,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     
     
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param BSeller_SkyHub_Model_Catalog_Product $product
      *
      * @return $this
      */

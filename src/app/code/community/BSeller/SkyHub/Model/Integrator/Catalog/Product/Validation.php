@@ -19,7 +19,7 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
 
 
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param BSeller_SkyHub_Model_Catalog_Product $product
      * @param bool                       $bypassVisibleCheck
      *
      * @return bool

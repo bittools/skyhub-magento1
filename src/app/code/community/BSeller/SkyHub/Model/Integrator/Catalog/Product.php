@@ -24,7 +24,7 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
 
 
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param BSeller_SkyHub_Model_Catalog_Product $product
      *
      * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
      */
@@ -57,7 +57,7 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
 
     
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param BSeller_SkyHub_Model_Catalog_Product $product
      *
      * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
      */
@@ -87,7 +87,7 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
     
     
     /**
-     * @param Mage_Catalog_Model_Product $product
+     * @param BSeller_SkyHub_Model_Catalog_Product $product
      *
      * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
      */

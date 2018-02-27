@@ -4,6 +4,11 @@
         <BSeller_SkyHub>
             <active>true</active>
             <codePool>community</codePool>
+            <depends>
+                <Mage_Catalog/>
+                <Mage_Sales/>
+                <Mage_Core/>
+            </depends>
         </BSeller_SkyHub>
     </modules>
 </config>
