@@ -151,6 +151,17 @@
                 </observers>
             </sales_quote_item_set_product>
         </events>
+        <sales>
+            <quote>
+                <totals>
+                    <bseller_skyhub_discount>
+                        <class>bseller_skyhub/sales_quote_address_total_discount</class>
+                        <after>discount</after>
+                        <before>grand_total</before>
+                    </bseller_skyhub_discount>
+                </totals>
+            </quote>
+        </sales>
     </global>
     <frontend>
         <routers>

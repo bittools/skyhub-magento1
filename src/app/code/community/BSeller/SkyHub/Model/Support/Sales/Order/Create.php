@@ -142,6 +142,25 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     
     
     /**
+     * @param float $discount
+     *
+     * @return $this
+     */
+    public function setDiscountAmount($discount)
+    {
+        $data = [
+            'order' => [
+                'discount_amount' => (float) $discount,
+            ]
+        ];
+        
+        $this->merge($data);
+        
+        return $this;
+    }
+    
+    
+    /**
      * @param string $method
      * @param float  $cost
      *
@@ -425,8 +444,9 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         /** @var array $product */
         foreach ($products as $item) {
             $this->getOrderCreator()->addProductByData($item);
-                 // ->addProduct($item['model'], $item['config']);
         }
+        
+        $this->registerDiscount($order);
         
         $shippingAmount = (float) $this->arrayExtract($data, 'order/shipping_cost');
         $this->getQuote()
@@ -456,6 +476,31 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                  ->getPayment()
                  ->addData($payment);
         }
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @param array $data
+     *
+     * @return $this
+     * @throws Mage_Core_Exception
+     */
+    protected function registerDiscount(array $data)
+    {
+        $key = 'bseller_skyhub_discount_amount';
+        if (Mage::registry($key)) {
+            Mage::unregister($key);
+        }
+    
+        $discount = (float) $this->arrayExtract($data, 'discount_amount');
+        
+        if (!$discount) {
+            return $this;
+        }
+        
+        Mage::register($key, $discount, true);
         
         return $this;
     }
