@@ -155,7 +155,14 @@ $table = $this->newTable($tableName)
         'nullable' => false,
         'default'  => 0,
     ])
+    ->addColumn('process_type', $this::TYPE_INTEGER, 2, [
+        'nullable' => false,
+        'default'  => 1,
+    ])
     ->addColumn('messages', $this::TYPE_TEXT, null, [
+        'nullable' => true,
+    ])
+    ->addColumn('additional_data', $this::TYPE_TEXT, null, [
         'nullable' => true,
     ])
     ->addColumn('can_process', $this::TYPE_INTEGER, 1, [

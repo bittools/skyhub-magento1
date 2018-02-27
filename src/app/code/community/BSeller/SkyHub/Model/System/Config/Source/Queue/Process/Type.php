@@ -12,17 +12,17 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-trait BSeller_SkyHub_Trait_Queue
+class BSeller_SkyHub_Model_System_Config_Source_Queue_Status extends BSeller_Core_Model_System_Config_Source_Abstract
 {
 
-
     /**
-     * @return BSeller_SkyHub_Model_Resource_Queue
+     * @return array
      */
-    protected function getQueueResource()
+    protected function optionsKeyValue()
     {
-        /** @var BSeller_SkyHub_Model_Resource_Queue $resource */
-        $resource = Mage::getResourceModel('bseller_skyhub/queue');
-        return $resource;
+        return [
+            BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT => $this->__('Import'),
+            BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT => $this->__('Export'),
+        ];
     }
 }

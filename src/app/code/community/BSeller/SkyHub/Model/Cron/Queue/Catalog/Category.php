@@ -12,13 +12,13 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cron_Abstract
+class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Model_Cron_Queue_Abstract
 {
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function createCategoriesQueue(Mage_Cron_Model_Schedule $schedule)
+    public function create(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->canRun($schedule)) {
             return;
@@ -43,9 +43,10 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
                 continue;
             }
 
-            $this->queue(
+            $this->getQueueResource()->queue(
                 $category->getId(),
                 BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
+                BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT,
                 true,
                 null,
                 $category->getStoreId()
@@ -63,7 +64,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Category extends BSeller_SkyHub_Model_Cr
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function executeCategoriesQueue(Mage_Cron_Model_Schedule $schedule)
+    public function execute(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->canRun($schedule)) {
             return;

@@ -15,7 +15,7 @@
 use SkyHub\Api\Handler\Response\HandlerException;
 use SkyHub\Api\Handler\Response\HandlerDefault;
 
-class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub_Model_Cron_Abstract
+class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product_Attribute extends BSeller_SkyHub_Model_Cron_Queue_Abstract
 {
 
     use BSeller_SkyHub_Trait_Catalog_Product_Attribute;
@@ -24,7 +24,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function createAttributesQueue(Mage_Cron_Model_Schedule $schedule)
+    public function create(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->canRun($schedule)) {
             return;
@@ -33,7 +33,11 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub
         $integrableIds = (array) array_keys($this->getIntegrableProductAttributes());
 
         try {
-            $this->queue($integrableIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE);
+            $this->getQueueResource()->queue(
+                $integrableIds,
+                BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE,
+                BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT
+            );
             $message = $this->__(
                 'Queue successfully created. IDs: %s.', implode(',', $integrableIds)
             );
@@ -50,7 +54,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product_Attribute extends BSeller_SkyHub
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function executeAttributesQueue(Mage_Cron_Model_Schedule $schedule)
+    public function execute(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->canRun($schedule)) {
             return;

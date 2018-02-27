@@ -11,18 +11,22 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-
-trait BSeller_SkyHub_Trait_Queue
+interface BSeller_SkyHub_Model_Cron_Queue_Interface
 {
-
-
+    
     /**
-     * @return BSeller_SkyHub_Model_Resource_Queue
+     * @param Mage_Cron_Model_Schedule $schedule
+     *
+     * @return mixed
      */
-    protected function getQueueResource()
-    {
-        /** @var BSeller_SkyHub_Model_Resource_Queue $resource */
-        $resource = Mage::getResourceModel('bseller_skyhub/queue');
-        return $resource;
-    }
+    public function create(Mage_Cron_Model_Schedule $schedule);
+    
+    
+    /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     *
+     * @return mixed
+     */
+    public function execute(Mage_Cron_Model_Schedule $schedule);
+    
 }

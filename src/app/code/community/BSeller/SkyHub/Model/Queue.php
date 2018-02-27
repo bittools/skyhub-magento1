@@ -27,9 +27,12 @@
 class BSeller_SkyHub_Model_Queue extends BSeller_Core_Model_Abstract
 {
 
-    const STATUS_PENDING = 1;
-    const STATUS_FAIL    = 2;
-    const STATUS_RETRY   = 3;
+    const STATUS_PENDING       = 1;
+    const STATUS_FAIL          = 2;
+    const STATUS_RETRY         = 3;
+
+    const PROCESS_TYPE_IMPORT  = 1;
+    const PROCESS_TYPE_EXPORT  = 2;
 
 
     protected function _construct()

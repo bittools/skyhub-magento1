@@ -25,5 +25,4 @@ class BSeller_SkyHub_Model_Entity extends BSeller_Core_Model_Abstract
     {
         $this->_init('bseller_skyhub/entity');
     }
-
 }

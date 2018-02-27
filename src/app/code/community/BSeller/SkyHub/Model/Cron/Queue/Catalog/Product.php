@@ -12,13 +12,13 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cron_Abstract
+class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Model_Cron_Queue_Abstract
 {
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function createProductsQueue(Mage_Cron_Model_Schedule $schedule)
+    public function create(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->canRun($schedule)) {
             return;
@@ -62,7 +62,12 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
             return;
         }
 
-        $this->getQueueResource()->queue($productIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
+        $this->getQueueResource()
+             ->queue(
+                 $productIds,
+                 BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
+                 BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT
+             );
 
         $schedule->setMessages(
             $this->__('%s product(s) were queued. IDs: %s.', count($productIds), implode(',', $productIds))
@@ -73,7 +78,7 @@ class BSeller_SkyHub_Model_Cron_Catalog_Product extends BSeller_SkyHub_Model_Cro
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function executeProductsQueue(Mage_Cron_Model_Schedule $schedule)
+    public function execute(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->canRun($schedule)) {
             return;

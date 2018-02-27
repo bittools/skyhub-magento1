@@ -50,6 +50,9 @@
                     <queue_result>
                         <table>bseller_skyhub_queue_result</table>
                     </queue_result>
+                    <import_log>
+                        <table>bseller_skyhub_import_log</table>
+                    </import_log>
                 </entities>
             </bseller_skyhub_resource>
         </models>
@@ -237,7 +240,7 @@
                     <config_path>bseller_skyhub/cron_catalog_product_attributes/queue_create</config_path>
                 </schedule>
                 <run>
-                    <model>bseller_skyhub/cron_catalog_product_attribute::createAttributesQueue</model>
+                    <model>bseller_skyhub/cron_queue_catalog_product_attribute::create</model>
                 </run>
             </bseller_skyhub_catalog_product_attributes_queue_create>
             <bseller_skyhub_catalog_product_attributes_queue_execute>
@@ -245,7 +248,7 @@
                     <config_path>bseller_skyhub/cron_catalog_product_attributes/queue_execute</config_path>
                 </schedule>
                 <run>
-                    <model>bseller_skyhub/cron_catalog_product_attribute::executeAttributesQueue</model>
+                    <model>bseller_skyhub/cron_queue_catalog_product_attribute::execute</model>
                 </run>
             </bseller_skyhub_catalog_product_attributes_queue_execute>
             <!-- CATALOG PRODUCT -->
@@ -254,7 +257,7 @@
                     <config_path>bseller_skyhub/cron_catalog_products/queue_create</config_path>
                 </schedule>
                 <run>
-                    <model>bseller_skyhub/cron_catalog_product::createProductsQueue</model>
+                    <model>bseller_skyhub/cron_queue_catalog_product::create</model>
                 </run>
             </bseller_skyhub_catalog_products_queue_create>
             <bseller_skyhub_catalog_products_queue_execute>
@@ -262,7 +265,7 @@
                     <config_path>bseller_skyhub/cron_catalog_products/queue_execute</config_path>
                 </schedule>
                 <run>
-                    <model>bseller_skyhub/cron_catalog_product::executeProductsQueue</model>
+                    <model>bseller_skyhub/cron_queue_catalog_product::execute</model>
                 </run>
             </bseller_skyhub_catalog_products_queue_execute>
             <!-- CATALOG CATEGORY -->
@@ -271,7 +274,7 @@
                     <config_path>bseller_skyhub/cron_catalog_categories/catalog_categories_queue_create</config_path>
                 </schedule>
                 <run>
-                    <model>bseller_skyhub/cron_catalog_category::createCategoriesQueue</model>
+                    <model>bseller_skyhub/cron_queue_catalog_category::create</model>
                 </run>
             </bseller_skyhub_catalog_categories_queue_create>
             <bseller_skyhub_catalog_categories_queue_execute>
@@ -279,7 +282,7 @@
                     <config_path>bseller_skyhub/cron_catalog_categories/catalog_categories_queue_execute</config_path>
                 </schedule>
                 <run>
-                    <model>bseller_skyhub/cron_catalog_category::executeCategoriesQueue</model>
+                    <model>bseller_skyhub/cron_queue_catalog_category::execute</model>
                 </run>
             </bseller_skyhub_catalog_categories_queue_execute>
             <!-- SALES ORDER QUEUE -->

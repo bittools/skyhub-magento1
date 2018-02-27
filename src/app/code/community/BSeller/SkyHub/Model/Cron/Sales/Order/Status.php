@@ -50,7 +50,12 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
             return;
         }
 
-        $this->getQueueResource()->queue($orderIds, BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER);
+        $this->getQueueResource()
+             ->queue(
+                 $orderIds,
+                 BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER,
+                 BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT
+             );
 
         $schedule->setMessages($this->__('Order IDs Queued: %s.', implode(',', $orderIds)));
     }

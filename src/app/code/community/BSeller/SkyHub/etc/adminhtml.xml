@@ -34,7 +34,7 @@
                         </catalog_product_attributes_mapping>
                         <queues>
                             <title>Queues Tracking</title>
-                            <sort_order>800</sort_order>
+                            <sort_order>20</sort_order>
                             <children>
                                 <products_queue>
                                     <title>Products Queue</title>
@@ -58,6 +58,22 @@
                                 </sales_order_status_queue>
                             </children>
                         </queues>
+                        <sales_import>
+                            <title>Sales Import</title>
+                            <sort_order>30</sort_order>
+                            <children>
+                                <manual_import>
+                                    <title>Import Orders Manually</title>
+                                    <sort_order>10</sort_order>
+                                    <action>adminhtml/system_config/edit/section/bseller_skyhub</action>
+                                </manual_import>
+                                <logs>
+                                    <title>Logs</title>
+                                    <sort_order>20</sort_order>
+                                    <action>adminhtml/system_config/edit/section/bseller_skyhub</action>
+                                </logs>
+                            </children>
+                        </sales_import>
                         <configuration>
                             <title>Configuration</title>
                             <sort_order>900</sort_order>
