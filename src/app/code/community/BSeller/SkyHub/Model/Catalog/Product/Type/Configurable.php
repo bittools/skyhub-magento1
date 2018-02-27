@@ -15,5 +15,4 @@ class BSeller_SkyHub_Model_Catalog_Product_Type_Configurable extends Mage_Catalo
 {
     
     use BSeller_SkyHub_Model_Catalog_Product_Type_Common;
-    
 }

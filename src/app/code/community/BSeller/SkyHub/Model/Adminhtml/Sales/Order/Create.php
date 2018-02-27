@@ -30,6 +30,8 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
      * @param array $data
      *
      * @return bool
+     *
+     * @throws Mage_Core_Exception
      */
     public function addProductByData(array $data = [])
     {
@@ -46,18 +48,7 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
             return false;
         }
         
-        $qty          = (float) $this->arrayExtract($productData, 'qty');
-//        $price        = (float) $this->arrayExtract($productData, 'price');
-//        $specialPrice = (float) $this->arrayExtract($productData, 'promotional_price');
-//        $finalPrice   = (float) $this->arrayExtract($productData, 'final_price');
-        
-//        if (!$finalPrice) {
-//            $finalPrice = min($price, $specialPrice);
-//        }
-        
-//        if (!$finalPrice) {
-//            $finalPrice = $price;
-//        }
+        $qty = (float) $this->arrayExtract($productData, 'qty');
         
         $this->registerCurrentData($product, $productData);
         
@@ -104,17 +95,10 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
     {
         $qty = (float) $this->arrayExtract($productData, 'qty');
     
-        /** @var BSeller_SkyHub_Model_Catalog_Product_Type_Configurable $typeInstance */
-//        $typeInstance = Mage::getModel('bseller_skyhub/catalog_product_type_configurable');
-    
-        /** @var BSeller_SkyHub_Model_Catalog_Product_Type_Configurable_Price $priceModel */
-//        $priceModel = Mage::getModel('bseller_skyhub/catalog_product_type_configurable_price');
-//        $product->setPriceModel($priceModel);
-        
-//        $product->setTypeInstance($typeInstance)
-//                ->setTypeInstance($typeInstance, true);
-        
-        /** @var Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute_Collection $attributes */
+        /**
+         * @var BSeller_SkyHub_Model_Catalog_Product_Type_Configurable $typeInstance
+         * @var Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute_Collection $attributes
+         */
         $typeInstance    = $product->getTypeInstance(true);
         $attributes      = $typeInstance->getConfigurableAttributes($product);
         $superAttributes = [];
@@ -157,18 +141,8 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
      */
     protected function addProductGrouped(Mage_Catalog_Model_Product $product, array $productData = [])
     {
-        /** @var BSeller_SkyHub_Model_Catalog_Product_Type_Grouped $typeInstance */
-//        $typeInstance = Mage::getModel('bseller_skyhub/catalog_product_type_grouped');
-    
-        /** @var BSeller_SkyHub_Model_Catalog_Product_Type_Grouped_Price $priceModel */
-//        $priceModel = Mage::getModel('bseller_skyhub/catalog_product_type_grouped_price');
-//        $product->setPriceModel($priceModel);
-        
-//        $product->setTypeInstance($typeInstance)
-//                ->setTypeInstance($typeInstance, true);
-        
-        $children    = (array) $this->arrayExtract($productData, 'children');
-        $qty         = (float) $this->arrayExtract($productData, 'qty');
+        $children = (array) $this->arrayExtract($productData, 'children');
+        $qty      = (float) $this->arrayExtract($productData, 'qty');
         
         $childrenIds = [];
         
