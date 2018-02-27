@@ -46,7 +46,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
             $this->getQueueResource()->queue(
                 $category->getId(),
                 BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
-                BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT,
+                BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT,
                 true,
                 null,
                 $category->getStoreId()

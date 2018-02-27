@@ -13,7 +13,7 @@ class BSeller_SkyHub_Test_QueueController extends BSeller_SkyHub_Controller_Fron
         $resource->queue(
             $this->product()->getId(),
             BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
-            BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT,
+            BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT,
             'create'
         );
     }

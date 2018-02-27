@@ -148,6 +148,9 @@ $table = $this->newTable($tableName)
     ->addColumn('entity_id', $this::TYPE_INTEGER, 10, [
         'nullable' => true,
     ])
+    ->addColumn('reference', $this::TYPE_TEXT, 255, [
+        'nullable' => true,
+    ])
     ->addColumn('entity_type', $this::TYPE_TEXT, 255, [
         'nullable' => true,
     ])
@@ -157,7 +160,7 @@ $table = $this->newTable($tableName)
     ])
     ->addColumn('process_type', $this::TYPE_INTEGER, 2, [
         'nullable' => false,
-        'default'  => 1,
+        'default'  => BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT,
     ])
     ->addColumn('messages', $this::TYPE_TEXT, null, [
         'nullable' => true,

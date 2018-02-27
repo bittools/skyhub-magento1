@@ -36,7 +36,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product_Attribute extends BSeller_
             $this->getQueueResource()->queue(
                 $integrableIds,
                 BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE,
-                BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT
+                BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
             );
             $message = $this->__(
                 'Queue successfully created. IDs: %s.', implode(',', $integrableIds)

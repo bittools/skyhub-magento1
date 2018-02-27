@@ -153,6 +153,14 @@
                     </bseller_skyhub_override_product_original_prices>
                 </observers>
             </sales_quote_item_set_product>
+            <bseller_skyhub_order_import_exception>
+                <observers>
+                    <bseller_skyhub_log_order_details>
+                        <class>bseller_skyhub/observer_sales_order</class>
+                        <method>logOrderDetails</method>
+                    </bseller_skyhub_log_order_details>
+                </observers>
+            </bseller_skyhub_order_import_exception>
         </events>
         <sales>
             <quote>

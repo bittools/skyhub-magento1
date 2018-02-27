@@ -367,8 +367,18 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 $order = $this->getOrderCreator()
                               ->importPostData($this->arrayExtract($orderData, 'order'))
                               ->createOrder();
+    
+                Mage::dispatchEvent('bseller_skyhub_order_import_success', [
+                    'order'      => $order,
+                    'order_data' => $orderData,
+                ]);
                 
             } catch (Exception $e) {
+                Mage::dispatchEvent('bseller_skyhub_order_import_exception', [
+                    'exception'  => $e,
+                    'order_data' => $orderData,
+                ]);
+                
                 Mage::logException($e);
             }
     

@@ -66,7 +66,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
              ->queue(
                  $productIds,
                  BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
-                 BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT
+                 BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
              );
 
         $schedule->setMessages(

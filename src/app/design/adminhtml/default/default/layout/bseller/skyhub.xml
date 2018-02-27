@@ -83,6 +83,13 @@
         </reference>
     </adminhtml_bseller_skyhub_queue_salesorderstatusqueue>
 
+    <adminhtml_bseller_skyhub_sales_order_import_form>
+        <label>BSeller SkyHub Order Import Manually</label>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_sales_order_import_manual"/>
+        </reference>
+    </adminhtml_bseller_skyhub_sales_order_import_form>
+
     <ADD_STYLES>
         <reference name="head">
             <action method="addCss">

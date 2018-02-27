@@ -34,7 +34,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     public function queue(
         $entityIds,
         $entityType,
-        $processType = BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT,
+        $processType = BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT,
         $canProcess = true,
         $processAfter = null,
         $storeId = 0

@@ -14,7 +14,37 @@
 class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Import_Manual
     extends BSeller_Core_Block_Adminhtml_Widget_Form_Container
 {
-
-
-
+    
+    protected $_blockGroup = 'bseller_skyhub';
+    protected $_controller = 'adminhtml_sales_order_import';
+    protected $_mode       = 'manual';
+    
+    
+    /**
+     * BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Attributes_Mapping_Edit constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->removeButton('delete');
+        $this->_updateButton('save', 'label', $this->__('Submit'));
+    }
+    
+    
+    /**
+     * @return string
+     */
+    public function getHeaderText()
+    {
+        return $this->__('Import Orders Manually');
+    }
+    
+    
+    /**
+     * @return string
+     */
+    public function getFormActionUrl()
+    {
+        return $this->getUrl('*/*/submit');
+    }
 }
