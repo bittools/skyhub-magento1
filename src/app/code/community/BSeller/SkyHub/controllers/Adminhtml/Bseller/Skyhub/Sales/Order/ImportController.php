@@ -78,6 +78,13 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Sales_Order_ImportController
     }
     
     
+    public function logAction()
+    {
+        $this->init('Import Log');
+        $this->renderLayout();
+    }
+    
+    
     /**
      * @return BSeller_SkyHub_Model_Processor_Sales_Order
      */

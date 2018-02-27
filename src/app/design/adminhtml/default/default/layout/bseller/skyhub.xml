@@ -90,6 +90,13 @@
         </reference>
     </adminhtml_bseller_skyhub_sales_order_import_form>
 
+    <adminhtml_bseller_skyhub_sales_order_import_log>
+        <label>BSeller SkyHub Order Import Manually Log</label>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_sales_order_import_log"/>
+        </reference>
+    </adminhtml_bseller_skyhub_sales_order_import_log>
+
     <ADD_STYLES>
         <reference name="head">
             <action method="addCss">
