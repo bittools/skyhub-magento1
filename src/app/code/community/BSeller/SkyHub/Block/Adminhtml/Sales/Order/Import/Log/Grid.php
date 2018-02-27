@@ -22,6 +22,9 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Import_Log_Grid extends BSeller
      */
     protected function getPreparedCollection(BSeller_SkyHub_Model_Resource_Queue_Collection $collection)
     {
+        $collection->addFieldToFilter('entity_type', BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER);
+        $collection->addFieldToFilter('process_type', BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT);
+        
         return $collection;
     }
 
@@ -44,6 +47,29 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Import_Log_Grid extends BSeller
 
         $this->sortColumnsByOrder();
 
+        return $this;
+    }
+    
+    
+    /**
+     * @return $this
+     */
+    protected function _prepareMassaction()
+    {
+        $this->setMassactionIdField('id');
+        $this->getMassactionBlock()->setFormFieldName('queue_ids');
+        
+        $this->getMassactionBlock()->addItem('delete', array(
+            'label'   => $this->__('Delete'),
+            'url'     => $this->getUrl('*/*/massDelete'),
+            'confirm' => $this->__('Are you sure?')
+        ));
+        
+        $this->getMassactionBlock()->addItem('retry', array(
+            'label'   => $this->__('Retry'),
+            'url'     => $this->getUrl('*/*/massRetry'),
+        ));
+        
         return $this;
     }
     

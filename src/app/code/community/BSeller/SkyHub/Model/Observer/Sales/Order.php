@@ -24,6 +24,10 @@ class BSeller_SkyHub_Model_Observer_Sales_Order
      */
     public function logOrderDetails(Varien_Event_Observer $observer)
     {
+        if (true === Mage::registry('disable_order_log')) {
+            return;
+        }
+        
         /**
          * @var Exception $exception
          * @var array     $orderData

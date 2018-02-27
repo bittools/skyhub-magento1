@@ -16,6 +16,7 @@
  * Class BSeller_SkyHub_Model_Queue
  *
  * @method $this setEntityId(integer $entityId)
+ * @method $this setReference(string $reference)
  * @method $this setEntityType(string $type)
  * @method $this setStatus(int $status)
  * @method $this setMessages(string $message)
@@ -23,6 +24,16 @@
  * @method $this setProcessAfter(string $datetime)
  * @method $this setCreatedAt(string $datetime)
  * @method $this setUpdatedAt(string $datetime)
+ *
+ * @method int     getEntityId()
+ * @method string  getReference()
+ * @method string  getEntityType()
+ * @method int     getStatus()
+ * @method string  getMessages()
+ * @method boolean getCanProcess()
+ * @method string  getProcessAfter()
+ * @method string  getCreatedAt()
+ * @method string  getUpdatedAt()
  */
 class BSeller_SkyHub_Model_Queue extends BSeller_Core_Model_Abstract
 {

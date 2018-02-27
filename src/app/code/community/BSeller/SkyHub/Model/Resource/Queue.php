@@ -149,6 +149,28 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
 
         return $this;
     }
+    
+    
+    /**
+     * @param int|array $queueIds
+     *
+     * @return $this
+     */
+    public function deleteByQueueIds($queueIds)
+    {
+        $queueIds = (array) $this->filterEntityIds($queueIds);
+    
+        if (empty($queueIds)) {
+            return $this;
+        }
+    
+        $queueIds = implode(',', $queueIds);
+        $where    = new Zend_Db_Expr("id IN ({$queueIds})");
+        
+        $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
+    
+        return $this;
+    }
 
 
     /**

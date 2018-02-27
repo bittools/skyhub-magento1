@@ -50,38 +50,106 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Sales_Order_ImportController
         
         /** @var string $code */
         foreach ($codes as $code) {
-            /** @var bool|array $orderData */
-            $orderData = $this->getOrderIntegrator()->order($code);
-            
-            if (!$orderData) {
-                $this->_getSession()->addError($this->__('Order code %s does not exist in SkyHub.', $code));
-                continue;
-            }
-            
-            /** @var bool|Mage_Sales_Model_Order $order */
-            $order = $this->getOrderProcessor()->createOrder($orderData);
-            
-            if (false === $order) {
-                $this->_getSession()->addError($this->__('The order %s cannot be created in Magento.', $code));
-                continue;
-            }
-            
-            if (!$order->getData('is_created')) {
-                $this->_getSession()->addWarning($this->__('The order %s already exists in Magento.', $code));
-                continue;
-            }
-    
-            $this->_getSession()->addSuccess($this->__('The order %s was successfully created.', $code));
+            $this->importOrder($code);
         }
         
-        $this->redirectOrdersGrid();
+        $this->redirectBack();
     }
     
     
+    /**
+     * See the log.
+     */
     public function logAction()
     {
         $this->init('Import Log');
         $this->renderLayout();
+    }
+    
+    
+    /**
+     * Delete log queue.
+     */
+    public function massDeleteAction()
+    {
+        $queueIds = (array) $this->getRequest()->getPost('queue_ids');
+        
+        /** @var BSeller_SkyHub_Model_Resource_Queue $queue */
+        $queue = Mage::getResourceModel('bseller_skyhub/queue');
+        $queue->deleteByQueueIds($queueIds);
+        
+        $this->_getSession()->addSuccess($this->__('The logs were successfully removed.'));
+        
+        $this->redirectBack();
+    }
+    
+    
+    /**
+     * Retry to import the failed orders.
+     *
+     * @throws Exception
+     * @throws Mage_Core_Exception
+     */
+    public function massRetryAction()
+    {
+        $queueIds = (array) $this->getRequest()->getPost('queue_ids');
+        
+        foreach ($queueIds as $queueId) {
+            /** @var BSeller_SkyHub_Model_Queue $queue */
+            $queue = Mage::getModel('bseller_skyhub/queue');
+            $queue->load($queueId);
+            
+            if (!$queue->getId()) {
+                continue;
+            }
+            
+            $reference = $queue->getReference();
+            
+            if (!$reference) {
+                continue;
+            }
+    
+            Mage::register('disable_order_log', true, true);
+            $this->importOrder($reference);
+            Mage::unregister('disable_order_log');
+        }
+        
+        $this->redirectBack();
+    }
+    
+    
+    /**
+     * @param string $code
+     *
+     * @return bool
+     * @throws Exception
+     */
+    protected function importOrder($code)
+    {
+        /** @var bool|array $orderData */
+        $orderData = $this->getOrderIntegrator()->order($code);
+    
+        if (!$orderData) {
+            $this->_getSession()->addError($this->__('Order code %s does not exist in SkyHub.', $code));
+            return false;
+        }
+    
+        /** @var bool|Mage_Sales_Model_Order $order */
+        $order = $this->getOrderProcessor()->createOrder($orderData);
+    
+        if (false === $order) {
+            $this->_getSession()->addError($this->__('The order %s cannot be created in Magento.', $code));
+            return false;
+        }
+    
+        if (!$order->getData('is_created')) {
+            $this->_getSession()->addWarning($this->__('The order %s already exists in Magento.', $code));
+            return false;
+        }
+    
+        $this->_getSession()->addSuccess($this->__('The order %s was successfully created.', $code));
+        
+        return true;
     }
     
     
