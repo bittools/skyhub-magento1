@@ -59,13 +59,13 @@
                             </children>
                         </queues>
                         <sales_import>
-                            <title>Sales Import</title>
+                            <title>Orders Import</title>
                             <sort_order>30</sort_order>
                             <children>
                                 <manual_import>
                                     <title>Import Orders Manually</title>
                                     <sort_order>10</sort_order>
-                                    <action>adminhtml/system_config/edit/section/bseller_skyhub</action>
+                                    <action>adminhtml/bseller_skyhub_sales_order_import/form</action>
                                 </manual_import>
                                 <logs>
                                     <title>Logs</title>
