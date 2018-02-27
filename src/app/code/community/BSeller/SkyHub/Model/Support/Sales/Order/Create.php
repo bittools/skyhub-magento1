@@ -147,7 +147,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      *
      * @return $this
      */
-    public function setShippingMethod($method = 'flatrate_flatrate', $cost = 0.0000)
+    public function setShippingMethod($method = 'bseller_skyhub_standard', $cost = 0.0000)
     {
         $data = [
             'order' => [
@@ -402,6 +402,8 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      * @param array $data
      *
      * @return $this
+     *
+     * @throws Mage_Core_Exception
      */
     protected function processQuote($data = array())
     {
@@ -425,6 +427,10 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
             $this->getOrderCreator()->addProductByData($item);
                  // ->addProduct($item['model'], $item['config']);
         }
+        
+        $shippingAmount = (float) $this->arrayExtract($data, 'order/shipping_cost');
+        $this->getQuote()
+             ->setFixedShippingAmount($shippingAmount);
         
         /* Collect shipping rates */
         $this->resetQuote()

@@ -31,7 +31,16 @@ class BSeller_SkyHub_Model_Shipping_Carrier_Standard extends Mage_Shipping_Model
         if (!$this->getConfigFlag('active')) {
             return false;
         }
-
+    
+        $amount = 0;
+        
+        /** @var Mage_Sales_Model_Quote $quote */
+        $quote = Mage::getSingleton('bseller_skyhub/adminhtml_session_quote')->getQuote();
+        
+        if ($quote) {
+            $amount = $quote->getData('fixed_shipping_amount');
+        }
+        
         /** @var Mage_Shipping_Model_Rate_Result $result */
         $result = Mage::getModel('shipping/rate_result');
 
@@ -43,8 +52,8 @@ class BSeller_SkyHub_Model_Shipping_Carrier_Standard extends Mage_Shipping_Model
 
         $method->setMethod('standard');
         $method->setMethodTitle($this->getConfigData('name'));
-
-        $method->setPrice(0.0000);
+        
+        $method->setPrice((float) $amount);
         $method->setCost(0.0000);
 
         $result->append($method);
