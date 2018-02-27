@@ -3,4 +3,5 @@ src/app/etc/modules/BSeller_SkyHub.xml                              app/etc/modu
 src/app/locale/pt_BR/BSeller/SkyHub.csv                             app/locale/pt_BR/BSeller/SkyHub.csv
 src/app/design/adminhtml/default/default/layout/bseller/skyhub.xml  app/design/adminhtml/default/default/layout/bseller/skyhub.xml
 src/app/design/adminhtml/default/default/template/bseller/skyhub    app/design/adminhtml/default/default/template/bseller/skyhub
+src/shell/bseller/skyhub                                            shell/bseller/skyhub
 src/skin/adminhtml/default/default/bseller/skyhub                   skin/adminhtml/default/default/bseller/skyhub
