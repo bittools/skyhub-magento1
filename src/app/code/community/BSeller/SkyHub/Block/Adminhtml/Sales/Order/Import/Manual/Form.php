@@ -47,6 +47,7 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Import_Manual_Form extends BSel
             'required' => true,
             'label'    => $this->__('SkyHub Order Codes'),
             'value'    => $orderCodes,
+            'note'     => $this->__('The order codes must be inserted one by line.'),
         ]);
         
         $form->setValues([]);

@@ -59,16 +59,16 @@
                             </children>
                         </queues>
                         <sales_import>
-                            <title>Orders Import</title>
+                            <title>Orders Importation</title>
                             <sort_order>30</sort_order>
                             <children>
                                 <manual_import>
-                                    <title>Import Orders Manually</title>
+                                    <title>Manual Import</title>
                                     <sort_order>10</sort_order>
                                     <action>adminhtml/bseller_skyhub_sales_order_import/form</action>
                                 </manual_import>
                                 <logs>
-                                    <title>Logs</title>
+                                    <title>Import Errors</title>
                                     <sort_order>20</sort_order>
                                     <action>adminhtml/bseller_skyhub_sales_order_import/log</action>
                                 </logs>
@@ -106,7 +106,7 @@
                                     </catalog_product_attributes>
                                     <queues>
                                         <title>Queues Management</title>
-                                        <sort_order>800</sort_order>
+                                        <sort_order>20</sort_order>
                                         <children>
                                             <products_queue>
                                                 <title>Products Queue</title>
@@ -126,6 +126,20 @@
                                             </sales_order_status_queue>
                                         </children>
                                     </queues>
+                                    <sales_import>
+                                        <title>Orders Importation</title>
+                                        <sort_order>30</sort_order>
+                                        <children>
+                                            <manual_import>
+                                                <title>Manual Import</title>
+                                                <sort_order>10</sort_order>
+                                            </manual_import>
+                                            <logs>
+                                                <title>Import Errors</title>
+                                                <sort_order>20</sort_order>
+                                            </logs>
+                                        </children>
+                                    </sales_import>
                                     <configuration>
                                         <title>Configuration</title>
                                         <sort_order>900</sort_order>
