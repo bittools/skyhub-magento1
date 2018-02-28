@@ -32,7 +32,7 @@ trait BSeller_SkyHub_Trait_Processors
     protected function salesOrderProcessor()
     {
         /** @var BSeller_SkyHub_Model_Processor_Sales_Order $processor */
-        $processor = Mage::getModel('bseller_skyhub/processor_sales_order_status');
+        $processor = Mage::getModel('bseller_skyhub/processor_sales_order');
         return $processor;
     }
 }

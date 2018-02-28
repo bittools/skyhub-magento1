@@ -32,7 +32,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
         foreach ($orders as $orderData) {
             try {
                 /** @var Mage_Sales_Model_Order $order */
-                $order = $this->getOrderProcessor()->createOrder($orderData);
+                $order = $this->salesOrderProcessor()->createOrder($orderData);
             } catch (Exception $e) {
                 Mage::logException($e);
                 continue;
@@ -46,7 +46,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
             $statusCode  = $this->arrayExtract($orderData, 'status/code');
             // $statusLabel = $this->arrayExtract($orderData, 'status/label');
 
-            $this->getOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
+            $this->salesOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
 
             $message  = $schedule->getMessages();
 

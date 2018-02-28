@@ -91,7 +91,8 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
             $statusType = $this->arrayExtract($orderData, 'status/type');
             // $statusLabel = $this->arrayExtract($orderData, 'status/label');
 
-            $result = $this->getOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
+            $result = $this->salesOrderStatusProcessor()
+                           ->processOrderStatus($statusCode, $statusType, $order);
 
             if (false == $result) {
                 return;

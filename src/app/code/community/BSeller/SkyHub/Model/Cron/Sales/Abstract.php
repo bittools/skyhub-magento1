@@ -14,21 +14,6 @@
 
 abstract class BSeller_SkyHub_Model_Cron_Sales_Abstract extends BSeller_SkyHub_Model_Cron_Abstract
 {
-
-    /**
-     * @return BSeller_SkyHub_Model_Processor_Sales_Order
-     */
-    protected function getOrderProcessor()
-    {
-        return Mage::getModel('bseller_skyhub/processor_sales_order');
-    }
-
-
-    /**
-     * @return BSeller_SkyHub_Model_Processor_Sales_Order_Status
-     */
-    protected function getOrderStatusProcessor()
-    {
-        return Mage::getModel('bseller_skyhub/processor_sales_order_status');
-    }
+    
+    use BSeller_SkyHub_Trait_Processors;
 }

@@ -92,7 +92,7 @@ class BSeller_SkyHub_Controller_Admin_Queue extends BSeller_SkyHub_Controller_Ad
         }
         
         /** @var bool|Mage_Sales_Model_Order $order */
-        $order = $this->getOrderProcessor()->createOrder($orderData);
+        $order = $this->salesOrderProcessor()->createOrder($orderData);
         
         if (false === $order) {
             $this->_getSession()->addError($this->__('The order %s cannot be created in Magento.', $code));
@@ -107,17 +107,6 @@ class BSeller_SkyHub_Controller_Admin_Queue extends BSeller_SkyHub_Controller_Ad
         $this->_getSession()->addSuccess($this->__('The order %s was successfully created.', $code));
         
         return true;
-    }
-    
-    
-    /**
-     * @return BSeller_SkyHub_Model_Processor_Sales_Order
-     */
-    protected function getOrderProcessor()
-    {
-        /** @var BSeller_SkyHub_Model_Processor_Sales_Order $processor */
-        $processor = Mage::getModel('bseller_skyhub/processor_sales_order');
-        return $processor;
     }
     
     
