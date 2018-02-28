@@ -11,6 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
+
 class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Totals_Interest extends BSeller_Core_Block_Abstract
 {
     

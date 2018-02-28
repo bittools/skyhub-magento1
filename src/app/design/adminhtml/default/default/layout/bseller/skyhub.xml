@@ -104,10 +104,40 @@
     </adminhtml_sales_order_view>
 
     <adminhtml_sales_order_invoice_new>
+        <update handle="INVOICE_TOTALS"/>
+    </adminhtml_sales_order_invoice_new>
+
+    <adminhtml_sales_order_invoice_updateqty>
+        <update handle="INVOICE_TOTALS"/>
+    </adminhtml_sales_order_invoice_updateqty>
+
+    <adminhtml_sales_order_invoice_view>
+        <update handle="INVOICE_TOTALS"/>
+    </adminhtml_sales_order_invoice_view>
+
+    <adminhtml_sales_order_creditmemo_new>
+        <update handle="CREDITMEMO_TOTALS"/>
+    </adminhtml_sales_order_creditmemo_new>
+
+    <adminhtml_sales_order_creditmemo_updateqty>
+        <update handle="CREDITMEMO_TOTALS"/>
+    </adminhtml_sales_order_creditmemo_updateqty>
+
+    <adminhtml_sales_order_creditmemo_view>
+        <update handle="CREDITMEMO_TOTALS"/>
+    </adminhtml_sales_order_creditmemo_view>
+
+    <CREDITMEMO_TOTALS>
+        <reference name="creditmemo_totals">
+            <block type="bseller_skyhub/adminhtml_sales_order_totals_interest" name="bseller_skyhub_interest" />
+        </reference>
+    </CREDITMEMO_TOTALS>
+
+    <INVOICE_TOTALS>
         <reference name="invoice_totals">
             <block type="bseller_skyhub/adminhtml_sales_order_totals_interest" name="bseller_skyhub_interest" />
         </reference>
-    </adminhtml_sales_order_invoice_new>
+    </INVOICE_TOTALS>
 
     <ADD_STYLES>
         <reference name="head">
