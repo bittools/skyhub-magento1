@@ -102,10 +102,32 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $order->setData('skyhub_marketplace', $channel);
     
         $order->getResource()->save($order);
-
+        
         $order->setData('is_created', true);
+    
+        if ($order->getId()) {
+            $this->updateOrderStatus($data, $order);
+        }
 
         return $order;
+    }
+    
+    
+    /**
+     * @param array                  $skyhubOrderData
+     * @param Mage_Sales_Model_Order $order
+     *
+     * @return $this
+     */
+    protected function updateOrderStatus(array $skyhubOrderData, Mage_Sales_Model_Order $order)
+    {
+        $skyhubStatusCode = $this->arrayExtract($skyhubOrderData, 'code');
+        $skyhubStatusType = $this->arrayExtract($skyhubOrderData, 'status/type');
+        
+        $this->salesOrderStatusProcessor()
+             ->processOrderStatus($skyhubStatusCode, $skyhubStatusType, $order);
+        
+        return $this;
     }
     
     
