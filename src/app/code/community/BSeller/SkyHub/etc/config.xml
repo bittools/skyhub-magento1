@@ -170,9 +170,26 @@
                         <after>discount</after>
                         <before>grand_total</before>
                     </bseller_skyhub_discount>
+                    <bseller_skyhub_interest>
+                        <class>bseller_skyhub/sales_quote_address_total_interest</class>
+                        <after>discount</after>
+                        <before>grand_total</before>
+                    </bseller_skyhub_interest>
                 </totals>
             </quote>
         </sales>
+        <fieldsets>
+            <sales_convert_quote>
+                <bseller_skyhub_interest>
+                    <to_order>*</to_order>
+                </bseller_skyhub_interest>
+            </sales_convert_quote>
+            <sales_convert_order>
+                <bseller_skyhub_interest>
+                    <to_quote>*</to_quote>
+                </bseller_skyhub_interest>
+            </sales_convert_order>
+        </fieldsets>
     </global>
     <frontend>
         <routers>

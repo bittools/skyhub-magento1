@@ -161,6 +161,25 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     
     
     /**
+     * @param float $discount
+     *
+     * @return $this
+     */
+    public function setInterestAmount($discount)
+    {
+        $data = [
+            'order' => [
+                'interest' => (float) $discount,
+            ]
+        ];
+        
+        $this->merge($data);
+        
+        return $this;
+    }
+    
+    
+    /**
      * @param string $method
      * @param float  $cost
      *
@@ -457,6 +476,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         }
         
         $this->registerDiscount($order);
+        $this->registerInterest($order);
         
         $shippingAmount = (float) $this->arrayExtract($data, 'order/shipping_cost');
         $this->getQuote()
@@ -511,6 +531,31 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         }
         
         Mage::register($key, $discount, true);
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @param array $data
+     *
+     * @return $this
+     * @throws Mage_Core_Exception
+     */
+    protected function registerInterest(array $data)
+    {
+        $key = 'bseller_skyhub_interest';
+        if (Mage::registry($key)) {
+            Mage::unregister($key);
+        }
+    
+        $interest = (float) $this->arrayExtract($data, 'interest');
+        
+        if (!$interest) {
+            return $this;
+        }
+        
+        Mage::register($key, $interest, true);
         
         return $this;
     }

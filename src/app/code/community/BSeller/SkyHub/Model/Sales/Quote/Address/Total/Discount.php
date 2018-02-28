@@ -61,7 +61,7 @@ class BSeller_SkyHub_Model_Sales_Quote_Address_Total_Discount extends Mage_Sales
         $discount     = $address->getTotalAmount($this->getCode());
         $baseDiscount = $address->getBaseTotalAmount($this->getCode());
         
-        $totalDiscount     = $discount + ($skyhubDiscount * -1);
+        $totalDiscount     = $discount     + ($skyhubDiscount * -1);
         $baseTotalDiscount = $baseDiscount + ($skyhubDiscount * -1);
         
         $this->_addAmount($totalDiscount);

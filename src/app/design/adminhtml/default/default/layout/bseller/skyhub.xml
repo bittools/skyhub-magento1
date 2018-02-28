@@ -97,6 +97,18 @@
         </reference>
     </adminhtml_bseller_skyhub_sales_order_import_log>
 
+    <adminhtml_sales_order_view>
+        <reference name="order_totals">
+            <block type="bseller_skyhub/adminhtml_sales_order_totals_interest" name="bseller_skyhub_interest" />
+        </reference>
+    </adminhtml_sales_order_view>
+
+    <adminhtml_sales_order_invoice_new>
+        <reference name="invoice_totals">
+            <block type="bseller_skyhub/adminhtml_sales_order_totals_interest" name="bseller_skyhub_interest" />
+        </reference>
+    </adminhtml_sales_order_invoice_new>
+
     <ADD_STYLES>
         <reference name="head">
             <action method="addCss">

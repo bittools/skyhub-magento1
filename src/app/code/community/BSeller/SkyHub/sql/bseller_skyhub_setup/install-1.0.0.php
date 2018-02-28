@@ -20,7 +20,18 @@
 //**********************************************************************************************************************
 // Update sales/order
 //**********************************************************************************************************************
+$interest = [
+    'type'     => $this::TYPE_DECIMAL,
+    'length'   => '12,4',
+    'nullable' => false,
+    'default'  => '0.0000',
+    'comment'  => 'SkyHub Interest Amount',
+];
+
 $tables = [
+    $this->getTable('sales/quote') => [
+        'bseller_skyhub_interest' => $interest
+    ],
     $this->getTable('sales/order') => [
         'bseller_skyhub' => [
             'type'     => $this::TYPE_BOOLEAN,
@@ -52,9 +63,14 @@ $tables = [
             'after'    => 'bseller_skyhub_channel',
             'comment'  => 'SkyHub Invoice Key',
         ],
+        'bseller_skyhub_interest' => array_merge($interest, ['after' => 'bseller_skyhub_invoice_key']),
     ]
 ];
 
+/**
+ * @var string $tableName
+ * @var array  $columns
+ */
 foreach ($tables as $tableName => $columns) {
     foreach ($columns as $name => $definition) {
         $conn->addColumn($tableName, $name, $definition);
