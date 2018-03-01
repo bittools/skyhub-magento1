@@ -40,6 +40,7 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Sales_Order_Status_Grid extends BSell
         ;
 
         $collection->addFieldToFilter('entity_type', BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER);
+        $collection->addFieldToFilter('process_type', BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT);
 
         return $collection;
     }
