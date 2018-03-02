@@ -39,7 +39,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order
             return;
         }
         
-        $orderCode = $this->arrayExtract($orderData, 'order/increment_id');
+        $orderCode = $this->arrayExtract($orderData, 'code');
         
         $data = [
             'entity_id'       => null,

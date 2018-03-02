@@ -14,24 +14,55 @@
 
 class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Processor_Abstract
 {
-    
+
     /**
      * @param array $data
      *
-     * @return Mage_Sales_Model_Order|bool
-     *
-     * @throws Exception
+     * @return bool|Mage_Sales_Model_Order
      */
     public function createOrder(array $data)
+    {
+        try {
+            /** @var Mage_Sales_Model_Order $order */
+            $order = $this->processOrderCreation($data);
+        } catch (Exception $e) {
+            Mage::dispatchEvent('bseller_skyhub_order_import_exception', [
+                'exception'  => $e,
+                'order_data' => $data,
+            ]);
+
+            Mage::logException($e);
+
+            return false;
+        }
+
+        if ($order && $order->getId()) {
+            $this->updateOrderStatus($data, $order);
+        }
+
+        return $order;
+    }
+
+
+    /**
+     * @param array $data
+     *
+     * @return bool|Mage_Sales_Model_Order
+     *
+     * @throws Exception
+     * @throws Mage_Core_Exception
+     * @throws Mage_Core_Model_Store_Exception
+     */
+    protected function processOrderCreation(array $data)
     {
         $code        = $this->arrayExtract($data, 'code');
         $channel     = $this->arrayExtract($data, 'channel');
         $incrementId = $this->getOrderIncrementId($code);
-        
+
         /** @var BSeller_SkyHub_Model_Resource_Sales_Order $orderResource */
         $orderResource = Mage::getResourceModel('bseller_skyhub/sales_order');
         $orderId       = $orderResource->getEntityIdByIncrementId($incrementId);
-        
+
         if ($orderId) {
             /**
              * @var Mage_Sales_Model_Order $order
@@ -43,58 +74,58 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         }
 
         $this->simulateStore($this->getStore());
-        
+
         $info = new Varien_Object([
             'increment_id'      => $incrementId,
             'send_confirmation' => 0
         ]);
-    
+
         $billingAddress  = new Varien_Object($this->arrayExtract($data, 'billing_address'));
         $shippingAddress = new Varien_Object($this->arrayExtract($data, 'shipping_address'));
-        
+
         $customerData = (array) $this->arrayExtract($data, 'customer', []);
         $customerData = array_merge_recursive($customerData, [
             'billing_address'  => $billingAddress,
             'shipping_address' => $shippingAddress
         ]);
-        
+
         /** @var Mage_Customer_Model_Customer $customer */
         $customer = $this->getCustomer($customerData);
 
         $shippingCost   = (float) $this->arrayExtract($data, 'shipping_cost', 0.0000);
         $discountAmount = (float) $this->arrayExtract($data, 'discount', 0.0000);
         $interestAmount = (float) $this->arrayExtract($data, 'interest', 0.0000);
-    
+
         /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
         $creation = Mage::getModel('bseller_skyhub/support_sales_order_create', $this->getStore());
         $creation->setOrderInfo($info)
-                 ->setCustomer($customer)
-                 ->setShippingMethod('bseller_skyhub_standard', $shippingCost)
-                 ->setPaymentMethod('bseller_skyhub_standard')
-                 ->setDiscountAmount($discountAmount)
-                 ->setInterestAmount($interestAmount)
-                 ->addOrderAddress('billing', $billingAddress)
-                 ->addOrderAddress('shipping', $shippingAddress)
-                 ->setComment('This order was automatically created by SkyHub import process.')
+            ->setCustomer($customer)
+            ->setShippingMethod('bseller_skyhub_standard', $shippingCost)
+            ->setPaymentMethod('bseller_skyhub_standard')
+            ->setDiscountAmount($discountAmount)
+            ->setInterestAmount($interestAmount)
+            ->addOrderAddress('billing', $billingAddress)
+            ->addOrderAddress('shipping', $shippingAddress)
+            ->setComment('This order was automatically created by SkyHub import process.')
         ;
-    
+
         $products = $this->getProducts((array) $this->arrayExtract($data, 'items'));
         if (empty($products)) {
-            return false;
+            Mage::throwException($this->__('The SkyHub products cannot be matched with Magento products.'));
         }
-    
+
         /** @var array $productData */
         foreach ((array) $products as $productData) {
             $creation->addProduct($productData);
         }
-    
+
         /** @var Mage_Sales_Model_Order $order */
         $order = $creation->create();
 
         if (!$order) {
             return false;
         }
-    
+
         $order->setData('bseller_skyhub', true);
         $order->setData('bseller_skyhub_code', $code);
         $order->setData('bseller_skyhub_channel', $channel);
@@ -102,14 +133,10 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         /** Bizcommerce_SkyHub uses these fields. */
         $order->setData('skyhub_code', $code);
         $order->setData('skyhub_marketplace', $channel);
-    
+
         $order->getResource()->save($order);
-        
+
         $order->setData('is_created', true);
-    
-        if ($order->getId()) {
-            $this->updateOrderStatus($data, $order);
-        }
 
         return $order;
     }

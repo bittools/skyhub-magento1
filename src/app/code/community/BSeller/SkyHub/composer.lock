@@ -368,12 +368,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tiagosampaio/skyhub-php.git",
-                "reference": "62c772d49ffdc72d43ea2dd346ad64d901713ff8"
+                "reference": "85bae988383b161752e8a9a256e0dfef22cd0f29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tiagosampaio/skyhub-php/zipball/62c772d49ffdc72d43ea2dd346ad64d901713ff8",
-                "reference": "62c772d49ffdc72d43ea2dd346ad64d901713ff8",
+                "url": "https://api.github.com/repos/tiagosampaio/skyhub-php/zipball/85bae988383b161752e8a9a256e0dfef22cd0f29",
+                "reference": "85bae988383b161752e8a9a256e0dfef22cd0f29",
                 "shasum": ""
             },
             "require": {
@@ -401,11 +401,12 @@
             "authors": [
                 {
                     "name": "Tiago Sampaio",
-                    "email": "tiago@tiagosampaio.com"
+                    "email": "tiago@tiagosampaio.com",
+                    "role": "Developer"
                 }
             ],
             "description": "This is the official PHP SDK for integration with SkyHub.",
-            "time": "2018-02-22T21:41:51+00:00"
+            "time": "2018-03-02T14:53:06+00:00"
         }
     ],
     "packages-dev": [],

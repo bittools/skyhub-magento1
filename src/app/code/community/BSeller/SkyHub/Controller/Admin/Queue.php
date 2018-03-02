@@ -100,7 +100,7 @@ class BSeller_SkyHub_Controller_Admin_Queue extends BSeller_SkyHub_Controller_Ad
         }
         
         if (!$order->getData('is_created')) {
-            $this->_getSession()->addWarning($this->__('The order %s already exists in Magento.', $code));
+            $this->_getSession()->addNotice($this->__('The order %s already exists in Magento.', $code));
             return false;
         }
         

@@ -351,10 +351,15 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         
         return $this;
     }
-    
-    
+
+
     /**
-     * Creates order
+     * Create order.
+     *
+     * @return Mage_Sales_Model_Order|null
+     *
+     * @throws Mage_Core_Exception
+     * @throws Mage_Core_Model_Store_Exception
      */
     public function create()
     {
@@ -363,43 +368,33 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         
         if (!empty($orderData)) {
             $this->initSession($this->arrayExtract($orderData, 'session'));
-            
-            try {
-                $this->processQuote($orderData);
-                $payment = $this->arrayExtract($orderData, 'payment');
-                
-                if (!empty($payment)) {
-                    $this->getOrderCreator()
-                         ->setPaymentData($payment);
-                    
-                    $this->getQuote()
-                         ->getPayment()
-                         ->addData($payment);
-                }
-                
-                /** This can be necessary. */
-                // $this->processProductOptions();
-                
-                Mage::app()->getStore()->setConfig(Mage_Sales_Model_Order::XML_PATH_EMAIL_ENABLED, "0");
-                
-                /** @var Mage_Sales_Model_Order $order */
-                $order = $this->getOrderCreator()
-                              ->importPostData($this->arrayExtract($orderData, 'order'))
-                              ->createOrder();
-    
-                Mage::dispatchEvent('bseller_skyhub_order_import_success', [
-                    'order'      => $order,
-                    'order_data' => $orderData,
-                ]);
-                
-            } catch (Exception $e) {
-                Mage::dispatchEvent('bseller_skyhub_order_import_exception', [
-                    'exception'  => $e,
-                    'order_data' => $orderData,
-                ]);
-                
-                Mage::logException($e);
+
+            $this->processQuote($orderData);
+            $payment = $this->arrayExtract($orderData, 'payment');
+
+            if (!empty($payment)) {
+                $this->getOrderCreator()
+                     ->setPaymentData($payment);
+
+                $this->getQuote()
+                     ->getPayment()
+                     ->addData($payment);
             }
+
+            /** This can be necessary. */
+            // $this->processProductOptions();
+
+            Mage::app()->getStore()->setConfig(Mage_Sales_Model_Order::XML_PATH_EMAIL_ENABLED, "0");
+
+            /** @var Mage_Sales_Model_Order $order */
+            $order = $this->getOrderCreator()
+                          ->importPostData($this->arrayExtract($orderData, 'order'))
+                          ->createOrder();
+
+            Mage::dispatchEvent('bseller_skyhub_order_import_success', [
+                'order'      => $order,
+                'order_data' => $orderData,
+            ]);
     
             $this->getSession()->clear();
             Mage::unregister('rule_data');
@@ -420,7 +415,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
          */
         $products = $this->arrayExtract($this->data, 'products');
         
-        foreach ($this->products as $productId => $product) {
+        foreach ($products as $productId => $product) {
             $item = $this->getOrderCreator()->getQuote()->getItemByProduct($product);
     
             $options = [
