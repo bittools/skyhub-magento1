@@ -60,8 +60,10 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product_Attribute extends BSeller_
             return;
         }
 
-        $attributeIds = (array) $this->getQueueResource()
-            ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE);
+        $attributeIds = (array) $this->getQueueResource()->getPendingEntityIds(
+            BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE,
+            BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
+        );
 
         if (empty($attributeIds)) {
             $schedule->setMessages($this->__('No product attribute to process.'));

@@ -24,8 +24,10 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             return;
         }
 
-        $queuedIds = (array) $this->getQueueResource()
-            ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
+        $queuedIds = (array) $this->getQueueResource()->getPendingEntityIds(
+            BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
+            BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
+        );
 
         $queuedIds = $this->filterIds($queuedIds);
 
@@ -84,8 +86,10 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             return;
         }
 
-        $productIds = (array) $this->getQueueResource()
-            ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
+        $productIds = (array) $this->getQueueResource()->getPendingEntityIds(
+            BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
+            BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
+        );
 
         $productIds = $this->filterIds($productIds);
 

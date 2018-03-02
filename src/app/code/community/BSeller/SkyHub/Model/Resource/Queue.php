@@ -96,12 +96,18 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
 
     /**
      * @param string   $entityType
+     * @param int      $processType
      * @param int|null $limit
      * @param int      $storeId
      *
      * @return array
      */
-    public function getPendingEntityIds($entityType, $limit = null, $storeId = 0)
+    public function getPendingEntityIds(
+        $entityType,
+        $processType = BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT,
+        $limit = null,
+        $storeId = 0
+    )
     {
         $integrableStatuses = [
             BSeller_SkyHub_Model_Queue::STATUS_PENDING,
@@ -113,7 +119,8 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
             ->select()
             ->from($this->getMainTable(), 'entity_id')
             ->where('status IN (?)', implode(',', $integrableStatuses))
-            ->where('can_process = 1')
+            ->where('can_process = ?', 1)
+            ->where('process_type = ?', (int) $processType)
             ->where('store_id IN (?)', $this->getStoreIds($storeId))
             ->where('process_after <= ?', now())
             ->where('entity_type = ?', (string) $entityType)

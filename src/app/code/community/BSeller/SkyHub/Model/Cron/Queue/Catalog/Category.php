@@ -70,8 +70,10 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
             return;
         }
 
-        $categoryIds = (array) $this->getQueueResource()
-            ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY);
+        $categoryIds = (array) $this->getQueueResource()->getPendingEntityIds(
+            BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
+            BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
+        );
 
         if (empty($categoryIds)) {
             $schedule->setMessages($this->__('No category to be integrated right now.'));

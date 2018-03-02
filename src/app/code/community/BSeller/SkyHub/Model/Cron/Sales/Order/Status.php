@@ -50,12 +50,11 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
             return;
         }
 
-        $this->getQueueResource()
-             ->queue(
-                 $orderIds,
-                 BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER,
-                 BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
-             );
+        $this->getQueueResource()->queue(
+            $orderIds,
+            BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER,
+            BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT
+        );
 
         $schedule->setMessages($this->__('Order IDs Queued: %s.', implode(',', $orderIds)));
     }
@@ -70,8 +69,11 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
             return;
         }
 
-        $orderIds = (array) $this->getQueueResource()
-            ->getPendingEntityIds(BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER, 50);
+        $orderIds = (array) $this->getQueueResource()->getPendingEntityIds(
+            BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER,
+            BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT,
+            50
+        );
 
         if (empty($orderIds)) {
             $schedule->setMessages($this->__('No order in the queue to be processed.'));
@@ -85,7 +87,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
         /** @var Mage_Sales_Model_Order $order */
         foreach ($collection as $order) {
             /** @var array $orderData */
-            $orderData = (array) $this->orderIntegrator()->order($order->getId());
+            $orderData = (array) $this->orderIntegrator()->orderByOrderId($order->getId());
 
             $statusCode = $this->arrayExtract($orderData, 'status/code');
             $statusType = $this->arrayExtract($orderData, 'status/type');
