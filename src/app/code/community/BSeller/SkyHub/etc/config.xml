@@ -316,7 +316,7 @@
                     <config_path>bseller_skyhub/cron_sales_order_queue/expression</config_path>
                 </schedule>
                 <run>
-                    <model>bseller_skyhub/cron_sales_order_queue::importNextOrders</model>
+                    <model>bseller_skyhub/cron_queue_sales_order_queue::execute</model>
                 </run>
             </bseller_skyhub_sales_order_import_new_orders>
             <!-- SALES ORDER STATUS -->
@@ -325,7 +325,7 @@
                     <config_path>bseller_skyhub/cron_sales_order_status/queue_create</config_path>
                 </schedule>
                 <run>
-                    <model>bseller_skyhub/cron_sales_order_status::createOrderStatusQueue</model>
+                    <model>bseller_skyhub/cron_queue_sales_order_status::create</model>
                 </run>
             </bseller_skyhub_sales_order_status_update_queue_create>
             <bseller_skyhub_sales_order_status_update_queue_execute>
@@ -333,7 +333,7 @@
                     <config_path>bseller_skyhub/cron_sales_order_status/queue_execute</config_path>
                 </schedule>
                 <run>
-                    <model>bseller_skyhub/cron_sales_order_status::executeOrderStatusQueue</model>
+                    <model>bseller_skyhub/cron_queue_sales_order_status::execute</model>
                 </run>
             </bseller_skyhub_sales_order_status_update_queue_execute>
         </jobs>

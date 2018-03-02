@@ -12,13 +12,15 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Model_Cron_Sales_Order_Queue extends BSeller_SkyHub_Model_Cron_Sales_Abstract
+class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_Model_Cron_Queue_Sales_Abstract
 {
 
     /**
+     * Import next orders from the queue in SkyHub.
+     *
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function importNextOrders(Mage_Cron_Model_Schedule $schedule)
+    public function execute(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->canRun($schedule)) {
             return;
@@ -40,7 +42,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Queue extends BSeller_SkyHub_Model_C
                 /** @var Mage_Sales_Model_Order $order */
                 $order = $this->salesOrderProcessor()->createOrder($orderData);
             } catch (Exception $e) {
-                Mage::logException($e);
+                /** The log is already created in the createOrder method. */
                 continue;
             }
 

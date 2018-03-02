@@ -97,5 +97,4 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
 
         return (bool) (strpos($pattern, '%d') != false);
     }
-
 }

@@ -12,13 +12,13 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
  
-class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_Cron_Sales_Abstract
+class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_Model_Cron_Queue_Sales_Abstract
 {
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function createOrderStatusQueue(Mage_Cron_Model_Schedule $schedule)
+    public function create(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->canRun($schedule)) {
             return;
@@ -52,7 +52,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
 
         $this->getQueueResource()->queue(
             $orderIds,
-            BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER,
+            BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER_STATUS,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT
         );
 
@@ -63,14 +63,14 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function executeOrderStatusQueue(Mage_Cron_Model_Schedule $schedule)
+    public function execute(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->canRun($schedule)) {
             return;
         }
 
         $orderIds = (array) $this->getQueueResource()->getPendingEntityIds(
-            BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER,
+            BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER_STATUS,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT,
             50
         );
@@ -94,14 +94,16 @@ class BSeller_SkyHub_Model_Cron_Sales_Order_Status extends BSeller_SkyHub_Model_
             // $statusLabel = $this->arrayExtract($orderData, 'status/label');
 
             $result = $this->salesOrderStatusProcessor()
-                           ->processOrderStatus($statusCode, $statusType, $order);
+                ->processOrderStatus($statusCode, $statusType, $order);
 
             if (false == $result) {
                 return;
             }
 
-            $this->getQueueResource()
-                ->removeFromQueue($order->getId(), BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER);
+            $this->getQueueResource()->removeFromQueue(
+                $order->getId(),
+                BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER_STATUS
+            );
         }
     }
 

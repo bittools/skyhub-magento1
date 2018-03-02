@@ -19,6 +19,7 @@ class BSeller_SkyHub_Model_Entity extends BSeller_Core_Model_Abstract
     const TYPE_CATALOG_PRODUCT           = 'catalog_product';
     const TYPE_CATALOG_CATEGORY          = 'catalog_category';
     const TYPE_SALES_ORDER               = 'sales_order';
+    const TYPE_SALES_ORDER_STATUS        = 'sales_order_status';
 
 
     protected function _construct()

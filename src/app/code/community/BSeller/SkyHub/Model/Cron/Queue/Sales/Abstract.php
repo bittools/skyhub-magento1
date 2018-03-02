@@ -12,8 +12,18 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-abstract class BSeller_SkyHub_Model_Cron_Sales_Abstract extends BSeller_SkyHub_Model_Cron_Abstract
+abstract class BSeller_SkyHub_Model_Cron_Queue_Sales_Abstract extends BSeller_SkyHub_Model_Cron_Queue_Abstract
 {
     
     use BSeller_SkyHub_Trait_Processors;
+
+
+    /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     *
+     * @return void
+     */
+    public function create(Mage_Cron_Model_Schedule $schedule)
+    {
+    }
 }

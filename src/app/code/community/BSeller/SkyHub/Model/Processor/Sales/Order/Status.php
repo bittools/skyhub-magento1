@@ -31,7 +31,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
         $state = $this->getStateBySkyhubStatusType($skyhubStatusType);
 
         if ($order->getState() == $state) {
-            return $this;
+            return false;
         }
 
         /**
@@ -41,7 +41,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
          */
         if ($order->isStateProtected($state)) {
             /** State is protected. */
-            return $this;
+            return false;
         }
 
         /**
@@ -54,7 +54,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
                 return false;
             }
 
-            return $this;
+            return true;
         }
 
         /**
@@ -67,7 +67,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
                 return false;
             }
 
-            return $this;
+            return true;
         }
 
         $message = $this->__(
@@ -79,7 +79,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
         $order->setState($state, true, $message);
         $order->save();
 
-        return $this;
+        return true;
     }
 
 

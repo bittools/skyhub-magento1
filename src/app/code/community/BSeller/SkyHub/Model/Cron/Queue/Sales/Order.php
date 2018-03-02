@@ -12,7 +12,7 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
  
-class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sales_Abstract
+class BSeller_SkyHub_Model_Cron_Queue_Sales_Order extends BSeller_SkyHub_Model_Cron_Queue_Sales_Abstract
 {
 
     /**
@@ -21,7 +21,7 @@ class BSeller_SkyHub_Model_Cron_Sales_Order extends BSeller_SkyHub_Model_Cron_Sa
      *
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function syncAllOrders(Mage_Cron_Model_Schedule $schedule)
+    public function execute(Mage_Cron_Model_Schedule $schedule)
     {
         if (!$this->canRun($schedule)) {
             return;
