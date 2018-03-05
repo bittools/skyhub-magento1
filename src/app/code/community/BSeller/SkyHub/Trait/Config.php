@@ -124,6 +124,21 @@ trait BSeller_SkyHub_Trait_Config
 
         return $status;
     }
+
+
+    /**
+     * @return string
+     */
+    protected function getShipmentExceptionOrdersStatus()
+    {
+        $status = (string) $this->getSkyHubModuleConfig('shipment_exception_order_status', 'sales_order_status');
+
+        if (empty($status)) {
+            $status = $this->getDefaultStatusByState(Mage_Sales_Model_Order::STATE_COMPLETE);
+        }
+
+        return $status;
+    }
     
     
     /**

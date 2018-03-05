@@ -131,7 +131,7 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
                 'label'  => $statusLabel
             ];
         
-            $this->getConnection()->insert($this->getSalesOrderStatusTable(), $statusData);
+            $this->getConnection()->insertIgnore($this->getSalesOrderStatusTable(), $statusData);
             $this->associateStatusToState($state, $statusCode);
         }
         
@@ -154,7 +154,7 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
             'is_default' => (int)    $isDefault,
         ];
     
-        $this->getConnection()->insert($this->getSalesOrderStatusStateTable(), $associationData);
+        $this->getConnection()->insertIgnore($this->getSalesOrderStatusStateTable(), $associationData);
         
         return $this;
     }

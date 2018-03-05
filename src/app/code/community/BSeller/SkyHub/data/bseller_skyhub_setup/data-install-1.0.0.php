@@ -29,7 +29,8 @@ $this->installSkyHubRequiredAttributes();
 //**********************************************************************************************************************
 $statuses = [
     Mage_Sales_Model_Order::STATE_COMPLETE => [
-        'customer_delivered' => 'Delivered to Customer'
+        'customer_delivered' => 'Delivered to Customer',
+        'shipment_exception' => 'Shipment Exception',
     ]
 ];
 
