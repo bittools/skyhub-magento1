@@ -134,6 +134,10 @@
                         <class>bseller_skyhub/observer_sales_order_history</class>
                         <method>sendTaxInvoiceKey</method>
                     </bseller_skyhub_integrate_nfkey_status_history>
+                    <bseller_skyhub_process_order_shipping_exception>
+                        <class>bseller_skyhub/observer_sales_order_history</class>
+                        <method>processOrderShippingException</method>
+                    </bseller_skyhub_process_order_shipping_exception>
                 </observers>
             </sales_order_status_history_save_after>
             <sales_order_shipment_track_save_after>

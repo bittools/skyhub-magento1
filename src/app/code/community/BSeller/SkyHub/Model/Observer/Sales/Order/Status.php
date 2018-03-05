@@ -11,7 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Model_Observer_Abstract
+class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Model_Observer_Sales_Abstract
 {
     
     /**
@@ -25,8 +25,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
         if (!$this->validateOrder($order)) {
             return;
         }
-    
-        $this->processShippingExceptionOrderStatus($order);
+        
         $this->processDeliveredCustomerStatus($order);
     }
     
@@ -53,44 +52,6 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
     /**
      * @param Mage_Sales_Model_Order $order
      *
-     * @return $this
-     */
-    protected function processShippingExceptionOrderStatus(Mage_Sales_Model_Order $order)
-    {
-        $configStatus = $this->getShipmentExceptionOrderStatus();
-    
-        if (!$this->statusMatches($configStatus, $order)) {
-            return $this;
-        }
-        
-        $datetime    = $this->getDateModel()->gmtDate('c');
-        $observation = $this->__('A problem has occurred with the order shipment.');
-        
-        $this->orderIntegrator()->shipmentException($order->getId(), $datetime, $observation);
-        
-        return $this;
-    }
-    
-    
-    /**
-     * @param string                 $configStatus
-     * @param Mage_Sales_Model_Order $order
-     *
-     * @return bool
-     */
-    protected function statusMatches($configStatus, Mage_Sales_Model_Order $order)
-    {
-        if ($order->getStatus() == $configStatus) {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    
-    /**
-     * @param Mage_Sales_Model_Order $order
-     *
      * @return bool
      */
     protected function validateOrder(Mage_Sales_Model_Order $order)
@@ -104,16 +65,5 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
         }
         
         return true;
-    }
-    
-    
-    /**
-     * @return Mage_Core_Model_Date
-     */
-    protected function getDateModel()
-    {
-        /** @var Mage_Core_Model_Date $model */
-        $model = Mage::getSingleton('core/date');
-        return $model;
     }
 }

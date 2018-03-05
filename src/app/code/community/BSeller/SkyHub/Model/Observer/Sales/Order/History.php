@@ -12,7 +12,7 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_Model_Observer_Abstract
+class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_Model_Observer_Sales_Abstract
 {
 
     /**
@@ -56,6 +56,35 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
             ->setData('bseller_skyhub_invoice_key', $invoiceKeyNumber);
 
         $order->getResource()->save($order);
+    }
+    
+    
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function processOrderShippingException(Varien_Event_Observer $observer)
+    {
+        /** @var Mage_Sales_Model_Order_Status_History $history */
+        $history = $observer->getData('status_history');
+    
+        if (!$history || !$history->getId()) {
+            return;
+        }
+        
+        $configStatus = $this->getShipmentExceptionOrderStatus();
+    
+        if (!$this->statusMatches($configStatus, $history->getStatus())) {
+            return;
+        }
+    
+        $datetime = $this->getDateModel()->gmtDate('c');
+        $comment  = $history->getComment();
+        
+        if (!$comment) {
+            $comment = $this->__('A problem has occurred with the order shipment.');
+        }
+        
+        $this->orderIntegrator()->shipmentException($history->getParentId(), $datetime, $comment);
     }
 
 

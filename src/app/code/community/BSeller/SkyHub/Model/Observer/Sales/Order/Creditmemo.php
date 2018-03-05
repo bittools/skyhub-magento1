@@ -11,7 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-class BSeller_SkyHub_Model_Observer_Sales_Order_Creditmemo extends BSeller_SkyHub_Model_Observer_Abstract
+class BSeller_SkyHub_Model_Observer_Sales_Order_Creditmemo extends BSeller_SkyHub_Model_Observer_Sales_Abstract
 {
     
     /**

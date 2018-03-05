@@ -13,7 +13,7 @@
  */
 
 
-class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Observer_Abstract
+class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Observer_Sales_Abstract
 {
     
     
@@ -71,16 +71,5 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
         }
         
         $this->orderIntegrator()->cancel($order->getId());
-    }
-    
-    
-    /**
-     * @return int
-     *
-     * @throws Mage_Core_Model_Store_Exception
-     */
-    protected function getStoreId()
-    {
-        return Mage::app()->getStore()->getId();
     }
 }

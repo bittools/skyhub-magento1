@@ -11,11 +11,8 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-class BSeller_SkyHub_Model_Observer_Sales_Order_Item
+class BSeller_SkyHub_Model_Observer_Sales_Order_Item extends BSeller_SkyHub_Model_Observer_Sales_Abstract
 {
-    
-    use BSeller_SkyHub_Trait_Data;
-    
     
     /**
      * This method is responsible for overriding the product original price for configurable products.

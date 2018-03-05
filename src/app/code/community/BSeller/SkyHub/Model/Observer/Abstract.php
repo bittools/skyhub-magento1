@@ -31,4 +31,26 @@ abstract class BSeller_SkyHub_Model_Observer_Abstract
 
         return true;
     }
+    
+    
+    /**
+     * @return int
+     *
+     * @throws Mage_Core_Model_Store_Exception
+     */
+    protected function getStoreId()
+    {
+        return Mage::app()->getStore()->getId();
+    }
+    
+    
+    /**
+     * @return Mage_Core_Model_Date
+     */
+    protected function getDateModel()
+    {
+        /** @var Mage_Core_Model_Date $model */
+        $model = Mage::getSingleton('core/date');
+        return $model;
+    }
 }
