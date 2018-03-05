@@ -46,7 +46,7 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product_Attribute extends BSeller_
             $response = $this->create($attribute);
             $eventParams['method'] = 'create';
 
-            if ($response->success()) {
+            if ($response && $response->success()) {
                 $this->registerProductAttributeEntity($attribute->getId());
             }
         }

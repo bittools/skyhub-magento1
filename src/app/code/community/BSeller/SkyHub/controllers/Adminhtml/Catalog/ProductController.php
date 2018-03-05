@@ -42,11 +42,11 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
         /**
          * After the product to be integrated, we show the information.
          */
-        if ($response->success()) {
+        if ($response && $response->success()) {
             $this->_getSession()->addSuccess($this->__('The product was successfully integrated.'));
         }
         
-        if ($response->exception()) {
+        if ($response && $response->exception()) {
             $this->_getSession()->addError($this->__('There was a problem when trying to integrate the product.'));
         }
         

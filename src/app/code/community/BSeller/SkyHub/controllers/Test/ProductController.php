@@ -35,7 +35,7 @@ class BSeller_SkyHub_Test_ProductController extends BSeller_SkyHub_Controller_Fr
         $response = $this->catalogProductIntegrator()->product($product->getSku());
     
         /** @var \SkyHub\Api\Handler\Response\HandlerException $response */
-        if ($response->exception()) {
+        if ($response && $response->exception()) {
             $this->getResponse()
                 ->setHttpResponseCode($response->code())
                 ->setBody($response->message());
@@ -51,7 +51,7 @@ class BSeller_SkyHub_Test_ProductController extends BSeller_SkyHub_Controller_Fr
         $response = $this->catalogProductIntegrator()->products();
     
         /** @var \SkyHub\Api\Handler\Response\HandlerException $response */
-        if ($response->exception()) {
+        if ($response && $response->exception()) {
             $this->getResponse()
                 ->setHttpResponseCode($response->code())
                 ->setBody($response->message());
