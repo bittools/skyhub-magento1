@@ -11,13 +11,8 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-class BSeller_SkyHub_Model_Observer_Sales_Order_Status
+class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Model_Observer_Abstract
 {
-    
-    use BSeller_SkyHub_Trait_Data,
-        BSeller_SkyHub_Trait_Config,
-        BSeller_SkyHub_Trait_Integrators;
-    
     
     /**
      * @param Varien_Event_Observer $observer

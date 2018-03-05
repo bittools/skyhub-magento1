@@ -31,5 +31,4 @@ abstract class BSeller_SkyHub_Model_Observer_Abstract
 
         return true;
     }
-    
 }
