@@ -22,7 +22,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Creditmemo extends BSeller_SkyHu
         /** @var Mage_Sales_Model_Order_Creditmemo $creditmemo */
         $creditmemo = $observer->getData('creditmemo');
         
-        if (!$creditmemo || !$creditmemo->getId()) {
+        if (!$creditmemo) {
             return;
         }
         

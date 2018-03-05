@@ -13,10 +13,8 @@
  */
 
 
-class BSeller_SkyHub_Model_Observer_Sales_Order
+class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Observer_Abstract
 {
-    
-    use BSeller_SkyHub_Trait_Data;
     
     
     /**
@@ -57,6 +55,22 @@ class BSeller_SkyHub_Model_Observer_Sales_Order
         $queue = Mage::getModel('bseller_skyhub/queue');
         $queue->setData($data);
         $queue->save();
+    }
+    
+    
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function cancelOrderAfter(Varien_Event_Observer $observer)
+    {
+        /** @var Mage_Sales_Model_Order $order */
+        $order = $observer->getData('order');
+        
+        if (!$order || !$order->getId()) {
+            return;
+        }
+        
+        $this->orderIntegrator()->cancel($order->getId());
     }
     
     

@@ -177,6 +177,14 @@
                     </bseller_skyhub_cancel_order_after_refund>
                 </observers>
             </sales_order_creditmemo_refund>
+            <order_cancel_after>
+                <observers>
+                    <bseller_skyhub_cancel_order_after>
+                        <class>bseller_skyhub/observer_sales_order</class>
+                        <method>cancelOrderAfter</method>
+                    </bseller_skyhub_cancel_order_after>
+                </observers>
+            </order_cancel_after>
         </events>
         <sales>
             <quote>
