@@ -17,6 +17,8 @@
  * @var Magento_Db_Adapter_Pdo_Mysql        $conn
  */
 
+$this->startSetup();
+
 //**********************************************************************************************************************
 // Update sales/order
 //**********************************************************************************************************************
@@ -211,3 +213,5 @@ $this->addIndex(['entity_id', 'entity_type', 'store_id'], $tableName);
 // Install bseller_skyhub/queue_result
 //**********************************************************************************************************************
 // $tableName = (string) $this->getTable('bseller_skyhub/queue_result');
+
+$this->endSetup();

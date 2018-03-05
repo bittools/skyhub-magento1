@@ -385,9 +385,12 @@
                 <!-- SALES ORDER QUEUE -->
                 <enabled>1</enabled>
                 <expression>*/10 * * * *</expression>
+            </cron_sales_order_queue>
+            <sales_order_status>
                 <new_order_status>pending</new_order_status>
                 <approved_order_status>processing</approved_order_status>
-            </cron_sales_order_queue>
+                <delivered_order_status>customer_delivered</delivered_order_status>
+            </sales_order_status>
         </bseller_skyhub>
         <payment>
             <bseller_skyhub_standard>

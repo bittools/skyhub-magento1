@@ -86,12 +86,10 @@ trait BSeller_SkyHub_Trait_Config
      */
     protected function getNewOrdersStatus()
     {
-        $status = (string) $this->getSkyHubModuleConfig('new_order_status', 'cron_sales_order_queue');
+        $status = (string) $this->getSkyHubModuleConfig('new_order_status', 'sales_order_status');
 
         if (empty($status)) {
-            /** @var Mage_Sales_Model_Order_Status $status */
-            $status = Mage::getModel('sales/order_status')->loadDefaultByState(Mage_Sales_Model_Order::STATE_NEW);
-            $status = $status->getId();
+            $status = $this->getDefaultStatusByState(Mage_Sales_Model_Order::STATE_NEW);
         }
 
         return $status;
@@ -103,16 +101,41 @@ trait BSeller_SkyHub_Trait_Config
      */
     protected function getApprovedOrdersStatus()
     {
-        $status = (string) $this->getSkyHubModuleConfig('approved_order_status', 'cron_sales_order_queue');
+        $status = (string) $this->getSkyHubModuleConfig('approved_order_status', 'sales_order_status');
 
         if (empty($status)) {
-            /** @var Mage_Sales_Model_Order_Status $status */
-            $status = Mage::getModel('sales/order_status')
-                ->loadDefaultByState(Mage_Sales_Model_Order::STATE_PROCESSING);
-            $status = $status->getId();
+            $status = $this->getDefaultStatusByState(Mage_Sales_Model_Order::STATE_PROCESSING);
         }
 
         return $status;
+    }
+
+
+    /**
+     * @return string
+     */
+    protected function getDeliveredOrdersStatus()
+    {
+        $status = (string) $this->getSkyHubModuleConfig('delivered_order_status', 'sales_order_status');
+
+        if (empty($status)) {
+            $status = $this->getDefaultStatusByState(Mage_Sales_Model_Order::STATE_COMPLETE);
+        }
+
+        return $status;
+    }
+    
+    
+    /**
+     * @param string $state
+     *
+     * @return string
+     */
+    protected function getDefaultStatusByState($state)
+    {
+        /** @var Mage_Sales_Model_Order_Status $status */
+        $status = Mage::getModel('sales/order_status')->loadDefaultByState($state);
+        return (string) $status->getId();
     }
 
 

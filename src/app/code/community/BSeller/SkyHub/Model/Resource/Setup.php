@@ -100,4 +100,80 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
         
         return $this;
     }
+    
+    
+    /**
+     * @param array $statuses
+     *
+     * @return $this
+     */
+    public function createAssociatedSalesOrderStatuses(array $states = [])
+    {
+        foreach ($states as $stateCode => $statuses) {
+            $this->createSalesOrderStatus($stateCode, $statuses);
+        }
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @param string $state
+     * @param array  $status
+     *
+     * @return $this
+     */
+    public function createSalesOrderStatus($state, array $status)
+    {
+        foreach ($status as $statusCode => $statusLabel) {
+            $statusData = [
+                'status' => $statusCode,
+                'label'  => $statusLabel
+            ];
+        
+            $this->getConnection()->insert($this->getSalesOrderStatusTable(), $statusData);
+            $this->associateStatusToState($state, $statusCode);
+        }
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @param string $state
+     * @param string $status
+     * @param int    $isDefault
+     *
+     * @return $this
+     */
+    public function associateStatusToState($state, $status, $isDefault = 0)
+    {
+        $associationData = [
+            'status'     => (string) $status,
+            'state'      => (string) $state,
+            'is_default' => (int)    $isDefault,
+        ];
+    
+        $this->getConnection()->insert($this->getSalesOrderStatusStateTable(), $associationData);
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @return string
+     */
+    public function getSalesOrderStatusTable()
+    {
+        return $this->getTable('sales/order_status');
+    }
+    
+    
+    /**
+     * @return string
+     */
+    public function getSalesOrderStatusStateTable()
+    {
+        return $this->getTable('sales/order_status_state');
+    }
 }
