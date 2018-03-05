@@ -129,7 +129,7 @@ trait BSeller_SkyHub_Trait_Config
     /**
      * @return string
      */
-    protected function getShipmentExceptionOrdersStatus()
+    protected function getShipmentExceptionOrderStatus()
     {
         $status = (string) $this->getSkyHubModuleConfig('shipment_exception_order_status', 'sales_order_status');
 

@@ -189,6 +189,28 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
         /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
         return $result->toArray();
     }
+    
+    
+    /**
+     * @param int    $orderId
+     * @param string $datetime
+     * @param string $observation
+     *
+     * @return bool
+     */
+    public function shipmentException($orderId, $datetime, $observation)
+    {
+        $incrementId = $this->getOrderIncrementId($orderId);
+        $result = $this->getEntityInterface()
+                       ->shipmentException($incrementId, $datetime, $observation);
+    
+        if ($result->exception() || $result->invalid()) {
+            return false;
+        }
+    
+        /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
+        return true;
+    }
 
 
     /**

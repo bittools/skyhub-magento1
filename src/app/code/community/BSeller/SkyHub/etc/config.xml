@@ -161,6 +161,14 @@
                     </bseller_skyhub_log_order_details>
                 </observers>
             </bseller_skyhub_order_import_exception>
+            <sales_order_save_after>
+                <observers>
+                    <bseller_skyhub_process_complete_status_order>
+                        <class>bseller_skyhub/observer_sales_order_status</class>
+                        <method>processCompleteStatusOrder</method>
+                    </bseller_skyhub_process_complete_status_order>
+                </observers>
+            </sales_order_save_after>
         </events>
         <sales>
             <quote>
