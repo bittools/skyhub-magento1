@@ -62,12 +62,8 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
         if (!$this->statusMatches($configStatus, $order)) {
             return $this;
         }
-    
-        /**
-         * @todo Check the correct format for this date time parameter.
-         * @todo Turn the observation parameter as a flexible message (field in admin for instance).
-         */
-        $datetime    = date('Y:m:d H:i:s');
+        
+        $datetime    = $this->getDateModel()->gmtDate('c');
         $observation = $this->__('A problem has occurred with the order shipment.');
         
         $this->orderIntegrator()->shipmentException($order->getId(), $datetime, $observation);
@@ -108,5 +104,16 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
         }
         
         return true;
+    }
+    
+    
+    /**
+     * @return Mage_Core_Model_Date
+     */
+    protected function getDateModel()
+    {
+        /** @var Mage_Core_Model_Date $model */
+        $model = Mage::getSingleton('core/date');
+        return $model;
     }
 }
