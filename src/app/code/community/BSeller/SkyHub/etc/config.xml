@@ -379,7 +379,6 @@
                 <base_uri>https://api.skyhub.com.br</base_uri>
                 <email/>
                 <api_key/>
-                <account_manager_key/>
             </service>
             <tax_invoice_key>
                 <pattern>Chave NFE: %d</pattern>

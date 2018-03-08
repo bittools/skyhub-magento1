@@ -106,6 +106,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </api_key>
+                        <!--
                         <account_manager_key>
                             <label>Account Manager Key</label>
                             <sort_order>40</sort_order>
@@ -114,6 +115,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </account_manager_key>
+                        -->
                     </fields>
                 </service>
                 <tax_invoice_key translate="label" module="bseller_skyhub">
