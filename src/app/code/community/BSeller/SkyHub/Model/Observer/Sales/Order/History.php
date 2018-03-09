@@ -39,17 +39,25 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
             return;
         }
 
+        if ($order->getData('bseller_skyhub_invoice_key')) {
+            return;
+        }
+
         $invoiceKeyNumber = $this->extractInvoiceKeyNumber($comment);
 
         if (empty($invoiceKeyNumber)) {
             return;
         }
 
-        /** @var boolean $result */
-        $result = $this->orderIntegrator()->invoice($order->getId(), $invoiceKeyNumber);
+        try {
+            /** @var boolean $result */
+            $result = $this->orderIntegrator()->invoice($order->getId(), $invoiceKeyNumber);
 
-        if (!$result) {
-            return;
+            if (!$result) {
+                return;
+            }
+        } catch (Exception $e) {
+            Mage::logException($e);
         }
 
         $order->setData('invoice_key', $invoiceKeyNumber)
@@ -83,8 +91,12 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
         if (!$comment) {
             $comment = $this->__('A problem has occurred with the order shipment.');
         }
-        
-        $this->orderIntegrator()->shipmentException($history->getParentId(), $datetime, $comment);
+
+        try {
+            $this->orderIntegrator()->shipmentException($history->getParentId(), $datetime, $comment);
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
     }
 
 

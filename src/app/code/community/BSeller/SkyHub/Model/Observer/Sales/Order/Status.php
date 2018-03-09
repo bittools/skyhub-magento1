@@ -42,9 +42,13 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
         if (!$this->statusMatches($configStatus, $order)) {
             return $this;
         }
-        
-        $this->orderIntegrator()->delivery($order->getId());
-        
+
+        try {
+            $this->orderIntegrator()->delivery($order->getId());
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+
         return $this;
     }
     
