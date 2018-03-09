@@ -78,7 +78,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product_Attribute extends BSeller_
             /** @var HandlerDefault|HandlerException $response */
             $response = $this->catalogProductAttributeIntegrator()->createOrUpdate($attribute);
 
-            if ($this->isErrorResponse($response)) {
+            if ($response && $this->isErrorResponse($response)) {
                 $failedQueueIds[] = $attribute->getId();
 
                 $this->getQueueResource()->setFailedEntityIds(
