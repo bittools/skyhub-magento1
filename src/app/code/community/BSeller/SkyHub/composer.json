@@ -1,6 +1,6 @@
 {
     "require": {
-        "tiagosampaio/skyhub-php": "^1.0"
+        "esmart/skyhub-php": "^1.0"
     },
     "minimum-stability": "stable"
 }
