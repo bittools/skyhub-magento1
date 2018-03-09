@@ -60,7 +60,6 @@ class BSeller_SkyHub_Model_Service
     public function initApi()
     {
         $this->api = new Api(
-            $this->getServiceBaseUri(),
             $this->getServiceEmail(),
             $this->getServiceApiKey(),
             'bZa6Ml0zgS'

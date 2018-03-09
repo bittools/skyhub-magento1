@@ -1,6 +1,6 @@
 {
     "require": {
-        "tiagosampaio/skyhub-php": "dev-master"
+        "tiagosampaio/skyhub-php": "^1.0"
     },
     "minimum-stability": "stable"
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1781311c3d9219b358fa61a2f981318c",
+    "content-hash": "4940b01cf4abbc1a58d58ea2b40959cd",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -364,20 +364,20 @@
         },
         {
             "name": "tiagosampaio/skyhub-php",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tiagosampaio/skyhub-php.git",
-                "reference": "85bae988383b161752e8a9a256e0dfef22cd0f29"
+                "reference": "02a9885f774b8e49edba8d470af00a33518e724f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tiagosampaio/skyhub-php/zipball/85bae988383b161752e8a9a256e0dfef22cd0f29",
-                "reference": "85bae988383b161752e8a9a256e0dfef22cd0f29",
+                "url": "https://api.github.com/repos/tiagosampaio/skyhub-php/zipball/02a9885f774b8e49edba8d470af00a33518e724f",
+                "reference": "02a9885f774b8e49edba8d470af00a33518e724f",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/guzzle": "^6.2@dev",
+                "guzzlehttp/guzzle": "^6.3",
                 "monolog/monolog": "^1.0",
                 "php": ">=5.4"
             },
@@ -406,15 +406,13 @@
                 }
             ],
             "description": "This is the official PHP SDK for integration with SkyHub.",
-            "time": "2018-03-02T14:53:06+00:00"
+            "time": "2018-03-09T16:21:20+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "tiagosampaio/skyhub-php": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
