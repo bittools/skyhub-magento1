@@ -80,7 +80,14 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
         }
         
         $configStatus = $this->getShipmentExceptionOrderStatus();
-    
+
+        /**
+         * There was no change.
+         */
+        if ($history->getStatus() == $history->getOrigData('status')) {
+            return;
+        }
+
         if (!$this->statusMatches($configStatus, $history->getStatus())) {
             return;
         }

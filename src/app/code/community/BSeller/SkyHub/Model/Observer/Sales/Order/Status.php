@@ -39,7 +39,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
     {
         $configStatus = $this->getDeliveredOrdersStatus();
         
-        if (!$this->statusMatches($configStatus, $order)) {
+        if (!$this->statusMatches($configStatus, $order->getStatus())) {
             return $this;
         }
 
