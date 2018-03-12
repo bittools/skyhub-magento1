@@ -185,12 +185,14 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      *
      * @return $this
      */
-    public function setShippingMethod($method = 'bseller_skyhub_standard', $cost = 0.0000)
+    public function setShippingMethod($method = null, $carrier = null, $cost = 0.0000)
     {
         $data = [
             'order' => [
-                'shipping_method' => $method,
-                'shipping_cost'   => (float) $cost,
+                'shipping_method'        => 'bseller_skyhub_standard',
+                'shipping_custom_method' => $method,
+                'shipping_carrier'       => $carrier,
+                'shipping_cost'          => (float) $cost,
             ]
         ];
         
@@ -473,9 +475,17 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         $this->registerDiscount($order);
         $this->registerInterest($order);
         
-        $shippingAmount = (float) $this->arrayExtract($data, 'order/shipping_cost');
+        $shippingMethod       = (string) $this->arrayExtract($data, 'order/shipping_method');
+        $shippingCustomMethod = (string) $this->arrayExtract($data, 'order/shipping_customer_method');
+        $shippingCarrier      = (string) $this->arrayExtract($data, 'order/shipping_carrier');
+        $shippingAmount       = (float) $this->arrayExtract($data, 'order/shipping_cost');
+        
         $this->getQuote()
-             ->setFixedShippingAmount($shippingAmount);
+             ->setFixedShippingAmount($shippingAmount)
+             ->setFixedShippingMethod($shippingMethod)
+             ->setFixedShippingCustomMethod($shippingCustomMethod)
+             ->setFixedShippingCarrier($shippingCarrier)
+        ;
         
         /* Collect shipping rates */
         $this->resetQuote()

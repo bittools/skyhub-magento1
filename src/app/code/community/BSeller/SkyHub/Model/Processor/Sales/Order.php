@@ -92,15 +92,17 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         /** @var Mage_Customer_Model_Customer $customer */
         $customer = $this->getCustomer($customerData);
 
-        $shippingCost   = (float) $this->arrayExtract($data, 'shipping_cost', 0.0000);
-        $discountAmount = (float) $this->arrayExtract($data, 'discount', 0.0000);
-        $interestAmount = (float) $this->arrayExtract($data, 'interest', 0.0000);
+        $shippingCarrier = (string) $this->arrayExtract($data, 'shipping_carrier');
+        $shippingMethod  = (string) $this->arrayExtract($data, 'shipping_method');
+        $shippingCost    = (float)  $this->arrayExtract($data, 'shipping_cost', 0.0000);
+        $discountAmount  = (float)  $this->arrayExtract($data, 'discount', 0.0000);
+        $interestAmount  = (float)  $this->arrayExtract($data, 'interest', 0.0000);
 
         /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
         $creation = Mage::getModel('bseller_skyhub/support_sales_order_create', $this->getStore());
         $creation->setOrderInfo($info)
             ->setCustomer($customer)
-            ->setShippingMethod('bseller_skyhub_standard', $shippingCost)
+            ->setShippingMethod($shippingMethod, $shippingCarrier, (float) $shippingCost)
             ->setPaymentMethod('bseller_skyhub_standard')
             ->setDiscountAmount($discountAmount)
             ->setInterestAmount($interestAmount)

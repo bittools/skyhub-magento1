@@ -32,13 +32,17 @@ class BSeller_SkyHub_Model_Shipping_Carrier_Standard extends Mage_Shipping_Model
             return false;
         }
     
-        $amount = 0;
+        $amount     = 0;
+        $carrier    = null;
+        $methodCode = null;
         
         /** @var Mage_Sales_Model_Quote $quote */
         $quote = Mage::getSingleton('bseller_skyhub/adminhtml_session_quote')->getQuote();
         
         if ($quote) {
-            $amount = $quote->getData('fixed_shipping_amount');
+            $amount     = (float)  $quote->getData('fixed_shipping_amount');
+            $carrier    = (string) $quote->getData('fixed_shipping_carrier');
+            $methodCode = (string) $quote->getData('fixed_shipping_method');
         }
         
         /** @var Mage_Shipping_Model_Rate_Result $result */
@@ -48,9 +52,9 @@ class BSeller_SkyHub_Model_Shipping_Carrier_Standard extends Mage_Shipping_Model
         $method = Mage::getModel('shipping/rate_result_method');
 
         $method->setCarrier('bseller_skyhub');
-        $method->setCarrierTitle($this->getConfigData('title'));
+        $method->setCarrierTitle($this->getShippingCarrierTitle($carrier));
 
-        $method->setMethod('standard');
+        $method->setMethod($this->getShippingMethod($methodCode));
         $method->setMethodTitle($this->getConfigData('name'));
         
         $method->setPrice((float) $amount);
@@ -60,5 +64,50 @@ class BSeller_SkyHub_Model_Shipping_Carrier_Standard extends Mage_Shipping_Model
 
         return $result;
     }
-
+    
+    
+    /**
+     * @param string $method
+     *
+     * @return mixed
+     */
+    protected function getShippingMethod($method = null)
+    {
+        if (!$method) {
+            return 'standard';
+        }
+    
+        $method = trim(strtolower($method));
+        $method = str_replace(' ', '_', $method);
+    
+        $method = $this->helper()->removeAccents($method);
+        
+        return $method;
+    }
+    
+    
+    /**
+     * @param null|string $carrier
+     *
+     * @return null
+     */
+    protected function getShippingCarrierTitle($carrier = null)
+    {
+        if (!$carrier) {
+            return $this->getConfigData('title');
+        }
+        
+        return $carrier;
+    }
+    
+    
+    /**
+     * @return BSeller_SkyHub_Helper_Data
+     */
+    protected function helper()
+    {
+        /** @var BSeller_SkyHub_Helper_Data $helper */
+        $helper = Mage::helper('bseller_skyhub');
+        return $helper;
+    }
 }
