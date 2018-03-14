@@ -188,6 +188,7 @@
                     </fields>
                 </sales_order_status>
                 <!-- CATALOG PRODUCT TYPE ATTRIBUTE -->
+                <!--
                 <catalog_product_type_grouped>
                     <label>Grouped Product Configuration</label>
                     <sort_order>60</sort_order>
@@ -204,10 +205,11 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment><![CDATA[]]></comment>
+                            <comment><![CDATA[It's still in working progress.]]></comment>
                         </configurable_attribute>
                     </fields>
                 </catalog_product_type_grouped>
+                -->
                 <!-- CATALOG PRODUCT ATTRIBUTES -->
                 <cron_catalog_product_attributes translate="label comment" module="bseller_skyhub">
                     <label>Product Attributes Cron Configuration</label>
