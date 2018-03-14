@@ -369,6 +369,8 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         $order     = null;
         
         if (!empty($orderData)) {
+            
+            
             $this->initSession($this->arrayExtract($orderData, 'session'));
 
             $this->processQuote($orderData);
@@ -387,6 +389,12 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
             // $this->processProductOptions();
 
             Mage::app()->getStore()->setConfig(Mage_Sales_Model_Order::XML_PATH_EMAIL_ENABLED, "0");
+    
+            Mage::dispatchEvent('bseller_skyhub_order_import_before', [
+                'order'      => $order,
+                'order_data' => $orderData,
+                'creator'    => $this,
+            ]);
 
             /** @var Mage_Sales_Model_Order $order */
             $order = $this->getOrderCreator()

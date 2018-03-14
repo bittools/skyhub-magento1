@@ -28,5 +28,4 @@ class BSeller_SkyHub_Model_Payment_Method_Standard extends Mage_Payment_Model_Me
     {
         return true;
     }
-
 }
