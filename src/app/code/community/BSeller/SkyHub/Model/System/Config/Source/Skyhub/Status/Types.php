@@ -26,7 +26,7 @@ class BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types
     /**
      * @return array
      */
-    protected function optionsKeyValue()
+    protected function optionsKeyValue($multiselect = null)
     {
         return [
             self::TYPE_NEW       => $this->__('New'),

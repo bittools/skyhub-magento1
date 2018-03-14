@@ -18,7 +18,7 @@ class BSeller_SkyHub_Model_System_Config_Source_Data_Types extends BSeller_Core_
     /**
      * @return array
      */
-    protected function optionsKeyValue()
+    protected function optionsKeyValue($multiselect = null)
     {
         return [
             'string'  => $this->__('String'),

@@ -61,11 +61,14 @@ class BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Attributes_Mapping_Edit_For
             'label' => $this->__('SkyHub Description'),
         ]);
         
+        /** @var BSeller_SkyHub_Model_System_Config_Source_Catalog_Product_Attributes $attributesSource */
+        $attributesSource = Mage::getModel('bseller_skyhub/system_config_source_catalog_product_attributes');
+        
         $fieldset->addField('attribute_id', 'select', [
             'name'     => 'attribute_id',
             'label'    => $this->__('Related Attribute'),
             'required' => true,
-            'options'  => Mage::getModel('bseller_skyhub/system_config_source_catalog_product_attributes')->toArray(),
+            'options'  => $attributesSource->toArray(true),
         ]);
     
         $form->setValues($this->getMapping()->getData());

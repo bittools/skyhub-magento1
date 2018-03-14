@@ -18,7 +18,7 @@ class BSeller_SkyHub_Model_System_Config_Source_Entity_Types extends BSeller_Cor
     /**
      * @return array
      */
-    protected function optionsKeyValue()
+    protected function optionsKeyValue($multiselect = null)
     {
         return [
             BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY          => $this->__('Catalog Category'),

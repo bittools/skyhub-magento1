@@ -24,7 +24,7 @@ class BSeller_SkyHub_Model_System_Config_Source_Integration_Method
     /**
      * @return array
      */
-    protected function optionsKeyValue()
+    protected function optionsKeyValue($multiselect = null)
     {
         return [
             self::INTEGRATION_METHOD_QUEUE   => $this->__('Only With Queues'),

@@ -22,12 +22,14 @@ class BSeller_SkyHub_Model_System_Config_Source_Catalog_Product_Attributes
     /**
      * @return array
      */
-    protected function optionsKeyValue()
+    protected function optionsKeyValue($multiselect = null)
     {
         $attributes = $this->getProductAttributesCollection();
-        $options    = [
-            '' => $this->__('-- Select One Attribute --'),
-        ];
+        $options    = [];
+        
+        if (!$multiselect) {
+            $options[''] = $this->__('-- Select One Attribute --');
+        }
         
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         foreach ($attributes as $attribute) {

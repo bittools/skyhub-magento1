@@ -18,7 +18,7 @@ class BSeller_SkyHub_Model_System_Config_Source_Queue_Status extends BSeller_Cor
     /**
      * @return array
      */
-    protected function optionsKeyValue()
+    protected function optionsKeyValue($multiselect = null)
     {
         return [
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT => $this->__('Import'),

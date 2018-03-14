@@ -26,5 +26,4 @@ class BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Attributes_Mapping
         
         $this->removeButton('add');
     }
-    
 }
