@@ -16,6 +16,15 @@ class BSeller_SkyHub_Model_Cron_Config_Catalog_Product extends BSeller_SkyHub_Mo
 {
 
     protected $group = 'cron_catalog_products';
+    
+    
+    /**
+     * @return integer
+     */
+    public function getQueueCreateLimit()
+    {
+        return (int) $this->getGroupConfig('queue_create_limit');
+    }
 
 
     /**
@@ -25,5 +34,4 @@ class BSeller_SkyHub_Model_Cron_Config_Catalog_Product extends BSeller_SkyHub_Mo
     {
         return (int) $this->getGroupConfig('queue_execute_limit');
     }
-
 }

@@ -399,6 +399,7 @@
                 <!-- CATALOG PRODUCTS -->
                 <enabled>1</enabled>
                 <queue_create>*/13 * * * *</queue_create>
+                <queue_create_limit>500</queue_create_limit>
                 <queue_execute>*/30 * * * *</queue_execute>
                 <queue_execute_limit>500</queue_execute_limit>
             </cron_catalog_products>

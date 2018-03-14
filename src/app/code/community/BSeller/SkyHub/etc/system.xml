@@ -253,7 +253,7 @@
                         </enabled>
                         <queue_create>
                             <label>Products Queue Create</label>
-                            <sort_order>50</sort_order>
+                            <sort_order>20</sort_order>
                             <frontend_type>text</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -263,9 +263,22 @@
                                 <enabled>1</enabled>
                             </depends>
                         </queue_create>
+                        <queue_create_limit>
+                            <label>Products Create Queue Limit</label>
+                            <sort_order>30</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number validate-greater-than-zero</validate>
+                            <comment><![CDATA[The amount of products to be queued per time. The default quantity is 500 at time.]]></comment>
+                            <depends>
+                                <enabled>1</enabled>
+                            </depends>
+                        </queue_create_limit>
                         <queue_execute>
                             <label>Products Queue Execute</label>
-                            <sort_order>60</sort_order>
+                            <sort_order>40</sort_order>
                             <frontend_type>text</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -276,14 +289,14 @@
                             </depends>
                         </queue_execute>
                         <queue_execute_limit>
-                            <label>Products Queue Limit Quantity</label>
-                            <sort_order>70</sort_order>
+                            <label>Products Execute Queue Limit</label>
+                            <sort_order>50</sort_order>
                             <frontend_type>text</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <validate>validate-number validate-greater-than-zero</validate>
-                            <comment><![CDATA[The amount of products to be queued and integrated per time. The default quantity is 500 at time.]]></comment>
+                            <comment><![CDATA[The amount of products to be integrated per time. The default quantity is 500 at time.]]></comment>
                             <depends>
                                 <enabled>1</enabled>
                             </depends>

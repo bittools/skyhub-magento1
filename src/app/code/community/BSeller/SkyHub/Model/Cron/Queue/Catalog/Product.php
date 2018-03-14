@@ -48,11 +48,10 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             ->order('updated_at DESC')
             ->order('created_at DESC')
         ;
-
-        /**
-         * Set limitation.
-         */
-        $limit = $this->getCronConfig()->catalogProduct()->getQueueExecuteLimit();
+    
+        /** Set limitation. */
+        $limit = abs($this->getCronConfig()->catalogProduct()->getQueueCreateLimit());
+        
         if ($limit) {
             $select->limit((int) $limit);
         }
@@ -97,10 +96,9 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
         $collection = $this->getProductCollection()
             ->addFieldToFilter('entity_id', ['in' => $productIds]);
 
-        /**
-         * Set limitation.
-         */
-        $limit = $this->getCronConfig()->catalogProduct()->getQueueExecuteLimit();
+        /** Set limitation. */
+        $limit = abs($this->getCronConfig()->catalogProduct()->getQueueExecuteLimit());
+        
         if ($limit) {
             $collection->getSelect()->limit((int) $limit);
         }
