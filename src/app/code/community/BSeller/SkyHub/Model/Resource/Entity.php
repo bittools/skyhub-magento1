@@ -10,6 +10,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_Abstract
@@ -43,7 +44,48 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
                 'entity_type' => (string) $entityType,
                 'store_id'    => (int)    Mage::app()->getStore($storeId)->getId(),
                 'created_at'  => now(),
+                'updated_at'  => now(),
             ]);
+            $this->commit();
+
+            return true;
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $this->rollBack();
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param integer $entityId
+     * @param string  $entityType
+     * @param int     $storeId
+     *
+     * @return bool
+     */
+    public function updateEntity($entityId, $entityType, $storeId = 0)
+    {
+        $entityExists = $this->entityExists($entityId, $entityType);
+
+        if (!$entityExists) {
+            return false;
+        }
+
+        $data = array(
+            'updated_at'  => now(),
+        );
+
+        $where = array(
+            'entity_id = ?'     => (int)    $entityId,
+            'entity_type = ?'   => (string) $entityType,
+            'store_id = ?'      => (int)    Mage::app()->getStore($storeId)->getId(),
+        );
+
+        try {
+            $this->beginTransaction();
+            $this->_getWriteAdapter()->update($this->getMainTable(), $data, $where);
             $this->commit();
 
             return true;
