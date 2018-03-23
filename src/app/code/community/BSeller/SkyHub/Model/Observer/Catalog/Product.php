@@ -16,6 +16,8 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
 {
 
     use BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
+
+    const IMMEDIATELY_INTEGRATE_PRODUCT_ON_SAVE_PRICE_STOCK_CHANGE = 'immediately_integrate_product_on_save_price_stock_change';
     
     /**
      * @param Varien_Event_Observer $observer
@@ -33,10 +35,42 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
             return;
         }
 
-        /** Create or Update Product */
-        $this->catalogProductIntegrator()->createOrUpdate($product);
+        if ($this->_hasActiveIntegrateOnSaveFlag() && $this->_hasStockOrPriceUpdate($product)) {
+            /** Create or Update Product */
+            $this->catalogProductIntegrator()->createOrUpdate($product);
+        } else {
+            //check if this product already exists at queue table
+            $queueRow = Mage::getModel('bseller_skyhub/queue')->load($product->getId(), 'entity_id');
+            if($queueRow && $queueRow->getId()) {
+                return;
+            }
+
+            //enqueue this product
+            $queue = Mage::getModel('bseller_skyhub/queue')->queue(
+                $product->getId(),
+                BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT
+            );
+            $queue->save();
+        }
     }
 
+    private function _hasActiveIntegrateOnSaveFlag()
+    {
+        return $this->getGeneralConfig(self::IMMEDIATELY_INTEGRATE_PRODUCT_ON_SAVE_PRICE_STOCK_CHANGE);
+    }
+
+    private function _hasStockOrPriceUpdate($product)
+    {
+        if (
+            $product->getOrigData('price') != $product->getData('price') ||
+            $product->getOrigData('special_price') != $product->getData('special_price') ||
+            $product->getOrigData('promotional_price') != $product->getData('promotional_price') ||
+            $product->getStockData('qty') != $product->getStockData('original_inventory_qty')
+        ) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * @param Varien_Event_Observer $observer
