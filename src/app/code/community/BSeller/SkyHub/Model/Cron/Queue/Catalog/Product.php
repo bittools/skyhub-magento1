@@ -10,6 +10,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Model_Cron_Queue_Abstract
@@ -29,7 +30,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
 
-        $queuedIds = $this->filterIds($queuedIds);
+        $queuedIds          = $this->filterIds($queuedIds);
+        $skyhubEntityTable  = Mage::getSingleton('core/resource')->getTableName('bseller_skyhub/entity_id');
 
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = $this->getProductCollection()
@@ -43,10 +45,15 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
 
         /** @var Varien_Db_Select $select */
         $select = $collection->getSelect()
+            ->joinLeft(
+                array('bseller_skyhub_entity' => $skyhubEntityTable),
+                'bseller_skyhub_entity.entity_id = e.entity_id 
+                      AND bseller_skyhub_entity.entity_type = \''.BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT.'\''
+            )
             ->reset('columns')
-            ->columns('entity_id')
-            ->order('updated_at DESC')
-            ->order('created_at DESC')
+            ->columns('e.entity_id')
+            ->where('bseller_skyhub_entity.updated_at IS NULL OR e.updated_at >= bseller_skyhub_entity.updated_at')
+            ->order(array('e.updated_at DESC', 'e.created_at DESC'))
         ;
     
         /** Set limitation. */
@@ -64,11 +71,11 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
         }
 
         $this->getQueueResource()
-             ->queue(
-                 $productIds,
-                 BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
-                 BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
-             );
+            ->queue(
+                $productIds,
+                BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
+                BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
+            );
 
         $schedule->setMessages(
             $this->__('%s product(s) were queued. IDs: %s.', count($productIds), implode(',', $productIds))
