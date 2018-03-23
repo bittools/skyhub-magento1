@@ -170,4 +170,12 @@ trait BSeller_SkyHub_Trait_Config
     {
         return Mage::getSingleton('bseller_skyhub/config');
     }
+
+    /**
+     * @return boolean
+     */
+    protected function hasActiveIntegrateOnSaveFlag()
+    {
+        return (bool)$this->getGeneralConfig('immediately_integrate_product_on_save_price_stock_change');
+    }
 }

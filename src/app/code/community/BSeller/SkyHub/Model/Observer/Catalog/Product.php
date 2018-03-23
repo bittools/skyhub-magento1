@@ -16,8 +16,6 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
 {
 
     use BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
-
-    const IMMEDIATELY_INTEGRATE_PRODUCT_ON_SAVE_PRICE_STOCK_CHANGE = 'immediately_integrate_product_on_save_price_stock_change';
     
     /**
      * @param Varien_Event_Observer $observer
@@ -35,7 +33,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
             return;
         }
 
-        if ($this->_hasActiveIntegrateOnSaveFlag() && $this->_hasStockOrPriceUpdate($product)) {
+        if ($this->hasActiveIntegrateOnSaveFlag() && $this->hasStockOrPriceUpdate($product)) {
             /** Create or Update Product */
             $this->catalogProductIntegrator()->createOrUpdate($product);
         } else {
@@ -54,19 +52,18 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         }
     }
 
-    private function _hasActiveIntegrateOnSaveFlag()
+    protected function hasStockOrPriceUpdate($product)
     {
-        return $this->getGeneralConfig(self::IMMEDIATELY_INTEGRATE_PRODUCT_ON_SAVE_PRICE_STOCK_CHANGE);
-    }
-
-    private function _hasStockOrPriceUpdate($product)
-    {
-        if (
-            $product->getOrigData('price') != $product->getData('price') ||
-            $product->getOrigData('special_price') != $product->getData('special_price') ||
-            $product->getOrigData('promotional_price') != $product->getData('promotional_price') ||
-            $product->getStockData('qty') != $product->getStockData('original_inventory_qty')
-        ) {
+        if ($product->getOrigData('price') != $product->getData('price')) {
+            return true;
+        }
+        if ($product->getOrigData('special_price') != $product->getData('special_price')) {
+            return true;
+        }
+        if ($product->getOrigData('promotional_price') != $product->getData('promotional_price')) {
+            return true;
+        }
+        if ($product->getStockData('qty') != $product->getStockData('original_inventory_qty')) {
             return true;
         }
         return false;
