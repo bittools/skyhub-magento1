@@ -43,8 +43,8 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
                 'entity_id'   => (int)    $entityId,
                 'entity_type' => (string) $entityType,
                 'store_id'    => (int)    Mage::app()->getStore($storeId)->getId(),
-                'created_at'  => now(),
-                'updated_at'  => now(),
+                'created_at'  => Varien_Date::now(),
+                'updated_at'  => Varien_Date::now(),
             ]);
             $this->commit();
 
@@ -74,7 +74,7 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
         }
 
         $data = array(
-            'updated_at'  => now(),
+            'updated_at'  => Varien_Date::now(),
         );
 
         $where = array(
