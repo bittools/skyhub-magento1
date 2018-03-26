@@ -10,10 +10,13 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Model_Cron_Queue_Abstract
 {
+
+    use BSeller_Core_Trait_Config;
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
@@ -31,11 +34,12 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
 
         $queuedIds = $this->filterIds($queuedIds);
 
+        /** @var array $productVisibilities */
+        $productVisibilities = $this->getSkyHubModuleConfigAsArray('integration_product_visibility', 'general');
+
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = $this->getProductCollection()
-            ->addAttributeToFilter('visibility', [
-                'neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE
-            ]);
+            ->addAttributeToFilter('visibility', array('in' => $productVisibilities));
 
         if (!empty($queuedIds)) {
             $collection->addFieldToFilter('entity_id', ['nin' => $queuedIds]);
@@ -46,8 +50,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             ->reset('columns')
             ->columns('entity_id')
             ->order('updated_at DESC')
-            ->order('created_at DESC')
-        ;
+            ->order('created_at DESC');
     
         /** Set limitation. */
         $limit = abs($this->getCronConfig()->catalogProduct()->getQueueCreateLimit());
