@@ -114,3 +114,5 @@
 "Products Cron Configuration","Configuração da Cron de Produtos"
 "Grouped Product Configuration","Configuraçòes de Produtos Agrupados"
 "Configurable Attributes","Atributos Configuráveis"
+"Immediately integrate product on save (price or stock change)","Integrar o produto imediatamente após salvá-lo (havendo alteração de preço ou estoque)"
+"After saving a product, it will force real time integration if has changes on attributes: Price, Stock","Após o produto ser salvo, será forçada uma integração em tempo real caso um dos atributos seja alterado: Preço, Estoque"

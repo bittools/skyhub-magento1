@@ -41,6 +41,16 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </enabled>
+                        <immediately_integrate_product_on_save_price_stock_change>
+                            <label>Immediately integrate product on save (price or stock change)</label>
+                            <sort_order>20</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>After saving a product, it will force real time integration if has changes on attributes: Price, Stock</comment>
+                        </immediately_integrate_product_on_save_price_stock_change>
                     </fields>
                 </general>
                 <log translate="label" module="bseller_skyhub">
