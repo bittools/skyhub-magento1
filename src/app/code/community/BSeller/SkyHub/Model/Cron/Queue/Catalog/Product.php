@@ -15,6 +15,7 @@
 
 class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Model_Cron_Queue_Abstract
 {
+    use BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification;
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
@@ -187,6 +188,12 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
     {
         if (!$this->getCronConfig()->catalogProduct()->isEnabled()) {
             $schedule->setMessages($this->__('Catalog Product Cron is Disabled'));
+            return false;
+        }
+
+        //if the notification block can be showed, it means there's a products attributes mapping problem;
+        if ($this->canShowAttributesNotificiationBlock()) {
+            $schedule->setMessages($this->__('The installation is not completed. All required product attributes must be mapped.'));
             return false;
         }
 
