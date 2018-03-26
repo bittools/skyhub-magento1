@@ -17,6 +17,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
 {
     use BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification;
 
+    use BSeller_Core_Trait_Config;
+
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
@@ -34,11 +36,12 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
         $queuedIds          = $this->filterIds($queuedIds);
         $skyhubEntityTable  = Mage::getSingleton('core/resource')->getTableName('bseller_skyhub/entity_id');
 
+        /** @var array $productVisibilities */
+        $productVisibilities = $this->getSkyHubModuleConfigAsArray('integration_product_visibility', 'general');
+
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = $this->getProductCollection()
-            ->addAttributeToFilter('visibility', [
-                'neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE
-            ]);
+            ->addAttributeToFilter('visibility', ['in' => $productVisibilities]);
 
         if (!empty($queuedIds)) {
             $collection->addFieldToFilter('entity_id', ['nin' => $queuedIds]);
@@ -54,9 +57,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             ->reset('columns')
             ->columns('e.entity_id')
             ->where('bseller_skyhub_entity.updated_at IS NULL OR e.updated_at >= bseller_skyhub_entity.updated_at')
-            ->order(array('e.updated_at DESC', 'e.created_at DESC'))
-        ;
-    
+            ->order(array('e.updated_at DESC', 'e.created_at DESC'));
+
         /** Set limitation. */
         $limit = abs($this->getCronConfig()->catalogProduct()->getQueueCreateLimit());
         
