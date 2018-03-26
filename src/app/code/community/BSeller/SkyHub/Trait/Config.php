@@ -28,7 +28,7 @@ trait BSeller_SkyHub_Trait_Config
      *
      * @return mixed
      */
-    protected function getSkyHubModuleConfig($field, $group, Mage_Core_Model_Config $store = null, $return = 'string')
+    protected function getSkyHubModuleConfig($field, $group, Mage_Core_Model_Config $store = null)
     {
         return $this->getModuleConfig($field, $group, 'bseller_skyhub', $store);
     }

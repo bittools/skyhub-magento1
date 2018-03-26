@@ -16,8 +16,6 @@ class BSeller_SkyHub_Model_System_Config_Source_Catalog_Product_Visibilities
     extends Mage_Catalog_Model_Product_Visibility
 {
     /**
-     * Get options for captcha mode selection field
-     *
      * @return array
      */
     public function toOptionArray()
