@@ -18,6 +18,7 @@
 class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes
     extends BSeller_SkyHub_Block_Adminhtml_Notifications_Abstract
 {
+    use BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification;
 
     protected function _construct()
     {
@@ -31,7 +32,7 @@ class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes
      */
     public function canShow()
     {
-        return (bool) ($this->getPendingAttributesCollection()->getSize()>0);
+        return $this->canShowAttributesNotificiationBlock();
     }
 
 
@@ -60,26 +61,5 @@ class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes
         return $this->getUrl('adminhtml/bseller_skyhub_catalog_product_attributes_mapping/createAutomatically', [
             'id' => $id
         ]);
-    }
-
-
-    /**
-     * @return BSeller_SkyHub_Model_Resource_Catalog_Product_Attributes_Mapping_Collection
-     */
-    public function getPendingAttributesCollection()
-    {
-        $key = 'notification_pending_attributes_collection';
-
-        if (Mage::registry($key)) {
-            return Mage::registry($key);
-        }
-
-        /** @var BSeller_SkyHub_Model_Resource_Catalog_Product_Attributes_Mapping_Collection $collection */
-        $collection = Mage::getResourceModel('bseller_skyhub/catalog_product_attributes_mapping_collection');
-        $collection->setPendingAttributesFilter();
-
-        Mage::register($key, $collection, true);
-
-        return $collection;
     }
 }
