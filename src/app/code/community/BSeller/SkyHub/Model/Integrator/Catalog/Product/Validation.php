@@ -51,7 +51,7 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
             $product->setData('visibility', $visibility);
         }
 
-        if (!$bypassVisibleCheck && !$product->isVisibleInSiteVisibility()) {
+        if (!$bypassVisibleCheck && !$this->hasAllowedVisibility($product)) {
             return false;
         }
 

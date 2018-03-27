@@ -179,4 +179,18 @@ trait BSeller_SkyHub_Trait_Catalog_Product
         
         return true;
     }
+
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return bool
+     */
+    protected function hasAllowedVisibility(Mage_Catalog_Model_Product $product)
+    {
+        $productVisibilities = $this->getSkyHubModuleConfigAsArray('integration_product_visibility', 'general');
+        if (in_array($product->getVisibility(), $productVisibilities)) {
+            return true;
+        }
+        return false;
+    }
 }
