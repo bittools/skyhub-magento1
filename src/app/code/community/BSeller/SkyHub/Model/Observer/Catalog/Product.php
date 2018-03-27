@@ -36,19 +36,6 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         if ($this->hasActiveIntegrateOnSaveFlag() && $this->hasStockOrPriceUpdate($product)) {
             /** Create or Update Product */
             $this->catalogProductIntegrator()->createOrUpdate($product);
-        } else {
-            //check if this product already exists at queue table
-            $queueRow = Mage::getModel('bseller_skyhub/queue')->load($product->getId(), 'entity_id');
-            if($queueRow && $queueRow->getId()) {
-                return;
-            }
-
-            //enqueue this product
-            $queue = Mage::getModel('bseller_skyhub/queue')->queue(
-                $product->getId(),
-                BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT
-            );
-            $queue->save();
         }
     }
 
