@@ -5,6 +5,8 @@
 "Enabled","Habilitado"
 "Yes","Sim"
 "No","Não"
+"Visibilities for Integration","Visibilidades a serem integradas"
+"Magento will send to Skyhub the products with these visibilities","Magento enviará para a Skyhub os produtos com estas visibilidades"
 "Log Filename","Nome do Arquivo de Log"
 "Base URI","URI Base"
 "Email","Email"

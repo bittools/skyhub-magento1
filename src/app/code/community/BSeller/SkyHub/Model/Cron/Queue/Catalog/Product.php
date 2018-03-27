@@ -10,10 +10,14 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Model_Cron_Queue_Abstract
 {
+    use BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification;
+
+    use BSeller_Core_Trait_Config;
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
@@ -29,13 +33,15 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
 
-        $queuedIds = $this->filterIds($queuedIds);
+        $queuedIds          = $this->filterIds($queuedIds);
+        $skyhubEntityTable  = Mage::getSingleton('core/resource')->getTableName('bseller_skyhub/entity_id');
+
+        /** @var array $productVisibilities */
+        $productVisibilities = $this->getSkyHubModuleConfigAsArray('integration_product_visibility', 'general');
 
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = $this->getProductCollection()
-            ->addAttributeToFilter('visibility', [
-                'neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE
-            ]);
+            ->addAttributeToFilter('visibility', ['in' => $productVisibilities]);
 
         if (!empty($queuedIds)) {
             $collection->addFieldToFilter('entity_id', ['nin' => $queuedIds]);
@@ -43,12 +49,16 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
 
         /** @var Varien_Db_Select $select */
         $select = $collection->getSelect()
+            ->joinLeft(
+                array('bseller_skyhub_entity' => $skyhubEntityTable),
+                'bseller_skyhub_entity.entity_id = e.entity_id 
+                      AND bseller_skyhub_entity.entity_type = \''.BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT.'\''
+            )
             ->reset('columns')
-            ->columns('entity_id')
-            ->order('updated_at DESC')
-            ->order('created_at DESC')
-        ;
-    
+            ->columns('e.entity_id')
+            ->where('bseller_skyhub_entity.updated_at IS NULL OR e.updated_at >= bseller_skyhub_entity.updated_at')
+            ->order(array('e.updated_at DESC', 'e.created_at DESC'));
+
         /** Set limitation. */
         $limit = abs($this->getCronConfig()->catalogProduct()->getQueueCreateLimit());
         
@@ -64,11 +74,11 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
         }
 
         $this->getQueueResource()
-             ->queue(
-                 $productIds,
-                 BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
-                 BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
-             );
+            ->queue(
+                $productIds,
+                BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
+                BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
+            );
 
         $schedule->setMessages(
             $this->__('%s product(s) were queued. IDs: %s.', count($productIds), implode(',', $productIds))
@@ -180,6 +190,12 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
     {
         if (!$this->getCronConfig()->catalogProduct()->isEnabled()) {
             $schedule->setMessages($this->__('Catalog Product Cron is Disabled'));
+            return false;
+        }
+
+        //if the notification block can be showed, it means there's a products attributes mapping problem;
+        if ($this->canShowAttributesNotificiationBlock()) {
+            $schedule->setMessages($this->__('The installation is not completed. All required product attributes must be mapped.'));
             return false;
         }
 

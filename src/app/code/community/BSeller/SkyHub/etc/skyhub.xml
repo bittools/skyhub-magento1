@@ -120,7 +120,7 @@
                 <description>The products current promotional price.</description>
                 <cast_type>float</cast_type>
                 <validation/>
-                <required>1</required>
+                <required>0</required>
                 <attribute_install_config>
                     <attribute_code>special_price</attribute_code>
                     <label>Product Promotional Price</label>
@@ -128,7 +128,7 @@
                     <type>decimal</type>
                     <input>text</input>
                     <source_model/>
-                    <required>1</required>
+                    <required>0</required>
                 </attribute_install_config>
             </promotional_price>
             <cost>
@@ -137,7 +137,7 @@
                 <description>The products cost.</description>
                 <cast_type>float</cast_type>
                 <validation/>
-                <required>1</required>
+                <required>0</required>
                 <attribute_install_config>
                     <attribute_code>cost</attribute_code>
                     <label>Product Cost</label>
@@ -145,7 +145,7 @@
                     <type>decimal</type>
                     <input>text</input>
                     <source_model/>
-                    <required>1</required>
+                    <required>0</required>
                 </attribute_install_config>
             </cost>
             <weight>
@@ -222,7 +222,7 @@
                 <description>The products brand.</description>
                 <cast_type>string</cast_type>
                 <validation/>
-                <required>1</required>
+                <required>0</required>
                 <attribute_install_config>
                     <attribute_code>brand</attribute_code>
                     <label>Product Brand</label>
@@ -230,7 +230,7 @@
                     <type>int</type>
                     <input>select</input>
                     <source_model/>
-                    <required>1</required>
+                    <required>0</required>
                     <source>eav/entity_attribute_source_table</source>
                 </attribute_install_config>
             </brand>
@@ -240,7 +240,7 @@
                 <description>The products valid EAN number.</description>
                 <cast_type>string</cast_type>
                 <validation/>
-                <required>1</required>
+                <required>0</required>
                 <attribute_install_config>
                     <attribute_code>ean</attribute_code>
                     <label>Product EAN</label>
@@ -248,7 +248,7 @@
                     <type>varchar</type>
                     <input>text</input>
                     <source_model/>
-                    <required>1</required>
+                    <required>0</required>
                 </attribute_install_config>
             </ean>
             <nbm>
@@ -260,7 +260,7 @@
                 <input>text</input>
                 <attribute_code>nbm</attribute_code>
                 <validation/>
-                <required>1</required>
+                <required>0</required>
                 <attribute_install_config>
                     <attribute_code>nbm</attribute_code>
                     <label>Product NBM</label>
@@ -268,7 +268,7 @@
                     <type>varchar</type>
                     <input>text</input>
                     <source_model/>
-                    <required>1</required>
+                    <required>0</required>
                 </attribute_install_config>
             </nbm>
         </attributes>

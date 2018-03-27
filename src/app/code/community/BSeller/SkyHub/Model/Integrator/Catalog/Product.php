@@ -10,6 +10,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Model_Integrator_Abstract
@@ -41,6 +42,7 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
             $response = $this->update($product);
             
             if ($response && $response->success()) {
+                $this->updateProductEntity($product->getId());
                 return $response;
             }
         }
