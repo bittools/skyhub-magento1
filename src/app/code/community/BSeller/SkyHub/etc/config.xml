@@ -11,6 +11,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 -->
 <config>
@@ -370,6 +371,7 @@
         <bseller_skyhub>
             <general>
                 <enabled>1</enabled>
+                <integration_product_visibility>4</integration_product_visibility>
             </general>
             <log>
                 <enabled>1</enabled>

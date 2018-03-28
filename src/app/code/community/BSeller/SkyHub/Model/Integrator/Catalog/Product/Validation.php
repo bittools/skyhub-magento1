@@ -16,7 +16,7 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
 {
 
     use BSeller_SkyHub_Trait_Catalog_Product;
-
+    use BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification;
 
     /**
      * @param BSeller_SkyHub_Model_Catalog_Product $product
@@ -26,6 +26,12 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
      */
     public function canIntegrateProduct(Mage_Catalog_Model_Product $product, $bypassVisibleCheck = false)
     {
+
+        //if the notification block can be showed, it means there's a products attributes mapping problem;
+        if ($this->canShowAttributesNotificiationBlock()) {
+            return false;
+        }
+
         $allowedTypes = [
             Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
             Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
@@ -51,7 +57,7 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
             $product->setData('visibility', $visibility);
         }
 
-        if (!$bypassVisibleCheck && !$product->isVisibleInSiteVisibility()) {
+        if (!$bypassVisibleCheck && !$this->hasAllowedVisibility($product)) {
             return false;
         }
 

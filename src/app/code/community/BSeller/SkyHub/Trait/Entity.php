@@ -10,6 +10,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
 trait BSeller_SkyHub_Trait_Entity
@@ -93,5 +94,17 @@ trait BSeller_SkyHub_Trait_Entity
     {
         return (bool) $this->getEntityResource()
             ->entityExists((int) $id, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY);
+    }
+
+
+    /**
+     * @param int $id
+     *
+     * @return bool
+     */
+    protected function updateProductEntity($id)
+    {
+        return (bool) $this->getEntityResource()
+            ->updateEntity((int) $id, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
     }
 }

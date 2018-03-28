@@ -33,10 +33,28 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
             return;
         }
 
-        /** Create or Update Product */
-        $this->catalogProductIntegrator()->createOrUpdate($product);
+        if ($this->hasActiveIntegrateOnSaveFlag() && $this->hasStockOrPriceUpdate($product)) {
+            /** Create or Update Product */
+            $this->catalogProductIntegrator()->createOrUpdate($product);
+        }
     }
 
+    protected function hasStockOrPriceUpdate($product)
+    {
+        if ($product->getOrigData('price') != $product->getData('price')) {
+            return true;
+        }
+        if ($product->getOrigData('special_price') != $product->getData('special_price')) {
+            return true;
+        }
+        if ($product->getOrigData('promotional_price') != $product->getData('promotional_price')) {
+            return true;
+        }
+        if ($product->getStockData('qty') != $product->getStockData('original_inventory_qty')) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * @param Varien_Event_Observer $observer

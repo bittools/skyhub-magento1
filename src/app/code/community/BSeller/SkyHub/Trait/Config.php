@@ -10,6 +10,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
 trait BSeller_SkyHub_Trait_Config
@@ -30,6 +31,21 @@ trait BSeller_SkyHub_Trait_Config
     protected function getSkyHubModuleConfig($field, $group, Mage_Core_Model_Config $store = null)
     {
         return $this->getModuleConfig($field, $group, 'bseller_skyhub', $store);
+    }
+
+
+    /**
+     * @param string                      $field
+     * @param string                      $group
+     * @param Mage_Core_Model_Config|null $store
+     *
+     * @return array
+     */
+    protected function getSkyHubModuleConfigAsArray($field, $group, Mage_Core_Model_Config $store = null)
+    {
+        $values =  $this->getModuleConfig($field, $group, 'bseller_skyhub', $store);
+        $arrayValues = explode(',', $values);
+        return $arrayValues;
     }
 
 
@@ -169,5 +185,13 @@ trait BSeller_SkyHub_Trait_Config
     protected function getSkyHubConfig()
     {
         return Mage::getSingleton('bseller_skyhub/config');
+    }
+
+    /**
+     * @return boolean
+     */
+    protected function hasActiveIntegrateOnSaveFlag()
+    {
+        return (bool)$this->getGeneralConfig('immediately_integrate_product_on_save_price_stock_change');
     }
 }
