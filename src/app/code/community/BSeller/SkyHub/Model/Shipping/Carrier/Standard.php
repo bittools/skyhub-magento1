@@ -10,6 +10,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Shipping_Carrier_Standard extends Mage_Shipping_Model_Carrier_Freeshipping
@@ -33,7 +34,6 @@ class BSeller_SkyHub_Model_Shipping_Carrier_Standard extends Mage_Shipping_Model
         }
     
         $amount     = 0;
-        $carrier    = null;
         $methodCode = null;
         
         /** @var Mage_Sales_Model_Quote $quote */
@@ -44,9 +44,9 @@ class BSeller_SkyHub_Model_Shipping_Carrier_Standard extends Mage_Shipping_Model
         ]);
         
         if ($quote) {
-            $amount     = (float)  $quote->getData('fixed_shipping_amount');
-            $carrier    = (string) $quote->getData('fixed_shipping_carrier');
-            $methodCode = (string) $quote->getData('fixed_shipping_method');
+            $amount         = (float)  $quote->getData('fixed_shipping_amount');
+            $methodCode     = (string) $quote->getData('fixed_shipping_method_code');
+            $methodTitle    = (string) $quote->getData('fixed_shipping_title');
         }
         
         /** @var Mage_Shipping_Model_Rate_Result $result */
@@ -56,11 +56,11 @@ class BSeller_SkyHub_Model_Shipping_Carrier_Standard extends Mage_Shipping_Model
         $method = Mage::getModel('shipping/rate_result_method');
 
         $method->setCarrier('bseller_skyhub');
-        $method->setCarrierTitle($this->getShippingCarrierTitle($carrier));
+        $method->setCarrierTitle($this->getConfigData('title'));
 
         $method->setMethod($this->getShippingMethod($methodCode));
-        $method->setMethodTitle($this->getConfigData('name'));
-        
+        $method->setMethodTitle($methodTitle);
+
         $method->setPrice((float) $amount);
         $method->setCost(0.0000);
     
@@ -86,11 +86,8 @@ class BSeller_SkyHub_Model_Shipping_Carrier_Standard extends Mage_Shipping_Model
         if (!$method) {
             return 'standard';
         }
-    
-        $method = trim(strtolower($method));
-        $method = str_replace(' ', '_', $method);
-    
-        $method = $this->helper()->removeAccents($method);
+
+        $method = $this->helper()->normalizeString($method);
         
         return $method;
     }

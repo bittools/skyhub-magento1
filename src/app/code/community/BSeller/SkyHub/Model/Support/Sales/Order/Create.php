@@ -10,6 +10,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Support_Sales_Order_Create
@@ -18,7 +19,8 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     use BSeller_SkyHub_Trait_Data,
         BSeller_SkyHub_Trait_Customer;
     
-    
+    const CARRIER_PREFIX = 'bseller_skyhub_';
+
     /** @var Mage_Core_Model_Store */
     private $store;
     
@@ -180,17 +182,25 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     
     
     /**
-     * @param string $method
+     * @param string $title
      * @param float  $cost
      *
      * @return $this
      */
-    public function setShippingMethod($method = null, $carrier = null, $cost = 0.0000)
+    public function setShippingMethod($title = null, $carrier = null, $cost = 0.0000)
     {
+        if (!$title) {
+            $title = 'Standard';
+        }
+
+        /** @var string $methodCode */
+        $methodCode = $this->helper()->normalizeString($title);
+
         $data = [
             'order' => [
-                'shipping_method'        => 'bseller_skyhub_standard',
-                'shipping_custom_method' => $method,
+                'shipping_method'        => self::CARRIER_PREFIX.$methodCode,
+                'shipping_method_code'   => $methodCode,
+                'shipping_title'         => $title,
                 'shipping_carrier'       => $carrier,
                 'shipping_cost'          => (float) $cost,
             ]
@@ -484,16 +494,17 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         $this->registerInterest($order);
         
         $shippingMethod       = (string) $this->arrayExtract($data, 'order/shipping_method');
-        $shippingCustomMethod = (string) $this->arrayExtract($data, 'order/shipping_customer_method');
+        $shippingMethodCode   = (string) $this->arrayExtract($data, 'order/shipping_method_code');
         $shippingCarrier      = (string) $this->arrayExtract($data, 'order/shipping_carrier');
+        $shippingTitle        = (string) $this->arrayExtract($data, 'order/shipping_title');
         $shippingAmount       = (float) $this->arrayExtract($data, 'order/shipping_cost');
         
         $this->getQuote()
              ->setFixedShippingAmount($shippingAmount)
              ->setFixedShippingMethod($shippingMethod)
-             ->setFixedShippingCustomMethod($shippingCustomMethod)
+             ->setFixedShippingMethodCode($shippingMethodCode)
              ->setFixedShippingCarrier($shippingCarrier)
-        ;
+             ->setFixedShippingTitle($shippingTitle);
         
         /* Collect shipping rates */
         $this->resetQuote()
@@ -603,5 +614,16 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         }
         
         return $this->store;
+    }
+
+
+    /**
+     * @return BSeller_SkyHub_Helper_Data
+     */
+    protected function helper()
+    {
+        /** @var BSeller_SkyHub_Helper_Data $helper */
+        $helper = Mage::helper('bseller_skyhub');
+        return $helper;
     }
 }
