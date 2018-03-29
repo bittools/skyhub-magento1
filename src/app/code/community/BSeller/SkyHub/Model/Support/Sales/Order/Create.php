@@ -270,7 +270,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                     'region'              => $address->getData('region'),
                     'region_id'           => '',
                     'postcode'            => $address->getData('postcode'),
-                    'telephone'           => $address->getData('phone'),
+                    'telephone'           => $this->formatPhone($address->getData('phone')),
                     'fax'                 => $address->getData('secondary_phone'),
                 ]
             ]
