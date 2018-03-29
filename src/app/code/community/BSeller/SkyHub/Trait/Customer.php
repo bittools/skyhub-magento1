@@ -40,4 +40,16 @@ trait BSeller_SkyHub_Trait_Customer
         ]);
     }
 
+    /**
+     * @param string $phone
+     * @return string
+     */
+    protected function formatPhone($phone)
+    {
+        if (!$phone) {
+            return '(00) 0000-0000';
+        }
+        return $phone;
+    }
+
 }
