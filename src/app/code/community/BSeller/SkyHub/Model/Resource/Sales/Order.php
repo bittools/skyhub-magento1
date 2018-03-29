@@ -32,4 +32,31 @@ class BSeller_SkyHub_Model_Resource_Sales_Order extends Mage_Sales_Model_Resourc
         return $this->_getReadAdapter()->fetchOne($select);
     }
 
+    public function getEntityIdBySkyhubCode($code)
+    {
+        /** @var Varien_Db_Select $select */
+        $select = $this->_getReadAdapter()
+            ->select()
+            ->from($this->getMainTable(), 'entity_id')
+            ->where('bseller_skyhub_code = ?', $code)
+            ->limit(1);
+
+        return $this->_getReadAdapter()->fetchOne($select);
+    }
+
+    /**
+     * @param $orderId
+     * @return string
+     */
+    public function getSkyhubCodeByOrderId($orderId)
+    {
+        /** @var Varien_Db_Select $select */
+        $select = $this->_getReadAdapter()
+            ->select()
+            ->from($this->getMainTable(), 'bseller_skyhub_code')
+            ->where('entity_id = ?', $orderId)
+            ->limit(1);
+
+        return $this->_getReadAdapter()->fetchOne($select);
+    }
 }

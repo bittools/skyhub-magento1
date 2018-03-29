@@ -220,11 +220,8 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
      */
     protected function getOrderIncrementId($orderId)
     {
-        /** @var Mage_Sales_Model_Resource_Order $resource */
-        $resource    = Mage::getResourceModel('sales/order');
-        $incrementId = $resource->getIncrementId($orderId);
-
-        return $incrementId;
+        $skyhubCode = $this->getSkyhubCodeByOrderId($orderId);
+        return $skyhubCode;
     }
 
 
