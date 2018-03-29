@@ -118,3 +118,7 @@
 "Configurable Attributes","Atributos Configuráveis"
 "Immediately integrate product on save (price or stock change)","Integrar o produto imediatamente após salvá-lo (havendo alteração de preço ou estoque)"
 "After saving a product, it will force real time integration if has changes on attributes: Price, Stock","Após o produto ser salvo, será forçada uma integração em tempo real caso um dos atributos seja alterado: Preço, Estoque"
+"This action must be accompanied by Skyhub Integration Team. Do you want to continue?","Este procedimento deve ser acompanhado pelo time de Implantação da Skyhub para auxílio na integração de produtos. Deseja continuar?"
+"The product integration entity table has been cleared.","Os dados de integração de produtos com a SkyHub foram limpos."
+"An error occurred while clearing product integration entity table.","Ocorreu um erro ao limpar os dados de integração de produtos com a SkyHub"
+"Reset SkyHub Products Integration History","Limpar dados de integração com a SkyHub"

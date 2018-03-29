@@ -271,6 +271,10 @@
                         <class>bseller_skyhub/observer_catalog_product</class>
                         <method>addIntegrateButtonToProductEditPage</method>
                     </bseller_skyhub_add_integration_button_to_product_edit_page>
+                    <bseller_skyhub_add_reset_button_to_product_queue_page>
+                        <class>bseller_skyhub/observer_adminhtml_skyhub_product_queue</class>
+                        <method>addResetButtonToProductQueuePage</method>
+                    </bseller_skyhub_add_reset_button_to_product_queue_page>
                 </observers>
             </adminhtml_block_html_before>
         </events>
