@@ -128,4 +128,16 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
 
         return false;
     }
+
+
+    /**
+     * @param string  $entityType
+     *
+     * @return $this
+     */
+    public function truncateEntityType($entityType)
+    {
+        $this->_getWriteAdapter()->query('DELETE FROM '.$this->getMainTable().' WHERE entity_type = "'.$entityType.'"');
+        return $this;
+    }
 }

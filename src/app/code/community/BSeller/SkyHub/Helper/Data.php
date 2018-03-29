@@ -10,9 +10,21 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Helper_Data extends BSeller_Core_Helper_Data
 {
-
+    /**
+     * @param string $method
+     * @return string
+     */
+    public function normalizeString($method)
+    {
+        $method = trim(strtolower($method));
+        $method = str_replace(' ', '_', $method);
+        $method = $this->removeAccents($method);
+        
+        return $method;
+    }
 }

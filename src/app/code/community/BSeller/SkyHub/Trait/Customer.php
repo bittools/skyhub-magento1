@@ -23,11 +23,14 @@ trait BSeller_SkyHub_Trait_Customer
      */
     protected function breakName($fullname)
     {
-        $fullname = (array) explode(' ', $fullname);
+        $fullnametmp = (array) explode(' ', $fullname);
     
-        $firstname  = ucwords(array_shift($fullname));
-        $lastname   = ucwords(array_pop($fullname));
-        $middlename = ucwords(implode(' ', $fullname));
+        $firstname  = ucwords(array_shift($fullnametmp));
+        $lastname   = ucwords(array_pop($fullnametmp));
+        if(!$lastname) {
+            $lastname = $firstname;
+        }
+        $middlename = ucwords(implode(' ', $fullnametmp));
         
         return new Varien_Object([
             'firstname' => $firstname,
@@ -35,6 +38,18 @@ trait BSeller_SkyHub_Trait_Customer
             'lastname' => $lastname,
             'fullname' => $fullname,
         ]);
+    }
+
+    /**
+     * @param string $phone
+     * @return string
+     */
+    protected function formatPhone($phone)
+    {
+        if (!$phone) {
+            return '(00) 0000-0000';
+        }
+        return $phone;
     }
 
 }
