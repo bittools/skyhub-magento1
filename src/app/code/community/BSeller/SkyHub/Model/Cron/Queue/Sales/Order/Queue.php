@@ -31,7 +31,6 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
 
         while ($count < $limit) {
             /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
-            //$orderData = $this->orderQueueIntegrator()->nextOrder();
             $orderData = $this->orderQueueIntegrator()
                 ->nextOrder();
 
