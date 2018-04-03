@@ -41,9 +41,6 @@ abstract class BSeller_SkyHub_Model_Integrator_Abstract implements BSeller_SkyHu
      */
     protected function init()
     {
-        $defaultStore = Mage::app()->getDefaultStoreView();
-        Mage::app()->setCurrentStore($defaultStore);
-
         return $this;
     }
 
