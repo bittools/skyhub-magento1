@@ -11,6 +11,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
+ * @author    Julio Reis <julio.reis@e-smart.com.br>
  */
 
 trait BSeller_SkyHub_Trait_Config
@@ -18,7 +19,8 @@ trait BSeller_SkyHub_Trait_Config
 
     use BSeller_Core_Trait_Config,
         BSeller_SkyHub_Trait_Config_Service,
-        BSeller_SkyHub_Trait_Config_Log;
+        BSeller_SkyHub_Trait_Config_Log,
+        BSeller_SkyHub_Trait_Config_General;
 
 
     /**

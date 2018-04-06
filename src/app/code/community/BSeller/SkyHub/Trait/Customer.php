@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BSeller Platform | B2W - Companhia Digital
  *
@@ -14,8 +15,8 @@
 
 trait BSeller_SkyHub_Trait_Customer
 {
-    
-    
+
+
     /**
      * @param string $fullname
      *
@@ -52,4 +53,39 @@ trait BSeller_SkyHub_Trait_Customer
         return $phone;
     }
 
+    /**
+     * @param $address
+     * @param $addressSize
+     * @return string
+     */
+    protected function formatAddress($address, $addressSize)
+    {
+        $street = $address->getData('street');
+        $number = $address->getData('number');
+        $complement = implode(' ', [$address->getData('reference'), $address->getData('detail')]);
+        $neighborhood = $address->getData('neighborhood');
+
+        return $this->_formatAddress(
+            [
+                $street,
+                $number,
+                $complement,
+                $neighborhood,
+            ], $addressSize
+        );
+    }
+
+    /**
+     * @param array $address
+     * @param $addressSize
+     * @return string
+     */
+    private function _formatAddress(array $address, $addressSize)
+    {
+        if ($addressSize == 1) {
+            return implode(' - ', $address);
+        }
+
+        return (array_shift($address) . "\n" . $this->_formatAddress($address, $addressSize - 1));
+    }
 }
