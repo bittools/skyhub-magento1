@@ -11,12 +11,14 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
+ * @author    Julio Reis <julio.reis@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Support_Sales_Order_Create
 {
     
     use BSeller_SkyHub_Trait_Data,
+        BSeller_SkyHub_Trait_Config,
         BSeller_SkyHub_Trait_Customer;
     
     const CARRIER_PREFIX = 'bseller_skyhub_';
@@ -249,10 +251,10 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         
         /** @var Varien_Object $nameObject */
         $nameObject = $this->breakName($fullname);
-        
-        $street = [
-            $address->getData('street'),
-        ];
+
+        $addressSize = $this->getAddressSizeConfig();
+
+        $simpleAddressData = $this->formatAddress($address, $addressSize);
         
         $data = [
             'order' => [
@@ -264,7 +266,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                     'lastname'            => $nameObject->getData('lastname'),
                     'suffix'              => '',
                     'company'             => '',
-                    'street'              => implode(' - ', $street),
+                    'street'              => $simpleAddressData,
                     'city'                => $address->getData('city'),
                     'country_id'          => $address->getData('country'),
                     'region'              => $address->getData('region'),
