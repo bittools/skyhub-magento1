@@ -20,7 +20,8 @@ abstract class BSeller_SkyHub_Model_Cron_Abstract
         BSeller_SkyHub_Trait_Service,
         BSeller_SkyHub_Trait_Integrators,
         BSeller_SkyHub_Trait_Config,
-        BSeller_SkyHub_Trait_Config_Cron;
+        BSeller_SkyHub_Trait_Config_Cron,
+        BSeller_SkyHub_Trait_Store_Iterator;
 
 
     /**
