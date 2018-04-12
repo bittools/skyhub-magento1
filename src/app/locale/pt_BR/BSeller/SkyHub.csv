@@ -122,3 +122,7 @@
 "The product integration entity table has been cleared.","Os dados de integração de produtos com a SkyHub foram limpos."
 "An error occurred while clearing product integration entity table.","Ocorreu um erro ao limpar os dados de integração de produtos com a SkyHub"
 "Reset SkyHub Products Integration History","Limpar dados de integração com a SkyHub"
+"Person Type PF Value","Valor do atributo 'Tipo de Pessoa' para Pessoa Física"
+"Person Type PJ Value","Valor do atributo 'Tipo de Pessoa' para Pessoa Jurídica"
+"The value of the 'person_type' attribute which represents PF (example: 'pf')","Valor do atributo 'Tipo de Pessoa' para pessoa física (exemplo: 'pf')"
+"The value of the 'person_type' attribute which represents PJ (example: 'pj')","Valor do atributo 'Tipo de Pessoa' para pessoa jurídica (exemplo: 'pj')"
