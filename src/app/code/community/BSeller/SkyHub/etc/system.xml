@@ -46,7 +46,7 @@
                             <sort_order>10</sort_order>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </enabled>
@@ -55,7 +55,7 @@
                             <sort_order>20</sort_order>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment>After saving a product, it will force real time integration if has changes on attributes: Price, Stock</comment>
@@ -65,7 +65,7 @@
                             <sort_order>20</sort_order>
                             <frontend_type>multiselect</frontend_type>
                             <source_model>bseller_skyhub/system_config_source_catalog_product_visibilities</source_model>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Magento will send to Skyhub the products with these visibilities]]></comment>
@@ -85,7 +85,7 @@
                             <sort_order>10</sort_order>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </enabled>
@@ -93,7 +93,7 @@
                             <label>Log Filename</label>
                             <sort_order>20</sort_order>
                             <frontend_type>text</frontend_type>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <can_be_empty>0</can_be_empty>
@@ -106,7 +106,7 @@
                 <service translate="label" module="bseller_skyhub">
                     <label>API Service Configuration</label>
                     <sort_order>30</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
@@ -115,7 +115,7 @@
                             <label>Base URI</label>
                             <sort_order>10</sort_order>
                             <frontend_type>label</frontend_type>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </base_uri>
@@ -123,7 +123,7 @@
                             <label>Email</label>
                             <sort_order>20</sort_order>
                             <frontend_type>text</frontend_type>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </email>
@@ -131,7 +131,7 @@
                             <label>API Key</label>
                             <sort_order>30</sort_order>
                             <frontend_type>text</frontend_type>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </api_key>
@@ -150,7 +150,7 @@
                 <tax_invoice_key translate="label" module="bseller_skyhub">
                     <label>Invoice Key Configuration</label>
                     <sort_order>40</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
@@ -169,7 +169,7 @@
                 <sales_order_status translate="label comment" module="bseller_skyhub">
                     <label>Order Status Configuration</label>
                     <sort_order>50</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
@@ -221,7 +221,7 @@
                 <catalog_product_type_grouped>
                     <label>Grouped Product Configuration</label>
                     <sort_order>60</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
@@ -243,7 +243,7 @@
                 <cron_catalog_product_attributes translate="label comment" module="bseller_skyhub">
                     <label>Product Attributes Cron Configuration</label>
                     <sort_order>1000</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
@@ -288,7 +288,7 @@
                 <cron_catalog_products translate="label comment" module="bseller_skyhub">
                     <label>Products Cron Configuration</label>
                     <sort_order>1100</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
@@ -359,7 +359,7 @@
                 <cron_catalog_categories translate="label comment" module="bseller_skyhub">
                     <label>Categories Cron Configuration</label>
                     <sort_order>1200</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
@@ -404,7 +404,7 @@
                 <cron_sales_order_status translate="label comment" module="bseller_skyhub">
                     <label>Order Status Cron Configuration</label>
                     <sort_order>1300</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
@@ -449,7 +449,7 @@
                 <cron_sales_order_queue translate="label comment" module="bseller_skyhub">
                     <label>Order Import Cron Configuration</label>
                     <sort_order>1400</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
