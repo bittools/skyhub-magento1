@@ -33,6 +33,14 @@
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
                     <fields>
+                        <version>
+                            <label>Version</label>
+                            <sort_order>5</sort_order>
+                            <frontend_type>label</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </version>
                         <enabled>
                             <label>Enabled</label>
                             <sort_order>10</sort_order>

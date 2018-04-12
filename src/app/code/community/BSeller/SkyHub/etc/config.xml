@@ -374,7 +374,8 @@
     <default>
         <bseller_skyhub>
             <general>
-                <enabled>1</enabled>
+                <enabled>0</enabled>
+                <version>1.2.3</version>
                 <integration_product_visibility>4</integration_product_visibility>
             </general>
             <log>
