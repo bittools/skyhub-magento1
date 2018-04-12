@@ -122,3 +122,7 @@
 "The product integration entity table has been cleared.","Os dados de integração de produtos com a SkyHub foram limpos."
 "An error occurred while clearing product integration entity table.","Ocorreu um erro ao limpar os dados de integração de produtos com a SkyHub"
 "Reset SkyHub Products Integration History","Limpar dados de integração com a SkyHub"
+"You need to change the store scope to configure the credentials.","Você precisa alterar para o escopo de loja para configurar suas credenciais."
+"You need to change the store scope to enable the module.","Você precisa alterar para o escopo de loja para habilitar o módulo."
+"Notice","Aviso"
+"Module Version","Versão do Módulo"
