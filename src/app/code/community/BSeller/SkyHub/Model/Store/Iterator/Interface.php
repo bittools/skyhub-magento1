@@ -15,6 +15,9 @@
 interface BSeller_SkyHub_Model_Store_Iterator_Interface
 {
     
+    const REGISTRY_KEY = 'skyhub_store_iterator_iterating';
+    
+    
     /**
      * @return array
      */
@@ -32,6 +35,30 @@ interface BSeller_SkyHub_Model_Store_Iterator_Interface
     
     
     /**
+     * This method should simulate the store.
+     *
+     * @param Mage_Core_Model_Store $store
+     *
+     * @return $this
+     */
+    public function simulateStore(Mage_Core_Model_Store $store);
+    
+    
+    /**
+     * @return Mage_Core_Model_Store
+     */
+    public function getCurrentStore();
+    
+    
+    /**
+     * @return Mage_Core_Model_Store
+     */
+    public function getPreviousStore();
+    
+    
+    /**
+     * Checks if the Store Iterator is already iterating in the moment.
+     *
      * @return boolean
      */
     public function isIterating();

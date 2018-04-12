@@ -15,11 +15,14 @@
 class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_Iterator_Interface
 {
     
-    const REGISTRY_KEY = 'skyhub_store_iterator_iterating';
-    
-    
     /** @var Mage_Core_Model_Store */
     protected $initialStore = null;
+    
+    /** @var Mage_Core_Model_Store */
+    protected $previousStore = null;
+    
+    /** @var Mage_Core_Model_Store */
+    protected $currentStore = null;
     
     /** @var array */
     protected $stores = [];
@@ -47,6 +50,8 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
      * @param array  $params
      *
      * @return $this
+     *
+     * @throws Mage_Core_Exception
      */
     public function iterate($object, $method, array $params = [])
     {
@@ -66,6 +71,45 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
         $this->endIterator();
         
         return $this;
+    }
+    
+    
+    /**
+     * @param Mage_Core_Model_Store $store
+     *
+     * @return $this
+     */
+    public function simulateStore(Mage_Core_Model_Store $store)
+    {
+        try {
+            $this->previousStore = $this->currentStore;
+            
+            Mage::app()->setCurrentStore($store);
+            
+            $this->currentStore = $store;
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @return Mage_Core_Model_Store
+     */
+    public function getCurrentStore()
+    {
+        return $this->currentStore;
+    }
+    
+    
+    /**
+     * @return Mage_Core_Model_Store
+     */
+    public function getPreviousStore()
+    {
+        return $this->previousStore;
     }
     
     
@@ -92,24 +136,10 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
     
     /**
      * @return $this
-     *
-     * @throws Mage_Core_Exception
      */
     protected function endIterator()
     {
         Mage::unregister(self::REGISTRY_KEY);
-        return $this;
-    }
-    
-    
-    /**
-     * @param Mage_Core_Model_Store $store
-     *
-     * @return $this
-     */
-    protected function simulateStore(Mage_Core_Model_Store $store)
-    {
-        Mage::app()->setCurrentStore($store);
         return $this;
     }
     
@@ -145,6 +175,7 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
         
         try {
             $this->initialStore = Mage::app()->getStore();
+            $this->currentStore = Mage::app()->getStore();
     
             /** @var array $stores */
             $stores = Mage::app()->getStores();
