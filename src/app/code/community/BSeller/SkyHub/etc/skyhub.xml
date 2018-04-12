@@ -280,6 +280,7 @@
                 <cast_type>string</cast_type>
                 <attribute_code>person_type</attribute_code>
                 <validation/>
+                <required>0</required>
                 <attribute_install_config>
                     <attribute_code>person_type</attribute_code>
                     <label>Person Type</label>
@@ -296,6 +297,7 @@
                 <cast_type>string</cast_type>
                 <attribute_code>cpf</attribute_code>
                 <validation/>
+                <required>0</required>
                 <attribute_install_config>
                     <attribute_code>cpf</attribute_code>
                     <label>CPF</label>
@@ -312,6 +314,7 @@
                 <cast_type>string</cast_type>
                 <attribute_code>cnpj</attribute_code>
                 <validation/>
+                <required>0</required>
                 <attribute_install_config>
                     <attribute_code>cnpj</attribute_code>
                     <label>CNPJ</label>
@@ -328,6 +331,7 @@
                 <cast_type>string</cast_type>
                 <attribute_code>ie</attribute_code>
                 <validation/>
+                <required>0</required>
                 <attribute_install_config>
                     <attribute_code>ie</attribute_code>
                     <label>IE</label>
