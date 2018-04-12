@@ -16,26 +16,33 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
 {
     
     use BSeller_SkyHub_Trait_Data,
-        BSeller_SkyHub_Trait_Config,
-        BSeller_SkyHub_Trait_Catalog_Product_Attribute;
+        BSeller_SkyHub_Trait_Config;
     
     
     /**
      * @return array
      */
-    public function getSkyHubFixedAttributes()
+    public function getSkyHubFixedAttributes($entityType)
     {
-        return $this->getSkyHubConfig()->getSkyHubFixedAttributes();
+        if($entityType == Mage_Catalog_Model_Product::ENTITY) {
+            return Mage::getSingleton('bseller_skyhub/config_catalog_product')->getSkyHubFixedAttributes();
+        } else {
+            return Mage::getSingleton('bseller_skyhub/config_customer')->getSkyHubFixedAttributes();
+        }
     }
     
     
     /**
      * @return $this
      */
-    public function installSkyHubRequiredAttributes()
+    public function installSkyHubRequiredAttributes($entityType)
     {
-        $attributes = (array)  $this->getSkyHubFixedAttributes();
-        $table      = (string) $this->getTable('bseller_skyhub/product_attributes_mapping');
+        $attributes = (array)  $this->getSkyHubFixedAttributes($entityType);
+        if($entityType == Mage_Catalog_Model_Product::ENTITY) {
+            $table = (string)$this->getTable('bseller_skyhub/product_attributes_mapping');
+        } else {
+            $table = (string)$this->getTable('bseller_skyhub/customer_attributes_mapping');
+        }
 
         $defaultDataType  = BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping::DATA_TYPE_STRING;
 
@@ -100,8 +107,8 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
         
         return $this;
     }
-    
-    
+
+
     /**
      * @param array $statuses
      *

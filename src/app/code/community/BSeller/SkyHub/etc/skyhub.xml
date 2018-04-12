@@ -15,7 +15,7 @@
 -->
 <config>
     <skyhub>
-        <attributes>
+        <product_attributes>
             <sku>
                 <code>sku</code>
                 <label>Product Sku</label>
@@ -271,7 +271,73 @@
                     <required>0</required>
                 </attribute_install_config>
             </nbm>
-        </attributes>
+        </product_attributes>
+        <customer_attributes>
+            <person_type>
+                <code>person_type</code>
+                <label>Person Type</label>
+                <description>The customer person type.</description>
+                <cast_type>string</cast_type>
+                <attribute_code>person_type</attribute_code>
+                <validation/>
+                <attribute_install_config>
+                    <attribute_code>person_type</attribute_code>
+                    <label>Person Type</label>
+                    <type>static</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>0</required>
+                </attribute_install_config>
+            </person_type>
+            <cpf>
+                <code>cpf</code>
+                <label>CPF</label>
+                <description>The customer CPF.</description>
+                <cast_type>string</cast_type>
+                <attribute_code>cpf</attribute_code>
+                <validation/>
+                <attribute_install_config>
+                    <attribute_code>cpf</attribute_code>
+                    <label>CPF</label>
+                    <type>static</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>0</required>
+                </attribute_install_config>
+            </cpf>
+            <cnpj>
+                <code>cnpj</code>
+                <label>CNPJ</label>
+                <description>The customer CNPJ.</description>
+                <cast_type>string</cast_type>
+                <attribute_code>cnpj</attribute_code>
+                <validation/>
+                <attribute_install_config>
+                    <attribute_code>cnpj</attribute_code>
+                    <label>CNPJ</label>
+                    <type>static</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>0</required>
+                </attribute_install_config>
+            </cnpj>
+            <ie>
+                <code>ie</code>
+                <label>Customer IE</label>
+                <description>The customer estadual inscription.</description>
+                <cast_type>string</cast_type>
+                <attribute_code>ie</attribute_code>
+                <validation/>
+                <attribute_install_config>
+                    <attribute_code>ie</attribute_code>
+                    <label>IE</label>
+                    <type>static</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>0</required>
+                </attribute_install_config>
+            </ie>
+        </customer_attributes>
         <catalog>
             <product>
                 <attributes>
@@ -312,5 +378,12 @@
                 </attributes>
             </product>
         </catalog>
+        <customer>
+            <attributes>
+                <blacklist>
+                    <entity_id></entity_id>
+                </blacklist>
+            </attributes>
+        </customer>
     </skyhub>
 </config>

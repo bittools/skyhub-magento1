@@ -41,6 +41,24 @@
         </reference>
     </adminhtml_bseller_skyhub_catalog_product_attributes_mapping_edit>
 
+    <!-- Customer Attributes Mapping -->
+    <adminhtml_bseller_skyhub_customer_attributes_mapping_index>
+        <label>BSeller SkyHub Customer Attributes Mapping</label>
+        <update handle="ADD_STYLES"/>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_customer_attributes_mapping"/>
+        </reference>
+    </adminhtml_bseller_skyhub_customer_attributes_mapping_index>
+
+    <!-- Customer Attributes Mapping Edit -->
+    <adminhtml_bseller_skyhub_customer_attributes_mapping_edit>
+        <label>BSeller SkyHub Customer Attributes Mapping</label>
+        <update handle="ADD_STYLES"/>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_customer_attributes_mapping_edit"/>
+        </reference>
+    </adminhtml_bseller_skyhub_customer_attributes_mapping_edit>
+
     <!-- Integration Pending Products -->
     <adminhtml_bseller_skyhub_queue_pendingproducts>
         <label>BSeller SkyHub Integration Pending Products</label>
