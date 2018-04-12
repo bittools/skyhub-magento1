@@ -14,78 +14,70 @@
 
 trait BSeller_SkyHub_Trait_Config_Service
 {
-
+    
     /**
      * @param string $field
+     * @param int    $storeId
      *
      * @return string|integer
      */
-    protected function getServiceConfig($field)
+    protected function getServiceConfig($field, $storeId = null)
     {
-        return $this->getSkyHubModuleConfig($field, 'service');
+        try {
+            $store = Mage::app()->getStore($storeId);
+        } catch (Exception $e) {}
+        
+        return $this->getSkyHubModuleConfig($field, 'service', $store);
+    }
+
+
+    /**
+     * @param int $storeId
+     *
+     * @return string
+     */
+    protected function getServiceBaseUri($storeId = null)
+    {
+        return (string) $this->getServiceConfig('base_uri', $storeId);
     }
 
 
     /**
      * @return string
      */
-    protected function getServiceBaseUri()
+    protected function getServiceEmail($storeId = null)
     {
-        return (string) $this->getServiceConfig('base_uri');
+        return (string) $this->getServiceConfig('email', $storeId);
     }
 
 
     /**
      * @return string
      */
-    protected function getServiceEmail()
+    protected function getServiceApiKey($storeId = null)
     {
-        return (string) $this->getServiceConfig('email');
+        return (string) $this->getServiceConfig('api_key', $storeId);
     }
 
 
     /**
-     * @return string
-     */
-    protected function getServiceApiKey()
-    {
-        return (string) $this->getServiceConfig('api_key');
-    }
-
-
-    /**
-     * @return string
-     */
-    protected function getServiceAccountManagerKey()
-    {
-        return (string) $this->getServiceConfig('account_manager_key');
-    }
-
-
-    /**
+     * @param int|null $storeId
+     *
      * @return bool
      */
-    protected function isConfigurationOk()
+    protected function isConfigurationOk($storeId = null)
     {
-        if (!$this->getServiceBaseUri()) {
+        if (!$this->getServiceBaseUri($storeId)) {
             return false;
         }
 
-        if (!$this->getServiceEmail()) {
+        if (!$this->getServiceEmail($storeId)) {
             return false;
         }
 
-        if (!$this->getServiceApiKey()) {
+        if (!$this->getServiceApiKey($storeId)) {
             return false;
         }
-
-        /**
-         * Apparently this field is not required for integration.
-         *
-        if (!$this->getServiceAccountManagerKey()) {
-            return false;
-        }
-        */
 
         return true;
     }
