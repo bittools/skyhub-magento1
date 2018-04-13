@@ -26,9 +26,11 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
      */
     public function canIntegrateProduct(Mage_Catalog_Model_Product $product, $bypassVisibleCheck = false)
     {
-
-        //if the notification block can be showed, it means there's a products attributes mapping problem;
-        if ($this->canShowAttributesNotificiationBlock()) {
+    
+        /**
+         * If the notification block can be showed, it means there's a products attributes mapping problem.
+         */
+        if ($this->hasPendingAttributesToMap()) {
             return false;
         }
 

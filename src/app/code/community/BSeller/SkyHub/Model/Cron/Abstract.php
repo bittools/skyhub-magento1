@@ -52,6 +52,8 @@ abstract class BSeller_SkyHub_Model_Cron_Abstract
     
     
     /**
+     * Get the current Store. Please, consider the Store Iterator.
+     *
      * @param int|null $storeId
      *
      * @return bool|Mage_Core_Model_Store
