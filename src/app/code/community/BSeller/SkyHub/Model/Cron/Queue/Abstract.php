@@ -57,7 +57,7 @@ abstract class BSeller_SkyHub_Model_Cron_Queue_Abstract
      */
     protected function extractResultFailIds(Mage_Cron_Model_Schedule $schedule)
     {
-        $failQueueIds = (array) $schedule->getData('success_queue_ids');
+        $failQueueIds = (array) $schedule->getData('failed_queue_ids');
         return $failQueueIds;
     }
 }

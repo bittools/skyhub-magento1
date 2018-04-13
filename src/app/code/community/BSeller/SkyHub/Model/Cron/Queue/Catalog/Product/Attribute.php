@@ -61,15 +61,18 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product_Attribute extends BSeller_
         $successQueueIds = $this->extractResultSuccessIds($schedule);
         $failedQueueIds  = $this->extractResultFailIds($schedule);
     
-        $this->getQueueResource()
-             ->removeFromQueue($successQueueIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE);
+        $this->getQueueResource()->removeFromQueue(
+            $successQueueIds,
+            BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE
+        );
+        
+        $message = $this->__('All product attributes were successfully integrated.');
     
         if (!empty($failedQueueIds)) {
-            $schedule->setMessages($this->__('Some attributes could not be integrated.'));
-            return;
+            $message .= " " . $this->__('Some attributes could not be integrated.');
         }
-        
-        $schedule->setMessages($this->__('All product attributes were successfully integrated.'));
+    
+        $schedule->setMessages($message);
     }
     
     
