@@ -28,7 +28,7 @@ $tableName = (string) $this->getTable('bseller_skyhub/plp');
 /** @var Varien_Db_Ddl_Table $table */
 $table = $this->newTable($tableName)
     ->addColumn(
-        'bseller_skyhub_code',
+        'skyhub_code',
         $this::TYPE_VARCHAR,
         30,
         [
@@ -47,6 +47,6 @@ $table = $this->newTable($tableName)
 $this->addTimestamps($table);
 $conn->createTable($table);
 
-$this->addIndex(['bseller_skyhub_code'], $tableName);
+$this->addIndex(['skyhub_code'], $tableName);
 
 $this->endSetup();

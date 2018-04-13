@@ -11,6 +11,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
 -->
@@ -96,6 +97,24 @@
             <block type="bseller_skyhub/adminhtml_sales_order_import_log"/>
         </reference>
     </adminhtml_bseller_skyhub_sales_order_import_log>
+
+    <!-- PLP list-->
+    <adminhtml_bseller_skyhub_sales_plp_index>
+        <label>BSeller SkyHub PLP List</label>
+        <update handle="ADD_STYLES"/>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_sales_plp"/>
+        </reference>
+    </adminhtml_bseller_skyhub_sales_plp_index>
+
+    <!-- PLP detail -->
+    <adminhtml_bseller_skyhub_sales_plp_view>
+        <label>BSeller SkyHub PLP Detail</label>
+        <update handle="ADD_STYLES"/>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_sales_plp_view"/>
+        </reference>
+    </adminhtml_bseller_skyhub_sales_plp_view>
 
     <adminhtml_sales_order_view>
         <reference name="order_totals">

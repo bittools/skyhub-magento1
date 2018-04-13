@@ -11,22 +11,16 @@
  *
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
-
-/**
- * Class BSeller_SkyHub_Model_Plp
- *
- * @method $this setSkyhubCode(integer $entityId)
- * @method $this setExpirationDate(string $datetime)
- *
- * @method int     getSkyhubCode()
- * @method string  getExpirationDate()
- */
-class BSeller_SkyHub_Model_Plp extends BSeller_Core_Model_Abstract
+class BSeller_SkyHub_Block_Adminhtml_Sales_Plp
+    extends BSeller_SkyHub_Block_Adminhtml_Widget_Grid_Container
 {
 
-    protected function _construct()
+    protected $_controller = 'adminhtml_sales_plp';
+    
+    
+    public function __construct()
     {
-        $this->_init('bseller_skyhub/plp');
+        parent::__construct();
+        $this->_headerText = $this->__('Pre-post list (PLP) List');
     }
-
 }
