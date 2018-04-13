@@ -131,6 +131,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $order->setData('bseller_skyhub', true);
         $order->setData('bseller_skyhub_code', $code);
         $order->setData('bseller_skyhub_channel', $channel);
+        $order->setData('bseller_skyhub_json', json_encode($data));
 
         /** Bizcommerce_SkyHub uses these fields. */
         $order->setData('skyhub_code', $code);

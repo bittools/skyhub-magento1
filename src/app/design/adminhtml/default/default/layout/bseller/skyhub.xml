@@ -146,4 +146,13 @@
             </action>
         </reference>
     </ADD_STYLES>
+
+    <adminhtml_sales_order_view>
+        <reference name="sales_order_tabs">
+            <action method="addTab">
+                <name>bseller_skyhub_block_adminhtml_sales_order_view_tab_integrationJson</name>
+                <block>bseller_skyhub/adminhtml_sales_order_view_tab_integrationJson</block>
+            </action>
+        </reference>
+    </adminhtml_sales_order_view>
 </layout>
