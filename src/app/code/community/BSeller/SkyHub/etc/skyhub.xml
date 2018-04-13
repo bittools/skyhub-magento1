@@ -284,10 +284,11 @@
                 <attribute_install_config>
                     <attribute_code>person_type</attribute_code>
                     <label>Person Type</label>
-                    <type>static</type>
-                    <input>text</input>
-                    <source_model/>
+                    <type>int</type>
+                    <input>select</input>
                     <required>0</required>
+                    <source>bseller_skyhub/system_config_source_customer_attributes_personType</source>
+                    <default>1</default>
                 </attribute_install_config>
             </person_type>
             <cpf>
@@ -301,7 +302,7 @@
                 <attribute_install_config>
                     <attribute_code>cpf</attribute_code>
                     <label>CPF</label>
-                    <type>static</type>
+                    <type>varchar</type>
                     <input>text</input>
                     <source_model/>
                     <required>0</required>
@@ -318,7 +319,7 @@
                 <attribute_install_config>
                     <attribute_code>cnpj</attribute_code>
                     <label>CNPJ</label>
-                    <type>static</type>
+                    <type>varchar</type>
                     <input>text</input>
                     <source_model/>
                     <required>0</required>
@@ -327,7 +328,7 @@
             <ie>
                 <code>ie</code>
                 <label>Customer IE</label>
-                <description>The customer estadual inscription.</description>
+                <description>The customer state inscription.</description>
                 <cast_type>string</cast_type>
                 <attribute_code>ie</attribute_code>
                 <validation/>
@@ -335,12 +336,26 @@
                 <attribute_install_config>
                     <attribute_code>ie</attribute_code>
                     <label>IE</label>
-                    <type>static</type>
+                    <type>varchar</type>
                     <input>text</input>
                     <source_model/>
                     <required>0</required>
                 </attribute_install_config>
             </ie>
+            <social_name>
+                <code>social_name</code>
+                <label>Social Name</label>
+                <description>The customer social name.</description>
+                <cast_type>string</cast_type>
+                <attribute_code>social_name</attribute_code>
+                <validation/>
+                <required>0</required>
+                <attribute_install_config>
+                    <attribute_code>social_name</attribute_code>
+                    <label>Social Name</label>
+                    <type>varchar</type>
+                </attribute_install_config>
+            </social_name>
         </customer_attributes>
         <catalog>
             <product>

@@ -81,7 +81,7 @@ class BSeller_SkyHub_Model_Customer_Attributes_Mapping extends BSeller_Core_Mode
      */
     public function getAttributeInstallConfig()
     {
-        $config = (array) $this->getSkyHubConfig()->getAttributeInstallConfig($this->getSkyhubCode());
+        $config = (array) $this->getCustomerSkyHubConfig()->getAttributeInstallConfig($this->getSkyhubCode());
 
         foreach ($config as $key => $value) {
             $config[$key] = (''==$value) ? null : $value;

@@ -225,7 +225,16 @@ trait BSeller_SkyHub_Trait_Customer_Attribute
         /** @var Mage_Eav_Model_Entity_Setup $installer */
         $installer = Mage::getModel('eav/entity_setup', 'core_setup');
         $installer->startSetup();
-        $installer->addAttribute(Mage_Catalog_Model_Customer::ENTITY, $code, $attributeData);
+        $installer->addAttribute('customer', $code, $attributeData);
+
+        //adding the attribute to the adminhtml form
+        $usedInCustomerAddressForms = array(
+            'adminhtml_customer'
+        );
+        $attribute = Mage::getSingleton('eav/config')->getAttribute('customer', $code);
+        $attribute->setData('used_in_forms', $usedInCustomerAddressForms);
+        $attribute->save();
+
         $installer->endSetup();
 
         return $this->loadCustomerAttribute($code);
@@ -241,7 +250,7 @@ trait BSeller_SkyHub_Trait_Customer_Attribute
     protected function loadCustomerAttribute($code)
     {
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        $attribute = Mage::getModel('eav/entity_attribute')->loadByCode(Mage_Catalog_Model_Customer::ENTITY, $code);
+        $attribute = Mage::getModel('eav/entity_attribute')->loadByCode('customer', $code);
         return $attribute;
     }
 

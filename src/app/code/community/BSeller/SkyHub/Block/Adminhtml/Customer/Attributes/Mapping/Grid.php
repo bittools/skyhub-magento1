@@ -45,14 +45,6 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Grid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('type', array(
-            'header'    => $this->__('Type'),
-            'align'     => 'left',
-            'width'     => '50px',
-            'type'      => 'options',
-            'options'   => Mage::getModel('bseller_skyhub/system_config_source_data_types')->toArray(),
-        ));
-        
         $this->addColumn('skyhub_code', array(
             'header'           => $this->__('SkyHub Code'),
             'width'            => '150px',
@@ -76,6 +68,14 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Grid
         $this->addColumn('skyhub_description', array(
             'header'    => $this->__('SkyHub Description'),
             'align'     => 'left',
+        ));
+
+        $this->addColumn('create_attribute_link', array(
+            'align' => 'center',
+            'index' => 'create_attribute_link',
+            'width' => 50,
+            'type' => 'text',
+            'renderer' =>  'BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Renderer_LinkCreate'
         ));
         
         return parent::_prepareColumns();

@@ -16,7 +16,7 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
 {
 
     use BSeller_SkyHub_Trait_Catalog_Product;
-    use BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification;
+    use BSeller_SkyHub_Trait_Attribute_Notification;
 
     /**
      * @param BSeller_SkyHub_Model_Catalog_Product $product

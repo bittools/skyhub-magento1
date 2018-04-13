@@ -18,7 +18,7 @@
 class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes
     extends BSeller_SkyHub_Block_Adminhtml_Notifications_Abstract
 {
-    use BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification;
+    use BSeller_SkyHub_Trait_Attribute_Notification;
 
     protected function _construct()
     {
@@ -48,18 +48,5 @@ class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes
         }
 
         return $this->getUrl('adminhtml/bseller_skyhub_catalog_product_attributes_mapping/index');
-    }
-
-
-    /**
-     * @param int $id
-     *
-     * @return string
-     */
-    public function getAttributeAutoUrl($id)
-    {
-        return $this->getUrl('adminhtml/bseller_skyhub_catalog_product_attributes_mapping/createAutomatically', [
-            'id' => $id
-        ]);
     }
 }

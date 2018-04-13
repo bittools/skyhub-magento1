@@ -16,7 +16,8 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Customer_Attributes_MappingControl
     extends BSeller_SkyHub_Controller_Admin_Action
 {
 
-    use BSeller_SkyHub_Trait_Customer_Attribute_Mapping,
+    use BSeller_SkyHub_Trait_Customer_Attribute,
+        BSeller_SkyHub_Trait_Customer_Attribute_Mapping,
         BSeller_SkyHub_Trait_Config;
 
     
@@ -138,6 +139,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Customer_Attributes_MappingControl
             'type'            => 'varchar',
             'input'           => 'text',
             'required'        => 0,
+            'visible'         => 0,
             'visible_on_front'=> 0,
             'filterable'      => 0,
             'searchable'      => 0,
@@ -147,8 +149,8 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Customer_Attributes_MappingControl
             'global'          => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
             'note'            => sprintf(
                 '%s. %s.',
-                'Created automatically by BSeller SkyHub module.',
-                $mapping->getSkyhubDescription()
+                $this->__('Created automatically by BSeller SkyHub module.'),
+                $this->__($mapping->getSkyhubDescription())
             ),
         ];
 

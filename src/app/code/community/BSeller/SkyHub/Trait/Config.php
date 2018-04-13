@@ -184,9 +184,17 @@ trait BSeller_SkyHub_Trait_Config
     /**
      * @return BSeller_SkyHub_Model_Config
      */
-    protected function getSkyHubConfig()
+    protected function getProductSkyHubConfig()
     {
-        return Mage::getSingleton('bseller_skyhub/config');
+        return Mage::getSingleton('bseller_skyhub/config_catalog_product');
+    }
+
+    /**
+     * @return BSeller_SkyHub_Model_Config
+     */
+    protected function getCustomerSkyHubConfig()
+    {
+        return Mage::getSingleton('bseller_skyhub/config_customer');
     }
 
     /**
