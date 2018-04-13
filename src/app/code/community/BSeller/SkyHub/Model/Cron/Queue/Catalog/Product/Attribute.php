@@ -78,10 +78,11 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product_Attribute extends BSeller_
     
     /**
      * @param Mage_Cron_Model_Schedule $schedule
+     * @param Mage_Core_Model_Store    $store
      */
-    public function executeIntegration(Mage_Cron_Model_Schedule $schedule)
+    public function executeIntegration(Mage_Cron_Model_Schedule $schedule, Mage_Core_Model_Store $store)
     {
-        if (!$this->canRun($schedule, $this->getStoreId())) {
+        if (!$this->canRun($schedule, $store->getId())) {
             return;
         }
         

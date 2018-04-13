@@ -43,14 +43,14 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
                 continue;
             }
 
-            $this->getQueueResource()->queue(
-                $category->getId(),
-                BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
-                BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
-            );
-
             $categoryIds[] = $category->getId();
         }
+    
+        $this->getQueueResource()->queue(
+            $categoryIds,
+            BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
+            BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
+        );
 
         $schedule->setMessages(
             $this->__('The categories were successfully queued. Category IDs: %s.', implode(',', $categoryIds))
@@ -82,7 +82,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function executeIntegration(Mage_Cron_Model_Schedule $schedule)
+    public function executeIntegration(Mage_Cron_Model_Schedule $schedule, Mage_Core_Model_Store $store)
     {
         if (!$this->canRun($schedule)) {
             return;
@@ -98,23 +98,22 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
             return;
         }
     
-        /** @var Mage_Catalog_Model_Resource_Category_Collection $collection */
-        $collection = $this->getCategoryCollection()
-                           ->addFieldToFilter('entity_id', $categoryIds);
-    
         $successQueueIds = [];
         $failedQueueIds  = [];
     
         /** @var Mage_Catalog_Model_Category $category */
-        foreach ($collection as $category) {
+        foreach ($categoryIds as $categoryId) {
+            /** @var Mage_Catalog_Model_Category $category */
+            $category = $this->getCategory($categoryId, $store);
+            
             /** @var \SkyHub\Api\Handler\Response\HandlerInterface $response */
             $response = $this->catalogCategoryIntegrator()->createOrUpdate($category);
         
             if ($this->isErrorResponse($response)) {
-                $failedQueueIds[] = $category->getId();
+                $failedQueueIds[] = $categoryId;
             
                 $this->getQueueResource()->setFailedEntityIds(
-                    $category->getId(),
+                    $categoryId,
                     BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
                     $response->message()
                 );
@@ -122,10 +121,26 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
                 continue;
             }
     
-            $successQueueIds[] = $category->getId();
+            $successQueueIds[] = $categoryId;
         }
     
         $this->mergeResults($schedule, $successQueueIds, $failedQueueIds);
+    }
+    
+    
+    /**
+     * @return Mage_Catalog_Model_Category
+     */
+    protected function getCategory($categoryId, Mage_Core_Model_Store $store = null)
+    {
+        $data = ['disable_flat' => true];
+        
+        /** @var Mage_Catalog_Model_Category $category */
+        $category = Mage::getModel('catalog/category', $data);
+        $category->setStoreId($store->getId())
+                 ->load($categoryId);
+        
+        return $category;
     }
 
 
@@ -136,6 +151,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
     {
         /** @var Mage_Catalog_Model_Resource_Category_Collection $collection */
         $collection = Mage::getResourceModel('catalog/category_collection');
+        $collection->setDisableFlat(true);
+        
         return $collection;
     }
 
