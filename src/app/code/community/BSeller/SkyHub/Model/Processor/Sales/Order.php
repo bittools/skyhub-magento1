@@ -427,6 +427,13 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             $attribute = $this->getAttributeById($mappedAttribute->getAttributeId());
             $customer->setData($attribute->getAttributeCode(), $this->arrayExtract($data, 'state_registration'));
         }
+
+        //set the mapped IE attribute value on customer if exists
+        if (isset($mappedCustomerAttributes['social_name'])) {
+            $mappedAttribute = $mappedCustomerAttributes['social_name'];
+            $attribute = $this->getAttributeById($mappedAttribute->getAttributeId());
+            $customer->setData($attribute->getAttributeCode(), $this->arrayExtract($data, 'name'));
+        }
     }
     
 }
