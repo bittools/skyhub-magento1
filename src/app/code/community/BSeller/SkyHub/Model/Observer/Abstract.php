@@ -21,11 +21,13 @@ abstract class BSeller_SkyHub_Model_Observer_Abstract
 
 
     /**
+     * @param int|null $storeId
+     *
      * @return bool
      */
-    protected function canRun()
+    protected function canRun($storeId = null)
     {
-        if (!$this->isModuleEnabled()) {
+        if (!$this->isModuleEnabled($storeId)) {
             return false;
         }
 

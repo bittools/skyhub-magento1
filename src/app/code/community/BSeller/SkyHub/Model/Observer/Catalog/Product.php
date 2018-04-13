@@ -82,10 +82,15 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     public function addIntegrateButtonToProductEditPage(Varien_Event_Observer $observer)
     {
-        if (!$this->canRun()) {
-            return;
-        }
-
+        // $storeId = Mage::app()->getRequest()->getParam('store');
+        
+        /** @var Mage_Core_Model_Store $store */
+        // $store = Mage::app()->getStore($storeId);
+    
+        // if (!$this->canRun($store->getId())) {
+        //     return;
+        // }
+        
         /** @var Mage_Adminhtml_Block_Catalog_Product_Edit $block */
         $block = $observer->getData('block');
 
