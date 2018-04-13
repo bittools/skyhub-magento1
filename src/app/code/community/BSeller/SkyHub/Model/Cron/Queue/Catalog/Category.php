@@ -184,7 +184,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
      */
     protected function canRun(Mage_Cron_Model_Schedule $schedule, $storeId = null)
     {
-        if (!$this->getCronConfig()->catalogCategory()->isEnabled()) {
+        if (!$this->getCronConfig()->catalogCategory()->isEnabled($storeId)) {
             $schedule->setMessages($this->__('Catalog Category Cron is Disabled'));
             return false;
         }

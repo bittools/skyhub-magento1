@@ -87,7 +87,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order extends BSeller_SkyHub_Model_C
      */
     protected function canRun(Mage_Cron_Model_Schedule $schedule, $storeId = null)
     {
-        if (!$this->getCronConfig()->salesOrderQueue()->isEnabled()) {
+        if (!$this->getCronConfig()->salesOrderQueue()->isEnabled($storeId)) {
             $schedule->setMessages($this->__('Sales Order Queue Cron is Disabled'));
             return false;
         }

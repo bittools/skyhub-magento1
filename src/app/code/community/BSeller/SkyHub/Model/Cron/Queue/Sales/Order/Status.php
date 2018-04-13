@@ -41,6 +41,12 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
             ->reset('columns')
             ->columns('entity_id');
 
+        $limit = $this->getCronConfig()->salesOrderStatus()->queueCreateLimit();
+        
+        if ($limit) {
+            $select->limit((int) $limit);
+        }
+        
         $orderIds = (array) $this->getQueueResource()
             ->getReadConnection()
             ->fetchCol($select);
@@ -65,14 +71,12 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
      */
     public function execute(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!$this->canRun($schedule)) {
-            return;
-        }
-
+        $limit = $this->getCronConfig()->salesOrderStatus()->queueExecuteLimit();
+        
         $orderIds = (array) $this->getQueueResource()->getPendingEntityIds(
             BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER_STATUS,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT,
-            50
+            (int) $limit
         );
 
         if (empty($orderIds)) {
@@ -86,6 +90,10 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
 
         /** @var Mage_Sales_Model_Order $order */
         foreach ($collection as $order) {
+            if (!$this->canRun($schedule, $order->getStoreId())) {
+                return;
+            }
+            
             /** @var array $orderData */
             $orderData = (array) $this->orderIntegrator()->orderByOrderId($order->getId());
 
@@ -127,7 +135,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
      */
     protected function canRun(Mage_Cron_Model_Schedule $schedule, $storeId = null)
     {
-        if (!$this->getCronConfig()->salesOrderStatus()->isEnabled()) {
+        if (!$this->getCronConfig()->salesOrderStatus()->isEnabled($storeId)) {
             $schedule->setMessages($this->__('Sales Order Status Cron is Disabled'));
             return false;
         }

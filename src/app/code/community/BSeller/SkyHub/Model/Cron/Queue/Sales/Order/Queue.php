@@ -14,19 +14,25 @@
 
 class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_Model_Cron_Queue_Sales_Abstract
 {
+    
+    public function execute(Mage_Cron_Model_Schedule $schedule)
+    {
+        $this->processStoreIteration($this, 'executeIntegration', $schedule);
+    }
+    
 
     /**
      * Import next orders from the queue in SkyHub.
      *
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function execute(Mage_Cron_Model_Schedule $schedule)
+    public function executeIntegration(Mage_Cron_Model_Schedule $schedule, Mage_Core_Model_Store $store)
     {
-        if (!$this->canRun($schedule)) {
+        if (!$this->canRun($schedule, $store->getId())) {
             return;
         }
 
-        $limit = 20;
+        $limit = $this->getCronConfig()->salesOrderQueue()->getLimit();
         $count = 0;
 
         while ($count < $limit) {
@@ -47,12 +53,14 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
             }
 
             if (!$order || !$order->getId()) {
-                $schedule->setMessages($this->__('Order cannot be created.'));
+                $schedule->setMessages($this->__('Order cannot be created in store %s.', $store->getFrontendName()));
                 return;
             }
 
             $message  = $schedule->getMessages();
-            $message .= $this->__('Order %s successfully created.', $order->getIncrementId());
+            $message .= $this->__(
+                'Order %s successfully created in store %s.', $order->getIncrementId(), $store->getFrontendName()
+            );
 
             /** @var \SkyHub\Api\Handler\Response\HandlerDefault $isDeleted */
             $isDeleted = $this->orderQueueIntegrator()->deleteByOrder($order);
@@ -75,7 +83,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
      */
     protected function canRun(Mage_Cron_Model_Schedule $schedule, $storeId = null)
     {
-        if (!$this->getCronConfig()->salesOrderQueue()->isEnabled()) {
+        if (!$this->getCronConfig()->salesOrderQueue()->isEnabled($storeId)) {
             $schedule->setMessages($this->__('Sales Order Queue Cron is Disabled'));
             return false;
         }

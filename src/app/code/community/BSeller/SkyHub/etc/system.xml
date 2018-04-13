@@ -437,9 +437,21 @@
                                 <enabled>1</enabled>
                             </depends>
                         </queue_create>
+                        <queue_create_limit>
+                            <label>Queue Orders Max Qty</label>
+                            <sort_order>30</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[The maximum amount of orders to be queued by time.]]></comment>
+                            <depends>
+                                <enabled>1</enabled>
+                            </depends>
+                        </queue_create_limit>
                         <queue_execute>
                             <label>Queue Execute</label>
-                            <sort_order>30</sort_order>
+                            <sort_order>40</sort_order>
                             <frontend_type>text</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -449,6 +461,18 @@
                                 <enabled>1</enabled>
                             </depends>
                         </queue_execute>
+                        <queue_execute_limit>
+                            <label>Update Orders Max Qty</label>
+                            <sort_order>50</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[The maximum amount of orders to be updated by time.]]></comment>
+                            <depends>
+                                <enabled>1</enabled>
+                            </depends>
+                        </queue_execute_limit>
                     </fields>
                 </cron_sales_order_status>
                 <!-- SALES ORDER QUEUE -->
@@ -482,6 +506,7 @@
                                 <enabled>1</enabled>
                             </depends>
                         </expression>
+                        <!--
                         <default_store_id>
                             <label>Imported Orders Store View</label>
                             <sort_order>30</sort_order>
@@ -492,6 +517,19 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[The default store which the order will be imported in.]]></comment>
                         </default_store_id>
+                        -->
+                        <limit>
+                            <label>Import Orders Max Qty</label>
+                            <sort_order>40</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[The maximum amount of orders to be imported by time.]]></comment>
+                            <depends>
+                                <enabled>1</enabled>
+                            </depends>
+                        </limit>
                     </fields>
                 </cron_sales_order_queue>
             </groups>

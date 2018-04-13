@@ -422,12 +422,15 @@
                 <!-- SALES ORDER STATUS QUEUE -->
                 <enabled>1</enabled>
                 <queue_create>*/10 * * * *</queue_create>
+                <queue_create_limit>50</queue_create_limit>
                 <queue_execute>*/10 * * * *</queue_execute>
+                <queue_execute_limit>50</queue_execute_limit>
             </cron_sales_order_status>
             <cron_sales_order_queue>
                 <!-- SALES ORDER QUEUE -->
                 <enabled>1</enabled>
                 <expression>*/10 * * * *</expression>
+                <limit>50</limit>
             </cron_sales_order_queue>
         </bseller_skyhub>
         <payment>
