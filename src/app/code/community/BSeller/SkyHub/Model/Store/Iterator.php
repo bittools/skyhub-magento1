@@ -49,7 +49,7 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
     
     
     /**
-     * @param object $object
+     * @param object $subject
      * @param string $method
      * @param array  $params
      *
@@ -57,23 +57,40 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
      *
      * @throws Mage_Core_Exception
      */
-    public function iterate($object, $method, array $params = [])
+    public function iterate($subject, $method, array $params = [])
     {
         $this->initIterator()
             ->initStores();
         
-        if (!$this->validateObjectMethod($object, $method)) {
+        if (!$this->validateObjectMethod($subject, $method)) {
             return $this;
         }
+        
+        $eventParams = [
+            'iterator' => $this,
+            'subject'  => $subject,
+            'method'   => $method,
+            'params'   => $params,
+        ];
+        
+        Mage::dispatchEvent('bseller_skyhub_store_iterate_before', $eventParams);
         
         /** @var Mage_Core_Model_Store $store */
         foreach ($this->getStores() as $store) {
             $this->simulateStore($store);
             
             $params['__store'] = $this->getCurrentStore();
+    
+            $eventParams['store']          = $this->getCurrentStore();
+            $eventParams['initial_store']  = $this->getInitialStore();
+            $eventParams['previous_store'] = $this->getPreviousStore();
             
-            call_user_func_array([$object, $method], $params);
+            Mage::dispatchEvent('bseller_skyhub_store_iterate', $eventParams);
+            
+            call_user_func_array([$subject, $method], $params);
         }
+    
+        Mage::dispatchEvent('bseller_skyhub_store_iterate_after', $eventParams);
         
         $this->endIterator();
         
@@ -224,6 +241,10 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
     
             /** @var array $stores */
             $stores = Mage::app()->getStores();
+    
+            Mage::dispatchEvent('bseller_skyhub_store_init_stores', [
+                'stores' => $stores,
+            ]);
     
             /** @var Mage_Core_Model_Store $store */
             foreach ($stores as $store) {

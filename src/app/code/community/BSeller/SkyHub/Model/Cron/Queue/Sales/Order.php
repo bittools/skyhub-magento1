@@ -23,16 +23,22 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order extends BSeller_SkyHub_Model_C
      */
     public function execute(Mage_Cron_Model_Schedule $schedule)
     {
-        if ($this->processIteration($this, __FUNCTION__, $schedule)) {
+        $this->processStoreIteration($this, 'executeIntegration', $schedule);
+    }
+    
+    
+    /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     * @param Mage_Core_Model_Store    $store
+     */
+    public function executeIntegration(Mage_Cron_Model_Schedule $schedule, Mage_Core_Model_Store $store)
+    {
+        if (!$this->canRun($schedule, $store->getId())) {
             return;
         }
-
-        if (!$this->canRun($schedule)) {
-            return;
-        }
-
+    
         $orders = (array) $this->orderIntegrator()->orders();
-
+    
         foreach ($orders as $orderData) {
             try {
                 /** @var Mage_Sales_Model_Order $order */
@@ -41,25 +47,33 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order extends BSeller_SkyHub_Model_C
                 Mage::logException($e);
                 continue;
             }
-
+        
             if (!$order || !$order->getId()) {
                 continue;
             }
-
-            $statusType  = $this->arrayExtract($orderData, 'status/type');
-            $statusCode  = $this->arrayExtract($orderData, 'status/code');
+        
+            $statusType = $this->arrayExtract($orderData, 'status/type');
+            $statusCode = $this->arrayExtract($orderData, 'status/code');
             // $statusLabel = $this->arrayExtract($orderData, 'status/label');
-
+        
             $this->salesOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
-
+        
             $message  = $schedule->getMessages();
-
+        
             if ($order->getData('is_created')) {
-                $message .= $this->__('Order ID %s was successfully created.', $order->getIncrementId());
+                $message .= $this->__(
+                    'Order ID %s was successfully created in store %s.',
+                    $order->getIncrementId(),
+                    $store->getFrontendName()
+                );
             } elseif ($order->hasDataChanges()) {
-                $message .= $this->__('Order ID %s was updated.', $order->getIncrementId());
+                $message .= $this->__(
+                    'Order ID %s was updated in store %s.',
+                    $order->getIncrementId(),
+                    $store->getFrontendName()
+                );
             }
-
+        
             $schedule->setMessages($message);
         }
     }

@@ -35,8 +35,12 @@ abstract class BSeller_SkyHub_Model_Cron_Abstract
         /**
          * If a Store ID is specified it needs to be privileged.
          */
-        if (!empty($storeId) && $this->getStore($storeId) && !$this->isModuleEnabled($storeId)) {
-            return false;
+        if (!empty($storeId) && $this->getStore($storeId)) {
+            if (!$this->isModuleEnabled($storeId)) {
+                return false;
+            }
+            
+            return true;
         }
     
         /**

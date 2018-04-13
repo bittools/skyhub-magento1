@@ -381,8 +381,6 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         $order     = null;
         
         if (!empty($orderData)) {
-            
-            
             $this->initSession($this->arrayExtract($orderData, 'session'));
 
             $this->processQuote($orderData);

@@ -73,7 +73,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             return $order;
         }
 
-        $this->simulateStore($this->getStore());
+//        $this->simulateStore($this->getStore());
 
         $info = new Varien_Object([
             'increment_id'      => $incrementId,
@@ -277,7 +277,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     protected function createCustomer(array $data, Mage_Customer_Model_Customer $customer)
     {
-        $customer->setStore(Mage::app()->getStore());
+        $customer->setStore($this->getStore());
         
         $dateOfBirth = $this->arrayExtract($data, 'date_of_birth');
         $email       = $this->arrayExtract($data, 'email');
@@ -364,7 +364,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     protected function getStore()
     {
-        return $this->getNewOrdersDefaultStore();
+        return Mage::app()->getStore();
     }
     
     
