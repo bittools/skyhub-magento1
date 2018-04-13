@@ -15,6 +15,9 @@
 class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_Iterator_Interface
 {
     
+    use BSeller_SkyHub_Trait_Config;
+    
+    
     /** @var Mage_Core_Model_Store */
     protected $initialStore = null;
     
@@ -220,6 +223,18 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
         }
         
         if (!$store->getIsActive()) {
+            return false;
+        }
+        
+        if (!$this->isModuleEnabled($store->getId())) {
+            return false;
+        }
+        
+        if (!$this->getServiceEmail($store->getId())) {
+            return false;
+        }
+        
+        if (!$this->getServiceApiKey($store->getId())) {
             return false;
         }
         
