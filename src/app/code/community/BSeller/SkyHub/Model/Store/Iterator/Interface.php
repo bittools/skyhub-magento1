@@ -57,6 +57,12 @@ interface BSeller_SkyHub_Model_Store_Iterator_Interface
     
     
     /**
+     * @return Mage_Core_Model_Store
+     */
+    public function getInitialStore();
+    
+    
+    /**
      * Checks if the Store Iterator is already iterating in the moment.
      *
      * @return boolean

@@ -15,7 +15,8 @@
 class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_Iterator_Interface
 {
     
-    use BSeller_SkyHub_Trait_Config;
+    use BSeller_SkyHub_Trait_Config,
+        BSeller_SkyHub_Trait_Service;
     
     
     /** @var Mage_Core_Model_Store */
@@ -89,6 +90,9 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
             
             Mage::app()->setCurrentStore($store);
             
+            /** Reinitialize the service parameters. */
+            $this->service()->initApi();
+            
             $this->currentStore = $store;
         } catch (Exception $e) {
             Mage::logException($e);
@@ -113,6 +117,15 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
     public function getPreviousStore()
     {
         return $this->previousStore;
+    }
+    
+    
+    /**
+     * @return Mage_Core_Model_Store
+     */
+    public function getInitialStore()
+    {
+        return $this->initialStore;
     }
     
     
@@ -143,6 +156,32 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
     protected function endIterator()
     {
         Mage::unregister(self::REGISTRY_KEY);
+        $this->reset();
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @return $this
+     */
+    protected function reset()
+    {
+        $this->simulateStore($this->getInitialStore());
+        $this->clear();
+        
+        return $this;
+    }
+    
+    
+    /**
+     * @return $this
+     */
+    protected function clear()
+    {
+        $this->previousStore = null;
+        $this->currentStore  = null;
+        
         return $this;
     }
     
@@ -230,11 +269,7 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
             return false;
         }
         
-        if (!$this->getServiceEmail($store->getId())) {
-            return false;
-        }
-        
-        if (!$this->getServiceApiKey($store->getId())) {
+        if (!$this->isConfigurationOk($store->getId())) {
             return false;
         }
         

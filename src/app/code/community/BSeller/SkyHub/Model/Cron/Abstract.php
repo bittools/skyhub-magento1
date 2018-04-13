@@ -26,26 +26,47 @@ abstract class BSeller_SkyHub_Model_Cron_Abstract
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
+     * @param int|null                 $storeId
      *
      * @return bool
      */
-    protected function canRun(Mage_Cron_Model_Schedule $schedule)
+    protected function canRun(Mage_Cron_Model_Schedule $schedule, $storeId = null)
     {
-        if (!$this->isModuleEnabled()) {
+        /**
+         * If a Store ID is specified it needs to be privileged.
+         */
+        if (!empty($storeId) && $this->getStore($storeId) && !$this->isModuleEnabled($storeId)) {
+            return false;
+        }
+    
+        /**
+         * Otherwise checks if any store is activated to use the module.
+         */
+        if (!$this->isModuleEnabled($storeId) && empty($this->getStoreIterator()->getStores())) {
             $schedule->setMessages($this->__('Module is not enabled in configuration.'));
             return false;
         }
 
         return true;
     }
-
-
+    
+    
     /**
-     * @return Mage_Core_Model_Store
+     * @param int|null $storeId
+     *
+     * @return bool|Mage_Core_Model_Store
      */
-    protected function getStore()
+    protected function getStore($storeId = null)
     {
-        return Mage::app()->getDefaultStoreView();
+        try {
+            $store = Mage::app()->getStore($storeId);
+    
+            if ($store && $store->getId()) {
+                return $store;
+            }
+        } catch (Exception $e) {}
+        
+        return false;
     }
 
 
