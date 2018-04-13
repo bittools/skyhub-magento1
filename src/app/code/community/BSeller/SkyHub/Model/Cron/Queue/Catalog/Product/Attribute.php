@@ -56,10 +56,10 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product_Attribute extends BSeller_
      */
     public function execute(Mage_Cron_Model_Schedule $schedule)
     {
-        $this->processIteration($this, 'executeIntegration', $schedule);
+        $this->processStoreIteration($this, 'executeIntegration', $schedule);
     
-        $successQueueIds = (array) $schedule->getData('success_queue_ids');
-        $failedQueueIds  = (array) $schedule->getData('failed_queue_ids');
+        $successQueueIds = $this->extractResultSuccessIds($schedule);
+        $failedQueueIds  = $this->extractResultFailIds($schedule);
     
         $this->getQueueResource()
              ->removeFromQueue($successQueueIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE);
@@ -94,8 +94,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product_Attribute extends BSeller_
     
         $attributes = $this->getProductAttributes($attributeIds);
         
-        $successQueueIds = (array) $schedule->getData('success_queue_ids');
-        $failedQueueIds  = (array) $schedule->getData('failed_queue_ids');
+        $successQueueIds = [];
+        $failedQueueIds  = [];
     
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         foreach ($attributes as $attribute) {
@@ -117,8 +117,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product_Attribute extends BSeller_
             $successQueueIds[$attribute->getId()] = $attribute->getId();
         }
         
-        $schedule->setData('success_queue_ids', $successQueueIds);
-        $schedule->setData('failed_queue_ids', $failedQueueIds);
+        $this->mergeResults($schedule, $successQueueIds, $failedQueueIds);
     }
 
 

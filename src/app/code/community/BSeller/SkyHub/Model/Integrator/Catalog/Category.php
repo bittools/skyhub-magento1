@@ -26,7 +26,7 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Category extends BSeller_SkyHub_Mo
     /**
      * @param Mage_Catalog_Model_Category $category
      *
-     * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
+     * @return \SkyHub\Api\Handler\Response\HandlerInterface
      */
     public function createOrUpdate(Mage_Catalog_Model_Category $category)
     {
@@ -55,10 +55,6 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Category extends BSeller_SkyHub_Mo
      */
     public function create(Mage_Catalog_Model_Category $category)
     {
-        if (!$this->canIntegrateCategory($category)) {
-            return false;
-        }
-
         /** @var \SkyHub\Api\EntityInterface\Catalog\Category $interface */
         $interface = $this->categoryTransformer()
                           ->convert($category);
@@ -85,10 +81,6 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Category extends BSeller_SkyHub_Mo
      */
     public function update(Mage_Catalog_Model_Category $category)
     {
-        if (!$this->canIntegrateCategory($category)) {
-            return false;
-        }
-        
         /** @var \SkyHub\Api\EntityInterface\Catalog\Category $interface */
         $interface = $this->categoryTransformer()
                           ->convert($category);

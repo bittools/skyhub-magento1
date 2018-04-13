@@ -46,10 +46,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
             $this->getQueueResource()->queue(
                 $category->getId(),
                 BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
-                BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT,
-                true,
-                null,
-                $category->getStoreId()
+                BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
             );
 
             $categoryIds[] = $category->getId();
@@ -66,59 +63,69 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
      */
     public function execute(Mage_Cron_Model_Schedule $schedule)
     {
+        $this->processStoreIteration($this, 'executeIntegration', $schedule);
+    
+        $successQueueIds = $this->extractResultSuccessIds($schedule);
+        $failedQueueIds  = $this->extractResultFailIds($schedule);
+    
+        $this->getQueueResource()
+             ->removeFromQueue($successQueueIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY);
+        
+        $schedule->setMessages($this->__(
+            'Queue was processed. Success: %s. Errors: %s.',
+            implode(',', $successQueueIds),
+            implode(',', $failedQueueIds)
+        ));
+    }
+    
+    
+    /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     */
+    public function executeIntegration(Mage_Cron_Model_Schedule $schedule)
+    {
         if (!$this->canRun($schedule)) {
             return;
         }
-
+    
         $categoryIds = (array) $this->getQueueResource()->getPendingEntityIds(
             BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
-
+    
         if (empty($categoryIds)) {
             $schedule->setMessages($this->__('No category to be integrated right now.'));
             return;
         }
-
+    
         /** @var Mage_Catalog_Model_Resource_Category_Collection $collection */
         $collection = $this->getCategoryCollection()
-            ->addFieldToFilter('entity_id', $categoryIds);
-
-        $successIds = [];
-        $errorIds   = [];
-
+                           ->addFieldToFilter('entity_id', $categoryIds);
+    
+        $successQueueIds = [];
+        $failedQueueIds  = [];
+    
         /** @var Mage_Catalog_Model_Category $category */
         foreach ($collection as $category) {
-            /** @var bool|\SkyHub\Api\Handler\Response\HandlerInterface $response */
+            /** @var \SkyHub\Api\Handler\Response\HandlerInterface $response */
             $response = $this->catalogCategoryIntegrator()->createOrUpdate($category);
-
+        
             if ($this->isErrorResponse($response)) {
-                $errorIds[] = $category->getId();
-
+                $failedQueueIds[] = $category->getId();
+            
                 $this->getQueueResource()->setFailedEntityIds(
                     $category->getId(),
                     BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
-                    $response->message(),
-                    $category->getStoreId()
+                    $response->message()
                 );
-
+            
                 continue;
             }
-
-            $this->getQueueResource()->removeFromQueue(
-                $category->getId(),
-                BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY,
-                $category->getStoreId()
-            );
-
-            $successIds[] = $category->getId();
+    
+            $successQueueIds[] = $category->getId();
         }
-
-        $schedule->setMessages($this->__(
-            'Queue was processed. Success: %s. Errors: %s.',
-            implode(',', $successIds),
-            implode(',', $errorIds)
-        ));
+    
+        $this->mergeResults($schedule, $successQueueIds, $failedQueueIds);
     }
 
 

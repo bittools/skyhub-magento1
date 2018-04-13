@@ -36,7 +36,7 @@ trait BSeller_SkyHub_Trait_Store_Iterator
      *
      * @return bool
      */
-    protected function processIteration($object, $method, $params = null)
+    protected function processStoreIteration($object, $method, $params = null)
     {
         if (!is_array($params)) {
             $params = [$params];
