@@ -123,6 +123,23 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
     
     
     /**
+     * @return bool|Mage_Core_Model_Store
+     */
+    public function getDefaultStore($onlyIfActive = false)
+    {
+        $store = Mage::app()->getDefaultStoreView();
+        
+        if (true === $onlyIfActive) {
+            if (!$this->isModuleEnabled($store->getId())) {
+                return false;
+            }
+        }
+        
+        return $store;
+    }
+    
+    
+    /**
      * @return Mage_Core_Model_Store
      */
     public function getCurrentStore()

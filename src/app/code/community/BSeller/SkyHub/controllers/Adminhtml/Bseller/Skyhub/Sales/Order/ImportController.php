@@ -24,6 +24,8 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Sales_Order_ImportController
     
     public function submitAction()
     {
+        $this->prepareStore();
+        
         $codes = $this->getCleanedOrderCodes();
         
         if (empty($codes)) {
@@ -105,5 +107,22 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Sales_Order_ImportController
         }
         
         $this->redirectBack();
+    }
+    
+    
+    /**
+     * @return $this
+     *
+     * @throws Mage_Core_Model_Store_Exception
+     */
+    protected function prepareStore()
+    {
+        $storeId = $this->getRequest()->getPost('store_id', $this->getStoreIterator()->getDefaultStore());
+        $store   = Mage::app()->getStore($storeId);
+        
+        $this->_getSession()->setData('simulated_store_id', $store->getId());
+        $this->getStoreIterator()->simulateStore($store);
+        
+        return $this;
     }
 }

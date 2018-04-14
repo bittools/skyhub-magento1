@@ -53,13 +53,13 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
             }
 
             if (!$order || !$order->getId()) {
-                $schedule->setMessages($this->__('Order cannot be created in store %s.', $store->getFrontendName()));
+                $schedule->setMessages($this->__('Order cannot be created in store %s.', $store->getName()));
                 return;
             }
 
             $message  = $schedule->getMessages();
             $message .= $this->__(
-                'Order %s successfully created in store %s.', $order->getIncrementId(), $store->getFrontendName()
+                'Order %s successfully created in store %s.', $order->getIncrementId(), $store->getName()
             );
 
             /** @var \SkyHub\Api\Handler\Response\HandlerDefault $isDeleted */

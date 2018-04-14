@@ -81,8 +81,18 @@ class BSeller_SkyHub_Controller_Admin_Queue extends BSeller_SkyHub_Controller_Ad
      * @return bool
      * @throws Exception
      */
-    protected function importOrder($code)
+    protected function importOrder($code, $storeId = null)
     {
+        if (!$this->isModuleEnabled($storeId)) {
+            $this->_getSession()->addError($this->__('The module is not enabled in this store.', $code));
+            return false;
+        }
+        
+        if (!$this->isConfigurationOk($storeId)) {
+            $this->_getSession()->addError($this->__('The module is not configured correctly in this store.', $code));
+            return false;
+        }
+        
         /** @var bool|array $orderData */
         $orderData = $this->getOrderIntegrator()->order($code);
         

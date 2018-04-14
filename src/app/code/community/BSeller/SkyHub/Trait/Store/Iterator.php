@@ -52,11 +52,11 @@ trait BSeller_SkyHub_Trait_Store_Iterator
     
     
     /**
-     * @return BSeller_SkyHub_Model_Store_Iterator_Interface
+     * @return BSeller_SkyHub_Model_Store_Iterator
      */
     protected function getStoreIterator()
     {
-        /** @var BSeller_SkyHub_Model_Store_Iterator_Interface $iterator */
+        /** @var BSeller_SkyHub_Model_Store_Iterator $iterator */
         $iterator = Mage::getSingleton('bseller_skyhub/store_iterator');
         return $iterator;
     }

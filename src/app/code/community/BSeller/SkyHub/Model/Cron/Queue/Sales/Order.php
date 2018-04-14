@@ -64,13 +64,13 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order extends BSeller_SkyHub_Model_C
                 $message .= $this->__(
                     'Order ID %s was successfully created in store %s.',
                     $order->getIncrementId(),
-                    $store->getFrontendName()
+                    $store->getName()
                 );
             } elseif ($order->hasDataChanges()) {
                 $message .= $this->__(
                     'Order ID %s was updated in store %s.',
                     $order->getIncrementId(),
-                    $store->getFrontendName()
+                    $store->getName()
                 );
             }
         

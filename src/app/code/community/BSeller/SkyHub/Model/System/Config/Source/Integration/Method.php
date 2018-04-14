@@ -32,5 +32,4 @@ class BSeller_SkyHub_Model_System_Config_Source_Integration_Method
             self::INTEGRATION_METHOD_BOTH    => $this->__('Both Queue and On Save'),
         ];
     }
-    
 }

@@ -41,6 +41,19 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Import_Manual_Form extends BSel
             'legend' => $this->__('Orders Information')
         ]);
         
+        $storeId = (int) $this->_getSession()->getData('simulated_store_id');
+        $this->_getSession()->unsetData('simulated_store_id');
+        
+        /** @var BSeller_SkyHub_Model_System_Config_Source_Store_Available $source */
+        $source = Mage::getModel('bseller_skyhub/system_config_source_store_available');
+        $fieldset->addField('store_id', 'select', [
+            'name'     => 'store_id',
+            'required' => true,
+            'options'  => $source->toArray(),
+            'label'    => $this->__('Select Store'),
+            'note'     => $this->__('The store the order must be imported to.'),
+        ]);
+        
         $orderCodes = $this->_getSession()->getData('order_codes');
         $fieldset->addField('order_codes', 'textarea', [
             'name'     => 'order_codes',
@@ -50,7 +63,7 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Import_Manual_Form extends BSel
             'note'     => $this->__('The order codes must be inserted one by line.'),
         ]);
         
-        $form->setValues([]);
+        $form->setValues(['store_id' => $storeId]);
         $form->setUseContainer(true);
         $this->setForm($form);
         
