@@ -79,15 +79,13 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
         foreach ($this->getStores() as $store) {
             $this->simulateStore($store);
             
-            $params['__store'] = $this->getCurrentStore();
-    
             $eventParams['store']          = $this->getCurrentStore();
             $eventParams['initial_store']  = $this->getInitialStore();
             $eventParams['previous_store'] = $this->getPreviousStore();
             
             Mage::dispatchEvent('bseller_skyhub_store_iterate', $eventParams);
             
-            call_user_func_array([$subject, $method], $params);
+            $this->call($subject, $method, $params, $store);
         }
     
         Mage::dispatchEvent('bseller_skyhub_store_iterate_after', $eventParams);
@@ -95,6 +93,42 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
         $this->endIterator();
         
         return $this;
+    }
+    
+    
+    /**
+     * @param object                $subject
+     * @param string                $method
+     * @param array                 $params
+     * @param Mage_Core_Model_Store $store
+     * @param bool                  $force
+     *
+     * @return mixed
+     */
+    public function call($subject, $method, array $params = [], Mage_Core_Model_Store $store, $force = false)
+    {
+        if (!$this->validateStore($store) && !$force) {
+            return false;
+        }
+        
+        if (!$this->validateObjectMethod($subject, $method)) {
+            return false;
+        }
+    
+        $result = false;
+    
+        $this->simulateStore($store);
+        
+        try {
+            $params['__store'] = $store;
+            $result = call_user_func_array([$subject, $method], $params);
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+    
+        $this->reset();
+        
+        return $result;
     }
     
     
@@ -202,7 +236,7 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
     /**
      * @return $this
      */
-    protected function reset()
+    public function reset()
     {
         $this->simulateStore($this->getInitialStore());
         $this->clear();
@@ -224,18 +258,22 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
     
     
     /**
-     * @param object $object
+     * @param object $subject
      * @param string $method
      *
      * @return bool
      */
-    protected function validateObjectMethod($object, $method)
+    protected function validateObjectMethod($subject, $method)
     {
-        if (!is_object($object)) {
+        if (!is_object($subject)) {
             return false;
         }
         
-        if (!method_exists($object, $method)) {
+        if (!method_exists($subject, $method)) {
+            return false;
+        }
+        
+        if (!is_callable([$subject, $method])) {
             return false;
         }
         

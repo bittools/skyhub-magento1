@@ -35,6 +35,18 @@ interface BSeller_SkyHub_Model_Store_Iterator_Interface
     
     
     /**
+     * @param object                $subject
+     * @param string                $method
+     * @param array                 $params
+     * @param Mage_Core_Model_Store $store
+     * @param bool                  $force
+     *
+     * @return mixed
+     */
+    public function call($subject, $method, array $params = [], Mage_Core_Model_Store $store, $force = false);
+    
+    
+    /**
      * This method should simulate the store.
      *
      * @param Mage_Core_Model_Store $store

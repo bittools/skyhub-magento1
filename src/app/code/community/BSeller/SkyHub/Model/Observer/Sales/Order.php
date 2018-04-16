@@ -70,6 +70,6 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
             return;
         }
         
-        $this->orderIntegrator()->cancel($order->getId());
+        $this->getStoreIterator()->call($this->orderIntegrator(), 'cancel', [$order->getId()], $order->getStore());
     }
 }

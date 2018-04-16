@@ -43,15 +43,16 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Shipment extends BSeller_SkyHub_
         $shippingMethod = $order->getShippingMethod();
 
         try {
-            /** @var array|boolean $result */
-            $result = $this->orderIntegrator()->shipment(
+            $params = [
                 $order->getId(),
                 $items,
                 $track->getNumber(),
                 $track->getTitle(),
-                $shippingMethod, // Track method like SEDEX...
-                ''  // Tracking URL (www.correios.com.br)
-            );
+                $shippingMethod,     // Track method like SEDEX...
+                ''                   // Tracking URL (www.correios.com.br)
+            ];
+            
+            $this->getStoreIterator()->call($this->orderIntegrator(), 'shipment', $params, $order->getStore());
         } catch (Exception $e) {
             Mage::logException($e);
         }
