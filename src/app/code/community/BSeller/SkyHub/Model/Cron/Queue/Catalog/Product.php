@@ -126,6 +126,17 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             /** @var \SkyHub\Api\Handler\Response\HandlerInterface $response */
             $response = $this->catalogProductIntegrator()->createOrUpdate($product);
 
+            /*
+             * If the response is exactly equal to false, means it cannot be integrated because of internal validation;
+             */
+            if ($response === false) {
+                $this->getQueueResource()->removeFromQueue(
+                    [$product->getId()],
+                    BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT
+                );
+                continue;
+            }
+
             if ($this->isErrorResponse($response)) {
                 $errorIds[] = $product->getId();
 
