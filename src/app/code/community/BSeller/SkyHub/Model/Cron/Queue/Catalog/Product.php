@@ -215,7 +215,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
         }
     
         /**
-         * If the notification block can be showed, it means there's a products attributes mapping problem.
+         * If the notification block can be shown, it means there's a products attributes mapping problem.
          */
         if ($this->hasPendingAttributesToMap()) {
             $schedule->setMessages(

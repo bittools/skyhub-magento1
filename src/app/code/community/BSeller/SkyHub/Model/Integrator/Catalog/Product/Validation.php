@@ -28,7 +28,7 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
     {
     
         /**
-         * If the notification block can be showed, it means there's a products attributes mapping problem.
+         * If the notification block can be shown, it means there's a products attributes mapping problem.
          */
         if ($this->hasPendingAttributesToMap()) {
             return false;
