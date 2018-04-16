@@ -77,8 +77,6 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
         
         /** @var Mage_Core_Model_Store $store */
         foreach ($this->getStores() as $store) {
-            $this->simulateStore($store);
-            
             $eventParams['store']          = $this->getCurrentStore();
             $eventParams['initial_store']  = $this->getInitialStore();
             $eventParams['previous_store'] = $this->getPreviousStore();
