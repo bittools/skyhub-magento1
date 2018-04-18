@@ -67,6 +67,8 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Edit_Form
         $mappingAttributeId = $this->getMapping()->getData('id');
         $magentoAttributeId = $this->getMapping()->getData('attribute_id');
         $url = Mage::getUrl('*/*/loadAttributeOptions');
+
+        $scriptToLoad = '';
         if ($magentoAttributeId) {
             $scriptToLoad = "<script>renderAttributeOptions($magentoAttributeId, '" . $mappingAttributeId . "', 'options_container' , '" . $url . "')</script>";
         }
@@ -81,7 +83,7 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Edit_Form
                 <div id=\"options_container\"></div>
                 {$scriptToLoad}
             "
-        ]);
+        );
     
         $form->setValues($this->getMapping()->getData());
         $form->setUseContainer(true);
