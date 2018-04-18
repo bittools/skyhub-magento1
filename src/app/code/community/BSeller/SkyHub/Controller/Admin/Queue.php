@@ -62,7 +62,9 @@ class BSeller_SkyHub_Controller_Admin_Queue extends BSeller_SkyHub_Controller_Ad
         /** @var BSeller_SkyHub_Model_Queue $queue */
         $queue     = Mage::getModel('bseller_skyhub/queue')->load((int) $queueId);
         $reference = $queue->getReference();
-        
+
+        $this->prepareStore((int) $queue->getStoreId());
+
         if (!$queue->getId() || !$reference) {
             return false;
         }
@@ -77,6 +79,7 @@ class BSeller_SkyHub_Controller_Admin_Queue extends BSeller_SkyHub_Controller_Ad
     
     /**
      * @param string $code
+     * @param null   $storeId
      *
      * @return bool
      * @throws Exception
@@ -150,6 +153,29 @@ class BSeller_SkyHub_Controller_Admin_Queue extends BSeller_SkyHub_Controller_Ad
         }
         
         return $cleanedCodes;
+    }
+
+
+    /**
+     * @param null|int $storeId
+     *
+     * @return $this
+     *
+     * @throws Mage_Core_Model_Store_Exception
+     */
+    protected function prepareStore($storeId = null)
+    {
+        if (!$storeId) {
+            $storeId = $this->getRequest()->getPost('store_id', $this->getStoreIterator()->getDefaultStore());
+        }
+
+        /** @var Mage_Core_Model_Store $store */
+        $store  = Mage::app()->getStore($storeId);
+
+        $this->_getSession()->setData('simulated_store_id', $store->getId());
+        $this->getStoreIterator()->simulateStore($store);
+
+        return $this;
     }
     
     

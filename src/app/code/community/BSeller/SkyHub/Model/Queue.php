@@ -31,6 +31,7 @@
  * @method int     getStatus()
  * @method string  getMessages()
  * @method boolean getCanProcess()
+ * @method int     getStoreId()
  * @method string  getProcessAfter()
  * @method string  getCreatedAt()
  * @method string  getUpdatedAt()
