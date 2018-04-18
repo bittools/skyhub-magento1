@@ -65,12 +65,15 @@ abstract class BSeller_SkyHub_Model_Cron_Abstract
     protected function getStore($storeId = null)
     {
         try {
+            /** @var Mage_Core_Model_Store $store */
             $store = Mage::app()->getStore($storeId);
     
             if ($store && $store->getId()) {
                 return $store;
             }
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
         
         return false;
     }
