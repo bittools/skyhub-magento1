@@ -31,7 +31,102 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
 
         while ($count < $limit) {
             /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
-            $orderData = $this->orderQueueIntegrator()->nextOrder();
+            //$orderData = $this->orderQueueIntegrator()->nextOrder();
+
+            $orderData = json_decode('{
+  "updated_at": "2018-04-11T15:43:22-03:00",
+  "total_ordered": 629.8,
+  "tags": [
+    
+  ],
+  "sync_status": "SYNCED",
+  "status": {
+    "type": "APPROVED",
+    "label": "Aprovado",
+    "code": "aprovado"
+  },
+  "shipping_method": "Entrega Econômica",
+  "shipping_cost": 29.9,
+  "shipping_carrier": "JadLog Standard",
+  "shipping_address": {
+    "street": "Alameda Jaú",
+    "secondary_phone": null,
+    "region": "SP",
+    "reference": "Próximo ao Hotel Renassence",
+    "postcode": "01420006",
+    "phone": "11 30959890",
+    "number": "1742",
+    "neighborhood": "Jardim Paulista",
+    "full_name": "Midia do Brasil Comunicações, serviços de televisão ltda",
+    "detail": "1º andar - cj. 12 - Próximo ao Hotel Renassence",
+    "country": "BR",
+    "city": "Sao Paulo"
+  },
+  "shipped_date": "",
+  "shipments": [
+    
+  ],
+  "placed_at": "2018-04-11T15:33:02-03:00",
+  "payments": [
+    {
+      "value": 629.8,
+      "status": null,
+      "parcels": 3,
+      "method": "CREDIT_CARD",
+      "description": "No valor de: 629.8"
+    }
+  ],
+  "items": [
+    {
+      "special_price": 599.9,
+      "qty": 1,
+      "product_id": "julioteste",
+      "original_price": 599.9,
+      "name": "TV LED 19,5\" LG 20MT49DF-PS HD com Conversor Digital 1 HDMI 1 USB 60Hz Time Machine Ready Preta",
+      "id": "julioteste"
+    }
+  ],
+  "invoices": [
+    
+  ],
+  "interest": 0,
+  "import_info": {
+    "remote_id": "01-68344470",
+    "remote_code": "106834447001"
+  },
+  "estimated_delivery_shift": null,
+  "estimated_delivery": "2018-04-25T00:00:00-03:00",
+  "discount": 0,
+  "customer": {
+    "vat_number": "71841282000106",
+    "state_registration": "114230680113",
+    "phones": [
+      "11 30959890"
+    ],
+    "name": "Midia do Brasil Comunicações, serviços de televisão ltda",
+    "gender": "",
+    "email": "71841282000106@email.com.br",
+    "date_of_birth": null
+  },
+  "code": "Shoptime-106834447001",
+  "channel": "Shoptime",
+  "calculation_type": "intelipost",
+  "billing_address": {
+    "street": "Alameda Jaú",
+    "secondary_phone": null,
+    "region": "SP",
+    "reference": "Próximo ao Hotel Renassence",
+    "postcode": "01420006",
+    "phone": "11 30959890",
+    "number": "1742",
+    "neighborhood": "Jardim Paulista",
+    "full_name": "Midia do Brasil Comunicações, serviços de televisão ltda",
+    "detail": "1º andar - cj. 12 - Próximo ao Hotel Renassence",
+    "country": "BR",
+    "city": "Sao Paulo"
+  },
+  "approved_date": "2018-04-11T18:52:45.327000"
+}', true);
 
             if (empty($orderData)) {
                 $schedule->setMessages($this->__('No order found in the queue.'));

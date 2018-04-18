@@ -38,7 +38,8 @@ class BSeller_SkyHub_Model_Resource_Setup_Customer_Mapping extends BSeller_SkyHu
             $enabled     = (bool) $this->arrayExtract($data, 'required', true);
             $required    = (bool) $this->arrayExtract($data, 'required', true);
             $editable    = (bool) $this->arrayExtract($data, 'editable', true);
-            
+            $hasOptions  = (bool) $this->arrayExtract($data, 'has_options', false);
+
             if (empty($skyhubCode) || empty($castType)) {
                 continue;
             }
@@ -52,6 +53,7 @@ class BSeller_SkyHub_Model_Resource_Setup_Customer_Mapping extends BSeller_SkyHu
                 'validation'         => $validation,
                 'required'           => $required,
                 'editable'           => $editable,
+                'has_options'        => $hasOptions
             ];
 
             $installConfig = (array) $this->arrayExtract($data, 'attribute_install_config', []);
@@ -82,12 +84,52 @@ class BSeller_SkyHub_Model_Resource_Setup_Customer_Mapping extends BSeller_SkyHu
     
                 $this->getConnection()->insert($table, $attributeData);
                 $this->getConnection()->commit();
+
+                /*
+                 * if the attribute has options
+                 */
+                if (isset($attributeData['has_options']) && $attributeData['has_options']) {
+                    $this->fillOptionsTable($this->arrayExtract($data, 'options', false));
+                }
             } catch (Exception $e) {
                 $this->getConnection()->rollBack();
             }
         }
         
         return $this;
+    }
+
+    private function fillOptionsTable($options)
+    {
+        /*
+         * get the last attribute mapping table ID
+         */
+        $table = (string)$this->getTable('bseller_skyhub/customer_attributes_mapping');
+        $select = $this->getConnection()
+            ->select()
+            ->from($table, 'id')
+            ->order('id DESC')
+            ->limit(1);
+        $id = $this->getConnection()->fetchOne($select);
+
+        /*
+         * save the options with the last attribute mapping saved ID
+         */
+        $table = (string)$this->getTable('bseller_skyhub/customer_attributes_mapping_options');
+        foreach ($options as $option) {
+            try {
+                $optionData =
+                    [
+                        'skyhub_code' => $this->arrayExtract($option, 'skyhub_code'),
+                        'skyhub_label' => $this->arrayExtract($option, 'skyhub_label'),
+                        'customer_attributes_mapping_id' => $id
+                    ];
+                $this->getConnection()->insert($table, $optionData);
+                $this->getConnection()->commit();
+            } catch (Exception $e) {
+                $this->getConnection()->rollBack();
+            }
+        }
     }
 
     /**

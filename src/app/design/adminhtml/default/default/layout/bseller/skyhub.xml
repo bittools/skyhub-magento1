@@ -54,6 +54,12 @@
     <adminhtml_bseller_skyhub_customer_attributes_mapping_edit>
         <label>BSeller SkyHub Customer Attributes Mapping</label>
         <update handle="ADD_STYLES"/>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>bseller/skyhub/js/AjaxFieldLoader.js</name>
+            </action>
+        </reference>
         <reference name="content">
             <block type="bseller_skyhub/adminhtml_customer_attributes_mapping_edit"/>
         </reference>

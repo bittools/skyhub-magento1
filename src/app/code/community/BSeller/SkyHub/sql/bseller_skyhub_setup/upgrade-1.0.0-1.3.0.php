@@ -56,6 +56,10 @@ $table = $this->newTable($tableName)
          'nullable' => false,
          'default'  => true,
      ])
+    ->addColumn('has_options', $this::TYPE_BOOLEAN, 1, [
+        'nullable' => false,
+        'default'  => false,
+    ])
 ;
 
 $this->addTimestamps($table);
@@ -64,6 +68,34 @@ $conn->createTable($table);
 $this->addIndex(['skyhub_code', 'attribute_id'], $tableName);
 $this->addForeignKey(
     $tableName, 'attribute_id', 'eav/attribute', 'attribute_id', $this::FK_ACTION_SET_NULL, $this::FK_ACTION_SET_NULL
+);
+
+//**********************************************************************************************************************
+// Install bseller_skyhub/customer_attributes_mapping_options
+//**********************************************************************************************************************
+$tableName = (string) $this->getTable('bseller_skyhub/customer_attributes_mapping_options');
+
+/** @var Varien_Db_Ddl_Table $table */
+$table = $this->newTable($tableName)
+    ->addColumn('customer_attributes_mapping_id', $this::TYPE_INTEGER, 255, [
+        'nullable' => false
+    ])
+    ->addColumn('skyhub_code', $this::TYPE_VARCHAR, 255, [
+        'nullable' => false
+    ])
+    ->addColumn('skyhub_label', $this::TYPE_VARCHAR, 255, [
+        'nullable' => false
+    ])
+    ->addColumn('magento_value', $this::TYPE_VARCHAR, 255, [
+        'nullable' => true,
+        'default' => null
+    ]);
+
+$conn->createTable($table);
+
+$this->addIndex(['customer_attributes_mapping_id', 'skyhub_code'], $tableName);
+$this->addForeignKey(
+    $tableName, 'customer_attributes_mapping_id', 'bseller_skyhub/customer_attributes_mapping', 'id'
 );
 
 $this->endSetup();

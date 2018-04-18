@@ -63,12 +63,24 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Edit_Form
         
         /** @var BSeller_SkyHub_Model_System_Config_Source_Customer_Attributes $attributesSource */
         $attributesSource = Mage::getModel('bseller_skyhub/system_config_source_customer_attributes');
-        
+
+        $mappingAttributeId = $this->getMapping()->getData('id');
+        $magentoAttributeId = $this->getMapping()->getData('attribute_id');
+        $url = Mage::getUrl('*/*/loadAttributeOptions');
+        if ($magentoAttributeId) {
+            $scriptToLoad = "<script>renderAttributeOptions($magentoAttributeId, '" . $mappingAttributeId . "', 'options_container' , '" . $url . "')</script>";
+        }
         $fieldset->addField('attribute_id', 'select', [
             'name'     => 'attribute_id',
             'label'    => $this->__('Related Attribute'),
             'required' => true,
-            'options'  => $attributesSource->toArray(true),
+            'options' => $attributesSource->toArray(true),
+            'onchange' => "renderAttributeOptions(this.value, '" . $mappingAttributeId . "', 'options_container' , '" . $url . "')",
+        ])->setAfterElementHtml(
+            "
+                <div id=\"options_container\"></div>
+                {$scriptToLoad}
+            "
         ]);
     
         $form->setValues($this->getMapping()->getData());

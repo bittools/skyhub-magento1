@@ -75,4 +75,15 @@ trait BSeller_SkyHub_Trait_Customer_Attribute_Mapping
         
         return $collection;
     }
+
+    /**
+     * @param string $attributeMappingSkyhubCode
+     * @param string $attributeOptionCode
+     * @return string
+     */
+    public function getAttributeMappingOptionMagentoValue($attributeMappingSkyhubCode, $attributeOptionCode)
+    {
+        $customerMapping = Mage::getModel('bseller_skyhub/customer_attributes_mapping')->load($attributeMappingSkyhubCode, 'skyhub_code');
+        return $customerMapping->getMagentoValueOption($attributeOptionCode);
+    }
 }

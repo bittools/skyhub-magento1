@@ -64,34 +64,6 @@
                         </integration_product_visibility>
                     </fields>
                 </general>
-                <customer translate="label" module="bseller_skyhub">
-                    <label>Customer Configuration</label>
-                    <sort_order>15</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>0</show_in_website>
-                    <show_in_store>0</show_in_store>
-                    <expanded>1</expanded>
-                    <fields>
-                        <person_type_pf_value>
-                            <label>Person Type PF Value</label>
-                            <sort_order>10</sort_order>
-                            <frontend_type>text</frontend_type>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <comment>The value of the 'person_type' attribute which represents PF (example: 'pf')</comment>
-                        </person_type_pf_value>
-                        <person_type_pj_value>
-                            <label>Person Type PJ Value</label>
-                            <sort_order>20</sort_order>
-                            <frontend_type>text</frontend_type>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <comment>The value of the 'person_type' attribute which represents PJ (example: 'pj')</comment>
-                        </person_type_pj_value>
-                    </fields>
-                </customer>
                 <log translate="label" module="bseller_skyhub">
                     <label>Log Configuration</label>
                     <sort_order>20</sort_order>

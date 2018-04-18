@@ -46,6 +46,9 @@
                     <customer_attributes_mapping>
                         <table>bseller_skyhub_customer_attributes_mapping</table>
                     </customer_attributes_mapping>
+                    <customer_attributes_mapping_options>
+                        <table>bseller_skyhub_customer_attributes_mapping_options</table>
+                    </customer_attributes_mapping_options>
                     <entity_id>
                         <table>bseller_skyhub_entity_id</table>
                     </entity_id>

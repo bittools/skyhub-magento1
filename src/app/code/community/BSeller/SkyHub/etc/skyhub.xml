@@ -281,6 +281,7 @@
                 <attribute_code>person_type</attribute_code>
                 <validation/>
                 <required>0</required>
+                <has_options>1</has_options>
                 <attribute_install_config>
                     <attribute_code>person_type</attribute_code>
                     <label>Person Type</label>
@@ -290,6 +291,18 @@
                     <source>bseller_skyhub/system_config_source_customer_attributes_personType</source>
                     <default>1</default>
                 </attribute_install_config>
+                <options>
+                    <physical_person>
+                        <skyhub_code>physical_person</skyhub_code>
+                        <skyhub_label>Physical Person</skyhub_label>
+                        <default_value>1</default_value>
+                    </physical_person>
+                    <legal_person>
+                        <skyhub_code>legal_person</skyhub_code>
+                        <skyhub_label>Legal Person</skyhub_label>
+                        <default_value>2</default_value>
+                    </legal_person>
+                </options>
             </person_type>
             <cpf>
                 <code>cpf</code>

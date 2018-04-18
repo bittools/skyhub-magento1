@@ -98,6 +98,17 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Customer_Attributes_MappingControl
         
         $mapping->setAttributeId($attribute->getId());
         $mapping->save();
+
+        /**
+         * if the attribute has options
+         */
+        if ($mapping->getHasOptions()) {
+            $attributesMappingOptions = $this->getRequest()->getPost('attributes_mapping_options');
+
+            foreach ($attributesMappingOptions as $skyhubCode => $magentoOptionValue) {
+                $mapping->updateOption($skyhubCode, $magentoOptionValue);
+            }
+        }
         
         $this->_getSession()
              ->addSuccess($this->__(
@@ -177,6 +188,15 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Customer_Attributes_MappingControl
             $mapping->setAttributeId((int) $attribute->getId())
                 ->save();
 
+            if ($mapping->getHasOptions()) {
+                $customerAttributesXml = Mage::getSingleton('bseller_skyhub/config_customer')->getSkyHubFixedAttributes();
+                $attributeConfig = $this->arrayExtract($customerAttributesXml, $mapping->getData('skyhub_code'), false);
+                $options = $this->arrayExtract($attributeConfig, 'options', false);
+                foreach ($options as $option) {
+                    $mapping->updateOption($option['skyhub_code'], $option['default_value']);
+                }
+            }
+
             $message = $this->__(
                 'The attribute "%s" was created in Magento and associated to SkyHub attribute "%s" automatically.',
                 $attribute->getAttributeCode(),
@@ -191,6 +211,17 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Customer_Attributes_MappingControl
             $this->_getSession()->addError('There was a problem when trying to map the attribute.');
             $this->redirectToAttributeMapping();
         }
+    }
+
+    public function loadAttributeOptionsAction()
+    {
+        $html = $this->getLayout()
+            ->createBlock('bseller_skyhub/adminhtml_customer_attributes_mapping_edit_form_options')
+            ->setRequestData(Mage::app()->getRequest()->getParams())
+            ->toHtml();
+
+        $this->getResponse()->setHeader('Content-type', 'text/html');
+        $this->getResponse()->setBody($html);
     }
 
 

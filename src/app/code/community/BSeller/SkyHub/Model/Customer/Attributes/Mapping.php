@@ -128,4 +128,22 @@ class BSeller_SkyHub_Model_Customer_Attributes_Mapping extends BSeller_Core_Mode
             self::DATA_TYPE_STRING,
         ];
     }
+
+    public function getOptions()
+    {
+        if (!$this->getHasOptions()) {
+            return null;
+        }
+        return $this->getResource()->getOptionsByAttributeMappingId($this->getId());
+    }
+
+    public function getMagentoValueOption($skyhubCode)
+    {
+        return $this->getResource()->getMagentoValueOption($this->getId(), $skyhubCode);
+    }
+
+    public function updateOption($skyhubCode, $magentoValue)
+    {
+        return $this->getResource()->updateOption($this->getId(), $skyhubCode, $magentoValue);
+    }
 }

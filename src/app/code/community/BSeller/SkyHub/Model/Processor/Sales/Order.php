@@ -398,9 +398,9 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             $personTypeAttribute = $this->getAttributeById($personTypeAttributeId);
 
             if ($customerIsPj) {
-                $personTypeAttributeValue = $this->getSkyHubModuleConfig('person_type_pj_value', 'customer');
+                $personTypeAttributeValue = $this->getAttributeMappingOptionMagentoValue('person_type', 'legal_person');
             } else {
-                $personTypeAttributeValue = $this->getSkyHubModuleConfig('person_type_pf_value', 'customer');
+                $personTypeAttributeValue = $this->getAttributeMappingOptionMagentoValue('person_type', 'physical_person');
             }
             $customer->setData($personTypeAttribute->getAttributeCode(), $personTypeAttributeValue);
         }
