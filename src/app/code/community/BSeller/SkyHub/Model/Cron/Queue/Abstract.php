@@ -37,8 +37,8 @@ abstract class BSeller_SkyHub_Model_Cron_Queue_Abstract
         $byStore     = (array) $schedule->getData('by_store');
         $dataByStore = [
             $this->getStoreId() => [
-                'success_queue_ids' => $successQueueIds,
-                'failed_queue_ids'  => $failedQueueIds,
+                'success_queue_ids' => $successIds,
+                'failed_queue_ids'  => $failIds,
             ]
         ];
         
