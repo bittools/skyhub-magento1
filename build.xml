@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="BSeller_SkyHub" default="info">
+    <target name="info">
+        <echo msg="The module was packaged."/>
+    </target>
+    <target name="build">
+        <delete dir="./build" />
+        <mkdir  dir="./build" />
+        <copy todir="./build">
+            <fileset dir="./src">
+                <include name="app/**/" />
+                <include name="shell/**/" />
+                <include name="skin/**/" />
+            </fileset>
+        </copy>
+    </target>
+    <target name="composer" depends="build">
+        <echo msg="Running composer install"/>
+        <exec command="php ./bin/composer install --working-dir ./build/app/code/community/BSeller/SkyHub/"/>
+    </target>
+    <target name="module_package" depends="composer">
+        <exec outputProperty="currentBranch" command="git rev-parse --abbrev-ref HEAD" dir="."/>
+        <exec outputProperty="latestVersion" command="git describe --tags `git rev-list --tags --max-count=1`" dir="."/>
+        <exec command="git checkout ${latestVersion}"/>
+        <delete dir="./releases/BSeller_SkyHub-${latestVersion}.zip" />
+        <mkdir  dir="./releases" />
+        <zip destfile="./releases/BSeller_SkyHub-${latestVersion}.zip" basedir="./build"/>
+        <delete dir="./build" />
+        <exec command="git checkout ${currentBranch}"/>
+    </target>
+</project>
