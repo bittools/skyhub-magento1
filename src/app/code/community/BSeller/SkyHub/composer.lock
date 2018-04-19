@@ -1,23 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d131c8c396e88b225660fd04bcca9a81",
+    "content-hash": "91b72cc9e5f090947141bdff129e5e5e",
     "packages": [
         {
-            "name": "esmart/skyhub-php",
+            "name": "bittools/skyhub-php",
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://bitbucket.org/esmart/skyhub.git",
-                "reference": "7b073c89f556c9878a207a999a4ea45cd56218a9"
+                "url": "https://github.com/bittools/skyhub-php.git",
+                "reference": "bb647ba22aa0e3d0f4965adfab8b310e7379deed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://bitbucket.org/esmart/skyhub/get/7b073c89f556c9878a207a999a4ea45cd56218a9.zip",
-                "reference": "7b073c89f556c9878a207a999a4ea45cd56218a9",
+                "url": "https://api.github.com/repos/bittools/skyhub-php/zipball/bb647ba22aa0e3d0f4965adfab8b310e7379deed",
+                "reference": "bb647ba22aa0e3d0f4965adfab8b310e7379deed",
                 "shasum": ""
             },
             "require": {
@@ -50,8 +50,7 @@
                 }
             ],
             "description": "This is the official PHP SDK for integration with SkyHub.",
-            "homepage": "https://bitbucket.org/esmart/skyhub",
-            "time": "2018-03-09T19:21:01+00:00"
+            "time": "2018-04-19T00:29:22+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
