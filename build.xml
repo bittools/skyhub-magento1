@@ -50,6 +50,10 @@
         <exec command="php ./bin/composer install --working-dir ./build/app/code/community/BSeller/SkyHub/"/>
     </target>
     <target name="git-prepare" depends="composer">
+        <echo msg="Fetching new code and tags from repository..."/>
+        <exec command="git fetch --all"/>
+        <exec command="git fetch --tags"/>
+
         <exec outputProperty="current-branch" command="git rev-parse --abbrev-ref HEAD" dir="${base-dir}"/>
         <echo msg="Your current branch is ${current-branch}..."/>
 
