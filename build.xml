@@ -12,6 +12,7 @@
     <target name="build" depends="environment">
         <delete dir="${buildDir}" />
         <mkdir  dir="${buildDir}" />
+
         <copy todir="${buildDir}">
             <fileset dir="${baseDir}/src">
                 <include name="app/**" />
@@ -21,17 +22,25 @@
         </copy>
     </target>
     <target name="bseller-core" depends="build">
+        <property name="bseller-core-repo" value="git@bitbucket.org:esmart/bseller_core.git"/>
+
+        <echo msg="Cloning BSeller_Core module form ${bseller-core-repo} repository..." level="info"/>
+
         <delete dir="${bsellerCoreDir}" />
         <mkdir  dir="${bsellerCoreDir}" />
-        <exec command="git clone git@bitbucket.org:esmart/bseller_core.git ." dir="${bsellerCoreDir}"/>
-        <exec outputProperty="bsellerCoreLatestVersion" command="git describe --tags `git rev-list --tags --max-count=1`" dir="${bsellerCoreDir}"/>
-        <exec command="git checkout ${bsellerCoreLatestVersion}" dir="${bsellerCoreDir}"/>
+
+        <exec command="git clone ${bseller-core-repo} ." dir="${bsellerCoreDir}"/>
+        <exec outputProperty="bseller-core-latest-version" command="git describe --tags `git rev-list --tags --max-count=1`" dir="${bsellerCoreDir}"/>
+        <exec command="git checkout ${bseller-core-latest-version}" dir="${bsellerCoreDir}"/>
+
         <copy todir="${buildDir}">
             <fileset dir="${bsellerCoreDir}/src">
                 <include name="app/**" />
                 <include name="skin/**" />
             </fileset>
         </copy>
+
+        <echo msg="Latest version of BSeller_Core module is ${bseller-core-latest-version}..." level="info"/>
     </target>
     <target name="composer" depends="bseller-core">
         <echo msg="Running composer install"/>
