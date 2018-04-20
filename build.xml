@@ -1,31 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="BSeller_SkyHub" default="info">
-    <target name="info">
-        <echo msg="The module was packaged."/>
+    <target name="environment">
+        <echo msg="Setting up the environment..." level="info"/>
+
+        <property name="baseDir" value="."/>
+        <property name="buildDir" value="${baseDir}/.build"/>
+        <property name="tmpDir" value="${baseDir}/.tmp"/>
+        <property name="bsellerCoreDir" value="${tmpDir}/.bseller_core"/>
+        <property name="releasesDir" value="${baseDir}/releases"/>
     </target>
-    <target name="build">
-        <delete dir="./build" />
-        <mkdir  dir="./build" />
-        <copy todir="./build">
-            <fileset dir="./src">
-                <include name="app/**/" />
-                <include name="shell/**/" />
-                <include name="skin/**/" />
+    <target name="build" depends="environment">
+        <delete dir="${buildDir}" />
+        <mkdir  dir="${buildDir}" />
+        <copy todir="${buildDir}">
+            <fileset dir="${baseDir}/src">
+                <include name="app/**" />
+                <include name="shell/**" />
+                <include name="skin/**" />
             </fileset>
         </copy>
     </target>
-    <target name="composer" depends="build">
+    <target name="bseller-core" depends="build">
+        <delete dir="${bsellerCoreDir}" />
+        <mkdir  dir="${bsellerCoreDir}" />
+        <exec command="git clone git@bitbucket.org:esmart/bseller_core.git ." dir="${bsellerCoreDir}"/>
+        <exec outputProperty="bsellerCoreLatestVersion" command="git describe --tags `git rev-list --tags --max-count=1`" dir="${bsellerCoreDir}"/>
+        <exec command="git checkout ${bsellerCoreLatestVersion}" dir="${bsellerCoreDir}"/>
+        <copy todir="${buildDir}">
+            <fileset dir="${bsellerCoreDir}/src">
+                <include name="app/**" />
+                <include name="skin/**" />
+            </fileset>
+        </copy>
+    </target>
+    <target name="composer" depends="bseller-core">
         <echo msg="Running composer install"/>
         <exec command="php ./bin/composer install --working-dir ./build/app/code/community/BSeller/SkyHub/"/>
     </target>
-    <target name="module_package" depends="composer">
-        <exec outputProperty="currentBranch" command="git rev-parse --abbrev-ref HEAD" dir="."/>
-        <exec outputProperty="latestVersion" command="git describe --tags `git rev-list --tags --max-count=1`" dir="."/>
+    <target name="git-prepare" depends="composer">
+        <exec outputProperty="currentBranch" command="git rev-parse --abbrev-ref HEAD" dir="${baseDir}"/>
+        <echo msg="Your current branch is ${currentBranch}..."/>
+
+        <exec outputProperty="latestVersion" command="git describe --tags `git rev-list --tags --max-count=1`" dir="${baseDir}"/>
+
+        <echo msg="Checking out to release TAG ${latestVersion}..."/>
         <exec command="git checkout ${latestVersion}"/>
-        <delete dir="./releases/BSeller_SkyHub-${latestVersion}.zip" />
-        <mkdir  dir="./releases" />
-        <zip destfile="./releases/BSeller_SkyHub-${latestVersion}.zip" basedir="./build"/>
-        <delete dir="./build" />
+    </target>
+    <target name="package-module" depends="git-prepare">
+        <property name="releaseFile" value="BSeller_SkyHub-${latestVersion}.zip"/>
+        <delete dir="${releasesDir}/${releaseFile}" />
+        <mkdir  dir="${releasesDir}" />
+        <zip destfile="${releasesDir}/${releaseFile}" basedir="${buildDir}"/>
+        <echo msg="Release file ${releaseFile} was successfully created!"/>
+    </target>
+    <target name="git-restore" depends="package-module">
+        <echo msg="Checking out to your original branch (${currentBranch})..."/>
         <exec command="git checkout ${currentBranch}"/>
+    </target>
+    <target name="finish-build" depends="git-restore">
+        <delete dir="${tmpDir}"/>
+        <delete dir="${buildDir}" />
+    </target>
+    <target name="info" depends="finish-build">
+        <echo msg="The module was successfully packaged in ${releasesDir}/${releaseFile}."/>
     </target>
 </project>
