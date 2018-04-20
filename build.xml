@@ -8,7 +8,20 @@
         <property name="tmp-dir" value="${base-dir}/.tmp"/>
         <property name="releases-dir" value="${base-dir}/releases"/>
     </target>
-    <target name="build" depends="environment">
+    <target name="git-prepare" depends="environment">
+        <echo msg="Fetching new code and tags from repository..."/>
+        <exec command="git fetch --all"/>
+        <exec command="git fetch --tags"/>
+
+        <exec outputProperty="current-branch" command="git rev-parse --abbrev-ref HEAD" dir="${base-dir}"/>
+        <echo msg="Your current branch is ${current-branch}..."/>
+
+        <exec outputProperty="bseller-skyhub-latest-version" command="git describe --tags `git rev-list --tags --max-count=1`" dir="${base-dir}"/>
+
+        <echo msg="Checking out to release TAG ${bseller-skyhub-latest-version}..."/>
+        <exec command="git checkout ${bseller-skyhub-latest-version}"/>
+    </target>
+    <target name="build" depends="git-prepare">
         <tstamp prefix="date"/>
         <php expression="date_default_timezone_set('America/Brasilia');" />
 
@@ -47,22 +60,9 @@
     </target>
     <target name="composer" depends="bseller-core">
         <echo msg="Running composer install"/>
-        <exec command="php ./bin/composer install --working-dir ./build/app/code/community/BSeller/SkyHub/"/>
+        <exec command="php ./bin/composer install --working-dir ${build-dir}/app/code/community/BSeller/SkyHub/"/>
     </target>
-    <target name="git-prepare" depends="composer">
-        <echo msg="Fetching new code and tags from repository..."/>
-        <exec command="git fetch --all"/>
-        <exec command="git fetch --tags"/>
-
-        <exec outputProperty="current-branch" command="git rev-parse --abbrev-ref HEAD" dir="${base-dir}"/>
-        <echo msg="Your current branch is ${current-branch}..."/>
-
-        <exec outputProperty="bseller-skyhub-latest-version" command="git describe --tags `git rev-list --tags --max-count=1`" dir="${base-dir}"/>
-
-        <echo msg="Checking out to release TAG ${bseller-skyhub-latest-version}..."/>
-        <exec command="git checkout ${bseller-skyhub-latest-version}"/>
-    </target>
-    <target name="write-info" depends="git-prepare">
+    <target name="write-info" depends="composer">
         <property name="info-file-name" value="${build-dir}/release-info.txt"/>
         <echo file="${info-file-name}" append="true">This is the release of BSeller_SkyHub module.</echo>
         <echo file="${info-file-name}" msg="${line.separator}" append="true"/>
