@@ -3,18 +3,17 @@
     <target name="environment">
         <echo msg="Setting up the environment..." level="info"/>
 
-        <property name="baseDir" value="."/>
-        <property name="buildDir" value="${baseDir}/.build"/>
-        <property name="tmpDir" value="${baseDir}/.tmp"/>
-        <property name="bsellerCoreDir" value="${tmpDir}/.bseller_core"/>
-        <property name="releasesDir" value="${baseDir}/releases"/>
+        <property name="base-dir" value="."/>
+        <property name="build-dir" value="${base-dir}/.build"/>
+        <property name="tmp-dir" value="${base-dir}/.tmp"/>
+        <property name="releases-dir" value="${base-dir}/releases"/>
     </target>
     <target name="build" depends="environment">
-        <delete dir="${buildDir}" />
-        <mkdir  dir="${buildDir}" />
+        <delete dir="${build-dir}" />
+        <mkdir  dir="${build-dir}" />
 
-        <copy todir="${buildDir}">
-            <fileset dir="${baseDir}/src">
+        <copy todir="${build-dir}">
+            <fileset dir="${base-dir}/src">
                 <include name="app/**" />
                 <include name="shell/**" />
                 <include name="skin/**" />
@@ -22,19 +21,20 @@
         </copy>
     </target>
     <target name="bseller-core" depends="build">
+        <property name="bseller-core-dir" value="${tmp-dir}/bseller_core"/>
         <property name="bseller-core-repo" value="git@bitbucket.org:esmart/bseller_core.git"/>
 
         <echo msg="Cloning BSeller_Core module form ${bseller-core-repo} repository..." level="info"/>
 
-        <delete dir="${bsellerCoreDir}" />
-        <mkdir  dir="${bsellerCoreDir}" />
+        <delete dir="${bseller-core-dir}" />
+        <mkdir  dir="${bseller-core-dir}" />
 
-        <exec command="git clone ${bseller-core-repo} ." dir="${bsellerCoreDir}"/>
-        <exec outputProperty="bseller-core-latest-version" command="git describe --tags `git rev-list --tags --max-count=1`" dir="${bsellerCoreDir}"/>
-        <exec command="git checkout ${bseller-core-latest-version}" dir="${bsellerCoreDir}"/>
+        <exec command="git clone ${bseller-core-repo} ." dir="${bseller-core-dir}"/>
+        <exec outputProperty="bseller-core-latest-version" command="git describe --tags `git rev-list --tags --max-count=1`" dir="${bseller-core-dir}"/>
+        <exec command="git checkout ${bseller-core-latest-version}" dir="${bseller-core-dir}"/>
 
-        <copy todir="${buildDir}">
-            <fileset dir="${bsellerCoreDir}/src">
+        <copy todir="${build-dir}">
+            <fileset dir="${bseller-core-dir}/src">
                 <include name="app/**" />
                 <include name="skin/**" />
             </fileset>
@@ -47,30 +47,30 @@
         <exec command="php ./bin/composer install --working-dir ./build/app/code/community/BSeller/SkyHub/"/>
     </target>
     <target name="git-prepare" depends="composer">
-        <exec outputProperty="currentBranch" command="git rev-parse --abbrev-ref HEAD" dir="${baseDir}"/>
-        <echo msg="Your current branch is ${currentBranch}..."/>
+        <exec outputProperty="current-branch" command="git rev-parse --abbrev-ref HEAD" dir="${base-dir}"/>
+        <echo msg="Your current branch is ${current-branch}..."/>
 
-        <exec outputProperty="latestVersion" command="git describe --tags `git rev-list --tags --max-count=1`" dir="${baseDir}"/>
+        <exec outputProperty="bseller-skyhub-latest-version" command="git describe --tags `git rev-list --tags --max-count=1`" dir="${base-dir}"/>
 
-        <echo msg="Checking out to release TAG ${latestVersion}..."/>
-        <exec command="git checkout ${latestVersion}"/>
+        <echo msg="Checking out to release TAG ${bseller-skyhub-latest-version}..."/>
+        <exec command="git checkout ${bseller-skyhub-latest-version}"/>
     </target>
     <target name="package-module" depends="git-prepare">
-        <property name="releaseFile" value="BSeller_SkyHub-${latestVersion}.zip"/>
-        <delete dir="${releasesDir}/${releaseFile}" />
-        <mkdir  dir="${releasesDir}" />
-        <zip destfile="${releasesDir}/${releaseFile}" basedir="${buildDir}"/>
-        <echo msg="Release file ${releaseFile} was successfully created!"/>
+        <property name="release-file" value="BSeller_SkyHub-${bseller-skyhub-latest-version}.zip"/>
+        <delete dir="${releases-dir}/${release-file}" />
+        <mkdir  dir="${releases-dir}" />
+        <zip destfile="${releases-dir}/${release-file}" basedir="${build-dir}"/>
+        <echo msg="Release file ${release-file} was successfully created!"/>
     </target>
     <target name="git-restore" depends="package-module">
-        <echo msg="Checking out to your original branch (${currentBranch})..."/>
-        <exec command="git checkout ${currentBranch}"/>
+        <echo msg="Checking out to your original branch (${current-branch})..."/>
+        <exec command="git checkout ${current-branch}"/>
     </target>
     <target name="finish-build" depends="git-restore">
-        <delete dir="${tmpDir}"/>
-        <delete dir="${buildDir}" />
+        <delete dir="${tmp-dir}"/>
+        <delete dir="${build-dir}" />
     </target>
     <target name="info" depends="finish-build">
-        <echo msg="The module was successfully packaged in ${releasesDir}/${releaseFile}."/>
+        <echo msg="The module was successfully packaged in ${releases-dir}/${release-file}."/>
     </target>
 </project>
