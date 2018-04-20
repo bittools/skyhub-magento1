@@ -9,6 +9,9 @@
         <property name="releases-dir" value="${base-dir}/releases"/>
     </target>
     <target name="build" depends="environment">
+        <tstamp prefix="date"/>
+        <php expression="date_default_timezone_set('America/Brasilia');" />
+
         <delete dir="${build-dir}" />
         <mkdir  dir="${build-dir}" />
 
@@ -55,7 +58,19 @@
         <echo msg="Checking out to release TAG ${bseller-skyhub-latest-version}..."/>
         <exec command="git checkout ${bseller-skyhub-latest-version}"/>
     </target>
-    <target name="package-module" depends="git-prepare">
+    <target name="write-info" depends="git-prepare">
+        <property name="info-file-name" value="${build-dir}/release-info.txt"/>
+        <echo file="${info-file-name}" append="true">This is the release of BSeller_SkyHub module.</echo>
+        <echo file="${info-file-name}" msg="${line.separator}" append="true"/>
+        <echo file="${info-file-name}" msg="${line.separator}" append="true"/>
+        <echo file="${info-file-name}" append="true">Build Date: ${date.TODAY}</echo>
+        <echo file="${info-file-name}" msg="${line.separator}" append="true"/>
+        <echo file="${info-file-name}" msg="${line.separator}" append="true"/>
+        <echo file="${info-file-name}" append="true">BSeller_SkyHub Version: ${bseller-skyhub-latest-version}</echo>
+        <echo file="${info-file-name}" msg="${line.separator}" append="true"/>
+        <echo file="${info-file-name}" append="true">BSeller_Core Version: ${bseller-core-latest-version}</echo>
+    </target>
+    <target name="package-module" depends="write-info">
         <property name="release-file" value="BSeller_SkyHub-${bseller-skyhub-latest-version}.zip"/>
         <delete dir="${releases-dir}/${release-file}" />
         <mkdir  dir="${releases-dir}" />
