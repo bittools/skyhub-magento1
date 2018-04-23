@@ -77,7 +77,9 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
         $this->renderLayout();
     }
     
-    
+    /*
+     * @return void
+     */
     public function saveAction()
     {
         $id          = (int) $this->getRequest()->getPost('id');
@@ -108,11 +110,13 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
         }
         
         $this->_getSession()
-             ->addSuccess($this->__(
-                 'SkyHub Attribute `%s` successfully linked to Magento attribute `%s`.',
-                 $mapping->getSkyhubCode(),
-                 $attribute->getAttributeCode()
-             ));
+            ->addSuccess(
+                $this->__(
+                    'SkyHub Attribute `%s` successfully linked to Magento attribute `%s`.',
+                    $mapping->getSkyhubCode(),
+                    $attribute->getAttributeCode()
+                )
+            );
         
         $this->_redirect('*/*');
     }

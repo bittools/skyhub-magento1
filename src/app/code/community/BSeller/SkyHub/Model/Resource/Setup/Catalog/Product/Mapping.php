@@ -89,6 +89,9 @@ class BSeller_SkyHub_Model_Resource_Setup_Catalog_Product_Mapping extends BSelle
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getSkyHubFixedAttributes()
     {
         return Mage::getSingleton('bseller_skyhub/config_catalog_product')->getSkyHubFixedAttributes();

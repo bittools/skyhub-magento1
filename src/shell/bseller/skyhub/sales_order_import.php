@@ -10,7 +10,7 @@
  *
  * @author        Julio Reis <julio.reis@e-smart.com.br>
  */
-require '/home/julio/Public/sephora/shell/abstract.php';
+require '../../../../../../shell/abstract.php';
 
 class BSeller_SkyHub_Shell_Abstract extends Mage_Shell_Abstract
 {

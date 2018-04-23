@@ -9,7 +9,7 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
- * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Julio Reis <julio.reis@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Resource_Customer_Attributes_Mapping extends BSeller_Core_Model_Resource_Abstract
@@ -20,11 +20,14 @@ class BSeller_SkyHub_Model_Resource_Customer_Attributes_Mapping extends BSeller_
         $this->_init('bseller_skyhub/customer_attributes_mapping', 'id');
     }
 
+    /**
+     * @param $id
+     * @return array|bool|null
+     */
     public function getOptionsByAttributeMappingId($id)
     {
-        if(!$id) {
+        if (!$id)
             return null;
-        }
 
         $select = $this->getReadConnection()
             ->select()
@@ -39,11 +42,15 @@ class BSeller_SkyHub_Model_Resource_Customer_Attributes_Mapping extends BSeller_
         return false;
     }
 
+    /**
+     * @param $id
+     * @param $skyhubCode
+     * @return bool|null|string
+     */
     public function getMagentoValueOption($id, $skyhubCode)
     {
-        if (!$id || !$skyhubCode) {
+        if (!$id || !$skyhubCode)
             return null;
-        }
 
         $select = $this->getReadConnection()
             ->select()
@@ -59,6 +66,11 @@ class BSeller_SkyHub_Model_Resource_Customer_Attributes_Mapping extends BSeller_
         return false;
     }
 
+    /**
+     * @param $attributeMappingId
+     * @param $skyhubCode
+     * @param $magentoValue
+     */
     public function updateOption($attributeMappingId, $skyhubCode, $magentoValue)
     {
         $table = $this->getTable('bseller_skyhub/customer_attributes_mapping_options');

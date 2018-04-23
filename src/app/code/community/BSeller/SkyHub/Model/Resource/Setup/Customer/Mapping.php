@@ -99,6 +99,11 @@ class BSeller_SkyHub_Model_Resource_Setup_Customer_Mapping extends BSeller_SkyHu
         return $this;
     }
 
+    /**
+     * @param $options
+     *
+     * @return void
+     */
     private function fillOptionsTable($options)
     {
         /*

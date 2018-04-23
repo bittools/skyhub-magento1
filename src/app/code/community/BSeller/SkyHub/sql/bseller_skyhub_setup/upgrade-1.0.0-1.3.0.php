@@ -25,42 +25,90 @@ $tableName = (string) $this->getTable('bseller_skyhub/customer_attributes_mappin
 
 /** @var Varien_Db_Ddl_Table $table */
 $table = $this->newTable($tableName)
-     ->addColumn('skyhub_code', $this::TYPE_TEXT, 255, [
-         'nullable' => false,
-     ])
-     ->addColumn('skyhub_label', $this::TYPE_TEXT, 255, [
-         'nullable' => true,
-     ])
-     ->addColumn('skyhub_description', $this::TYPE_TEXT, null, [
-         'nullable' => true,
-     ])
-     ->addColumn('enabled', $this::TYPE_BOOLEAN, 1, [
-         'nullable' => false,
-         'default' => true,
-     ])
-     ->addColumn('cast_type', $this::TYPE_TEXT, 255, [
-         'nullable' => false,
-     ])
-     ->addColumn('validation', $this::TYPE_TEXT, null, [
-         'nullable' => true,
-     ])
-     ->addColumn('attribute_id', $this::TYPE_INTEGER, 255, [
-         'nullable' => true,
-         'default'  => null,
-     ])
-     ->addColumn('required', $this::TYPE_BOOLEAN, 1, [
-         'nullable' => false,
-         'default'  => true,
-     ])
-     ->addColumn('editable', $this::TYPE_BOOLEAN, 1, [
-         'nullable' => false,
-         'default'  => true,
-     ])
-    ->addColumn('has_options', $this::TYPE_BOOLEAN, 1, [
-        'nullable' => false,
-        'default'  => false,
-    ])
-;
+    ->addColumn(
+        'skyhub_code',
+        $this::TYPE_TEXT,
+        255,
+        [
+            'nullable' => false,
+        ]
+    )
+    ->addColumn(
+        'skyhub_label',
+        $this::TYPE_TEXT,
+        255, [
+            'nullable' => true,
+        ]
+    )
+    ->addColumn(
+        'skyhub_description',
+        $this::TYPE_TEXT,
+        null,
+        [
+            'nullable' => true,
+        ]
+    )
+    ->addColumn(
+        'enabled',
+        $this::TYPE_BOOLEAN,
+        1,
+        [
+            'nullable' => false,
+            'default' => true
+        ]
+    )
+    ->addColumn(
+        'cast_type',
+        $this::TYPE_TEXT,
+        255,
+        [
+            'nullable' => false
+        ]
+    )
+    ->addColumn(
+        'validation',
+        $this::TYPE_TEXT,
+        null,
+        [
+            'nullable' => true
+        ]
+    )
+    ->addColumn(
+        'attribute_id',
+        $this::TYPE_INTEGER,
+        255,
+        [
+            'nullable' => true,
+            'default' => null
+        ]
+    )
+    ->addColumn(
+        'required',
+        $this::TYPE_BOOLEAN,
+        1,
+        [
+            'nullable' => false,
+            'default' => true
+        ]
+    )
+    ->addColumn(
+        'editable',
+        $this::TYPE_BOOLEAN,
+        1,
+        [
+            'nullable' => false,
+            'default' => true
+        ]
+    )
+    ->addColumn(
+        'has_options',
+        $this::TYPE_BOOLEAN,
+        1,
+        [
+            'nullable' => false,
+            'default' => false
+        ]
+    );
 
 $this->addTimestamps($table);
 $conn->createTable($table);
@@ -77,19 +125,39 @@ $tableName = (string) $this->getTable('bseller_skyhub/customer_attributes_mappin
 
 /** @var Varien_Db_Ddl_Table $table */
 $table = $this->newTable($tableName)
-    ->addColumn('customer_attributes_mapping_id', $this::TYPE_INTEGER, 255, [
-        'nullable' => false
-    ])
-    ->addColumn('skyhub_code', $this::TYPE_VARCHAR, 255, [
-        'nullable' => false
-    ])
-    ->addColumn('skyhub_label', $this::TYPE_VARCHAR, 255, [
-        'nullable' => false
-    ])
-    ->addColumn('magento_value', $this::TYPE_VARCHAR, 255, [
-        'nullable' => true,
-        'default' => null
-    ]);
+    ->addColumn(
+        'customer_attributes_mapping_id',
+        $this::TYPE_INTEGER,
+        255,
+        [
+            'nullable' => false
+        ]
+    )
+    ->addColumn(
+        'skyhub_code',
+        $this::TYPE_VARCHAR,
+        255,
+        [
+            'nullable' => false
+        ]
+    )
+    ->addColumn(
+        'skyhub_label',
+        $this::TYPE_VARCHAR,
+        255,
+        [
+            'nullable' => false
+        ]
+    )
+    ->addColumn(
+        'magento_value',
+        $this::TYPE_VARCHAR,
+        255,
+        [
+            'nullable' => true,
+            'default' => null
+        ]
+    );
 
 $conn->createTable($table);
 

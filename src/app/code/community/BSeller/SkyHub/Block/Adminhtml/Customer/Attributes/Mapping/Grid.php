@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BSeller Platform | B2W - Companhia Digital
  *
@@ -14,8 +15,6 @@
 class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Grid
     extends BSeller_Core_Block_Adminhtml_Widget_Grid
 {
-    
-    
     /**
      * @return Mage_Adminhtml_Block_Widget_Grid
      */
@@ -45,38 +44,53 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Grid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('skyhub_code', array(
-            'header'           => $this->__('SkyHub Code'),
-            'width'            => '150px',
-            'align'            => 'left',
-            'column_css_class' => 'skyhub-code',
-        ));
-    
-        $this->addColumn('attribute_code', array(
-            'header'           => $this->__('Magento Attribute Code'),
-            'width'            => '150px',
-            'align'            => 'left',
-            'column_css_class' => 'magento-code',
-        ));
-        
-        $this->addColumn('skyhub_label', array(
-            'header'    => $this->__('SkyHub Label'),
-            'width'     => '200px',
-            'align'     => 'left',
-        ));
-        
-        $this->addColumn('skyhub_description', array(
-            'header'    => $this->__('SkyHub Description'),
-            'align'     => 'left',
-        ));
+        $this->addColumn(
+            'skyhub_code',
+            array(
+                'header' => $this->__('SkyHub Code'),
+                'width' => '150px',
+                'align' => 'left',
+                'column_css_class' => 'skyhub-code',
+            )
+        );
 
-        $this->addColumn('create_attribute_link', array(
-            'align' => 'center',
-            'index' => 'create_attribute_link',
-            'width' => 50,
-            'type' => 'text',
-            'renderer' =>  'BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Renderer_LinkCreate'
-        ));
+        $this->addColumn(
+            'attribute_code',
+            array(
+                'header' => $this->__('Magento Attribute Code'),
+                'width' => '150px',
+                'align' => 'left',
+                'column_css_class' => 'magento-code',
+            )
+        );
+
+        $this->addColumn(
+            'skyhub_label',
+            array(
+                'header' => $this->__('SkyHub Label'),
+                'width' => '200px',
+                'align' => 'left',
+            )
+        );
+
+        $this->addColumn(
+            'skyhub_description',
+            array(
+                'header' => $this->__('SkyHub Description'),
+                'align' => 'left',
+            )
+        );
+
+        $this->addColumn(
+            'create_attribute_link',
+            array(
+                'align' => 'center',
+                'index' => 'create_attribute_link',
+                'width' => 50,
+                'type' => 'text',
+                'renderer' => 'BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Renderer_LinkCreate'
+            )
+        );
         
         return parent::_prepareColumns();
     }

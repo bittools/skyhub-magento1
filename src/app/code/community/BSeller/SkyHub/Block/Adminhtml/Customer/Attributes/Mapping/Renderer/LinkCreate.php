@@ -16,9 +16,13 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Renderer_LinkCr
     use BSeller_Core_Trait_Data;
     use BSeller_SkyHub_Trait_Attribute_Notification;
 
+    /**
+     * @param Varien_Object $row
+     * @return string
+     */
     public function render(Varien_Object $row)
     {
-        if(!$row->getAttributeId()) {
+        if (!$row->getAttributeId()) {
             $value = $this->getCustomerAttributeAutoUrl($row->getData('id'));
             $linkLabel = $this->__('Create Attribute');
             return '<a href="' . $value . '">' . $linkLabel . '</a>';

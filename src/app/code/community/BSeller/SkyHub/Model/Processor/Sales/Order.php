@@ -28,10 +28,12 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             /** @var Mage_Sales_Model_Order $order */
             $order = $this->processOrderCreation($data);
         } catch (Exception $e) {
-            Mage::dispatchEvent('bseller_skyhub_order_import_exception', [
-                'exception'  => $e,
-                'order_data' => $data,
-            ]);
+            Mage::dispatchEvent(
+                'bseller_skyhub_order_import_exception', [
+                    'exception' => $e,
+                    'order_data' => $data,
+                ]
+            );
 
             Mage::logException($e);
 
@@ -77,19 +79,24 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
 
         $this->simulateStore($this->getStore());
 
-        $info = new Varien_Object([
-            'increment_id'      => $incrementId,
-            'send_confirmation' => 0
-        ]);
+        $info = new Varien_Object(
+            [
+                'increment_id' => $incrementId,
+                'send_confirmation' => 0
+            ]
+        );
 
         $billingAddress  = new Varien_Object($this->arrayExtract($data, 'billing_address'));
         $shippingAddress = new Varien_Object($this->arrayExtract($data, 'shipping_address'));
 
         $customerData = (array) $this->arrayExtract($data, 'customer', []);
-        $customerData = array_merge_recursive($customerData, [
-            'billing_address'  => $billingAddress,
-            'shipping_address' => $shippingAddress
-        ]);
+        $customerData = array_merge_recursive(
+            $customerData,
+            [
+                'billing_address' => $billingAddress,
+                'shipping_address' => $shippingAddress
+            ]
+        );
 
         /** @var Mage_Customer_Model_Customer $customer */
         $customer = $this->getCustomer($customerData);
@@ -110,8 +117,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             ->setInterestAmount($interestAmount)
             ->addOrderAddress('billing', $billingAddress)
             ->addOrderAddress('shipping', $shippingAddress)
-            ->setComment('This order was automatically created by SkyHub import process.')
-        ;
+            ->setComment('This order was automatically created by SkyHub import process.');
 
         $products = $this->getProducts((array) $this->arrayExtract($data, 'items'));
         if (empty($products)) {
@@ -380,6 +386,12 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         return $code;
     }
 
+    /**
+     * @param $data
+     * @param $customer
+     *
+     * @return void
+     */
     protected function setPersonTypeInformation($data, $customer)
     {
         //get the vat number

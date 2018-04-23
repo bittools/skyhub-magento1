@@ -31,35 +31,56 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Edit_Form
     protected function _prepareForm()
     {
         /** @var Varien_Data_Form $form */
-        $form = new Varien_Data_Form([
+        $form = new Varien_Data_Form(
+            [
             'id'     => 'edit_form',
             'action' => $this->getData('action'),
             'method' => 'post'
-        ]);
+            ]
+        );
     
         /** @var Varien_Data_Form_Element_Fieldset $fieldset */
-        $fieldset = $form->addFieldset('general', [
-            'legend' => $this->__('General Information')
-        ]);
-        
-        $fieldset->addField('id', 'hidden', [
-            'name'  => 'id',
-        ]);
-        
-        $fieldset->addField('skyhub_code', 'label', [
-            'name'  => 'skyhub_code',
-            'label' => $this->__('SkyHub Code'),
-        ]);
-        
-        $fieldset->addField('skyhub_label', 'label', [
-            'name'  => 'skyhub_label',
-            'label' => $this->__('SkyHub Label'),
-        ]);
-        
-        $fieldset->addField('skyhub_description', 'label', [
-            'name'  => 'skyhub_description',
-            'label' => $this->__('SkyHub Description'),
-        ]);
+        $fieldset = $form->addFieldset(
+            'general',
+            [
+                'legend' => $this->__('General Information')
+            ]
+        );
+
+        $fieldset->addField(
+            'id',
+            'hidden',
+            [
+                'name' => 'id',
+            ]
+        );
+
+        $fieldset->addField(
+            'skyhub_code',
+            'label',
+            [
+                'name' => 'skyhub_code',
+                'label' => $this->__('SkyHub Code'),
+            ]
+        );
+
+        $fieldset->addField(
+            'skyhub_label',
+            'label',
+            [
+                'name' => 'skyhub_label',
+                'label' => $this->__('SkyHub Label'),
+            ]
+        );
+
+        $fieldset->addField(
+            'skyhub_description',
+            'label',
+            [
+                'name' => 'skyhub_description',
+                'label' => $this->__('SkyHub Description'),
+            ]
+        );
         
         /** @var BSeller_SkyHub_Model_System_Config_Source_Customer_Attributes $attributesSource */
         $attributesSource = Mage::getModel('bseller_skyhub/system_config_source_customer_attributes');
@@ -70,15 +91,22 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Edit_Form
 
         $scriptToLoad = '';
         if ($magentoAttributeId) {
-            $scriptToLoad = "<script>renderAttributeOptions($magentoAttributeId, '" . $mappingAttributeId . "', 'options_container' , '" . $url . "')</script>";
+            $scriptToLoad = "<script>renderAttributeOptions($magentoAttributeId , '"
+                . $mappingAttributeId
+                . "', 'options_container' , '"
+                . $url . "')</script>";
         }
-        $fieldset->addField('attribute_id', 'select', [
-            'name'     => 'attribute_id',
-            'label'    => $this->__('Related Attribute'),
-            'required' => true,
-            'options' => $attributesSource->toArray(true),
-            'onchange' => "renderAttributeOptions(this.value, '" . $mappingAttributeId . "', 'options_container' , '" . $url . "')",
-        ])->setAfterElementHtml(
+        $fieldset->addField(
+            'attribute_id',
+            'select',
+            [
+                'name' => 'attribute_id',
+                'label' => $this->__('Related Attribute'),
+                'required' => true,
+                'options' => $attributesSource->toArray(true),
+                'onchange' => "renderAttributeOptions(this.value, '" . $mappingAttributeId . "', 'options_container' , '" . $url . "')"
+            ]
+        )->setAfterElementHtml(
             "
                 <div id=\"options_container\"></div>
                 {$scriptToLoad}
