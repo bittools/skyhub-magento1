@@ -83,13 +83,17 @@ class BSeller_SkyHub_Model_Resource_Setup_Customer_Mapping extends BSeller_SkyHu
                 }
     
                 $this->getConnection()->insert($table, $attributeData);
+                /*
+                 * get the last attribute mapping table ID
+                 */
+                $parentAttributeId = $this->getConnection()->lastInsertId($table);
                 $this->getConnection()->commit();
 
                 /*
                  * if the attribute has options
                  */
                 if (isset($attributeData['has_options']) && $attributeData['has_options']) {
-                    $this->fillOptionsTable($this->arrayExtract($data, 'options', false));
+                    $this->fillOptionsTable($this->arrayExtract($data, 'options', false), $parentAttributeId);
                 }
             } catch (Exception $e) {
                 $this->getConnection()->rollBack();
@@ -104,19 +108,8 @@ class BSeller_SkyHub_Model_Resource_Setup_Customer_Mapping extends BSeller_SkyHu
      *
      * @return void
      */
-    private function fillOptionsTable($options)
+    private function fillOptionsTable($options, $parentAttributeId)
     {
-        /*
-         * get the last attribute mapping table ID
-         */
-        $table = (string)$this->getTable('bseller_skyhub/customer_attributes_mapping');
-        $select = $this->getConnection()
-            ->select()
-            ->from($table, 'id')
-            ->order('id DESC')
-            ->limit(1);
-        $id = $this->getConnection()->fetchOne($select);
-
         /*
          * save the options with the last attribute mapping saved ID
          */
@@ -127,7 +120,7 @@ class BSeller_SkyHub_Model_Resource_Setup_Customer_Mapping extends BSeller_SkyHu
                     [
                         'skyhub_code' => $this->arrayExtract($option, 'skyhub_code'),
                         'skyhub_label' => $this->arrayExtract($option, 'skyhub_label'),
-                        'customer_attributes_mapping_id' => $id
+                        'customer_attributes_mapping_id' => $parentAttributeId
                     ];
                 $this->getConnection()->insert($table, $optionData);
                 $this->getConnection()->commit();
