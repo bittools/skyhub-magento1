@@ -32,6 +32,10 @@ class BSeller_SkyHub_Model_Resource_Sales_Order extends Mage_Sales_Model_Resourc
         return $this->_getReadAdapter()->fetchOne($select);
     }
 
+    /**
+     * @param $code
+     * @return string
+     */
     public function getEntityIdBySkyhubCode($code)
     {
         /** @var Varien_Db_Select $select */
@@ -44,6 +48,10 @@ class BSeller_SkyHub_Model_Resource_Sales_Order extends Mage_Sales_Model_Resourc
         return $this->_getReadAdapter()->fetchOne($select);
     }
 
+    /**
+     * @param $code
+     * @return bool|string
+     */
     public function getEntityIdByBizzCommerceSkyhubCode($code)
     {
         if (!$this->hasBizzCommerceSkyhubCodeColumn()) {
@@ -95,6 +103,9 @@ class BSeller_SkyHub_Model_Resource_Sales_Order extends Mage_Sales_Model_Resourc
         return $this->_getReadAdapter()->fetchOne($select);
     }
 
+    /**
+     * @return bool
+     */
     protected function hasBizzCommerceSkyhubCodeColumn()
     {
         $readAdapter = $this->_getReadAdapter();
