@@ -14,6 +14,7 @@
 
 class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Processor_Abstract
 {
+    use BSeller_SkyHub_Trait_Sales_Order;
 
     /**
      * @param array $data
@@ -92,7 +93,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
         $creation = Mage::getModel('bseller_skyhub/support_sales_order_create', $this->getStore());
 
-        $incrementId = $this->getOrderIncrementId($creation->getQuote(), $code);
+        $incrementId = $this->getNewOrderIncrementId($creation->getQuote(), $code);
         $info = new Varien_Object([
             'increment_id' => $incrementId,
             'send_confirmation' => 0
@@ -363,29 +364,5 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     protected function getStore()
     {
         return $this->getNewOrdersDefaultStore();
-    }
-    
-    
-    /**
-     * @param string $code
-     *
-     * @return string
-     */
-    protected function getOrderId($code)
-    {
-        /** @var BSeller_SkyHub_Model_Resource_Sales_Order $orderResource */
-        $orderResource = Mage::getResourceModel('bseller_skyhub/sales_order');
-        $orderId = $orderResource->getEntityIdBySkyhubCode($code);
-        return $orderId;
-    }
-
-    protected function getOrderIncrementId($quote, $code)
-    {
-        $useDefaultIncrementId = $this->getSkyHubModuleConfig('use_default_increment_id', 'cron_sales_order_queue');
-        if (!$useDefaultIncrementId) {
-            return $code;
-        }
-
-        return $quote->getReservedOrderId();
     }
 }
