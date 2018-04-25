@@ -99,22 +99,22 @@
     </adminhtml_bseller_skyhub_sales_order_import_log>
 
     <!-- PLP list-->
-    <adminhtml_bseller_skyhub_sales_plp_index>
+    <adminhtml_bseller_skyhub_shipment_plp_index>
         <label>BSeller SkyHub PLP List</label>
         <update handle="ADD_STYLES"/>
         <reference name="content">
-            <block type="bseller_skyhub/adminhtml_sales_plp"/>
+            <block type="bseller_skyhub/adminhtml_shipment_plp"/>
         </reference>
-    </adminhtml_bseller_skyhub_sales_plp_index>
+    </adminhtml_bseller_skyhub_shipment_plp_index>
 
     <!-- PLP detail -->
-    <adminhtml_bseller_skyhub_sales_plp_view>
+    <adminhtml_bseller_skyhub_shipment_plp_view>
         <label>BSeller SkyHub PLP Detail</label>
         <update handle="ADD_STYLES"/>
         <reference name="content">
-            <block type="bseller_skyhub/adminhtml_sales_plp_view"/>
+            <block type="bseller_skyhub/adminhtml_shipment_plp_view"/>
         </reference>
-    </adminhtml_bseller_skyhub_sales_plp_view>
+    </adminhtml_bseller_skyhub_shipment_plp_view>
 
     <adminhtml_sales_order_view>
         <reference name="order_totals">

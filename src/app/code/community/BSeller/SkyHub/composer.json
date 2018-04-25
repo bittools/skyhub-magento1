@@ -1,6 +1,11 @@
 {
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/home/bruno/docker/skyhub-sdk"
+        }
+    ],
     "require": {
-        "esmart/skyhub-php": "^1.0"
-    },
-    "minimum-stability": "stable"
+        "bittools/skyhub-php": "dev-feature/ISKY-100"
+    }
 }

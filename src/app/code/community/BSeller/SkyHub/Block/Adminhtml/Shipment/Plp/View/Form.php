@@ -11,7 +11,7 @@
  *
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
-class BSeller_SkyHub_Block_Adminhtml_Sales_Plp_View_Form
+class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
     extends BSeller_Core_Block_Adminhtml_Widget_Form
 {
     

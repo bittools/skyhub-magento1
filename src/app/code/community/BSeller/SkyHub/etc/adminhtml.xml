@@ -78,7 +78,7 @@
                         <plp>
                             <title>Pre-post list (PLP)</title>
                             <sort_order>40</sort_order>
-                            <action>adminhtml/bseller_skyhub_sales_plp</action>
+                            <action>adminhtml/bseller_skyhub_shipment_plp</action>
                         </plp>
                         <configuration>
                             <title>Configuration</title>

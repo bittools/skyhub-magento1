@@ -11,11 +11,11 @@
  *
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
-class BSeller_SkyHub_Block_Adminhtml_Sales_Plp
+class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp
     extends BSeller_SkyHub_Block_Adminhtml_Widget_Grid_Container
 {
 
-    protected $_controller = 'adminhtml_sales_plp';
+    protected $_controller = 'adminhtml_shipment_plp';
     
     
     public function __construct()

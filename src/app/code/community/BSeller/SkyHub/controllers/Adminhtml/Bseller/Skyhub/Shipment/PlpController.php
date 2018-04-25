@@ -12,7 +12,7 @@
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Sales_PlpController extends BSeller_SkyHub_Controller_Admin_Action
+class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSeller_SkyHub_Controller_Admin_Action
 {
 
     /**
