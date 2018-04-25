@@ -93,11 +93,13 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
         $creation = Mage::getModel('bseller_skyhub/support_sales_order_create', $this->getStore());
 
-        $incrementId = $this->getNewOrderIncrementId($creation->getQuote(), $code);
-        $info = new Varien_Object([
-            'increment_id' => $incrementId,
-            'send_confirmation' => 0
-        ]);
+        $incrementId = $this->getNewOrderIncrementId($code);
+        $info = new Varien_Object(
+            [
+                'increment_id' => $incrementId,
+                'send_confirmation' => 0
+            ]
+        );
 
         $creation->setOrderInfo($info)
             ->setCustomer($customer)
@@ -107,8 +109,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             ->setInterestAmount($interestAmount)
             ->addOrderAddress('billing', $billingAddress)
             ->addOrderAddress('shipping', $shippingAddress)
-            ->setComment('This order was automatically created by SkyHub import process.')
-        ;
+            ->setComment('This order was automatically created by SkyHub import process.');
 
         $products = $this->getProducts((array) $this->arrayExtract($data, 'items'));
         if (empty($products)) {
