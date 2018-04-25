@@ -36,19 +36,17 @@ trait BSeller_SkyHub_Trait_Sales_Order
     }
 
     /**
-     * @param $quote
      * @param $code
      *
      * @return int
      */
-    protected function getNewOrderIncrementId($quote, $code)
+    protected function getNewOrderIncrementId($code)
     {
         $useDefaultIncrementId = $this->getSkyHubModuleConfig('use_default_increment_id', 'cron_sales_order_queue');
         if (!$useDefaultIncrementId) {
             return $code;
         }
-
-        return $quote->getReservedOrderId();
+        return null;
     }
 
     /**
