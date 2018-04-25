@@ -31,7 +31,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
 
         while ($count < $limit) {
             /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
-            $orderData = $this->orderQueueIntegrator()->nextOrder();
+            $orderData = $this->orderQueueIntegrator()
+                ->nextOrder();
 
             if (empty($orderData)) {
                 $schedule->setMessages($this->__('No order found in the queue.'));
@@ -65,7 +66,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
             $count++;
         }
     }
-    
+
     
     /**
      * @param Mage_Cron_Model_Schedule $schedule

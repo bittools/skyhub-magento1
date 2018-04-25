@@ -14,6 +14,7 @@
 
 class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Processor_Abstract
 {
+    use BSeller_SkyHub_Trait_Sales_Order;
 
     /**
      * @param array $data
@@ -57,11 +58,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     {
         $code        = $this->arrayExtract($data, 'code');
         $channel     = $this->arrayExtract($data, 'channel');
-        $incrementId = $this->getOrderIncrementId($code);
-
-        /** @var BSeller_SkyHub_Model_Resource_Sales_Order $orderResource */
-        $orderResource = Mage::getResourceModel('bseller_skyhub/sales_order');
-        $orderId       = $orderResource->getEntityIdByIncrementId($incrementId);
+        $orderId = $this->getOrderId($code);
 
         if ($orderId) {
             /**
@@ -74,11 +71,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         }
 
         $this->simulateStore($this->getStore());
-
-        $info = new Varien_Object([
-            'increment_id'      => $incrementId,
-            'send_confirmation' => 0
-        ]);
 
         $billingAddress  = new Varien_Object($this->arrayExtract($data, 'billing_address'));
         $shippingAddress = new Varien_Object($this->arrayExtract($data, 'shipping_address'));
@@ -100,6 +92,13 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
 
         /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
         $creation = Mage::getModel('bseller_skyhub/support_sales_order_create', $this->getStore());
+
+        $incrementId = $this->getNewOrderIncrementId($creation->getQuote(), $code);
+        $info = new Varien_Object([
+            'increment_id' => $incrementId,
+            'send_confirmation' => 0
+        ]);
+
         $creation->setOrderInfo($info)
             ->setCustomer($customer)
             ->setShippingMethod($shippingMethod, $shippingCarrier, (float) $shippingCost)
@@ -366,16 +365,4 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     {
         return $this->getNewOrdersDefaultStore();
     }
-    
-    
-    /**
-     * @param string $code
-     *
-     * @return string
-     */
-    protected function getOrderIncrementId($code)
-    {
-        return $code;
-    }
-    
 }
