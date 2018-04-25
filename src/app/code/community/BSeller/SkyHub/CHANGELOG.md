@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.2.5] - 2018-04-25
+### Added
+- Now, it's available an option to use the magento default incrementId at order creation process.
+### Changed
+- Adapting the order process creation to do not conflict with "Bizz Commerce" skyhub module;
+
 ## [1.2.4] - 2018-04-19
 ### Changed
 - Minor fixes.
