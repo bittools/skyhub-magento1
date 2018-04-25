@@ -62,7 +62,43 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_Grid
             )
         );
         
-        return parent::_prepareColumns();
+        parent::_prepareColumns();
+
+        return $this;
+    }
+
+
+    /**
+     * @return $this
+     */
+    protected function _prepareMassaction()
+    {
+        $this->setMassactionIdField('id');
+
+        /** @var Mage_Adminhtml_Block_Widget_Grid_Massaction $massactionBlock */
+        $massactionBlock = $this->getMassactionBlock();
+
+        $massactionBlock->setFormFieldName('plp_ids');
+
+        $massactionBlock->addItem(
+            'ungroup',
+            array(
+                'label'   => $this->__('Ungroup'),
+                'url'     => $this->getUrl('*/*/massUngroup'),
+                'confirm' => $this->__('Are you sure?'),
+            )
+        );
+
+        $massactionBlock->addItem(
+            'remove',
+            array(
+                'label'   => $this->__('Remove'),
+                'url'     => $this->getUrl('*/*/massRemove'),
+                'confirm' => $this->__('Are you sure?'),
+            )
+        );
+
+        return $this;
     }
     
     
