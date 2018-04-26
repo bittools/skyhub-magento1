@@ -53,7 +53,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
         $id = $this->getRequest()->getParam('id', null);
 
-        /** @var BSeller_SkyHub_Model_Plp $plp */
+        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
         $plp = $this->getPlp($id);
 
         if (!$plp->getId()) {
@@ -69,14 +69,14 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
     /**
      * @param int $id
      *
-     * @return BSeller_SkyHub_Model_Plp
+     * @return BSeller_SkyHub_Model_Shipment_Plp
      *
      * @throws Mage_Core_Exception
      */
     protected function getPlp($id)
     {
-        /** @var BSeller_SkyHub_Model_Plp $plp */
-        $plp = Mage::getModel('bseller_skyhub/plp');
+        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
+        $plp = Mage::getModel('bseller_skyhub/shipment_plp');
         $plp->load((int) $id);
 
         Mage::register('current_plp', $plp, true);

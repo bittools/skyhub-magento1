@@ -105,15 +105,15 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
     
     
     /**
-     * @return BSeller_SkyHub_Model_Plp
+     * @return BSeller_SkyHub_Model_Shipment_Plp
      */
     protected function _getPlp()
     {
-        /** @var BSeller_SkyHub_Model_Plp $plp */
+        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
         $plp = Mage::registry('current_plp');
         
         if (!$plp) {
-            $plp = Mage::getModel('bseller_skyhub/plp');
+            $plp = Mage::getModel('bseller_skyhub/shipment_plp');
         }
         
         return $plp;
@@ -121,7 +121,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
 
 
     /**
-     * @param   BSeller_SkyHub_Model_Plp $plp
+     * @param   BSeller_SkyHub_Model_Shipment_Plp $plp
      *
      * @return  null|array
      */

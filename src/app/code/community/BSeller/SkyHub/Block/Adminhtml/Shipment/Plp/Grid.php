@@ -21,8 +21,8 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_Grid
      */
     protected function _prepareCollection()
     {
-        /** @var BSeller_SkyHub_Model_Resource_Plp_Collection $collection */
-        $collection = Mage::getResourceModel('bseller_skyhub/plp_collection');
+        /** @var BSeller_SkyHub_Model_Resource_Shipment_Plp_Collection $collection */
+        $collection = Mage::getResourceModel('bseller_skyhub/shipment_plp_collection');
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -103,7 +103,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_Grid
     
     
     /**
-     * @param BSeller_SkyHub_Model_Plp $plp
+     * @param BSeller_SkyHub_Model_Shipment_Plp $plp
      *
      * @return string|bool
      */
