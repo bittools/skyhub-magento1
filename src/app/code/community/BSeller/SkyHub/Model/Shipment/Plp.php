@@ -12,12 +12,22 @@
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Model_Resource_Plp_Collection extends BSeller_Core_Model_Resource_Collection_Abstract
+/**
+ * Class BSeller_SkyHub_Model_Shipment_Plp
+ *
+ * @method $this setSkyhubCode(integer $entityId)
+ * @method $this setExpirationDate(string $datetime)
+ *
+ * @method int     getId()
+ * @method int     getSkyhubCode()
+ * @method string  getExpirationDate()
+ */
+class BSeller_SkyHub_Model_Shipment_Plp extends BSeller_Core_Model_Abstract
 {
 
     protected function _construct()
     {
-        $this->_init('bseller_skyhub/plp');
+        $this->_init('bseller_skyhub/shipment_plp');
     }
 
 }

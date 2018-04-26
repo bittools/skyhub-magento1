@@ -12,12 +12,12 @@
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Model_Resource_Plp extends BSeller_Core_Model_Resource_Abstract
+class BSeller_SkyHub_Model_Resource_Shipment_Plp_Collection extends BSeller_Core_Model_Resource_Collection_Abstract
 {
 
     protected function _construct()
     {
-        $this->_init('bseller_skyhub/plp', 'id');
+        $this->_init('bseller_skyhub/shipment_plp');
     }
 
 }
