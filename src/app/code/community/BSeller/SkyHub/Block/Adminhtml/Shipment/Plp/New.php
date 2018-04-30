@@ -33,6 +33,13 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
         $collection = Mage::getResourceModel('sales/order_grid_collection')
             ->addFieldtoFilter('entity_id', ['in' => $mutualIds]);
 
+        $collection->getSelect()
+            ->join(
+                array('order' => $magentoOrders->getResource()->getTable('sales/order')),
+                'order.entity_id = main_table.entity_id',
+                array('order.bseller_skyhub_code')
+            );
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -123,7 +130,8 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
      */
     protected function _prepareMassaction()
     {
-        $this->setMassactionIdField('id');
+        $this->setMassactionIdFieldOnlyIndexValue(true);
+        $this->setMassactionIdField('bseller_skyhub_code');
 
         /** @var Mage_Adminhtml_Block_Widget_Grid_Massaction $massactionBlock */
         $massactionBlock = $this->getMassactionBlock();
@@ -131,11 +139,11 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
         $massactionBlock->setFormFieldName('plp_ids');
 
         $massactionBlock->addItem(
-            'ungroup',
+            'group',
             array(
-                'label'   => $this->__('Group'),
-                'url'     => $this->getUrl('*/*/massGroup'),
-                'confirm' => $this->__('Are you sure?'),
+                'label'     => $this->__('Group'),
+                'url'       => $this->getUrl('*/*/massGroup'),
+                'confirm'   => $this->__('Are you sure?'),
             )
         );
 

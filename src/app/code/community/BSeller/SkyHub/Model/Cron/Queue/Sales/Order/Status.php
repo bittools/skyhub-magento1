@@ -29,7 +29,6 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
 
         /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
         $collection = $this->getPendingOrdersFromSkyHub();
-        
 
         /** @var Varien_Db_Select $select */
         $select = $collection->getSelect()
