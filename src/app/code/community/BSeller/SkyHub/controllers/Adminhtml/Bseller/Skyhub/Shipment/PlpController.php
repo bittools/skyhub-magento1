@@ -15,6 +15,9 @@
 class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSeller_SkyHub_Controller_Admin_Action
 {
 
+    use BSeller_SkyHub_Trait_Integrators;
+
+
     /**
      * @param string|null $actionTitle
      *
@@ -55,6 +58,23 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
 
     /**
+     * Group 'n' orders in a PLP in SkyHub API
+     */
+    public function massGroupAction()
+    {
+        $skyhubOrderIds = (array) $this->getRequest()->getPost('skyhub_order_ids');
+
+        if (empty($skyhubOrderIds)) {
+            $this->_redirect('*/*/index');
+            return $this;
+        }
+
+        $this->groupOrdersInPlp($skyhubOrderIds);
+        $this->_redirect('*/*/index');
+    }
+
+
+    /**
      * PLP detail
      */
     public function viewAction()
@@ -77,20 +97,65 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
 
     /**
-     * @param int $id
+     * @param array $ids
      *
      * @return BSeller_SkyHub_Model_Shipment_Plp
      *
      * @throws Mage_Core_Exception
      */
-    protected function getPlp($id)
+    protected function groupOrdersInPlp($ids)
     {
-        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
-        $plp = Mage::getModel('bseller_skyhub/shipment_plp');
-        $plp->load((int) $id);
+        /** @var  $plpIntegrator */
+        $plpIntegrator = $this->shipmentPlpIntegrator();
 
-        Mage::register('current_plp', $plp, true);
+        $result = $plpIntegrator->group($ids);
 
-        return $plp;
+        if (!$result) {
+            $this->_getSession()->addError($this->__('There was a problem when trying to create the PLP.'));
+            return;
+        }
+
+        $plpId = $this->extractPlpId($result['message']);
+
+        $this->savePlp($plpId);
+    }
+
+
+    /**
+     * Save PLP in 'bseller_skyhub_plp' table
+     *
+     * @param $id
+     */
+    protected function savePlp($id)
+    {
+        try {
+            $plp = Mage::getModel('bseller_skyhub/shipment_plp');
+            $plp->setSkyhubCode($id)
+                ->save();
+            //@todo get PLP data (expiration date, related orders, etc)
+            $this->_getSession()->addSuccess($this->__('The PLP has been created.'));
+        } catch (Mage_Exception $e) {
+            $this->_getSession()->addError($this->__('There was a problem when trying to create the PLP in Magento.'));
+            Mage::logException($e);
+        }
+    }
+
+
+    /**
+     * Extract PLP ID from API result message
+     *
+     * @param string $message
+     *
+     * @return int|null
+     */
+    protected function extractPlpId($message)
+    {
+        $pieces = explode(' ', $message);
+
+        if (count($pieces) == 0 || (int)$pieces[1] == 0) {
+            return null;
+        }
+
+        return (int)$pieces[1];
     }
 }

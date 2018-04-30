@@ -136,7 +136,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
         /** @var Mage_Adminhtml_Block_Widget_Grid_Massaction $massactionBlock */
         $massactionBlock = $this->getMassactionBlock();
 
-        $massactionBlock->setFormFieldName('plp_ids');
+        $massactionBlock->setFormFieldName('skyhub_order_ids');
 
         $massactionBlock->addItem(
             'group',

@@ -20,7 +20,7 @@ class BSeller_SkyHub_Model_Integrator_Shipment_Plp extends BSeller_SkyHub_Model_
     public function getOrdersAvailableToGroup()
     {
         /** @var \SkyHub\Api\EntityInterface\Shipment\Plp $interface */
-        $interface = $this->api()->plp()->entityInterface();
+        $interface = $this->getEntityInterface();
         $result    = $interface->ordersReadyToGroup();
 
         if ($result->exception() || $result->invalid()) {
@@ -35,5 +35,45 @@ class BSeller_SkyHub_Model_Integrator_Shipment_Plp extends BSeller_SkyHub_Model_
         }
 
         return (array) $ordersToGroup['orders'];
+    }
+
+
+    /**
+     * @param $orders
+     * 
+     * @return array|bool
+     */
+    public function group($orders)
+    {
+        /** @var \SkyHub\Api\EntityInterface\Shipment\Plp $interface */
+        $interface = $this->getEntityInterface();
+
+        foreach ($orders as $order) {
+            $interface->addOrder($order);
+        }
+
+        $result = $interface->group();
+
+        if ($result->exception() || $result->invalid()) {
+            return false;
+        }
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerDefault $data */
+        $data = $result->toArray();
+
+        if (empty($data)) {
+            return false;
+        }
+
+        return (array) $data;
+    }
+
+
+    /**
+     * @return \SkyHub\Api\EntityInterface\Shipment\Plp
+     */
+    protected function getEntityInterface()
+    {
+        return $this->api()->plp()->entityInterface();
     }
 }

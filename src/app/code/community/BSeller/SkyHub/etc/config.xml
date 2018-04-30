@@ -48,6 +48,9 @@
                     <plp>
                         <table>bseller_skyhub_plp</table>
                     </plp>
+                    <plp_orders>
+                        <table>bseller_skyhub_plp_orders</table>
+                    </plp_orders>
                     <queue>
                         <table>bseller_skyhub_queue</table>
                     </queue>
