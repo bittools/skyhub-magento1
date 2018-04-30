@@ -45,6 +45,16 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
 
     /**
+     * PLP create page
+     */
+    public function newAction()
+    {
+        $this->init('Pre-post list (PLP) Creation');
+        $this->renderLayout();
+    }
+
+
+    /**
      * PLP detail
      */
     public function viewAction()

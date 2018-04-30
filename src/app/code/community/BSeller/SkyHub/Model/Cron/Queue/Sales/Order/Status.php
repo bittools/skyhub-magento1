@@ -15,6 +15,9 @@
 class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_Model_Cron_Queue_Sales_Abstract
 {
 
+    use BSeller_SkyHub_Trait_Sales_Order;
+
+
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
@@ -24,17 +27,9 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
             return;
         }
 
-        $deniedStates = [
-            Mage_Sales_Model_Order::STATE_CANCELED,
-            Mage_Sales_Model_Order::STATE_CLOSED,
-            Mage_Sales_Model_Order::STATE_COMPLETE,
-        ];
-
         /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
-        $collection = $this->getOrderCollection()
-            ->addFieldToFilter('state', ['nin' => $deniedStates])
-            ->addFieldToFilter('bseller_skyhub', 1)
-        ;
+        $collection = $this->getPendingOrdersFromSkyHub();
+        
 
         /** @var Varien_Db_Select $select */
         $select = $collection->getSelect()

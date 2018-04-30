@@ -20,7 +20,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp
     
     public function __construct()
     {
-        parent::__construct();
+        BSeller_Core_Block_Adminhtml_Widget_Grid_Container::__construct();
         $this->_headerText = $this->__('Pre-post list (PLP) List');
     }
 }
