@@ -70,6 +70,35 @@ class BSeller_SkyHub_Model_Integrator_Shipment_Plp extends BSeller_SkyHub_Model_
 
 
     /**
+     * @param $plp
+     *
+     * @return string|bool
+     */
+    public function viewFile($plp)
+    {
+        /** @var \SkyHub\Api\EntityInterface\Shipment\Plp $interface */
+        $interface = $this->getEntityInterface();
+
+        $interface->setId($plp->getSkyhubCode());
+
+        $result = $interface->viewFile();
+
+        if ($result->exception() || $result->invalid()) {
+            return false;
+        }
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerDefault $data */
+        $data = $result->body();
+
+        if (empty($data)) {
+            return false;
+        }
+
+        return $data;
+    }
+
+
+    /**
      * @return \SkyHub\Api\EntityInterface\Shipment\Plp
      */
     protected function getEntityInterface()

@@ -30,6 +30,8 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
      */
     protected function _prepareForm()
     {
+        $fileButtonParams = "'popUpWindow','height=400,width=600,left=10,top=10,,scrollbars=yes,menubar=no";
+
         /** @var Varien_Data_Form $form */
         $form = new Varien_Data_Form(
             [
@@ -64,15 +66,6 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
         );
 
         $fieldset->addField(
-            'expiration_date',
-            'label',
-            [
-                'name'      => 'expiration_date',
-                'label'     => $this->__('Expiration Date'),
-            ]
-        );
-
-        $fieldset->addField(
             'pdf_file',
             'button',
             [
@@ -80,7 +73,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
                 'value'     => Mage::helper('core')->__('Download PLP File (PDF format)'),
                 'name'      => 'pdf_file',
                 'class'     => 'form-button',
-                'onclick'   => "setLocation('{$this->getUrl('*/*/registeremail')}')",
+                'onclick'   => "window.open('{$this->_getFileButtonLink('pdf')}',{$fileButtonParams}'); return false;",
             ]
         );
 
@@ -92,7 +85,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
                 'value'     => Mage::helper('core')->__('Download PLP File (JSON format)'),
                 'name'      => 'json_file',
                 'class'     => 'form-button',
-                'onclick'   => "setLocation('{$this->getUrl('*/*/registeremail')}')",
+                'onclick'   => "window.open('{$this->_getFileButtonLink('json')}',{$fileButtonParams}'); return false;",
             ]
         );
 
@@ -102,7 +95,23 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
         
         return $this;
     }
-    
+
+
+    /**
+     * @param string $format
+     *
+     * @return string
+     */
+    protected function _getFileButtonLink($format = 'json')
+    {
+        return $this->getUrl(
+            '*/*/viewFile',
+            [
+                'id'        => $this->_getPlp()->getId(),
+                'format'    => $format
+            ]
+        );
+    }
     
     /**
      * @return BSeller_SkyHub_Model_Shipment_Plp

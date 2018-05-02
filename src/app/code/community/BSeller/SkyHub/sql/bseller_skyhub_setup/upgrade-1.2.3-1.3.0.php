@@ -62,7 +62,7 @@ $table = $this->newTable($tableName)
     ->addColumn(
         'plp_id',
         $this::TYPE_INTEGER,
-        30,
+        10,
         [
             'nullable' => false,
             'primary'  => true,

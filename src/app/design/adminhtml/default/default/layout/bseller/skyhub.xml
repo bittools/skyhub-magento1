@@ -125,6 +125,21 @@
         </reference>
     </adminhtml_bseller_skyhub_shipment_plp_new>
 
+    <!-- PLP file (json/pdf) detail -->
+    <adminhtml_bseller_skyhub_shipment_plp_viewfile>
+        <label>BSeller SkyHub PLP File Detail</label>
+        <update handle="ADD_STYLES"/>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>popup.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_shipment_plp_view_file" template="bseller/skyhub/shipment/plp/view/file.phtml" />
+        </reference>
+        <!--name="bseller_skyhub_interest" -->
+    </adminhtml_bseller_skyhub_shipment_plp_viewfile>
+
     <adminhtml_sales_order_view>
         <reference name="order_totals">
             <block type="bseller_skyhub/adminhtml_sales_order_totals_interest" name="bseller_skyhub_interest" />

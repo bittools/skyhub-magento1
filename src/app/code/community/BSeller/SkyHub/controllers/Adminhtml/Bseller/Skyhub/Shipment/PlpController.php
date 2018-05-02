@@ -97,6 +97,31 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
 
     /**
+     * PLP file (PDF/JSON) detail
+     */
+    public function viewFileAction()
+    {
+        $this->init('Pre-post list (PLP) File Detail');
+
+        $id         = $this->getRequest()->getParam('id', null);
+        $format     = $this->getRequest()->getParam('format', null);
+
+        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
+        $plp = $this->getPlp($id);
+
+        if (!$plp->getId()) {
+            $this->_getSession()->addError($this->__('This PLP does not exist anymore.'));
+            $this->_redirect('*/*');
+            return;
+        }
+
+        Mage::register('current_plp_file_format', $format, true);
+
+        $this->renderLayout();
+    }
+
+
+    /**
      * @param array $ids
      *
      * @return BSeller_SkyHub_Model_Shipment_Plp
