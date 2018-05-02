@@ -15,9 +15,31 @@
 class BSeller_SkyHub_Model_Resource_Shipment_Plp_Order_Collection extends BSeller_Core_Model_Resource_Collection_Abstract
 {
 
+    /**
+     * PLP field for setPlpFilter
+     *
+     * @var string
+     */
+    protected $_plpField     = 'plp_id';
+
+
     protected function _construct()
     {
         $this->_init('bseller_skyhub/shipment_plp_order');
+    }
+
+
+    /**
+     * Add PLP filter
+     *
+     * @param BSeller_SkyHub_Model_Shipment_Plp $plp
+     * @return $this
+     */
+    public function setPlpFilter(BSeller_SkyHub_Model_Shipment_Plp $plp)
+    {
+        $plpId = $plp->getId();
+        $this->addFieldToFilter($this->_plpField, $plpId);
+        return $this;
     }
 
 }

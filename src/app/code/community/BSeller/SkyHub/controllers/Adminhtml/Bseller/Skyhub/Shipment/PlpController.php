@@ -116,24 +116,34 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         }
 
         $plpId = $this->extractPlpId($result['message']);
-
-        $this->savePlp($plpId);
+        $this->savePlp($plpId, $ids);
     }
 
 
     /**
-     * Save PLP in 'bseller_skyhub_plp' table
+     * @todo get PLP data (expiration date, related orders, etc)
      *
-     * @param $id
+     * @param string    $id
+     * @param array     $skyhubOrderIds
      */
-    protected function savePlp($id)
+    protected function savePlp($id, $skyhubOrderIds)
     {
         try {
+
+            /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
             $plp = Mage::getModel('bseller_skyhub/shipment_plp');
-            $plp->setSkyhubCode($id)
-                ->save();
-            //@todo get PLP data (expiration date, related orders, etc)
+            $plp->setSkyhubCode($id);
+
+            foreach ($skyhubOrderIds as $order) {
+                /** @var BSeller_SkyHub_Model_Shipment_Plp_Order $plpOrder */
+                $plpOrder = Mage::getModel('bseller_skyhub/shipment_plp_order');
+                $plpOrder->setSkyhubOrderCode($order);
+                $plp->addOrder($plpOrder);
+            }
+
+            $plp->save();
             $this->_getSession()->addSuccess($this->__('The PLP has been created.'));
+
         } catch (Mage_Exception $e) {
             $this->_getSession()->addError($this->__('There was a problem when trying to create the PLP in Magento.'));
             Mage::logException($e);
@@ -157,5 +167,22 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         }
 
         return (int)$pieces[1];
+    }
+
+
+    /**
+     * @param int $id
+     *
+     * @return BSeller_SkyHub_Model_Shipment_Plp
+     */
+    protected function getPlp($id)
+    {
+        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
+        $plp = Mage::getModel('bseller_skyhub/shipment_plp');
+        $plp->load((int) $id);
+
+        Mage::register('current_plp', $plp, true);
+
+        return $plp;
     }
 }

@@ -51,15 +51,6 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_Grid
                 'width'            => '250px',
                 'align'            => 'left',
             )
-        )
-        ->addColumn(
-            'expiration_date',
-            array(
-                'header'           => $this->__('Expiration Date'),
-                'type'             => 'date',
-                'width'            => '250px',
-                'align'            => 'left',
-            )
         );
         
         parent::_prepareColumns();

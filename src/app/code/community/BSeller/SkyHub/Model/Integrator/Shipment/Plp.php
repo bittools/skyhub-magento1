@@ -40,7 +40,7 @@ class BSeller_SkyHub_Model_Integrator_Shipment_Plp extends BSeller_SkyHub_Model_
 
     /**
      * @param $orders
-     * 
+     *
      * @return array|bool
      */
     public function group($orders)

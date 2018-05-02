@@ -62,7 +62,7 @@ $table = $this->newTable($tableName)
     ->addColumn(
         'plp_id',
         $this::TYPE_INTEGER,
-        10,
+        30,
         [
             'nullable' => false,
             'primary'  => true,
@@ -72,14 +72,6 @@ $table = $this->newTable($tableName)
         'skyhub_order_code',
         $this::TYPE_VARCHAR,
         128,
-        [
-            'nullable' => false
-        ]
-    )
-    ->addColumn(
-        'order_id',
-        $this::TYPE_INTEGER,
-        10,
         [
             'nullable' => false
         ]
@@ -98,6 +90,6 @@ $conn->createTable($table);
 $this->addForeignKey($tableName, 'plp_id', 'bseller_skyhub/plp', 'id');
 
 $this->addIndex(['plp_id'], $tableName, Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX);
-$this->addIndex(['order_id'], $tableName, Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX);
+$this->addIndex(['skyhub_order_code'], $tableName, Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX);
 
 $this->endSetup();

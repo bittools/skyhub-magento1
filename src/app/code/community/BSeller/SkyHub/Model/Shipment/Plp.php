@@ -25,9 +25,62 @@
 class BSeller_SkyHub_Model_Shipment_Plp extends BSeller_Core_Model_Abstract
 {
 
+    protected $_orders = null;
+
     protected function _construct()
     {
         $this->_init('bseller_skyhub/shipment_plp');
+    }
+
+
+    /**
+     * @param BSeller_SkyHub_Model_Shipment_Plp_Order $order
+     *
+     * @return $this
+     */
+    public function addOrder(BSeller_SkyHub_Model_Shipment_Plp_Order $order)
+    {
+        $order->setPlp($this);
+        if (!$order->getId()) {
+            $this->getOrdersCollection()->addItem($order);
+        }
+        return $this;
+    }
+
+
+    /**
+     * @return BSeller_SkyHub_Model_Resource_Shipment_Plp_Order_Collection
+     */
+    public function getOrdersCollection()
+    {
+        if (is_null($this->_orders)) {
+            /** @var BSeller_SkyHub_Model_Resource_Shipment_Plp_Order_Collection _items */
+            $this->_orders = Mage::getResourceModel('bseller_skyhub/shipment_plp_order_collection')
+                ->setPlpFilter($this);
+
+            if ($this->getId()) {
+                foreach ($this->_orders as $order) {
+                    $order->setPlp($this);
+                }
+            }
+        }
+
+        return $this->_orders;
+    }
+
+
+    /**
+     * Prepare data before after
+     *
+     * @return Mage_Core_Model_Abstract
+     */
+    protected function _afterSave()
+    {
+        if (null !== $this->_orders) {
+            $this->_orders->save();
+        }
+
+        return parent::_afterSave();
     }
 
 }
