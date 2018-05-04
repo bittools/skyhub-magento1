@@ -73,7 +73,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
                 'value'     => Mage::helper('core')->__('Download PLP File (PDF format)'),
                 'name'      => 'pdf_file',
                 'class'     => 'form-button',
-                'onclick'   => "window.open('{$this->_getFileButtonLink('pdf')}',{$fileButtonParams}'); return false;",
+                'onclick'   => "window.setLocation('{$this->_getFileButtonLink('pdf')}'); return false;",
             ]
         );
 
@@ -105,7 +105,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
     protected function _getFileButtonLink($format = 'json')
     {
         return $this->getUrl(
-            '*/*/viewFile',
+            '*/*/view'.ucfirst($format).'File',
             [
                 'id'        => $this->_getPlp()->getId(),
                 'format'    => $format

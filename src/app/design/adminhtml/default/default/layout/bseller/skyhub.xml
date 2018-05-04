@@ -126,7 +126,7 @@
     </adminhtml_bseller_skyhub_shipment_plp_new>
 
     <!-- PLP file (json/pdf) detail -->
-    <adminhtml_bseller_skyhub_shipment_plp_viewfile>
+    <adminhtml_bseller_skyhub_shipment_plp_viewjsonfile>
         <label>BSeller SkyHub PLP File Detail</label>
         <update handle="ADD_STYLES"/>
         <reference name="root">
@@ -135,10 +135,9 @@
             </action>
         </reference>
         <reference name="content">
-            <block type="bseller_skyhub/adminhtml_shipment_plp_view_file" template="bseller/skyhub/shipment/plp/view/file.phtml" />
+            <block type="bseller_skyhub/adminhtml_shipment_plp_view_file_json" template="bseller/skyhub/shipment/plp/view/file/json.phtml" />
         </reference>
-        <!--name="bseller_skyhub_interest" -->
-    </adminhtml_bseller_skyhub_shipment_plp_viewfile>
+    </adminhtml_bseller_skyhub_shipment_plp_viewjsonfile>
 
     <adminhtml_sales_order_view>
         <reference name="order_totals">

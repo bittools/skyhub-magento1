@@ -12,7 +12,7 @@
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_File extends Mage_Adminhtml_Block_Template
+class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_File_Json extends Mage_Adminhtml_Block_Template
 {
 
     use BSeller_SkyHub_Trait_Service;
@@ -21,7 +21,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_File extends Mage_Adminht
 
     protected function _toHtml()
     {
-        $this->getPlpFile();
+        $this->getPlpJsonFile();
         return parent::_toHtml();
     }
 
@@ -29,27 +29,14 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_File extends Mage_Adminht
     /**
      * Get PLP file and save it in class object
      */
-    public function getPlpFile()
+    public function getPlpJsonFile()
     {
         /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
-        $plp        = $this->getPlp();
-        $fileFormat = $this->_getPlpFileFormat();
+        $plp = $this->getPlp();
 
-//        $fileFormat
-
+        /** @var string $file */
         $file = $this->shipmentPlpIntegrator()->viewFile($plp);
         $this->_setFileContent($file);
-    }
-
-
-    /**
-     * @param $jsonFile
-     */
-    protected function _setFileContent($jsonFile)
-    {
-        $formattedValue = json_decode($jsonFile, true);
-        $formattedValue = json_encode($formattedValue, JSON_PRETTY_PRINT);
-        $this->setFileContent($formattedValue);
     }
 
 
@@ -70,18 +57,19 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_File extends Mage_Adminht
 
 
     /**
-     * @return string
+     * @todo reuse format logic from trait (order json)
+     *
+     * @param string $jsonFile
      */
-    protected function _getPlpFileFormat()
+    protected function _setFileContent($jsonFile)
     {
-        /** @var string $format */
-        $format = Mage::registry('current_plp_file_format');
-
-        if (!$format) {
-            $format = '';
+        if (!$jsonFile) {
+            $this->setFileContent($this->__('An error occurred while getting PLP file.'));
+            return;
         }
 
-        return $format;
+        $formattedValue = json_decode($jsonFile, true);
+        $formattedValue = json_encode($formattedValue, JSON_PRETTY_PRINT);
+        $this->setFileContent($formattedValue);
     }
-
 }

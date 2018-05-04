@@ -16,6 +16,11 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 {
 
     use BSeller_SkyHub_Trait_Integrators;
+    use BSeller_SkyHub_Trait_Service;
+    use BSeller_SkyHub_Trait_Integrators;
+
+
+    const RESPONSE_TYPE_PDF = 'pdf';
 
 
     /**
@@ -65,8 +70,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         $skyhubOrderIds = (array) $this->getRequest()->getPost('skyhub_order_ids');
 
         if (empty($skyhubOrderIds)) {
-            $this->_redirect('*/*/index');
-            return $this;
+            return $this->_redirect('*/*/index');
         }
 
         $this->groupOrdersInPlp($skyhubOrderIds);
@@ -88,8 +92,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
         if (!$plp->getId()) {
             $this->_getSession()->addError($this->__('This PLP does not exist anymore.'));
-            $this->_redirect('*/*');
-            return;
+            return $this->_redirect('*/*');
         }
 
         $this->renderLayout();
@@ -97,14 +100,47 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
 
     /**
-     * PLP file (PDF/JSON) detail
+     * PLP PDF file detail
      */
-    public function viewFileAction()
+    public function viewPdfFileAction()
     {
         $this->init('Pre-post list (PLP) File Detail');
 
-        $id         = $this->getRequest()->getParam('id', null);
-        $format     = $this->getRequest()->getParam('format', null);
+        $id = $this->getRequest()->getParam('id', null);
+
+        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
+        $plp = $this->getPlp($id);
+
+        if (!$plp->getId()) {
+            $this->_getSession()->addError($this->__('This PLP does not exist anymore.'));
+            return $this->_redirect('*/*');
+        }
+
+        Mage::register('bseller_skyhub_plp_file_format', SELF::RESPONSE_TYPE_PDF, true);
+
+        /** @var string $file */
+        $file = $this->shipmentPlpIntegrator()->viewFile($plp);
+
+        if (!$file) {
+            $this->_getSession()->addError($this->__('An error occurred while getting PLP file.'));
+            return $this->_redirect('*/*/view', array('id' => $id));
+        }
+
+        return $this->_prepareDownloadResponse(
+            'plp-'.$plp->getSkyhubCode().'.pdf', $file,
+            'application/pdf'
+        );
+    }
+
+
+    /**
+     * PLP JSON file detail
+     */
+    public function viewJsonFileAction()
+    {
+        $this->init('Pre-post list (PLP) File Detail');
+
+        $id = $this->getRequest()->getParam('id', null);
 
         /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
         $plp = $this->getPlp($id);
@@ -115,18 +151,12 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
             return;
         }
 
-        Mage::register('current_plp_file_format', $format, true);
-
         $this->renderLayout();
     }
 
 
     /**
      * @param array $ids
-     *
-     * @return BSeller_SkyHub_Model_Shipment_Plp
-     *
-     * @throws Mage_Core_Exception
      */
     protected function groupOrdersInPlp($ids)
     {

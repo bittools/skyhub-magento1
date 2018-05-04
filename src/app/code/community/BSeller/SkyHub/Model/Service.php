@@ -15,12 +15,14 @@
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 use SkyHub\Api;
+use SkyHub\Api\Service\ServicePdf;
 
 class BSeller_SkyHub_Model_Service
 {
 
     use BSeller_SkyHub_Trait_Config;
 
+    const RESPONSE_PDF = 'pdf';
 
     /** @var Api */
     protected $api;
@@ -59,10 +61,20 @@ class BSeller_SkyHub_Model_Service
      */
     public function initApi()
     {
+        $service = null;
+
+        $serviceResponseFormat = Mage::registry('bseller_skyhub_plp_file_format');
+
+        if ($serviceResponseFormat == SELF::RESPONSE_PDF) {
+            $service = new ServicePdf(null);
+        }
+
         $this->api = new Api(
             $this->getServiceEmail(),
             $this->getServiceApiKey(),
-            'bZa6Ml0zgS'
+            'bZa6Ml0zgS',
+            null,
+            $service
         );
 
         if ($this->isLogEnabled()) {
@@ -72,8 +84,7 @@ class BSeller_SkyHub_Model_Service
             $this->apiService()
                 ->setLogAllowed(true)
                 ->setLogFileName($logFileName)
-                ->setLogFilePath($logFilePath)
-            ;
+                ->setLogFilePath($logFilePath);
         }
 
         return $this;
