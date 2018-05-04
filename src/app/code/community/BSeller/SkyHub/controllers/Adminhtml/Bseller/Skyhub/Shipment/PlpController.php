@@ -83,8 +83,6 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
      */
     public function viewAction()
     {
-        $this->init('Pre-post list (PLP) Detail');
-
         $id = $this->getRequest()->getParam('id', null);
 
         /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
@@ -95,6 +93,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
             return $this->_redirect('*/*');
         }
 
+        $this->init('Pre-post list (PLP) Detail');
         $this->renderLayout();
     }
 
@@ -104,7 +103,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
      */
     public function viewPdfFileAction()
     {
-        $this->init('Pre-post list (PLP) File Detail');
+//        $this->init('Pre-post list (PLP) File Detail');
 
         $id = $this->getRequest()->getParam('id', null);
 
@@ -116,7 +115,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
             return $this->_redirect('*/*');
         }
 
-        Mage::register('bseller_skyhub_plp_file_format', SELF::RESPONSE_TYPE_PDF, true);
+        Mage::register('bseller_skyhub_response_format', SELF::RESPONSE_TYPE_PDF, true);
 
         /** @var string $file */
         $file = $this->shipmentPlpIntegrator()->viewFile($plp);
@@ -138,8 +137,6 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
      */
     public function viewJsonFileAction()
     {
-        $this->init('Pre-post list (PLP) File Detail');
-
         $id = $this->getRequest()->getParam('id', null);
 
         /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
@@ -151,7 +148,38 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
             return;
         }
 
+        $this->init('Pre-post list (PLP) File Detail');
         $this->renderLayout();
+    }
+
+
+    /**
+     * PLP ungroup action
+     */
+    public function ungroupAction()
+    {
+        $id = $this->getRequest()->getParam('id', null);
+
+        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
+        $plp = $this->getPlp($id);
+
+        if (!$plp->getId()) {
+            $this->_getSession()->addError($this->__('This PLP does not exist anymore.'));
+            return $this->_redirect('*/*');
+        }
+
+        /** @var  $plpIntegrator */
+        $plpIntegrator = $this->shipmentPlpIntegrator();
+
+        $result = $plpIntegrator->ungroup($plp->getSkyhubCode());
+
+        if (!$result) {
+            $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP.'));
+            return $this->_redirect('*/*');
+        }
+
+        $this->deletePlp($id);
+        $this->_redirect('*/*/index');
     }
 
 
@@ -201,6 +229,27 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
         } catch (Mage_Exception $e) {
             $this->_getSession()->addError($this->__('There was a problem when trying to create the PLP in Magento.'));
+            Mage::logException($e);
+        }
+    }
+
+
+    protected function deletePlp($id)
+    {
+        try {
+
+            /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
+            $plp = Mage::getModel('bseller_skyhub/shipment_plp')->load((int) $id);
+
+            if (!$plp) {
+                Mage::throwException($this->__('There was a problem when trying to ungroup the PLP.'));
+            }
+
+            $plp->delete();
+            $this->_getSession()->addSuccess($this->__('The PLP has been ungrouped.'));
+
+        } catch (Mage_Exception $e) {
+            $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP in Magento.'));
             Mage::logException($e);
         }
     }

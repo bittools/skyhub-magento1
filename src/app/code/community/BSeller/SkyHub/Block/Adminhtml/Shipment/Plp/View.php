@@ -27,15 +27,50 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View
         $this->removeButton('save');
         $this->removeButton('reset');
         $this->removeButton('delete');
+
+        $this->_addButton(
+            'ungroup',
+            array(
+                'label'     => Mage::helper('adminhtml')->__('Ungroup'),
+                'class'     => 'delete',
+                'onclick'   => 'deleteConfirm(\''
+                    . Mage::helper('core')->jsQuoteEscape(
+                        Mage::helper('adminhtml')->__('Are you sure you want to do this?')
+                    )
+                    .'\', \''
+                    . $this->_getUngroupUrl()
+                    . '\')',
+            )
+        );
     }
-    
-    
+
+
     /**
      * @return string
      */
-    public function getHeaderText()
+    protected function _getUngroupUrl()
     {
-        return $this->__('Pre-post list (PLP) Detail');
+        return $this->getUrl(
+            '*/*/ungroup',
+            array(
+                'id' => $this->_getPlp()->getId()
+            )
+        );
     }
 
+
+    /**
+     * @return BSeller_SkyHub_Model_Shipment_Plp
+     */
+    protected function _getPlp()
+    {
+        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
+        $plp = Mage::registry('current_plp');
+
+        if (!$plp) {
+            $plp = Mage::getModel('bseller_skyhub/shipment_plp');
+        }
+
+        return $plp;
+    }
 }

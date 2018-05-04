@@ -63,7 +63,7 @@ class BSeller_SkyHub_Model_Service
     {
         $service = null;
 
-        $serviceResponseFormat = Mage::registry('bseller_skyhub_plp_file_format');
+        $serviceResponseFormat = Mage::registry('bseller_skyhub_response_format');
 
         if ($serviceResponseFormat == SELF::RESPONSE_PDF) {
             $service = new ServicePdf(null);
