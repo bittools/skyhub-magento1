@@ -20,14 +20,20 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
     use BSeller_SkyHub_Trait_Integrators;
     use BSeller_SkyHub_Trait_Sales_Order;
 
+
     /**
      * @return Mage_Adminhtml_Block_Widget_Grid
      */
     protected function _prepareCollection()
     {
-        $skyhubOrdersToGroup = $this->getSkyHubOrdersToGroup();
-        $magentoOrders       = $this->getMagentoOrders();
-        $mutualIds           = $this->getMutualOrdersToGroup($skyhubOrdersToGroup, $magentoOrders);
+        /** @var array $skyhubOrdersToGroup */
+        $skyhubOrdersToGroup = $this->_getSkyHubOrdersToGroup();
+
+        /** @var Mage_Sales_Model_Resource_Order_Collection $magentoOrders */
+        $magentoOrders       = $this->_getMagentoOrders();
+
+        /** @var array $mutualIds */
+        $mutualIds           = $this->_getMutualOrdersToGroup($skyhubOrdersToGroup, $magentoOrders);
 
         /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
         $collection = Mage::getResourceModel('sales/order_grid_collection')
@@ -43,15 +49,15 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
-    
-    
+
+
     /**
      * @return $this
-     *
-     * @throws Exception
      */
     protected function _prepareColumns()
     {
+        parent::_prepareColumns();
+
         $this->addColumn(
             'real_order_id',
             array(
@@ -118,8 +124,6 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
                 'options' => Mage::getSingleton('sales/order_config')->getStatuses(),
             )
         );
-        
-        parent::_prepareColumns();
 
         return $this;
     }
@@ -135,9 +139,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
 
         /** @var Mage_Adminhtml_Block_Widget_Grid_Massaction $massactionBlock */
         $massactionBlock = $this->getMassactionBlock();
-
         $massactionBlock->setFormFieldName('skyhub_order_ids');
-
         $massactionBlock->addItem(
             'group',
             array(
@@ -156,9 +158,10 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
      *
      * @param array $skyHubOrdersToGroup
      * @param Mage_Sales_Model_Resource_Order_Collection $magentoOrders
+     *
      * @return array
      */
-    protected function getMutualOrdersToGroup($skyHubOrdersToGroup, $magentoOrders)
+    protected function _getMutualOrdersToGroup($skyHubOrdersToGroup, $magentoOrders)
     {
         $mutualIds = array();
 
@@ -177,9 +180,11 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
      *
      * @return \SkyHub\Api\Handler\Response\HandlerInterface
      */
-    protected function getSkyHubOrdersToGroup()
+    protected function _getSkyHubOrdersToGroup()
     {
         $skyHubOrdersCode = array();
+
+        /** @var array $ordersToGroupData */
         $ordersToGroupData =  $this->shipmentPlpIntegrator()->getOrdersAvailableToGroup();
 
         foreach ($ordersToGroupData as $order) {
@@ -197,7 +202,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
      *
      * @return array
      */
-    protected function getMagentoOrders()
+    protected function _getMagentoOrders()
     {
         /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
         $collection = $this->getPendingOrdersFromSkyHub();

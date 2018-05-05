@@ -26,15 +26,15 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_Grid
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
-    
-    
+
+
     /**
      * @return $this
-     *
-     * @throws Exception
      */
     protected function _prepareColumns()
     {
+        parent::_prepareColumns();
+
         $this->addColumn(
             'skyhub_code',
             array(
@@ -52,8 +52,6 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_Grid
                 'align'            => 'left',
             )
         );
-        
-        parent::_prepareColumns();
 
         return $this;
     }
@@ -78,9 +76,8 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_Grid
                 'url'     => $this->getUrl('*/*/massUngroup'),
                 'confirm' => $this->__('Are you sure?'),
             )
-        );
-
-        $massactionBlock->addItem(
+        )
+        ->addItem(
             'remove',
             array(
                 'label'   => $this->__('Remove'),
@@ -91,12 +88,11 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_Grid
 
         return $this;
     }
-    
-    
+
+
     /**
      * @param BSeller_SkyHub_Model_Shipment_Plp $plp
-     *
-     * @return string|bool
+     * @return string
      */
     public function getRowUrl($plp)
     {

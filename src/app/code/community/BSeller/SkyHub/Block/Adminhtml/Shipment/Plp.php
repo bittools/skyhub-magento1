@@ -16,8 +16,11 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp
 {
 
     protected $_controller = 'adminhtml_shipment_plp';
-    
-    
+
+
+    /**
+     * BSeller_SkyHub_Block_Adminhtml_Shipment_Plp constructor.
+     */
     public function __construct()
     {
         BSeller_Core_Block_Adminhtml_Widget_Grid_Container::__construct();

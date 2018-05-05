@@ -17,12 +17,27 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_File_Json extends Mage_Ad
 
     use BSeller_SkyHub_Trait_Service;
     use BSeller_SkyHub_Trait_Integrators;
+    use BSeller_SkyHub_Trait_Shipment_Plp;
 
 
+    /**
+     * Get file content in SkyHub API before rendering it
+     *
+     * @return string
+     */
     protected function _toHtml()
     {
         $this->getPlpJsonFile();
         return parent::_toHtml();
+    }
+
+
+    /**
+     * @return BSeller_SkyHub_Model_Shipment_Plp
+     */
+    public function getPlp()
+    {
+        return $this->getCurrentPlp();
     }
 
 
@@ -32,27 +47,11 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_File_Json extends Mage_Ad
     public function getPlpJsonFile()
     {
         /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
-        $plp = $this->getPlp();
+        $plp = $this->getCurrentPlp();
 
         /** @var string $file */
         $file = $this->shipmentPlpIntegrator()->viewFile($plp);
         $this->_setFileContent($file);
-    }
-
-
-    /**
-     * @return BSeller_SkyHub_Model_Shipment_Plp
-     */
-    public function getPlp()
-    {
-        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
-        $plp = Mage::registry('current_plp');
-
-        if (!$plp) {
-            $plp = Mage::getModel('bseller_skyhub/shipment_plp');
-        }
-
-        return $plp;
     }
 
 

@@ -14,7 +14,10 @@
 class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
     extends BSeller_Core_Block_Adminhtml_Widget_Form
 {
-    
+
+    use BSeller_SkyHub_Trait_Shipment_Plp;
+
+
     /**
      * Init form
      */
@@ -89,7 +92,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
             ]
         );
 
-        $form->addValues($this->_getPlpFormattedData($this->_getPlp()));
+        $form->addValues($this->_getPlpFormattedData($this->getCurrentPlp()));
         $form->setUseContainer(true);
         $this->setForm($form);
         
@@ -107,26 +110,10 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
         return $this->getUrl(
             '*/*/view'.ucfirst($format).'File',
             [
-                'id'        => $this->_getPlp()->getId(),
+                'id'        => $this->getCurrentPlp()->getId(),
                 'format'    => $format
             ]
         );
-    }
-
-
-    /**
-     * @return BSeller_SkyHub_Model_Shipment_Plp
-     */
-    protected function _getPlp()
-    {
-        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
-        $plp = Mage::registry('current_plp');
-        
-        if (!$plp) {
-            $plp = Mage::getModel('bseller_skyhub/shipment_plp');
-        }
-        
-        return $plp;
     }
 
 

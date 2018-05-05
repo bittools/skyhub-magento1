@@ -14,13 +14,14 @@
 class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View
     extends BSeller_Core_Block_Adminhtml_Widget_Form_Container
 {
-    
+
+    use BSeller_SkyHub_Trait_Shipment_Plp;
+
     protected $_blockGroup = 'bseller_skyhub';
     protected $_controller = 'adminhtml_shipment_plp';
     protected $_mode       = 'view';
     protected $_objectId   = 'id';
-    
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -48,29 +49,22 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View
     /**
      * @return string
      */
+    public function getHeaderText()
+    {
+        return $this->__('Pre-post list (PLP) Detail');
+    }
+
+
+    /**
+     * @return string
+     */
     protected function _getUngroupUrl()
     {
         return $this->getUrl(
             '*/*/ungroup',
             array(
-                'id' => $this->_getPlp()->getId()
+                'id' => $this->getCurrentPlp()->getId()
             )
         );
-    }
-
-
-    /**
-     * @return BSeller_SkyHub_Model_Shipment_Plp
-     */
-    protected function _getPlp()
-    {
-        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
-        $plp = Mage::registry('current_plp');
-
-        if (!$plp) {
-            $plp = Mage::getModel('bseller_skyhub/shipment_plp');
-        }
-
-        return $plp;
     }
 }
