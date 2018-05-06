@@ -105,10 +105,6 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
     {
         $id = $this->getRequest()->getParam('id', null);
 
-        if (!$this->_validatePlp($id)) {
-            return;
-        }
-
         /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
         $plp = $this->_getPlp($id);
 
@@ -133,6 +129,9 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         if (!$this->_validatePlp($id)) {
             return;
         }
+
+        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
+        $plp = $this->_getPlp($id);
 
         Mage::register('bseller_skyhub_response_format', SELF::RESPONSE_TYPE_PDF, true);
 
@@ -178,6 +177,9 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         if (!$this->_validatePlp($id)) {
             return;
         }
+
+        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
+        $plp = $this->_getPlp($id);
 
         /** @var BSeller_SkyHub_Model_Integrator_Shipment_Plp $plpIntegrator */
         $plpIntegrator = $this->shipmentPlpIntegrator();
