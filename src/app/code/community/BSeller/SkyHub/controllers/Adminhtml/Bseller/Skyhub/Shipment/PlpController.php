@@ -12,12 +12,11 @@
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSeller_SkyHub_Controller_Admin_Action
+class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSeller_SkyHub_Controller_Admin_Shipment_Plp_Action
 {
 
     use BSeller_SkyHub_Trait_Integrators;
     use BSeller_SkyHub_Trait_Service;
-    use BSeller_SkyHub_Trait_Integrators;
 
 
     const RESPONSE_TYPE_PDF = 'pdf';
@@ -75,10 +74,21 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
             return;
         }
 
-        $result = $this->_groupOrdersInPlp($skyhubOrderIds);
+        /** @var BSeller_SkyHub_Model_Integrator_Shipment_Plp $plpIntegrator */
+        $plpIntegrator = $this->shipmentPlpIntegrator();
+
+        $skyhubResult = $plpIntegrator->group($skyhubOrderIds);
+
+        if (!$skyhubResult || !$plpId = $this->_extractPlpId($skyhubResult['message'])) {
+            $this->_getSession()->addError($this->__('There was a problem when trying to create the PLP.'));
+            $this->_redirect('*/*');
+            return;
+        }
+
+        $result = $this->_savePlp($plpId, $skyhubOrderIds);
 
         if (!$result) {
-            $this->_getSession()->addError($this->__('There was a problem when trying to create the PLP.'));
+            $this->_getSession()->addError($this->__('There was a problem when trying to create the PLP in Magento.'));
             $this->_redirect('*/*');
             return;
         }
@@ -94,6 +104,10 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
     public function viewAction()
     {
         $id = $this->getRequest()->getParam('id', null);
+
+        if (!$this->_validatePlp($id)) {
+            return;
+        }
 
         /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
         $plp = $this->_getPlp($id);
@@ -116,12 +130,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
     {
         $id = $this->getRequest()->getParam('id', null);
 
-        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
-        $plp = $this->_getPlp($id);
-
-        if (!$plp->getId()) {
-            $this->_getSession()->addError($this->__('This PLP does not exist anymore.'));
-            $this->_redirect('*/*');
+        if (!$this->_validatePlp($id)) {
             return;
         }
 
@@ -150,12 +159,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
     {
         $id = $this->getRequest()->getParam('id', null);
 
-        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
-        $plp = $this->_getPlp($id);
-
-        if (!$plp->getId()) {
-            $this->_getSession()->addError($this->__('This PLP does not exist anymore.'));
-            $this->_redirect('*/*');
+        if (!$this->_validatePlp($id)) {
             return;
         }
 
@@ -171,12 +175,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
     {
         $id = $this->getRequest()->getParam('id', null);
 
-        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
-        $plp = $this->_getPlp($id);
-
-        if (!$plp->getId()) {
-            $this->_getSession()->addError($this->__('This PLP does not exist anymore.'));
-            $this->_redirect('*/*');
+        if (!$this->_validatePlp($id)) {
             return;
         }
 
@@ -201,32 +200,6 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
         $this->_getSession()->addSuccess($this->__('The PLP has been ungrouped.'));
         $this->_redirect('*/*/index');
-    }
-
-
-    /**
-     * @param array $ids
-     *
-     * @return bool
-     */
-    protected function _groupOrdersInPlp($ids)
-    {
-        /** @var  $plpIntegrator */
-        $plpIntegrator = $this->shipmentPlpIntegrator();
-
-        $skyhubResult = $plpIntegrator->group($ids);
-
-        if (!$skyhubResult) {
-            return false;
-        }
-
-        $plpId = $this->_extractPlpId($skyhubResult['message']);
-
-        if (!$plpId) {
-            return false;
-        }
-
-        return $this->_savePlp($plpId, $ids);
     }
 
 
@@ -307,22 +280,5 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         }
 
         return (int)$pieces[1];
-    }
-
-
-    /**
-     * @param int $id
-     *
-     * @return BSeller_SkyHub_Model_Shipment_Plp
-     */
-    protected function _getPlp($id)
-    {
-        /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
-        $plp = Mage::getModel('bseller_skyhub/shipment_plp');
-        $plp->load((int) $id);
-
-        Mage::register('current_plp', $plp, true);
-
-        return $plp;
     }
 }
