@@ -39,11 +39,11 @@ class BSeller_SkyHub_Model_Integrator_Shipment_Plp extends BSeller_SkyHub_Model_
 
 
     /**
-     * @param $orders
+     * @param array $orders
      *
      * @return array|bool
      */
-    public function group($orders)
+    public function group(array $orders)
     {
         /** @var \SkyHub\Api\EntityInterface\Shipment\Plp $interface */
         $interface = $this->getEntityInterface();
