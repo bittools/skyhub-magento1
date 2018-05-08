@@ -26,13 +26,13 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
      */
     protected function _prepareCollection()
     {
-        /** @var array $skyhubOrdersToGroup */
+        /**
+         * @var array                                       $skyhubOrdersToGroup
+         * @var Mage_Sales_Model_Resource_Order_Collection  $magentoOrders
+         * @var array                                       $mutualIds
+         */
         $skyhubOrdersToGroup = $this->_getSkyHubOrdersToGroup();
-
-        /** @var Mage_Sales_Model_Resource_Order_Collection $magentoOrders */
         $magentoOrders       = $this->_getMagentoOrders();
-
-        /** @var array $mutualIds */
         $mutualIds           = $this->_getMutualOrdersToGroup($skyhubOrdersToGroup, $magentoOrders);
 
         /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
