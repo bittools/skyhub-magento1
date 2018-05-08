@@ -32,7 +32,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View
         $this->_addButton(
             'ungroup',
             array(
-                'label'     => Mage::helper('adminhtml')->__('Ungroup'),
+                'label'     => Mage::helper('bseller_skyhub')->__('Ungroup'),
                 'class'     => 'delete',
                 'onclick'   => 'deleteConfirm(\''
                     . Mage::helper('core')->jsQuoteEscape(
