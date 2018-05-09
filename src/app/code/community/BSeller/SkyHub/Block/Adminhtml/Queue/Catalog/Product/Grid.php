@@ -35,7 +35,7 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Product_Grid extends BSeller_
         /** @var BSeller_SkyHub_Model_Resource_Queue_Collection $collection */
         $collection->getSelect()
             ->joinLeft(
-                ['entity' => 'catalog_product_entity'],
+                ['entity' => Mage::getSingleton('core/resource')->getTableName('catalog/product')],
                 "entity.entity_id = main_table.entity_id",
                 ['sku']
             )->joinLeft(
