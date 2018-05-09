@@ -10,13 +10,13 @@
  *
  * @author        Julio Reis <julio.reis@e-smart.com.br>
  */
-require __DIR__ . '/../abstract.php';
+require 'abstract.php';
 
-class BSeller_SkyHub_Shell_Abstract extends Mage_Shell_Abstract
+class BSeller_SkyHub_Shell_BSeller_Skyhub_AllServicesCron extends BSeller_SkyHub_Shell_Abstract
 {
     public function run()
     {
-        $schedule = new Mage_Cron_Model_Schedule();
+        $schedule = $this->getSchedule();
 
         //product attributes
         Mage::getModel('bseller_skyhub/cron_queue_catalog_product_attribute')->create($schedule);
@@ -34,3 +34,5 @@ class BSeller_SkyHub_Shell_Abstract extends Mage_Shell_Abstract
         Mage::getModel('bseller_skyhub/cron_queue_sales_order_status')->execute($schedule);
     }
 }
+
+(new BSeller_SkyHub_Shell_BSeller_Skyhub_AllServicesCron())->run();
