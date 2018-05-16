@@ -20,7 +20,7 @@ trait BSeller_SkyHub_Trait_Service
      */
     public function service()
     {
-        return Mage::getSingleton('bseller_skyhub/service');
+        return Mage::getModel('bseller_skyhub/service');
     }
 
 

@@ -252,7 +252,15 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     protected function getCustomer(array $data)
     {
         $email = $this->arrayExtract($data, 'email');
-        
+
+        if (!$email) {
+            if ($this->allowCustomerEmailCreationWithTaxvat()) {
+                $vatNumber = $this->arrayExtract($data, 'vat_number');
+                $email = $vatNumber . $this->customerEmailCreationWithTaxvatPattern();
+                $data['email'] = $email;
+            }
+        }
+
         /** @var Mage_Customer_Model_Customer $customer */
         $customer = Mage::getModel('customer/customer');
         $customer->setStore($this->getStore());

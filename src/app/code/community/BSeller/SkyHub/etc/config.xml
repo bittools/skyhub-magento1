@@ -377,6 +377,10 @@
                 <enabled>1</enabled>
                 <integration_product_visibility>4</integration_product_visibility>
             </general>
+            <customer>
+                <allow_customer_email_creation_with_taxvat>1</allow_customer_email_creation_with_taxvat>
+                <customer_email_creation_with_taxvat_pattern>@skuhub.com.br</customer_email_creation_with_taxvat_pattern>
+            </customer>
             <log>
                 <enabled>1</enabled>
                 <filename>bseller_skyhub_request_log.log</filename>
