@@ -196,4 +196,14 @@ trait BSeller_SkyHub_Trait_Config
     {
         return (bool)$this->getGeneralConfig('immediately_integrate_product_on_save_price_stock_change');
     }
+
+    /**
+     * @return boolean
+     */
+    protected function hasActiveIntegrateProductsOnOrderPlaceFlag()
+    {
+        return (bool)$this->getGeneralConfig('immediately_integrate_order_products_order_create');
+    }
+
+
 }

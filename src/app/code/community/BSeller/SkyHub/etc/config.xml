@@ -188,8 +188,20 @@
                         <class>bseller_skyhub/observer_sales_order</class>
                         <method>cancelOrderAfter</method>
                     </bseller_skyhub_cancel_order_after>
+                    <bseller_skyhub_cancel_order_after_2>
+                        <class>bseller_skyhub/observer_sales_order</class>
+                        <method>reintegrateOrderProducts</method>
+                    </bseller_skyhub_cancel_order_after_2>
                 </observers>
             </order_cancel_after>
+            <sales_order_place_after>
+                <observers>
+                    <bseller_skyhub_sales_order_place_before>
+                        <class>bseller_skyhub/observer_sales_order</class>
+                        <method>reintegrateOrderProducts</method>
+                    </bseller_skyhub_sales_order_place_before>
+                </observers>
+            </sales_order_place_after>
         </events>
         <sales>
             <quote>

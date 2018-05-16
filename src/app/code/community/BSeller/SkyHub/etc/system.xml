@@ -52,6 +52,16 @@
                             <show_in_store>1</show_in_store>
                             <comment>After saving a product, it will force real time integration if has changes on attributes: Price, Stock</comment>
                         </immediately_integrate_product_on_save_price_stock_change>
+                        <immediately_integrate_order_products_order_create>
+                            <label>Immediately integrate order products on order create</label>
+                            <sort_order>30</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>After placing a order on magento, it will force real time integration to all items of the order</comment>
+                        </immediately_integrate_order_products_order_create>
                         <integration_product_visibility>
                             <label>Visibilities for Integration</label>
                             <sort_order>20</sort_order>
