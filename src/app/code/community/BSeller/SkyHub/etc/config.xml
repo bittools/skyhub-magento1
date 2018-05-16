@@ -194,14 +194,14 @@
                     </bseller_skyhub_cancel_order_after_2>
                 </observers>
             </order_cancel_after>
-            <sales_order_place_after>
+            <sales_model_service_quote_submit_success>
                 <observers>
-                    <bseller_skyhub_sales_order_place_before>
+                    <bs_sales_model_service_quote_submit_success>
                         <class>bseller_skyhub/observer_sales_order</class>
                         <method>reintegrateOrderProducts</method>
-                    </bseller_skyhub_sales_order_place_before>
+                    </bs_sales_model_service_quote_submit_success>
                 </observers>
-            </sales_order_place_after>
+            </sales_model_service_quote_submit_success>
         </events>
         <sales>
             <quote>
