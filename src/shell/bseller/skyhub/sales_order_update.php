@@ -10,7 +10,7 @@
  *
  * @author        Julio Reis <julio.reis@e-smart.com.br>
  */
-require '../../../../../../shell/abstract.php';
+require dirname(dirname(__DIR__)) . '/abstract.php';
 
 class BSeller_SkyHub_Shell_Abstract extends Mage_Shell_Abstract
 {

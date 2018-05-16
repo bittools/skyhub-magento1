@@ -17,7 +17,7 @@ class BSeller_SkyHub_Shell_Abstract extends Mage_Shell_Abstract
     public function run()
     {
         $schedule = new Mage_Cron_Model_Schedule();
-        Mage::getModel('bseller_skyhub/cron_queue_sales_order_queue')->execute($schedule);
+        Mage::getModel('bseller_skyhub/cron_queue_catalog_product_attribute')->create($schedule);
     }
 
 }
