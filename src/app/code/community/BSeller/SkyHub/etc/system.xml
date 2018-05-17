@@ -88,9 +88,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>This is a pattern to be concatenated to the CPF / CNPJ sent by skyhub to create the
-                                customer.
-                            </comment>
+                            <comment>This is a pattern to be concatenated to the CPF / CNPJ sent by skyhub to create the customer.</comment>
                             <depends>
                                 <allow_customer_email_creation_with_taxvat>1</allow_customer_email_creation_with_taxvat>
                             </depends>
