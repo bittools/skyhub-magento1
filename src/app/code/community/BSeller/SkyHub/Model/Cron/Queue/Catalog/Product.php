@@ -15,7 +15,7 @@
 
 class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Model_Cron_Queue_Abstract
 {
-    use BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification;
+    use BSeller_SkyHub_Trait_Attribute_Notification;
 
     use BSeller_Core_Trait_Config;
 

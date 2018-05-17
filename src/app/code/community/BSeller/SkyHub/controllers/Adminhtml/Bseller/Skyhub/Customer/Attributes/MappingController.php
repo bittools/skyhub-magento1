@@ -9,14 +9,15 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
- * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Julio Reis <julio.reis@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_MappingController
+class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Customer_Attributes_MappingController
     extends BSeller_SkyHub_Controller_Admin_Action
 {
 
-    use BSeller_SkyHub_Trait_Catalog_Product_Attribute,
+    use BSeller_SkyHub_Trait_Customer_Attribute,
+        BSeller_SkyHub_Trait_Customer_Attribute_Mapping,
         BSeller_SkyHub_Trait_Config;
 
     
@@ -25,7 +26,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
      */
     protected function init($actionTitle = null)
     {
-        parent::init('Product Attributes');
+        parent::init('Customer Attributes');
     
         if (!empty($actionTitle)) {
             $this->_title($this->__($actionTitle));
@@ -42,7 +43,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
     {
         $this->init('Attributes Mapping');
         
-        $this->_setActiveMenu('bseller/bseller_skyhub/catalog_product_attributes_mapping/grid');
+        $this->_setActiveMenu('bseller/bseller_skyhub/customer_attributes_mapping/grid');
         
         $this->renderLayout();
     }
@@ -57,7 +58,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
     
         $id = $this->getRequest()->getParam('id', null);
     
-        /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mapping */
+        /** @var BSeller_SkyHub_Model_Customer_Attributes_Mapping $mapping */
         $mapping = $this->getMapping($id);
         
         if (!$mapping->getId()) {
@@ -72,12 +73,12 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
             return;
         }
         
-        $this->_setActiveMenu('bseller/bseller_skyhub/catalog_product_attributes_mapping/grid');
+        $this->_setActiveMenu('bseller/bseller_skyhub/customer_attributes_mapping/grid');
     
         $this->renderLayout();
     }
-    
-    /*
+
+    /**
      * @return void
      */
     public function saveAction()
@@ -86,7 +87,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
         $attributeId = (int) $this->getRequest()->getPost('attribute_id');
     
         /**
-         * @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mapping
+         * @var BSeller_SkyHub_Model_Customer_Attributes_Mapping $mapping
          * @var Mage_Eav_Model_Entity_Attribute                         $attribute
          */
         $mapping   = $this->getMapping($id);
@@ -103,12 +104,14 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
         /**
          * if the attribute has options
          */
-        if ($this->getHasOptions()) {
-            $skyhubCode     =   $this->getRequest()->getPost('skyhub_code');
-            $magentoValue   =   $this->getRequest()->getPost('magento_value');
-            $mapping->updateOption($skyhubCode, $magentoValue);
+        if ($mapping->getHasOptions()) {
+            $attributesMappingOptions = $this->getRequest()->getPost('attributes_mapping_options');
+
+            foreach ($attributesMappingOptions as $skyhubCode => $magentoOptionValue) {
+                $mapping->updateOption($skyhubCode, $magentoOptionValue);
+            }
         }
-        
+
         $this->_getSession()
             ->addSuccess(
                 $this->__(
@@ -121,12 +124,14 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
         $this->_redirect('*/*');
     }
 
-
+    /**
+     * @return void
+     */
     public function createAutomaticallyAction()
     {
         $id = (int) $this->getRequest()->getParam('id');
 
-        /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mapping */
+        /** @var BSeller_SkyHub_Model_Customer_Attributes_Mapping $mapping */
         $mapping = $this->getMapping($id);
 
         if (!$mapping->getId()) {
@@ -134,7 +139,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
             return;
         }
 
-        if ($attributeId = $this->loadProductAttribute($mapping->getSkyhubCode())->getId()) {
+        if ($attributeId = $this->loadCustomerAttribute($mapping->getSkyhubCode())->getId()) {
             $mapping->setAttributeId((int) $attributeId)
                 ->save();
 
@@ -151,6 +156,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
             'type'            => 'varchar',
             'input'           => 'text',
             'required'        => 0,
+            'visible'         => 0,
             'visible_on_front'=> 0,
             'filterable'      => 0,
             'searchable'      => 0,
@@ -160,8 +166,8 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
             'global'          => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
             'note'            => sprintf(
                 '%s. %s.',
-                'Created automatically by BSeller SkyHub module.',
-                $mapping->getSkyhubDescription()
+                $this->__('Created automatically by BSeller SkyHub module.'),
+                $this->__($mapping->getSkyhubDescription())
             ),
         ];
 
@@ -176,7 +182,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
         }
 
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        $attribute = $this->createProductAttribute($mapping->getSkyhubCode(), (array) $config);
+        $attribute = $this->createCustomerAttribute($mapping->getSkyhubCode(), (array) $config);
 
         if (!$attribute || !$attribute->getId()) {
             $this->_getSession()->addError('There was a problem when trying to create the attribute.');
@@ -187,6 +193,15 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
         try {
             $mapping->setAttributeId((int) $attribute->getId())
                 ->save();
+
+            if ($mapping->getHasOptions()) {
+                $customerAttributesXml = Mage::getSingleton('bseller_skyhub/config_customer')->getSkyHubFixedAttributes();
+                $attributeConfig = $this->arrayExtract($customerAttributesXml, $mapping->getData('skyhub_code'), false);
+                $options = $this->arrayExtract($attributeConfig, 'options', false);
+                foreach ($options as $option) {
+                    $mapping->updateOption($option['skyhub_code'], $option['default_value']);
+                }
+            }
 
             $message = $this->__(
                 'The attribute "%s" was created in Magento and associated to SkyHub attribute "%s" automatically.',
@@ -202,6 +217,20 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
             $this->_getSession()->addError('There was a problem when trying to map the attribute.');
             $this->redirectToAttributeMapping();
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function loadAttributeOptionsAction()
+    {
+        $html = $this->getLayout()
+            ->createBlock('bseller_skyhub/adminhtml_customer_attributes_mapping_edit_form_options')
+            ->setRequestData(Mage::app()->getRequest()->getParams())
+            ->toHtml();
+
+        $this->getResponse()->setHeader('Content-type', 'text/html');
+        $this->getResponse()->setBody($html);
     }
 
 
@@ -228,14 +257,14 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
     /**
      * @param int $id
      *
-     * @return BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping
+     * @return BSeller_SkyHub_Model_Customer_Attributes_Mapping
      *
      * @throws Mage_Core_Exception
      */
     protected function getMapping($id)
     {
-        /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mapping */
-        $mapping = Mage::getModel('bseller_skyhub/catalog_product_attributes_mapping');
+        /** @var BSeller_SkyHub_Model_Customer_Attributes_Mapping $mapping */
+        $mapping = Mage::getModel('bseller_skyhub/customer_attributes_mapping');
         $mapping->load((int) $id);
         
         Mage::register('current_attributes_mapping', $mapping, true);

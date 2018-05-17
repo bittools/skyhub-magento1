@@ -32,6 +32,17 @@
                                 </grid>
                             </children>
                         </catalog_product_attributes_mapping>
+                        <customer_attributes_mapping>
+                            <title>Customer Attributes</title>
+                            <sort_order>15</sort_order>
+                            <children>
+                                <grid>
+                                    <title>Attributes Mapping</title>
+                                    <sort_order>15</sort_order>
+                                    <action>adminhtml/bseller_skyhub_customer_attributes_mapping</action>
+                                </grid>
+                            </children>
+                        </customer_attributes_mapping>
                         <queues>
                             <title>Queues Tracking</title>
                             <sort_order>20</sort_order>
@@ -104,6 +115,16 @@
                                             </mapping>
                                         </children>
                                     </catalog_product_attributes>
+                                    <customer_attributes>
+                                        <title>Customer Attributes</title>
+                                        <sort_order>15</sort_order>
+                                        <children>
+                                            <mapping>
+                                                <title>Attributes Mapping</title>
+                                                <sort_order>15</sort_order>
+                                            </mapping>
+                                        </children>
+                                    </customer_attributes>
                                     <queues>
                                         <title>Queues Management</title>
                                         <sort_order>20</sort_order>

@@ -9,30 +9,14 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
- * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  * @author    Julio Reis <julio.reis@e-smart.com.br>
  */
 
-/**
- * @method $this setSkyhubCode(string $code)
- * @method $this setSkyhubLabel(string $label)
- * @method $this setSkyhubDescription(string $description)
- * @method $this setAttributeId(int $id)
- * @method $this setEditable(bool $flag)
- * @method $this setCastType(string $type)
- *
- * @method string getSkyhubCode()
- * @method string getSkyhubLabel()
- * @method string getSkyhubDescription()
- * @method int    getAttributeId()
- * @method bool   getEditable()
- * @method string getCastType()
- */
-class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Core_Model_Abstract
+class BSeller_SkyHub_Model_Customer_Attributes_Mapping extends BSeller_Core_Model_Abstract
 {
 
     use BSeller_SkyHub_Trait_Config,
-        BSeller_SkyHub_Trait_Catalog_Product;
+        BSeller_SkyHub_Trait_Customer;
 
     
     const DATA_TYPE_STRING   = 'string';
@@ -43,7 +27,7 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
 
     public function _construct()
     {
-        $this->_init('bseller_skyhub/catalog_product_attributes_mapping');
+        $this->_init('bseller_skyhub/customer_attributes_mapping');
     }
     
     
@@ -97,7 +81,7 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
      */
     public function getAttributeInstallConfig()
     {
-        $config = (array) $this->getProductSkyHubConfig()->getAttributeInstallConfig($this->getSkyhubCode());
+        $config = (array) $this->getCustomerSkyHubConfig()->getAttributeInstallConfig($this->getSkyhubCode());
 
         foreach ($config as $key => $value) {
             $config[$key] = (''==$value) ? null : $value;
@@ -132,25 +116,6 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
         }
     }
 
-
-    /**
-     * @param Mage_Catalog_Model_Product $product
-     *
-     * @return array|bool|mixed|string
-     */
-    public function extractProductValue(Mage_Catalog_Model_Product $product)
-    {
-        try {
-            $value = $this->productAttributeRawValue($product, $this->getAttribute());
-            return $value;
-        } catch (Exception $e) {
-            Mage::logException($e);
-        }
-
-        return null;
-    }
-
-
     /**
      * @return array
      */
@@ -162,5 +127,23 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
             self::DATA_TYPE_INTEGER,
             self::DATA_TYPE_STRING,
         ];
+    }
+
+    public function getOptions()
+    {
+        if (!$this->getHasOptions()) {
+            return null;
+        }
+        return $this->getResource()->getOptionsByAttributeMappingId($this->getId());
+    }
+
+    public function getMagentoValueOption($skyhubCode)
+    {
+        return $this->getResource()->getMagentoValueOption($this->getId(), $skyhubCode);
+    }
+
+    public function updateOption($skyhubCode, $magentoValue)
+    {
+        return $this->getResource()->updateOption($this->getId(), $skyhubCode, $magentoValue);
     }
 }

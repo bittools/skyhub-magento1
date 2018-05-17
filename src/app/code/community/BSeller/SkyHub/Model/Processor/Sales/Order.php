@@ -15,6 +15,8 @@
 class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Processor_Abstract
 {
     use BSeller_SkyHub_Trait_Sales_Order;
+    use BSeller_SkyHub_Trait_Customer_Attribute_Mapping,
+        BSeller_SkyHub_Trait_Customer_Attribute;
 
     /**
      * @param array $data
@@ -27,10 +29,12 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             /** @var Mage_Sales_Model_Order $order */
             $order = $this->processOrderCreation($data);
         } catch (Exception $e) {
-            Mage::dispatchEvent('bseller_skyhub_order_import_exception', [
-                'exception'  => $e,
-                'order_data' => $data,
-            ]);
+            Mage::dispatchEvent(
+                'bseller_skyhub_order_import_exception', [
+                    'exception' => $e,
+                    'order_data' => $data,
+                ]
+            );
 
             Mage::logException($e);
 
@@ -70,16 +74,26 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             return $order;
         }
 
-//        $this->simulateStore($this->getStore());
+        $this->simulateStore($this->getStore());
+
+        $info = new Varien_Object(
+            [
+                'increment_id' => $incrementId,
+                'send_confirmation' => 0
+            ]
+        );
 
         $billingAddress  = new Varien_Object($this->arrayExtract($data, 'billing_address'));
         $shippingAddress = new Varien_Object($this->arrayExtract($data, 'shipping_address'));
 
         $customerData = (array) $this->arrayExtract($data, 'customer', []);
-        $customerData = array_merge_recursive($customerData, [
-            'billing_address'  => $billingAddress,
-            'shipping_address' => $shippingAddress
-        ]);
+        $customerData = array_merge_recursive(
+            $customerData,
+            [
+                'billing_address' => $billingAddress,
+                'shipping_address' => $shippingAddress
+            ]
+        );
 
         /** @var Mage_Customer_Model_Customer $customer */
         $customer = $this->getCustomer($customerData);
@@ -291,7 +305,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $email       = $this->arrayExtract($data, 'email');
         $gender      = $this->arrayExtract($data, 'gender');
         $name        = $this->arrayExtract($data, 'name');
-        $vatNumber   = $this->arrayExtract($data, 'vat_number');
         $phones      = $this->arrayExtract($data, 'phones', []);
         
         /** @var Varien_Object $nameObject */
@@ -302,7 +315,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $customer->setMiddlename($nameObject->getData('middlename'));
         $customer->setEmail($email);
         $customer->setDob($dateOfBirth);
-        $customer->setTaxvat($vatNumber);
+
+        $this->setPersonTypeInformation($data, $customer);
         
         /** @var string $phone */
         foreach ($phones as $phone) {
@@ -373,5 +387,77 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     protected function getStore()
     {
         return Mage::app()->getStore();
+    }
+    
+    /**
+     * @param string $code
+     *
+     * @return string
+     */
+    protected function getOrderIncrementId($code)
+    {
+        return $code;
+    }
+
+    /**
+     * @param $data
+     * @param $customer
+     *
+     * @return void
+     */
+    protected function setPersonTypeInformation($data, $customer)
+    {
+        //get the vat number
+        $vatNumber = $this->arrayExtract($data, 'vat_number');
+        //the taxvat is filled anyway
+        $customer->setTaxvat($vatNumber);
+        //check if is a PJ customer (if not, it's a PF customer)
+        $customerIsPj = $this->customerIsPj($vatNumber);
+
+        //get customer mapped attributes
+        $mappedCustomerAttributes = $this->getMappedAttributes();
+
+        //if the store has the attribute "person_type" mapped
+        if (isset($mappedCustomerAttributes['person_type'])) {
+            $personTypeAttributeId = $mappedCustomerAttributes['person_type']->getAttributeId();
+            $personTypeAttribute = $this->getAttributeById($personTypeAttributeId);
+
+            if ($customerIsPj) {
+                $personTypeAttributeValue = $this->getAttributeMappingOptionMagentoValue('person_type', 'legal_person');
+            } else {
+                $personTypeAttributeValue = $this->getAttributeMappingOptionMagentoValue('person_type', 'physical_person');
+            }
+            $customer->setData($personTypeAttribute->getAttributeCode(), $personTypeAttributeValue);
+        }
+
+        if ($customerIsPj) {
+            //set the mapped PJ attribute value on customer if exists
+            if (isset($mappedCustomerAttributes['cnpj'])) {
+                $mappedAttribute = $mappedCustomerAttributes['cnpj'];
+                $attribute = $this->getAttributeById($mappedAttribute->getAttributeId());
+                $customer->setData($attribute->getAttributeCode(), $vatNumber);
+            }
+        } else {
+            //set the mapped PF attribute value on customer if exists
+            if (isset($mappedCustomerAttributes['cpf'])) {
+                $mappedAttribute = $mappedCustomerAttributes['cpf'];
+                $attribute = $this->getAttributeById($mappedAttribute->getAttributeId());
+                $customer->setData($attribute->getAttributeCode(), $vatNumber);
+            }
+        }
+
+        //set the mapped IE attribute value on customer if exists
+        if (isset($mappedCustomerAttributes['ie'])) {
+            $mappedAttribute = $mappedCustomerAttributes['ie'];
+            $attribute = $this->getAttributeById($mappedAttribute->getAttributeId());
+            $customer->setData($attribute->getAttributeCode(), $this->arrayExtract($data, 'state_registration'));
+        }
+
+        //set the mapped IE attribute value on customer if exists
+        if (isset($mappedCustomerAttributes['social_name'])) {
+            $mappedAttribute = $mappedCustomerAttributes['social_name'];
+            $attribute = $this->getAttributeById($mappedAttribute->getAttributeId());
+            $customer->setData($attribute->getAttributeCode(), $this->arrayExtract($data, 'name'));
+        }
     }
 }

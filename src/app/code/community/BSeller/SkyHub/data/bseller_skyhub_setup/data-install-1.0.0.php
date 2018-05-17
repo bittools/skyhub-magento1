@@ -22,7 +22,7 @@ $this->startSetup();
 //**********************************************************************************************************************
 // Install bseller_skyhub/product_attributes_mapping data.
 //**********************************************************************************************************************
-$this->installSkyHubRequiredAttributes();
+$this->installSkyHubRequiredAttributes(Mage_Catalog_Model_Product::ENTITY);
 
 //**********************************************************************************************************************
 // Install statuses data.

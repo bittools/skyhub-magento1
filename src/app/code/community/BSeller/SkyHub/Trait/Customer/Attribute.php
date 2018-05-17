@@ -10,16 +10,17 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Julio Reis <julio.reis@e-smart.com.br>
  */
 
-trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
+trait BSeller_SkyHub_Trait_Customer_Attribute
 {
     
     /** @var Mage_Eav_Model_Resource_Entity_Attribute_Collection */
     protected $attributeCollection;
     
     /** @var array */
-    protected $productAttributes   = [];
+    protected $customerAttributes   = [];
     
     /** @var array */
     protected $attributesWhitelist = [];
@@ -27,8 +28,8 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     /** @var array */
     protected $entityTypes         = [];
     
-    /** @var Mage_Catalog_Model_Product */
-    protected $product;
+    /** @var Mage_Catalog_Model_Customer */
+    protected $customer;
     
     
     /**
@@ -38,13 +39,13 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
      */
     protected function getAttributeByCode($attributeCode)
     {
-        $this->initProductAttributes();
+        $this->initCustomerAttributes();
         
-        if (!isset($this->productAttributes[$attributeCode])) {
+        if (!isset($this->customerAttributes[$attributeCode])) {
             return false;
         }
         
-        return $this->productAttributes[$attributeCode];
+        return $this->customerAttributes[$attributeCode];
     }
     
     
@@ -55,10 +56,10 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
      */
     protected function getAttributeById($attributeId)
     {
-        $this->initProductAttributes();
+        $this->initCustomerAttributes();
         
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        foreach ($this->productAttributes as $attribute) {
+        foreach ($this->customerAttributes as $attribute) {
             if ($attributeId == $attribute->getId()) {
                 return $attribute;
             }
@@ -76,7 +77,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
         $attributeIds = [];
         
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        foreach ($this->productAttributes as $attribute) {
+        foreach ($this->customerAttributes as $attribute) {
             $attributeIds[$attribute->getId()] = $attribute;
         }
         
@@ -87,29 +88,29 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     /**
      * @return array
      */
-    protected function initProductAttributes()
+    protected function initCustomerAttributes()
     {
-        if (!empty($this->productAttributes)) {
-            return $this->productAttributes;
+        if (!empty($this->customerAttributes)) {
+            return $this->customerAttributes;
         }
         
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        foreach ($this->getProductAttributesCollection() as $attribute) {
-            $this->productAttributes[$attribute->getAttributeCode()] = $attribute;
+        foreach ($this->getCustomerAttributesCollection() as $attribute) {
+            $this->customerAttributes[$attribute->getAttributeCode()] = $attribute;
         }
         
-        return $this->productAttributes;
+        return $this->customerAttributes;
     }
 
 
     /**
      * @return Mage_Eav_Model_Resource_Entity_Attribute_Collection
      */
-    protected function getProductAttributesCollection()
+    protected function getCustomerAttributesCollection()
     {
         /** @var Mage_Eav_Model_Resource_Entity_Attribute_Collection $collection */
         $collection = Mage::getResourceModel('eav/entity_attribute_collection');
-        $collection->setEntityTypeFilter($this->getEntityType(Mage_Catalog_Model_Product::ENTITY));
+        $collection->setEntityTypeFilter($this->getEntityType('customer'));
 
         return $collection;
     }
@@ -118,12 +119,12 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     /**
      * @return array
      */
-    protected function getIntegrableProductAttributes()
+    protected function getIntegrableCustomerAttributes()
     {
         $integrable = [];
 
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        foreach ($this->getProductAttributesCollection() as $attribute) {
+        foreach ($this->getCustomerAttributesCollection() as $attribute) {
             if (!$this->validateAttributeForIntegration($attribute)) {
                 continue;
             }
@@ -141,9 +142,9 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
      *
      * @return array
      */
-    protected function getProductAttributes(array $ids = [], array $excludeIds = [])
+    protected function getCustomerAttributes(array $ids = [], array $excludeIds = [])
     {
-        $this->initProductAttributes();
+        $this->initCustomerAttributes();
         
         $attributes = [];
         
@@ -151,7 +152,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
          * @var string                          $code
          * @var Mage_Eav_Model_Entity_Attribute $attribute
          */
-        foreach ($this->productAttributes as $code => $attribute) {
+        foreach ($this->customerAttributes as $code => $attribute) {
             if (!empty($ids) && !in_array($attribute->getId(), $ids)) {
                 continue;
             }
@@ -191,10 +192,10 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     /**
      * @return array
      */
-    protected function getProductAttributeBlacklist()
+    protected function getCustomerAttributeBlacklist()
     {
         /** @var BSeller_SkyHub_Model_Config $config */
-        $config = Mage::getSingleton('bseller_skyhub/config_catalog_product');
+        $config = Mage::getSingleton('bseller_skyhub/config_customer');
         return $config->getBlacklistedAttributes();
     }
     
@@ -207,7 +208,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     protected function isAttributeCodeInBlacklist($attributeCode)
     {
         /** @var BSeller_SkyHub_Model_Config $config */
-        $config = Mage::getSingleton('bseller_skyhub/config_catalog_product');
+        $config = Mage::getSingleton('bseller_skyhub/config_customer');
         return $config->isAttributeCodeInBlacklist($attributeCode);
     }
 
@@ -220,63 +221,25 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
      *
      * @throws Mage_Core_Exception
      */
-    protected function createProductAttribute($code, array $attributeData)
+    protected function createCustomerAttribute($code, array $attributeData)
     {
-        $groupName = 'BSeller SkyHub';
-
-        /** @var BSeller_SkyHub_Model_Resource_Eav_Entity_Attribute_Set $resource */
-        $resource = Mage::getResourceModel('bseller_skyhub/eav_entity_attribute_set');
-        $result   = $resource->setupEntityAttributeGroups(
-            $this->getEntityType(Mage_Catalog_Model_Product::ENTITY)->getId(),
-            $groupName
-        );
-
-        if (!$result) {
-            Mage::throwException($this->__('The attribute group could not be created.'));
-        }
-
-        $attributeData['group'] = $groupName;
-
         /** @var Mage_Eav_Model_Entity_Setup $installer */
         $installer = Mage::getModel('eav/entity_setup', 'core_setup');
         $installer->startSetup();
-        $installer->addAttribute(Mage_Catalog_Model_Product::ENTITY, $code, $attributeData);
+        $installer->addAttribute('customer', $code, $attributeData);
+
+        //adding the attribute to the adminhtml form
+        $usedInCustomerAddressForms = array(
+            'adminhtml_customer'
+        );
+        $attribute = Mage::getSingleton('eav/config')->getAttribute('customer', $code);
+        $attribute->setData('used_in_forms', $usedInCustomerAddressForms);
+        $attribute->save();
+
         $installer->endSetup();
 
-        return $this->loadProductAttribute($code);
+        return $this->loadCustomerAttribute($code);
     }
-
-
-    /**
-     * @param string $groupName
-     *
-     * @return $this
-     */
-    protected function initSkyHubAttributeGroup($groupName)
-    {
-        /** @var Mage_Eav_Model_Resource_Entity_Attribute_Set_Collection $setCollection */
-        $setCollection = Mage::getResourceModel('eav/entity_attribute_set_collection');
-        $setCollection->setEntityTypeFilter($this->getEntityType(Mage_Catalog_Model_Product::ENTITY)->getId());
-
-        /** @var Mage_Eav_Model_Entity_Attribute_Set $attributeSet */
-        foreach ($setCollection as $attributeSet) {
-            try {
-                /** @var Mage_Eav_Model_Entity_Attribute_Group $group */
-                $group = Mage::getModel('eav/entity_attribute_group');
-                $group->setAttributeSetId($attributeSet->getId())
-                    ->setAttributeGroupName($groupName)
-                    ->setSortOrder(900)
-                ;
-
-                $group->save();
-            } catch (Exception $e) {
-                Mage::logException($e);
-            }
-        }
-
-        return $this;
-    }
-
 
     /**
      * @param $code
@@ -285,10 +248,10 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
      *
      * @throws Mage_Core_Exception
      */
-    protected function loadProductAttribute($code)
+    protected function loadCustomerAttribute($code)
     {
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
-        $attribute = Mage::getModel('eav/entity_attribute')->loadByCode(Mage_Catalog_Model_Product::ENTITY, $code);
+        $attribute = Mage::getModel('eav/entity_attribute')->loadByCode('customer', $code);
         return $attribute;
     }
 
