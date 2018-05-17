@@ -21,9 +21,8 @@ $this->startSetup();
 
 //dropping wrong index
 $tableName = (string)$this->getTable('bseller_skyhub/entity_id');
-$indexNameToDrop = $this->getIdxName($tableName, ['entity_id', 'entity_type']);
-$sql = "DROP INDEX {$indexNameToDrop} ON {$tableName}";
-$this->run($sql);
+$keyName = $this->getIdxName($tableName, ['entity_id', 'entity_type'], Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE);
+$this->getConnection()->dropIndex($tableName, $keyName);
 
 //recreating the index correctly
 $this->addIndex(['entity_id', 'entity_type', 'store_id'], $tableName);
