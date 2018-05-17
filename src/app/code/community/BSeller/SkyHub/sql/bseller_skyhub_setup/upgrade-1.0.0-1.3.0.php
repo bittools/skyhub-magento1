@@ -166,4 +166,18 @@ $this->addForeignKey(
     $tableName, 'customer_attributes_mapping_id', 'bseller_skyhub/customer_attributes_mapping', 'id'
 );
 
+//**********************************************************************************************************************
+// Update sales/order
+//**********************************************************************************************************************
+$columnName = 'bseller_skyhub_json';
+$tableName = $this->getTable('sales/order');
+$columnConfig = [
+    'type' => $this::TYPE_TEXT,
+    'nullable' => true,
+    'default' => null,
+    'after' => 'bseller_skyhub_interest',
+    'comment' => 'SkyHub Order Json',
+];
+$conn->addColumn($tableName, $columnName, $columnConfig);
+
 $this->endSetup();
