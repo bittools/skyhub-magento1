@@ -126,3 +126,5 @@
 "Pattern for create random email","Padrão para criação do email de cliente"
 "This is a pattern to be concatenated to the CPF / CNPJ sent by skyhub to create the customer.","Este é um padrão que será concatenado ao cpf/cnpj enviado pela Skyhub para criação do cliente"
 "Customer Configuration","Configuração de Cliente"
+"Cleaning Cron Configuration","Configuração da Cron de Saneamento"
+"Enable integration via cron.","Habilitar execução da integração via cron"

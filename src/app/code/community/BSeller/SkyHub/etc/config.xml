@@ -97,14 +97,14 @@
                     </bseller_skyhub_integrate_catalog_product>
                 </observers>
             </catalog_product_save_after>
-            <catalog_product_delete_after>
+            <catalog_product_delete_before>
                 <observers>
                     <bseller_skyhub_integrate_catalog_product>
                         <class>bseller_skyhub/observer_catalog_product</class>
-                        <method>deleteProduct</method>
+                        <method>disableProduct</method>
                     </bseller_skyhub_integrate_catalog_product>
                 </observers>
-            </catalog_product_delete_after>
+            </catalog_product_delete_before>
             <catalog_category_save_after>
                 <observers>
                     <bseller_skyhub_integrate_catalog_category>
@@ -369,6 +369,14 @@
                     <model>bseller_skyhub/cron_queue_sales_order_status::execute</model>
                 </run>
             </bseller_skyhub_sales_order_status_update_queue_execute>
+            <bseller_skyhub_queue_clean>
+                <schedule>
+                    <config_path>bseller_skyhub/cron_queue_clean/expression</config_path>
+                </schedule>
+                <run>
+                    <model>bseller_skyhub/cron_queue_clean::cleanDeletedEntities</model>
+                </run>
+            </bseller_skyhub_queue_clean>
         </jobs>
     </crontab>
     <default>
@@ -430,6 +438,11 @@
                 <enabled>1</enabled>
                 <expression>*/10 * * * *</expression>
             </cron_sales_order_queue>
+            <cron_queue_clean>
+                <!-- QUEUE CLEANING -->
+                <enabled>1</enabled>
+                <expression>15 4 * * *</expression>
+            </cron_queue_clean>
         </bseller_skyhub>
         <payment>
             <bseller_skyhub_standard>

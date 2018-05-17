@@ -75,6 +75,39 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         /** Create or Update Product */
         $this->catalogProductIntegrator()->delete($product->getSku());
     }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function disableProduct(Varien_Event_Observer $observer)
+    {
+        if (!$this->canRun()) {
+            return;
+        }
+
+        /** @var Mage_Catalog_Model_Product $product */
+        $product = $observer->getData('product');
+
+        if (!$this->canIntegrateProduct($product)) {
+            return;
+        }
+
+        $responseHandler = $this->catalogProductIntegrator()->product($product->getSku());
+        if ($responseHandler === false || ($responseHandler && $responseHandler->exception())) {
+            return;
+        }
+
+        //disable the item and set 0 to stock items
+        $product->setStatus(Mage_Catalog_Model_Product_Status::STATUS_DISABLED);
+        $stockItem = $product->getStockItem();
+        if ($stockItem) {
+            $stockItem->setQty(0);
+            $stockItem->save();
+        }
+
+        /** Create or Update Product */
+        $this->catalogProductIntegrator()->update($product);
+    }
     
     
     /**
