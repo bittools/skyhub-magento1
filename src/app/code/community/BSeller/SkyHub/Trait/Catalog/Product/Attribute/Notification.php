@@ -14,9 +14,15 @@
  */
 trait BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification
 {
-    public function canShowAttributesNotificiationBlock()
+    
+    /**
+     * If there's still attributes to map out we cannot let the product to be integrated.
+     *
+     * @return bool
+     */
+    public function hasPendingAttributesToMap()
     {
-        return (bool)($this->getPendingAttributesCollection()->getSize() > 0);
+        return (bool) ($this->getPendingAttributesCollection()->getSize() > 0);
     }
 
     /**

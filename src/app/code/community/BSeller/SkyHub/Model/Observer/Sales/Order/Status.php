@@ -44,7 +44,8 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
         }
 
         try {
-            $this->orderIntegrator()->delivery($order->getId());
+            $this->getStoreIterator()
+                 ->call($this->orderIntegrator(), 'delivery', [$order->getId()], $order->getStore());
         } catch (Exception $e) {
             Mage::logException($e);
         }

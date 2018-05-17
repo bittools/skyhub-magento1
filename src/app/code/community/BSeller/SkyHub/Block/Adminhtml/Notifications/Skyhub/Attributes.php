@@ -32,7 +32,7 @@ class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes
      */
     public function canShow()
     {
-        return $this->canShowAttributesNotificiationBlock();
+        return $this->hasPendingAttributesToMap();
     }
 
 

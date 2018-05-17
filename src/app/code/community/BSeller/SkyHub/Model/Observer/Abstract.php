@@ -17,15 +17,18 @@ abstract class BSeller_SkyHub_Model_Observer_Abstract
     
     use BSeller_SkyHub_Trait_Data,
         BSeller_SkyHub_Trait_Config,
-        BSeller_SkyHub_Trait_Integrators;
+        BSeller_SkyHub_Trait_Integrators,
+        BSeller_SkyHub_Trait_Store_Iterator;
 
 
     /**
+     * @param int|null $storeId
+     *
      * @return bool
      */
-    protected function canRun()
+    protected function canRun($storeId = null)
     {
-        if (!$this->isModuleEnabled()) {
+        if (!$this->isModuleEnabled($storeId)) {
             return false;
         }
 

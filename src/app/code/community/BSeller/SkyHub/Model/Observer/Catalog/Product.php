@@ -22,24 +22,43 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     public function integrateProduct(Varien_Event_Observer $observer)
     {
-        if (!$this->canRun()) {
+        $this->processStoreIteration($this, 'processIntegrateProduct', $observer);
+    }
+    
+    
+    /**
+     * @param Varien_Event_Observer $observer
+     *
+     * @param Mage_Core_Model_Store $store
+     */
+    public function processIntegrateProduct(Varien_Event_Observer $observer, Mage_Core_Model_Store $store)
+    {
+        if (!$this->canRun($store->getId())) {
             return;
         }
-
+    
         /** @var Mage_Catalog_Model_Product $product */
         $product = $observer->getData('product');
-
+    
         if (!$this->canIntegrateProduct($product)) {
             return;
         }
-
+    
         if ($this->hasActiveIntegrateOnSaveFlag() && $this->hasStockOrPriceUpdate($product)) {
             /** Create or Update Product */
             $this->catalogProductIntegrator()->createOrUpdate($product);
         }
     }
-
-    protected function hasStockOrPriceUpdate($product)
+    
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return bool
+     *
+     * @throws Varien_Exception
+     */
+    protected function hasStockOrPriceUpdate(Mage_Catalog_Model_Product $product)
     {
         if ($product->getOrigData('price') != $product->getData('price')) {
             return true;
@@ -55,13 +74,23 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         }
         return false;
     }
+    
 
     /**
      * @param Varien_Event_Observer $observer
      */
     public function deleteProduct(Varien_Event_Observer $observer)
     {
-        if (!$this->canRun()) {
+        $this->processStoreIteration($this, 'processDeleteProduct', $observer);
+    }
+    
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function processDeleteProduct(Varien_Event_Observer $observer, Mage_Core_Model_Store $store)
+    {
+        if (!$this->canRun($store->getId())) {
             return;
         }
 
@@ -115,10 +144,15 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     public function addIntegrateButtonToProductEditPage(Varien_Event_Observer $observer)
     {
-        if (!$this->canRun()) {
-            return;
-        }
-
+        // $storeId = Mage::app()->getRequest()->getParam('store');
+        
+        /** @var Mage_Core_Model_Store $store */
+        // $store = Mage::app()->getStore($storeId);
+    
+        // if (!$this->canRun($store->getId())) {
+        //     return;
+        // }
+        
         /** @var Mage_Adminhtml_Block_Catalog_Product_Edit $block */
         $block = $observer->getData('block');
 

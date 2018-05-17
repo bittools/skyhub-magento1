@@ -19,38 +19,102 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
         BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
     
     
+    /**
+     * This method processes the product integration for each available store in Magento.
+     */
     public function integrateAction()
     {
         $productId = (int) $this->getRequest()->getParam('product_id');
-
-        if (!$this->isModuleEnabled()) {
-            $this->redirectProductEdit($productId);
+        
+        $this->processStoreIteration($this, 'integrateProduct', $productId);
+        
+        $proceed = Mage::registry('result_redirect');
+        
+        if ($proceed && is_callable($proceed)) {
+            $proceed();
             return;
         }
         
-        /** @var Mage_Catalog_Model_Product $product */
-        $product = Mage::getModel('bseller_skyhub/catalog_product')->load($productId);
-
-        if (!$this->canIntegrateProduct($product)) {
-            $this->_getSession()->addNotice($this->__('This product cannot be integrated.'));
-            $this->redirectProductList();
+        $this->redirectProductList();
+    }
+    
+    
+    /**
+     * @param int                   $productId
+     * @param Mage_Core_Model_Store $store
+     *
+     * @throws Mage_Core_Exception
+     * @throws Varien_Exception
+     */
+    public function integrateProduct($productId, Mage_Core_Model_Store $store)
+    {
+        if (!$this->isModuleEnabled()) {
+            $this->resultRedirect($productId, 'edit');
             return;
         }
-
+    
+        /** @var Mage_Catalog_Model_Product $product */
+        $product = Mage::getModel('bseller_skyhub/catalog_product');
+        $product->setStoreId($store->getId());
+        $product->load($productId);
+    
+        if (!$this->canIntegrateProduct($product)) {
+            $this->_getSession()
+                 ->addNotice($this->__('This product cannot be integrated for store %s.', $store->getCode()));
+            $this->resultRedirect($productId, 'edit');
+            return;
+        }
+    
+        /** @var \SkyHub\Api\Handler\Response\HandlerInterface $response */
         $response = $this->catalogProductIntegrator()->createOrUpdate($product);
     
         /**
          * After the product to be integrated, we show the information.
          */
         if ($response && $response->success()) {
-            $this->_getSession()->addSuccess($this->__('The product was successfully integrated.'));
+            $this->_getSession()
+                 ->addSuccess($this->__('The product was successfully integrated in store %s.', $store->getCode()));
         }
-        
+    
         if ($response && $response->exception()) {
-            $this->_getSession()->addError($this->__('There was a problem when trying to integrate the product.'));
+            $message = $this->__(
+                'There was a problem when trying to integrate the product in store %s.',
+                $store->getCode()
+            );
+            
+            $this->_getSession()->addError($message);
+        }
+    
+        $this->resultRedirect($productId, 'edit');
+    }
+    
+    
+    /**
+     * @param null $flag
+     *
+     * @return $this|mixed
+     *
+     * @throws Mage_Core_Exception
+     */
+    protected function resultRedirect($productId, $redirect = null)
+    {
+        switch ($redirect) {
+            case 'edit':
+                $result = function () use ($productId) {
+                    $this->_redirect('adminhtml/catalog_product/edit', ['id' => (int) $productId]);
+                };
+                break;
+            default:
+                $result = function () {
+                    $this->_redirect('adminhtml/catalog_product');
+                };
         }
         
-        $this->redirectProductEdit($product->getId());
+        $key = 'result_redirect';
+        
+        Mage::register($key, $result, true);
+        
+        return $this;
     }
 
 

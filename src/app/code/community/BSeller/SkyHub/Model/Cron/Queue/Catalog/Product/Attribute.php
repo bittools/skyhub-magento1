@@ -56,67 +56,88 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product_Attribute extends BSeller_
      */
     public function execute(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!$this->canRun($schedule)) {
+        $this->processStoreIteration($this, 'executeIntegration', $schedule);
+    
+        $successQueueIds = $this->extractResultSuccessIds($schedule);
+        $failedQueueIds  = $this->extractResultFailIds($schedule);
+    
+        $this->getQueueResource()->removeFromQueue(
+            $successQueueIds,
+            BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE
+        );
+        
+        $message = $this->__('All product attributes were successfully integrated.');
+    
+        if (!empty($failedQueueIds)) {
+            $message .= " " . $this->__('Some attributes could not be integrated.');
+        }
+    
+        $schedule->setMessages($message);
+    }
+    
+    
+    /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     * @param Mage_Core_Model_Store    $store
+     */
+    public function executeIntegration(Mage_Cron_Model_Schedule $schedule, Mage_Core_Model_Store $store)
+    {
+        if (!$this->canRun($schedule, $store->getId())) {
             return;
         }
-
+        
         $attributeIds = (array) $this->getQueueResource()->getPendingEntityIds(
             BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
-
+    
         if (empty($attributeIds)) {
             $schedule->setMessages($this->__('No product attribute to process.'));
+            return;
         }
-
-        $attributes      = $this->getProductAttributes($attributeIds);
+    
+        $attributes = $this->getProductAttributes($attributeIds);
+        
         $successQueueIds = [];
         $failedQueueIds  = [];
-
+    
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         foreach ($attributes as $attribute) {
             /** @var HandlerDefault|HandlerException $response */
             $response = $this->catalogProductAttributeIntegrator()->createOrUpdate($attribute);
-
+        
             if ($response && $this->isErrorResponse($response)) {
                 $failedQueueIds[] = $attribute->getId();
-
+            
                 $this->getQueueResource()->setFailedEntityIds(
                     $attribute->getId(),
                     BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE,
                     $response->message()
                 );
-
+            
                 continue;
             }
-
-            $successQueueIds[] = $attribute->getId();
+        
+            $successQueueIds[$attribute->getId()] = $attribute->getId();
         }
-
-        $this->getQueueResource()
-            ->removeFromQueue($successQueueIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE);
-
-        if (!empty($failedQueueIds)) {
-            $schedule->setMessages($this->__('Some attributes could not be integrated.'));
-            return;
-        }
-
-        $schedule->setMessages($this->__('All product attributes were successfully integrated.'));
+        
+        $this->mergeResults($schedule, $successQueueIds, $failedQueueIds);
     }
 
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
+     * @param int|null                 $storeId
      *
      * @return bool
      */
-    protected function canRun(Mage_Cron_Model_Schedule $schedule)
+    protected function canRun(Mage_Cron_Model_Schedule $schedule, $storeId = null)
     {
-        if (!$this->getCronConfig()->catalogProductAttribute()->isEnabled()) {
+        if (!$this->getCronConfig()->catalogProductAttribute()->isEnabled($storeId)) {
             $schedule->setMessages($this->__('Catalog Product Attribute Cron is Disabled'));
             return false;
         }
 
-        return parent::canRun($schedule);
+        return parent::canRun($schedule, $storeId);
     }
 }

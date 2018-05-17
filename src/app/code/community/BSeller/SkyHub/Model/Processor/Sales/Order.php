@@ -70,7 +70,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             return $order;
         }
 
-        $this->simulateStore($this->getStore());
+//        $this->simulateStore($this->getStore());
 
         $billingAddress  = new Varien_Object($this->arrayExtract($data, 'billing_address'));
         $shippingAddress = new Varien_Object($this->arrayExtract($data, 'shipping_address'));
@@ -285,7 +285,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     protected function createCustomer(array $data, Mage_Customer_Model_Customer $customer)
     {
-        $customer->setStore(Mage::app()->getStore());
+        $customer->setStore($this->getStore());
         
         $dateOfBirth = $this->arrayExtract($data, 'date_of_birth');
         $email       = $this->arrayExtract($data, 'email');
@@ -372,6 +372,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     protected function getStore()
     {
-        return $this->getNewOrdersDefaultStore();
+        return Mage::app()->getStore();
     }
 }

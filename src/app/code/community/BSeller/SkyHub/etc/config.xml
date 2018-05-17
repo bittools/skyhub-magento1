@@ -394,7 +394,9 @@
     <default>
         <bseller_skyhub>
             <general>
-                <enabled>1</enabled>
+                <version>1.2.3</version>
+                <store_scope_information>You need to change the store scope to enable the module.</store_scope_information>
+                <enabled>0</enabled>
                 <integration_product_visibility>4</integration_product_visibility>
             </general>
             <customer>
@@ -406,6 +408,7 @@
                 <filename>bseller_skyhub_request_log.log</filename>
             </log>
             <service>
+                <store_scope_information>You need to change the store scope to configure the credentials.</store_scope_information>
                 <base_uri>https://api.skyhub.com.br</base_uri>
                 <email/>
                 <api_key/>
@@ -443,12 +446,15 @@
                 <!-- SALES ORDER STATUS QUEUE -->
                 <enabled>1</enabled>
                 <queue_create>*/10 * * * *</queue_create>
+                <queue_create_limit>50</queue_create_limit>
                 <queue_execute>*/10 * * * *</queue_execute>
+                <queue_execute_limit>50</queue_execute_limit>
             </cron_sales_order_status>
             <cron_sales_order_queue>
                 <!-- SALES ORDER QUEUE -->
                 <enabled>1</enabled>
                 <expression>*/10 * * * *</expression>
+                <limit>50</limit>
             </cron_sales_order_queue>
             <cron_queue_clean>
                 <!-- QUEUE CLEANING -->

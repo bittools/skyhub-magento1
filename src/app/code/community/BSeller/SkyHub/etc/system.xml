@@ -33,12 +33,28 @@
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
                     <fields>
+                        <version>
+                            <label>Module Version</label>
+                            <sort_order>0</sort_order>
+                            <frontend_type>label</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </version>
+                        <store_scope_information>
+                            <label>Notice</label>
+                            <sort_order>5</sort_order>
+                            <frontend_type>label</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </store_scope_information>
                         <enabled>
                             <label>Enabled</label>
                             <sort_order>10</sort_order>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </enabled>
@@ -105,9 +121,51 @@
                         </customer_email_creation_with_taxvat_pattern>
                     </fields>
                 </customer>
+                <service translate="label" module="bseller_skyhub">
+                    <label>API Service Configuration</label>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                        <store_scope_information>
+                            <label>Notice</label>
+                            <sort_order>5</sort_order>
+                            <frontend_type>label</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </store_scope_information>
+                        <base_uri>
+                            <label>Base URI</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>label</frontend_type>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </base_uri>
+                        <email>
+                            <label>Email</label>
+                            <sort_order>20</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </email>
+                        <api_key>
+                            <label>API Key</label>
+                            <sort_order>30</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </api_key>
+                    </fields>
+                </service>
                 <log translate="label" module="bseller_skyhub">
                     <label>Log Configuration</label>
-                    <sort_order>20</sort_order>
+                    <sort_order>30</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -136,54 +194,10 @@
                         </filename>
                     </fields>
                 </log>
-                <service translate="label" module="bseller_skyhub">
-                    <label>API Service Configuration</label>
-                    <sort_order>30</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <expanded>1</expanded>
-                    <fields>
-                        <base_uri>
-                            <label>Base URI</label>
-                            <sort_order>10</sort_order>
-                            <frontend_type>label</frontend_type>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </base_uri>
-                        <email>
-                            <label>Email</label>
-                            <sort_order>20</sort_order>
-                            <frontend_type>text</frontend_type>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </email>
-                        <api_key>
-                            <label>API Key</label>
-                            <sort_order>30</sort_order>
-                            <frontend_type>text</frontend_type>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </api_key>
-                        <!--
-                        <account_manager_key>
-                            <label>Account Manager Key</label>
-                            <sort_order>40</sort_order>
-                            <frontend_type>text</frontend_type>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </account_manager_key>
-                        -->
-                    </fields>
-                </service>
                 <tax_invoice_key translate="label" module="bseller_skyhub">
                     <label>Invoice Key Configuration</label>
                     <sort_order>40</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
@@ -464,9 +478,21 @@
                                 <enabled>1</enabled>
                             </depends>
                         </queue_create>
+                        <queue_create_limit>
+                            <label>Queue Orders Max Qty</label>
+                            <sort_order>30</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[The maximum amount of orders to be queued by time.]]></comment>
+                            <depends>
+                                <enabled>1</enabled>
+                            </depends>
+                        </queue_create_limit>
                         <queue_execute>
                             <label>Queue Execute</label>
-                            <sort_order>30</sort_order>
+                            <sort_order>40</sort_order>
                             <frontend_type>text</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -476,6 +502,18 @@
                                 <enabled>1</enabled>
                             </depends>
                         </queue_execute>
+                        <queue_execute_limit>
+                            <label>Update Orders Max Qty</label>
+                            <sort_order>50</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[The maximum amount of orders to be updated by time.]]></comment>
+                            <depends>
+                                <enabled>1</enabled>
+                            </depends>
+                        </queue_execute_limit>
                     </fields>
                 </cron_sales_order_status>
                 <!-- SALES ORDER QUEUE -->
@@ -509,6 +547,7 @@
                                 <enabled>1</enabled>
                             </depends>
                         </expression>
+                        <!--
                         <default_store_id>
                             <label>Imported Orders Store View</label>
                             <sort_order>30</sort_order>
@@ -519,6 +558,7 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[The default store which the order will be imported in.]]></comment>
                         </default_store_id>
+                        -->
                         <use_default_increment_id>
                             <label>Use default store increment id?</label>
                             <sort_order>25</sort_order>
@@ -528,6 +568,18 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </use_default_increment_id>
+                        <limit>
+                            <label>Import Orders Max Qty</label>
+                            <sort_order>40</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[The maximum amount of orders to be imported by time.]]></comment>
+                            <depends>
+                                <enabled>1</enabled>
+                            </depends>
+                        </limit>
                     </fields>
                 </cron_sales_order_queue>
                 <!-- QUEUE CLEAN -->

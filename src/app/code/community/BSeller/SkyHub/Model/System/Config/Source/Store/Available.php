@@ -12,24 +12,24 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-abstract class BSeller_SkyHub_Block_Adminhtml_Notifications_Abstract extends BSeller_Core_Block_Adminhtml_Template
+class BSeller_SkyHub_Model_System_Config_Source_Store_Available extends BSeller_Core_Model_System_Config_Source_Abstract
 {
     
     use BSeller_SkyHub_Trait_Store_Iterator;
     
     
-    protected abstract function canShow();
-    
-    
     /**
-     * @return string
+     * @return array
      */
-    protected function _toHtml()
+    protected function optionsKeyValue($multiselect = null)
     {
-        if (!$this->canShow()) {
-            return '';
+        $stores = [];
+        
+        /** @var Mage_Core_Model_Store $store */
+        foreach ($this->getStoreIterator()->getStores() as $store) {
+            $stores[$store->getId()] = $store->getName();
         }
         
-        return parent::_toHtml();
+        return $stores;
     }
 }

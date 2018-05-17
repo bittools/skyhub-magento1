@@ -84,12 +84,39 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             $this->__('%s product(s) were queued. IDs: %s.', count($productIds), implode(',', $productIds))
         );
     }
+    
+    
+    /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     *
+     * @return mixed|void
+     */
+    public function execute(Mage_Cron_Model_Schedule $schedule)
+    {
+        $this->processStoreIteration($this, 'executeIntegration', $schedule);
+    
+        $successQueueIds = $this->extractResultSuccessIds($schedule);
+        $failedQueueIds  = $this->extractResultFailIds($schedule);
+    
+        if (!empty($successQueueIds)) {
+            $this->getQueueResource()->removeFromQueue(
+                $successQueueIds,
+                BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT
+            );
+        }
+    
+        $schedule->setMessages($this->__(
+            'Queue was processed. Success: %s. Errors: %s.',
+            implode(',', $successQueueIds),
+            implode(',', $failedQueueIds)
+        ));
+    }
 
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function execute(Mage_Cron_Model_Schedule $schedule)
+    public function executeIntegration(Mage_Cron_Model_Schedule $schedule, Mage_Core_Model_Store $store)
     {
         if (!$this->canRun($schedule)) {
             return;
@@ -104,6 +131,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
 
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = $this->getProductCollection()
+            ->addStoreFilter($store)
             ->addFieldToFilter('entity_id', ['in' => $productIds]);
 
         /** Set limitation. */
@@ -117,9 +145,9 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             $schedule->setMessages($this->__('No product to be integrated this time.'));
             return;
         }
-
-        $successIds = [];
-        $errorIds   = [];
+    
+        $successQueueIds = [];
+        $failedQueueIds  = [];
 
         /** @var Mage_Catalog_Model_Product $product */
         foreach ($collection as $product) {
@@ -138,7 +166,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             }
 
             if ($this->isErrorResponse($response)) {
-                $errorIds[] = $product->getId();
+                $failedQueueIds[] = $product->getId();
 
                 /** @var \SkyHub\Api\Handler\Response\HandlerException $response */
                 $this->getQueueResource()->setFailedEntityIds(
@@ -146,32 +174,24 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
                     BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
                     $response->message()
                 );
+                
                 continue;
             }
-
-            $successIds[] = $product->getId();
+    
+            $successQueueIds[] = $product->getId();
         }
 
-        if (!empty($successIds)) {
-            $this->getQueueResource()
-                ->removeFromQueue($successIds, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
-        }
-
-        $schedule->setMessages($this->__(
-            'Queue was processed. Success: %s. Errors: %s.',
-            implode(',', $successIds),
-            implode(',', $errorIds)
-        ));
+        $this->mergeResults($schedule, $successQueueIds, $failedQueueIds);
     }
 
 
     /**
-     * @return Mage_Catalog_Model_Resource_Product_Collection
+     * @return BSeller_SkyHub_Model_Resource_Catalog_Product_Collection
      */
     protected function getProductCollection()
     {
-        /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
-        $collection = Mage::getResourceModel('catalog/product_collection');
+        /** @var BSeller_SkyHub_Model_Resource_Catalog_Product_Collection $collection */
+        $collection = Mage::getResourceModel('bseller_skyhub/catalog_product_collection');
         return $collection;
     }
 
@@ -194,22 +214,28 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
+     * @param int|null                 $storeId
      *
      * @return bool
      */
-    protected function canRun(Mage_Cron_Model_Schedule $schedule)
+    protected function canRun(Mage_Cron_Model_Schedule $schedule, $storeId = null)
     {
-        if (!$this->getCronConfig()->catalogProduct()->isEnabled()) {
+        if (!$this->getCronConfig()->catalogProduct()->isEnabled($storeId)) {
             $schedule->setMessages($this->__('Catalog Product Cron is Disabled'));
             return false;
         }
-
-        //if the notification block can be showed, it means there's a products attributes mapping problem;
-        if ($this->canShowAttributesNotificiationBlock()) {
-            $schedule->setMessages($this->__('The installation is not completed. All required product attributes must be mapped.'));
+    
+        /**
+         * If the notification block can be shown, it means there's a products attributes mapping problem.
+         */
+        if ($this->hasPendingAttributesToMap()) {
+            $schedule->setMessages(
+                $this->__('The installation is not completed. All required product attributes must be mapped.')
+            );
+            
             return false;
         }
 
-        return parent::canRun($schedule);
+        return parent::canRun($schedule, $storeId);
     }
 }

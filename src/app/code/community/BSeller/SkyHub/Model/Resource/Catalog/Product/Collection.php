@@ -11,25 +11,14 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-
-abstract class BSeller_SkyHub_Block_Adminhtml_Notifications_Abstract extends BSeller_Core_Block_Adminhtml_Template
+class BSeller_SkyHub_Model_Resource_Catalog_Product_Collection extends Mage_Catalog_Model_Resource_Product_Collection
 {
     
-    use BSeller_SkyHub_Trait_Store_Iterator;
-    
-    
-    protected abstract function canShow();
-    
-    
     /**
-     * @return string
+     * @return bool
      */
-    protected function _toHtml()
+    public function isEnabledFlat()
     {
-        if (!$this->canShow()) {
-            return '';
-        }
-        
-        return parent::_toHtml();
+        return false;
     }
 }
