@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.2.6] - 2018-05-17
+### Added
+- Added a script file to execute all integrations (line creation and execution).
+- Added logic to create a customer email if the order doesn't contains it. A email creation pattern can be configurated at module config panel.
+- Products integration now is called after a order placed too (only for the order items). This behavior can be configured at module config panel. 
+
+### Changed
+- Minor fixes.
+- Changed the behavior of "deleted" product. Now, the product will be disabled and the stock set to 0 at skyhub.
+
 ## [1.2.5] - 2018-04-25
 ### Added
 - Now, it's available an option to use the magento default incrementId at order creation process.
