@@ -128,3 +128,5 @@
 "Customer Configuration","Configuração de Cliente"
 "Cleaning Cron Configuration","Configuração da Cron de Saneamento"
 "Enable integration via cron.","Habilitar execução da integração via cron"
+"Immediately integrate order products on order create","Atualizar de imediato na skyhub todos os itens dos pedidos criados."
+"After placing a order on magento, it will force real time integration to all items of the order","Após um pedido cair no magento, será forçada uma integração de todos os itens contidos nele."
