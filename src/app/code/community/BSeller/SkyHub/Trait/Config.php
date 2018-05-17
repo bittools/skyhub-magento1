@@ -196,4 +196,29 @@ trait BSeller_SkyHub_Trait_Config
     {
         return (bool)$this->getGeneralConfig('immediately_integrate_product_on_save_price_stock_change');
     }
+
+    /**
+     * @param string $field
+     *
+     * @return string|integer
+     */
+    protected function getCustomerConfig($field)
+    {
+        return $this->getSkyHubModuleConfig($field, 'customer');
+    }
+
+    /**
+     * @param string $field
+     *
+     * @return string|integer
+     */
+    protected function allowCustomerEmailCreationWithTaxvat()
+    {
+        return $this->getCustomerConfig('allow_customer_email_creation_with_taxvat');
+    }
+
+    protected function customerEmailCreationWithTaxvatPattern()
+    {
+        return $this->getCustomerConfig('customer_email_creation_with_taxvat_pattern');
+    }
 }
