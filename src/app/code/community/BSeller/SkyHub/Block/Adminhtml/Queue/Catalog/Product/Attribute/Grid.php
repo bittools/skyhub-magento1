@@ -26,7 +26,7 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Product_Attribute_Grid
         /** @var BSeller_SkyHub_Model_Resource_Queue_Collection $collection */
         $collection->getSelect()
             ->joinLeft(
-                ['eav' => 'eav_attribute'],
+                ['eav' => Mage::getSingleton('core/resource')->getTableName('eav/attribute')],
                 "eav.attribute_id = main_table.entity_id",
                 ['attribute_code', 'frontend_label']
             )
