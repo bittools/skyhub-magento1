@@ -122,3 +122,5 @@
 "The product integration entity table has been cleared.","Os dados de integração de produtos com a SkyHub foram limpos."
 "An error occurred while clearing product integration entity table.","Ocorreu um erro ao limpar os dados de integração de produtos com a SkyHub"
 "Reset SkyHub Products Integration History","Limpar dados de integração com a SkyHub"
+"Immediately integrate order products on order create","Atualizar de imediato na skyhub todos os itens dos pedidos criados."
+"After placing a order on magento, it will force real time integration to all items of the order","Após um pedido cair no magento, será forçada uma integração de todos os itens contidos nele."
