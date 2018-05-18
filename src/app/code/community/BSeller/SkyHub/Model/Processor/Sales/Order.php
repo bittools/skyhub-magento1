@@ -74,14 +74,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             return $order;
         }
 
-        $this->simulateStore($this->getStore());
-
-        $info = new Varien_Object(
-            [
-                'increment_id' => $incrementId,
-                'send_confirmation' => 0
-            ]
-        );
+        //$this->simulateStore($this->getStore());
 
         $billingAddress  = new Varien_Object($this->arrayExtract($data, 'billing_address'));
         $shippingAddress = new Varien_Object($this->arrayExtract($data, 'shipping_address'));
