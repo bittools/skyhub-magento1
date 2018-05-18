@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.0] - 2018-05-18
+### Added
+- Customer attributes mapping
+- Multistore enabled
+- The JSON of the orders now is stored and can be acessible at order's page. 
+
+### Changed
+- Minor fixes.
+
 ## [1.2.6] - 2018-05-17
 ### Added
 - Added a script file to execute all integrations (line creation and execution).
