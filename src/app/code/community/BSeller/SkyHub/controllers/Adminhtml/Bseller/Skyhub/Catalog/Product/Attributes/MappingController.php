@@ -103,7 +103,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
         /**
          * if the attribute has options
          */
-        if ($this->getHasOptions()) {
+        if ($mapping->getHasOptions()) {
             $skyhubCode     =   $this->getRequest()->getPost('skyhub_code');
             $magentoValue   =   $this->getRequest()->getPost('magento_value');
             $mapping->updateOption($skyhubCode, $magentoValue);
