@@ -39,36 +39,38 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
     
         /** @var Mage_Catalog_Model_Product $product */
         $product = $observer->getData('product');
-        if (($parentIds = $this->getParentProducts($product)) !== null) {
-            $this->getQueueResource()
-                ->queue(
-                    $parentIds,
-                    BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
-                    BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
-                );
-        }
-    
-        if (!$this->canIntegrateProduct($product)) {
-            return;
-        }
-    
-        if ($this->hasActiveIntegrateOnSaveFlag() && $this->hasStockOrPriceUpdate($product)) {
-            /** Create or Update Product */
-            $this->catalogProductIntegrator()->createOrUpdate($product);
-        }
+        $this->checkIntegrationProduct($product);
     }
 
     /**
      * @param Mage_Catalog_Model_Product $product
-     * @return null|array
+     * @param bool $forceQueue
+     * @return void
      */
-    protected function getParentProducts(Mage_Catalog_Model_Product $product)
+    protected function checkIntegrationProduct(Mage_Catalog_Model_Product $product, $forceQueue = false)
     {
         $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
-        if (count($parentIds) == 0) {
-            return null;
+        foreach ($parentIds as $id) {
+            $this->checkIntegrationProduct(Mage::getModel('catalog/product')->load($id), true);
         }
-        return $parentIds;
+
+        if (!$this->canIntegrateProduct($product)) {
+            return;
+        }
+
+        if ($this->hasActiveIntegrateOnSaveFlag() && $this->hasStockOrPriceUpdate($product)) {
+            /** Create or Update Product */
+            $this->catalogProductIntegrator()->createOrUpdate($product);
+        }
+
+        if ($forceQueue) {
+            $this->getQueueResource()
+                ->queue(
+                    $product->getId(),
+                    BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
+                    BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
+                );
+        }
     }
     
     /**
