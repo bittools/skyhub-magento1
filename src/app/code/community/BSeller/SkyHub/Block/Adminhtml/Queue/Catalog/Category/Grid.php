@@ -17,7 +17,7 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Category_Grid extends BSeller
     /**
      * @var string
      */
-    protected $_entityType = 'catalog_category';
+    protected $_entityType = BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY;
 
     /**
      * @param BSeller_SkyHub_Model_Resource_Queue_Collection $collection
