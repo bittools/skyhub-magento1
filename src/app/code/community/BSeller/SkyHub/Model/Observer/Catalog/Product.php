@@ -23,7 +23,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     public function integrateProduct(Varien_Event_Observer $observer)
     {
-        $this->processStoreIteration($this, 'processIntegrateProduct', $observer);
+        $this->processStoreIteration($this, 'prepareIntegrationProduct', $observer);
     }
 
     /**
@@ -31,7 +31,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      *
      * @param Mage_Core_Model_Store $store
      */
-    public function processIntegrateProduct(Varien_Event_Observer $observer, Mage_Core_Model_Store $store)
+    public function prepareIntegrationProduct(Varien_Event_Observer $observer, Mage_Core_Model_Store $store)
     {
         if (!$this->canRun($store->getId())) {
             return;
@@ -39,7 +39,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
     
         /** @var Mage_Catalog_Model_Product $product */
         $product = $observer->getData('product');
-        $this->checkIntegrationProduct($product);
+        $this->processIntegrationProduct($product);
     }
 
     /**
@@ -47,11 +47,11 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      * @param bool $forceQueue
      * @return void
      */
-    protected function checkIntegrationProduct(Mage_Catalog_Model_Product $product, $forceQueue = false)
+    protected function processIntegrationProduct(Mage_Catalog_Model_Product $product, $forceQueue = false)
     {
         $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
         foreach ($parentIds as $id) {
-            $this->checkIntegrationProduct(Mage::getModel('catalog/product')->load($id), true);
+            $this->processIntegrationProduct(Mage::getModel('catalog/product')->load($id), true);
         }
 
         if (!$this->canIntegrateProduct($product)) {
