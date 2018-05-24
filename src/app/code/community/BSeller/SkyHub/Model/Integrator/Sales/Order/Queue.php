@@ -50,7 +50,7 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order_Queue extends BSeller_SkyHub_M
             return false;
         }
 
-        return $this->delete($order->getIncrementId());
+        return $this->delete($order->getSkyhubCode());
     }
 
 
