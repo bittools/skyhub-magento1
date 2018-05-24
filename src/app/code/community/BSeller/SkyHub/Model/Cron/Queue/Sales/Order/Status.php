@@ -104,8 +104,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
             $result = $this->salesOrderStatusProcessor()
                 ->processOrderStatus($statusCode, $statusType, $order);
 
-            if (false == $result) {
-                return;
+            if (false == $result && !$this->isOrderExpirated($order)) {
+                continue;
             }
 
             $this->getQueueResource()->removeFromQueue(
@@ -113,6 +113,18 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
                 BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER_STATUS
             );
         }
+    }
+
+    protected function isOrderExpirated($order)
+    {
+        $expirationDays = $limit = $this->getCronConfig()->salesOrderStatus()->orderExpirationDays();
+
+        $referenceDate = new DateTime();
+        $referenceDate = $referenceDate->modify('-' . $expirationDays . ' days');
+        if (new DateTime($order->getCreatedAt()) < $referenceDate) {
+            return true;
+        }
+        return false;
     }
 
 
