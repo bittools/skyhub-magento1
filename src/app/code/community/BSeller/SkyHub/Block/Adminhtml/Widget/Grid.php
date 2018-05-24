@@ -29,13 +29,17 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
      */
     protected function _prepareLayout()
     {
-        $this->setChild('clear_queue_button',
-            $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->setData(array(
-                    'label'     => Mage::helper('bseller_skyhub')->__('Reset SkyHub Products Integration History'),
-                    'onclick' => "if (confirm('{$this->getConfirmMessage()}')) { setLocation('{$this->getClearQueueUrl()}')}",
-                    'class' => 'delete'
-                ))
+        $this->setChild(
+            'clear_queue_button',
+            $this->getLayout()
+                 ->createBlock('adminhtml/widget_button')
+                 ->setData(
+                     array(
+                        'label'     => Mage::helper('bseller_skyhub')->__('Reset SkyHub Products Integration History'),
+                        'onclick' => "if (confirm('{$this->getConfirmMessage()}')) { setLocation('{$this->getClearQueueUrl()}')}",
+                        'class' => 'delete'
+                    )
+                 )
         );
 
         return BSeller_Core_Block_Adminhtml_Widget_Grid::_prepareLayout();
@@ -71,12 +75,19 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
         return $html;
     }
 
+    /**
+     * Get block of button clear queue
+     *
+     * @return mixed
+     */
     public function getClearQueueButtonHtml()
     {
         return $this->getChildHtml('clear_queue_button');
     }
 
     /**
+     * Get message of confirmation to clear queue
+     *
      * @return string
      */
     public function getConfirmMessage()

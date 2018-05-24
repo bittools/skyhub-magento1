@@ -41,6 +41,9 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_EntityController e
         return $this->redirect();
     }
 
+    /**
+     * Redirect to last url accessed
+     */
     public function redirect()
     {
         $this->getResponse()
