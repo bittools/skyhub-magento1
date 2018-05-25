@@ -65,11 +65,15 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
         $schedule->setMessages($this->__('Order IDs Queued: %s.', implode(',', $orderIds)));
     }
 
+    public function execute(Mage_Cron_Model_Schedule $schedule)
+    {
+        $this->processStoreIteration($this, 'executeIntegration', $schedule);
+    }
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function execute(Mage_Cron_Model_Schedule $schedule)
+    public function executeIntegration(Mage_Cron_Model_Schedule $schedule)
     {
         $limit = $this->getCronConfig()->salesOrderStatus()->queueExecuteLimit();
         

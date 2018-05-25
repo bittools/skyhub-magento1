@@ -14,12 +14,13 @@
 
 class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_Model_Cron_Queue_Sales_Abstract
 {
+
+	use BSeller_Core_Trait_Data;
     
     public function execute(Mage_Cron_Model_Schedule $schedule)
     {
         $this->processStoreIteration($this, 'executeIntegration', $schedule);
     }
-    
 
     /**
      * Import next orders from the queue in SkyHub.
@@ -49,7 +50,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
             $order = $this->salesOrderProcessor()->createOrder($orderData);
             if (!$order || !$order->getId()) {
                 $message = $schedule->getMessages();
-                $message .= $this->__('Order cannot be created.', $this->salesOrderProcessor()->arrayExtract($orderData, 'code'));
+                $message .= $this->__('Order cannot be created.', $this->arrayExtract($orderData, 'code'));
                 $schedule->setMessages($message);
                 continue;
             }
