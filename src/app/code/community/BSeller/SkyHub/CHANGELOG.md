@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.1] - 2018-05-25
+### Added
+- Solved problem with order statuses queue which wasn't decreasing magento queue;
+- Solved problem with order consuming which wasn't decreasing skyhub queue;
+- Solved problem with orders created with the option to create with default magento increment_id which wasn't beeing deleted from skyhub;
+- Solved problem with canceled orders at skyhub which wasn't beeing deleted but magento wasn't cleaning skyhub queue;
+- Solved problem with configurable products sons which wasn't being updated at skyhub by integration;
+
+### Changed
+- Minor fixes.
+
 ## [1.3.0] - 2018-05-18
 ### Added
 - Customer attributes mapping
