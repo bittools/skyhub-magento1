@@ -34,4 +34,9 @@ class BSeller_SkyHub_Model_Cron_Config_Sales_Order_Status extends BSeller_SkyHub
     {
         return (int) $this->getGroupConfig('queue_execute_limit');
     }
+
+    public function orderExpirationDays()
+    {
+        return (int)$this->getGroupConfig('order_expiration');
+    }
 }

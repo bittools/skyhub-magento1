@@ -456,6 +456,7 @@
                 <queue_create_limit>50</queue_create_limit>
                 <queue_execute>*/10 * * * *</queue_execute>
                 <queue_execute_limit>50</queue_execute_limit>
+                <order_expiration>30</order_expiration>
             </cron_sales_order_status>
             <cron_sales_order_queue>
                 <!-- SALES ORDER QUEUE -->
