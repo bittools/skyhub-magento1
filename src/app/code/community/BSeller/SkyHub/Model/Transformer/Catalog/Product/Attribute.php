@@ -32,7 +32,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Attribute extends BSeller
 
         try {
             $code  = $attribute->getAttributeCode();
-            $label = $attribute->getStoreLabel(Mage::app()->getDefaultStoreView());
+            $label = $attribute->getStoreLabel(Mage::app()->getStore());
 
             $interface->setCode($code)
                 ->setLabel($label);

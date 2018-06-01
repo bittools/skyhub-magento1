@@ -15,7 +15,7 @@
 -->
 <config>
     <skyhub>
-        <attributes>
+        <product_attributes>
             <sku>
                 <code>sku</code>
                 <label>Product Sku</label>
@@ -271,7 +271,105 @@
                     <required>0</required>
                 </attribute_install_config>
             </nbm>
-        </attributes>
+        </product_attributes>
+        <customer_attributes>
+            <person_type>
+                <code>person_type</code>
+                <label>Person Type</label>
+                <description>The customer person type.</description>
+                <cast_type>string</cast_type>
+                <attribute_code>person_type</attribute_code>
+                <validation/>
+                <required>0</required>
+                <has_options>1</has_options>
+                <attribute_install_config>
+                    <attribute_code>person_type</attribute_code>
+                    <label>Person Type</label>
+                    <type>int</type>
+                    <input>select</input>
+                    <required>0</required>
+                    <source>bseller_skyhub/system_config_source_customer_attributes_personType</source>
+                    <default>1</default>
+                </attribute_install_config>
+                <options>
+                    <physical_person>
+                        <skyhub_code>physical_person</skyhub_code>
+                        <skyhub_label>Physical Person</skyhub_label>
+                        <default_value>1</default_value>
+                    </physical_person>
+                    <legal_person>
+                        <skyhub_code>legal_person</skyhub_code>
+                        <skyhub_label>Legal Person</skyhub_label>
+                        <default_value>2</default_value>
+                    </legal_person>
+                </options>
+            </person_type>
+            <cpf>
+                <code>cpf</code>
+                <label>CPF</label>
+                <description>The customer CPF.</description>
+                <cast_type>string</cast_type>
+                <attribute_code>cpf</attribute_code>
+                <validation/>
+                <required>0</required>
+                <attribute_install_config>
+                    <attribute_code>cpf</attribute_code>
+                    <label>CPF</label>
+                    <type>varchar</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>0</required>
+                </attribute_install_config>
+            </cpf>
+            <cnpj>
+                <code>cnpj</code>
+                <label>CNPJ</label>
+                <description>The customer CNPJ.</description>
+                <cast_type>string</cast_type>
+                <attribute_code>cnpj</attribute_code>
+                <validation/>
+                <required>0</required>
+                <attribute_install_config>
+                    <attribute_code>cnpj</attribute_code>
+                    <label>CNPJ</label>
+                    <type>varchar</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>0</required>
+                </attribute_install_config>
+            </cnpj>
+            <ie>
+                <code>ie</code>
+                <label>Customer IE</label>
+                <description>The customer state inscription.</description>
+                <cast_type>string</cast_type>
+                <attribute_code>ie</attribute_code>
+                <validation/>
+                <required>0</required>
+                <attribute_install_config>
+                    <attribute_code>ie</attribute_code>
+                    <label>IE</label>
+                    <type>varchar</type>
+                    <input>text</input>
+                    <source_model/>
+                    <required>0</required>
+                </attribute_install_config>
+            </ie>
+            <social_name>
+                <code>social_name</code>
+                <label>Social Name</label>
+                <description>The customer social name.</description>
+                <cast_type>string</cast_type>
+                <attribute_code>social_name</attribute_code>
+                <validation/>
+                <required>0</required>
+                <attribute_install_config>
+                    <attribute_code>social_name</attribute_code>
+                    <label>Social Name</label>
+                    <type>varchar</type>
+                </attribute_install_config>
+            </social_name>
+        </customer_attributes>
         <catalog>
             <product>
                 <attributes>
@@ -312,5 +410,12 @@
                 </attributes>
             </product>
         </catalog>
+        <customer>
+            <attributes>
+                <blacklist>
+                    <entity_id></entity_id>
+                </blacklist>
+            </attributes>
+        </customer>
     </skyhub>
 </config>

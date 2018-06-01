@@ -26,21 +26,24 @@ abstract class BSeller_SkyHub_Model_Cron_Config_Abstract implements BSeller_SkyH
 
 
     /**
+     * @param int|null $storeId
+     *
      * @return bool
      */
-    public function isEnabled()
+    public function isEnabled($storeId = null)
     {
-        return (bool) $this->getSkyHubModuleConfig($this->enabledField, $this->group);
+        return (bool) $this->getSkyHubModuleConfig($this->enabledField, $this->group, $storeId);
     }
 
 
     /**
-     * @param string $field
+     * @param string   $field
+     * @param int|null $storeId
      *
      * @return mixed
      */
-    public function getGroupConfig($field)
+    public function getGroupConfig($field, $storeId = null)
     {
-        return $this->getSkyHubModuleConfig($field, $this->group);
+        return $this->getSkyHubModuleConfig($field, $this->group, $storeId);
     }
 }

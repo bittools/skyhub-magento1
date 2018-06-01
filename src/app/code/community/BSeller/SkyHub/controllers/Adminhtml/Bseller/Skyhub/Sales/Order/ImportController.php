@@ -20,10 +20,17 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Sales_Order_ImportController
         $this->init('Import Manually');
         $this->renderLayout();
     }
-    
-    
+
+
+    /**
+     * Submit the manual order import.
+     *
+     * @throws Mage_Core_Model_Store_Exception
+     */
     public function submitAction()
     {
+        $this->prepareStore();
+        
         $codes = $this->getCleanedOrderCodes();
         
         if (empty($codes)) {

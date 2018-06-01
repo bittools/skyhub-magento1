@@ -34,7 +34,17 @@ class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Configuration
      */
     public function canShow()
     {
-        return (bool) !$this->isConfigurationOk();
+        $canShow = false;
+
+        /**
+         * A store is only appended to Store Iterator if it's totally ok.
+         * That's the reason we check the number of stores available here. Simple isn't it?
+         */
+        if (!count($this->getStoreIterator()->getStores())) {
+            $canShow = true;
+        }
+
+        return (bool) $canShow;
     }
 
 

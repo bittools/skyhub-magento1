@@ -14,6 +14,7 @@
 
 class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_Integrator_Abstract
 {
+    use BSeller_SkyHub_Trait_Sales_Order;
 
     /**
      * @param int   $page
@@ -211,22 +212,6 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
         /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
         return true;
     }
-
-
-    /**
-     * @param int $orderId
-     *
-     * @return string
-     */
-    protected function getOrderIncrementId($orderId)
-    {
-        /** @var Mage_Sales_Model_Resource_Order $resource */
-        $resource    = Mage::getResourceModel('sales/order');
-        $incrementId = $resource->getIncrementId($orderId);
-
-        return $incrementId;
-    }
-
 
     /**
      * @return \SkyHub\Api\EntityInterface\Sales\Order

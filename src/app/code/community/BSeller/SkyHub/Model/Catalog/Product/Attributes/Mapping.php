@@ -10,6 +10,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Julio Reis <julio.reis@e-smart.com.br>
  */
 
 /**
@@ -96,7 +97,7 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
      */
     public function getAttributeInstallConfig()
     {
-        $config = (array) $this->getSkyHubConfig()->getAttributeInstallConfig($this->getSkyhubCode());
+        $config = (array) $this->getProductSkyHubConfig()->getAttributeInstallConfig($this->getSkyhubCode());
 
         foreach ($config as $key => $value) {
             $config[$key] = (''==$value) ? null : $value;

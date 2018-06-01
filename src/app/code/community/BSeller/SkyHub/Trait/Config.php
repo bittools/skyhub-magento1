@@ -24,50 +24,54 @@ trait BSeller_SkyHub_Trait_Config
 
 
     /**
-     * @param string                      $field
-     * @param string                      $group
-     * @param Mage_Core_Model_Config|null $store
+     * @param string   $field
+     * @param string   $group
+     * @param int|null $storeId
      *
      * @return mixed
      */
-    protected function getSkyHubModuleConfig($field, $group, Mage_Core_Model_Config $store = null)
+    protected function getSkyHubModuleConfig($field, $group, $storeId = null)
     {
-        return $this->getModuleConfig($field, $group, 'bseller_skyhub', $store);
+        return $this->getModuleConfig($field, $group, 'bseller_skyhub', $storeId);
     }
 
 
     /**
-     * @param string                      $field
-     * @param string                      $group
-     * @param Mage_Core_Model_Config|null $store
+     * @param string   $field
+     * @param string   $group
+     * @param int|null $storeId
      *
      * @return array
      */
     protected function getSkyHubModuleConfigAsArray($field, $group, Mage_Core_Model_Config $store = null)
     {
-        $values =  $this->getModuleConfig($field, $group, 'bseller_skyhub', $store);
+        $values      = $this->getModuleConfig($field, $group, 'bseller_skyhub', $store);
         $arrayValues = explode(',', $values);
+        
         return $arrayValues;
     }
 
 
     /**
-     * @param string $field
+     * @param string   $field
+     * @param null|int $storeId
      *
      * @return string|integer
      */
-    protected function getGeneralConfig($field)
+    protected function getGeneralConfig($field, $storeId = null)
     {
-        return $this->getSkyHubModuleConfig($field, 'general');
+        return $this->getSkyHubModuleConfig($field, 'general', $storeId);
     }
 
 
     /**
+     * @param null|int $storeId
+     *
      * @return boolean
      */
-    protected function isModuleEnabled()
+    protected function isModuleEnabled($storeId = null)
     {
-        return (bool) $this->getGeneralConfig('enabled');
+        return (bool) $this->getGeneralConfig('enabled', $storeId);
     }
 
 
@@ -76,17 +80,19 @@ trait BSeller_SkyHub_Trait_Config
      */
     protected function getNewOrdersDefaultStoreId()
     {
-        return $this->getNewOrdersDefaultStore()->getId();
+        return (int) $this->getNewOrdersDefaultStore()->getId();
     }
 
 
     /**
      * @return Mage_Core_Model_Store
      */
-    protected function getNewOrdersDefaultStore()
+    protected function getNewOrdersDefaultStore($storeId = null)
     {
-        $storeId = (int) $this->getSkyHubModuleConfig('default_store_id', 'cron_sales_order_queue');
-
+        if (is_null($storeId)) {
+            $storeId = (int) Mage::app()->getDefaultStoreView();
+        }
+    
         try {
             if (Mage::app()->getStore($storeId)->isAdmin()) {
                 $storeId = Mage::app()->getDefaultStoreView()->getId();
@@ -102,9 +108,9 @@ trait BSeller_SkyHub_Trait_Config
     /**
      * @return string
      */
-    protected function getNewOrdersStatus()
+    protected function getNewOrdersStatus($storeId = null)
     {
-        $status = (string) $this->getSkyHubModuleConfig('new_order_status', 'sales_order_status');
+        $status = (string) $this->getSkyHubModuleConfig('new_order_status', 'sales_order_status', $storeId);
 
         if (empty($status)) {
             $status = $this->getDefaultStatusByState(Mage_Sales_Model_Order::STATE_NEW);
@@ -115,11 +121,13 @@ trait BSeller_SkyHub_Trait_Config
 
 
     /**
+     * @param null|int $storeId
+     *
      * @return string
      */
-    protected function getApprovedOrdersStatus()
+    protected function getApprovedOrdersStatus($storeId = null)
     {
-        $status = (string) $this->getSkyHubModuleConfig('approved_order_status', 'sales_order_status');
+        $status = (string) $this->getSkyHubModuleConfig('approved_order_status', 'sales_order_status', $storeId);
 
         if (empty($status)) {
             $status = $this->getDefaultStatusByState(Mage_Sales_Model_Order::STATE_PROCESSING);
@@ -127,14 +135,16 @@ trait BSeller_SkyHub_Trait_Config
 
         return $status;
     }
-
-
+    
+    
     /**
+     * @param null|int $storeId
+     *
      * @return string
      */
-    protected function getDeliveredOrdersStatus()
+    protected function getDeliveredOrdersStatus($storeId = null)
     {
-        $status = (string) $this->getSkyHubModuleConfig('delivered_order_status', 'sales_order_status');
+        $status = (string) $this->getSkyHubModuleConfig('delivered_order_status', 'sales_order_status', $storeId);
 
         if (empty($status)) {
             $status = $this->getDefaultStatusByState(Mage_Sales_Model_Order::STATE_COMPLETE);
@@ -145,11 +155,15 @@ trait BSeller_SkyHub_Trait_Config
 
 
     /**
+     * @param null|int $storeId
+     *
      * @return string
      */
-    protected function getShipmentExceptionOrderStatus()
+    protected function getShipmentExceptionOrderStatus($storeId = null)
     {
-        $status = (string) $this->getSkyHubModuleConfig('shipment_exception_order_status', 'sales_order_status');
+        $status = (string) $this->getSkyHubModuleConfig(
+            'shipment_exception_order_status', 'sales_order_status', $storeId
+        );
 
         if (empty($status)) {
             $status = $this->getDefaultStatusByState(Mage_Sales_Model_Order::STATE_COMPLETE);
@@ -167,7 +181,9 @@ trait BSeller_SkyHub_Trait_Config
     protected function getDefaultStatusByState($state)
     {
         /** @var Mage_Sales_Model_Order_Status $status */
-        $status = Mage::getModel('sales/order_status')->loadDefaultByState($state);
+        $status = Mage::getModel('sales/order_status');
+        $status->loadDefaultByState($state);
+        
         return (string) $status->getId();
     }
 
@@ -175,25 +191,67 @@ trait BSeller_SkyHub_Trait_Config
     /**
      * @return string
      */
-    protected function getTaxInvoiceKeyPattern()
+    protected function getTaxInvoiceKeyPattern($storeId = null)
     {
-        return (string) $this->getSkyHubModuleConfig('pattern', 'tax_invoice_key');
+        return (string) $this->getSkyHubModuleConfig('pattern', 'tax_invoice_key', $storeId);
     }
     
     
     /**
      * @return BSeller_SkyHub_Model_Config
      */
-    protected function getSkyHubConfig()
+    protected function getProductSkyHubConfig()
     {
-        return Mage::getSingleton('bseller_skyhub/config');
+        return Mage::getSingleton('bseller_skyhub/config_catalog_product');
+    }
+
+    /**
+     * @return BSeller_SkyHub_Model_Config
+     */
+    protected function getCustomerSkyHubConfig()
+    {
+        return Mage::getSingleton('bseller_skyhub/config_customer');
+    }
+    
+
+    /**
+     * @return boolean
+     */
+    protected function hasActiveIntegrateOnSaveFlag($storeId = null)
+    {
+        return (bool) $this->getGeneralConfig('immediately_integrate_product_on_save_price_stock_change', $storeId);
+    }
+
+    /**
+     * @param string $field
+     *
+     * @return string|integer
+     */
+    protected function getCustomerConfig($field)
+    {
+        return $this->getSkyHubModuleConfig($field, 'customer');
+    }
+
+    /**
+     * @param string $field
+     *
+     * @return string|integer
+     */
+    protected function allowCustomerEmailCreationWithTaxvat()
+    {
+        return $this->getCustomerConfig('allow_customer_email_creation_with_taxvat');
+    }
+
+    protected function customerEmailCreationWithTaxvatPattern()
+    {
+        return $this->getCustomerConfig('customer_email_creation_with_taxvat_pattern');
     }
 
     /**
      * @return boolean
      */
-    protected function hasActiveIntegrateOnSaveFlag()
+    protected function hasActiveIntegrateProductsOnOrderPlaceFlag()
     {
-        return (bool)$this->getGeneralConfig('immediately_integrate_product_on_save_price_stock_change');
+        return (bool)$this->getGeneralConfig('immediately_integrate_order_products_order_create');
     }
 }

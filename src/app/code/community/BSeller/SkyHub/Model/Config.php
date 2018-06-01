@@ -12,7 +12,7 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Model_Config
+abstract class BSeller_SkyHub_Model_Config
 {
     
     /** @var Mage_Core_Model_Config_Base */
@@ -20,7 +20,7 @@ class BSeller_SkyHub_Model_Config
 
     /** @var array */
     protected $attributes = [];
-    
+
     /** @var array */
     protected $blacklist = [];
 
@@ -38,38 +38,8 @@ class BSeller_SkyHub_Model_Config
             return [];
         }
 
-        return (array) $this->attributes[$code]['attribute_install_config'];
+        return (array)$this->attributes[$code]['attribute_install_config'];
     }
-    
-    
-    /**
-     * @return array
-     */
-    public function getSkyHubFixedAttributes()
-    {
-        if (empty($this->attributes)) {
-            $this->attributes = (array) $this->getConfig()->getNode('skyhub/attributes')->asArray();
-        }
-
-        return (array) $this->attributes;
-    }
-    
-    
-    /**
-     * @return array
-     */
-    public function getBlacklistedAttributes()
-    {
-        if (empty($this->blacklist)) {
-            $this->blacklist = (array) $this->getConfig()
-                                            ->getNode('skyhub/catalog/product/attributes/blacklist')
-                                            ->asArray();
-            $this->blacklist = array_keys($this->blacklist);
-        }
-        
-        return $this->blacklist;
-    }
-    
     
     /**
      * @param string $attributeCode

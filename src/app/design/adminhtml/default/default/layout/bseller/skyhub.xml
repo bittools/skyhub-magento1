@@ -42,6 +42,30 @@
         </reference>
     </adminhtml_bseller_skyhub_catalog_product_attributes_mapping_edit>
 
+    <!-- Customer Attributes Mapping -->
+    <adminhtml_bseller_skyhub_customer_attributes_mapping_index>
+        <label>BSeller SkyHub Customer Attributes Mapping</label>
+        <update handle="ADD_STYLES"/>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_customer_attributes_mapping"/>
+        </reference>
+    </adminhtml_bseller_skyhub_customer_attributes_mapping_index>
+
+    <!-- Customer Attributes Mapping Edit -->
+    <adminhtml_bseller_skyhub_customer_attributes_mapping_edit>
+        <label>BSeller SkyHub Customer Attributes Mapping</label>
+        <update handle="ADD_STYLES"/>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>bseller/skyhub/js/AjaxFieldLoader.js</name>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_customer_attributes_mapping_edit"/>
+        </reference>
+    </adminhtml_bseller_skyhub_customer_attributes_mapping_edit>
+
     <!-- Integration Pending Products -->
     <adminhtml_bseller_skyhub_queue_pendingproducts>
         <label>BSeller SkyHub Integration Pending Products</label>
@@ -188,4 +212,13 @@
             </action>
         </reference>
     </ADD_STYLES>
+
+    <adminhtml_sales_order_view>
+        <reference name="sales_order_tabs">
+            <action method="addTab">
+                <name>bseller_skyhub_block_adminhtml_sales_order_view_tab_integrationJson</name>
+                <block>bseller_skyhub/adminhtml_sales_order_view_tab_integrationJson</block>
+            </action>
+        </reference>
+    </adminhtml_sales_order_view>
 </layout>

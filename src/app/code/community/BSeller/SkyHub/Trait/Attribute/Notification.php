@@ -12,11 +12,17 @@
  *
  * @author    Julio Reis <julio.reis@e-smart.com.br>
  */
-trait BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification
+trait BSeller_SkyHub_Trait_Attribute_Notification
 {
-    public function canShowAttributesNotificiationBlock()
+    
+    /**
+     * If there's still attributes to map out we cannot let the product to be integrated.
+     *
+     * @return bool
+     */
+    public function hasPendingAttributesToMap()
     {
-        return (bool)($this->getPendingAttributesCollection()->getSize() > 0);
+        return (bool) ($this->getPendingAttributesCollection()->getSize() > 0);
     }
 
     /**
@@ -37,5 +43,29 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification
         Mage::register($key, $collection, true);
 
         return $collection;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return string
+     */
+    public function getProductAttributeAutoUrl($id)
+    {
+        return $this->getUrl('adminhtml/bseller_skyhub_catalog_product_attributes_mapping/createAutomatically', [
+            'id' => $id
+        ]);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return string
+     */
+    public function getCustomerAttributeAutoUrl($id)
+    {
+        return $this->getUrl('adminhtml/bseller_skyhub_customer_attributes_mapping/createAutomatically', [
+            'id' => $id
+        ]);
     }
 }

@@ -15,19 +15,44 @@
 class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model_Observer_Abstract
 {
 
-    use BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
+    use BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation,
+        BSeller_SkyHub_Trait_Queue;
     
     /**
      * @param Varien_Event_Observer $observer
      */
     public function integrateProduct(Varien_Event_Observer $observer)
     {
-        if (!$this->canRun()) {
+        $this->processStoreIteration($this, 'prepareIntegrationProduct', $observer);
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     *
+     * @param Mage_Core_Model_Store $store
+     */
+    public function prepareIntegrationProduct(Varien_Event_Observer $observer, Mage_Core_Model_Store $store)
+    {
+        if (!$this->canRun($store->getId())) {
             return;
         }
-
+    
         /** @var Mage_Catalog_Model_Product $product */
         $product = $observer->getData('product');
+        $this->processIntegrationProduct($product);
+    }
+
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param bool $forceQueue
+     * @return void
+     */
+    protected function processIntegrationProduct(Mage_Catalog_Model_Product $product, $forceQueue = false)
+    {
+        $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
+        foreach ($parentIds as $id) {
+            $this->processIntegrationProduct(Mage::getModel('catalog/product')->load($id), true);
+        }
 
         if (!$this->canIntegrateProduct($product)) {
             return;
@@ -37,9 +62,25 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
             /** Create or Update Product */
             $this->catalogProductIntegrator()->createOrUpdate($product);
         }
-    }
 
-    protected function hasStockOrPriceUpdate($product)
+        if ($forceQueue) {
+            $this->getQueueResource()
+                ->queue(
+                    $product->getId(),
+                    BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
+                    BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
+                );
+        }
+    }
+    
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return bool
+     *
+     * @throws Varien_Exception
+     */
+    protected function hasStockOrPriceUpdate(Mage_Catalog_Model_Product $product)
     {
         if ($product->getOrigData('price') != $product->getData('price')) {
             return true;
@@ -55,13 +96,23 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         }
         return false;
     }
+    
 
     /**
      * @param Varien_Event_Observer $observer
      */
     public function deleteProduct(Varien_Event_Observer $observer)
     {
-        if (!$this->canRun()) {
+        $this->processStoreIteration($this, 'processDeleteProduct', $observer);
+    }
+    
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function processDeleteProduct(Varien_Event_Observer $observer, Mage_Core_Model_Store $store)
+    {
+        if (!$this->canRun($store->getId())) {
             return;
         }
 
@@ -75,6 +126,39 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         /** Create or Update Product */
         $this->catalogProductIntegrator()->delete($product->getSku());
     }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function disableProduct(Varien_Event_Observer $observer)
+    {
+        if (!$this->canRun()) {
+            return;
+        }
+
+        /** @var Mage_Catalog_Model_Product $product */
+        $product = $observer->getData('product');
+
+        if (!$this->canIntegrateProduct($product)) {
+            return;
+        }
+
+        $responseHandler = $this->catalogProductIntegrator()->product($product->getSku());
+        if ($responseHandler === false || ($responseHandler && $responseHandler->exception())) {
+            return;
+        }
+
+        //disable the item and set 0 to stock items
+        $product->setStatus(Mage_Catalog_Model_Product_Status::STATUS_DISABLED);
+        $stockItem = $product->getStockItem();
+        if ($stockItem) {
+            $stockItem->setQty(0);
+            $stockItem->save();
+        }
+
+        /** Create or Update Product */
+        $this->catalogProductIntegrator()->update($product);
+    }
     
     
     /**
@@ -82,10 +166,15 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     public function addIntegrateButtonToProductEditPage(Varien_Event_Observer $observer)
     {
-        if (!$this->canRun()) {
-            return;
-        }
-
+        // $storeId = Mage::app()->getRequest()->getParam('store');
+        
+        /** @var Mage_Core_Model_Store $store */
+        // $store = Mage::app()->getStore($storeId);
+    
+        // if (!$this->canRun($store->getId())) {
+        //     return;
+        // }
+        
         /** @var Mage_Adminhtml_Block_Catalog_Product_Edit $block */
         $block = $observer->getData('block');
 

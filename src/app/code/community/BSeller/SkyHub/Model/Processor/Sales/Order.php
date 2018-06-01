@@ -14,6 +14,9 @@
 
 class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Processor_Abstract
 {
+    use BSeller_SkyHub_Trait_Sales_Order;
+    use BSeller_SkyHub_Trait_Customer_Attribute_Mapping,
+        BSeller_SkyHub_Trait_Customer_Attribute;
 
     /**
      * @param array $data
@@ -26,10 +29,12 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             /** @var Mage_Sales_Model_Order $order */
             $order = $this->processOrderCreation($data);
         } catch (Exception $e) {
-            Mage::dispatchEvent('bseller_skyhub_order_import_exception', [
-                'exception'  => $e,
-                'order_data' => $data,
-            ]);
+            Mage::dispatchEvent(
+                'bseller_skyhub_order_import_exception', [
+                    'exception' => $e,
+                    'order_data' => $data,
+                ]
+            );
 
             Mage::logException($e);
 
@@ -57,11 +62,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     {
         $code        = $this->arrayExtract($data, 'code');
         $channel     = $this->arrayExtract($data, 'channel');
-        $incrementId = $this->getOrderIncrementId($code);
-
-        /** @var BSeller_SkyHub_Model_Resource_Sales_Order $orderResource */
-        $orderResource = Mage::getResourceModel('bseller_skyhub/sales_order');
-        $orderId       = $orderResource->getEntityIdByIncrementId($incrementId);
+        $orderId = $this->getOrderId($code);
+        $status     = $this->arrayExtract($data, 'status/type');
 
         if ($orderId) {
             /**
@@ -73,21 +75,24 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             return $order;
         }
 
-        $this->simulateStore($this->getStore());
+        if ($status == "CANCELED") {
+            Mage::getSingleton('bseller_skyhub/integrator_sales_order_queue')->delete($code);
+            Mage::throwException($this->__('This order is canceled in the queue.'));
+        }
 
-        $info = new Varien_Object([
-            'increment_id'      => $incrementId,
-            'send_confirmation' => 0
-        ]);
+        //$this->simulateStore($this->getStore());
 
         $billingAddress  = new Varien_Object($this->arrayExtract($data, 'billing_address'));
         $shippingAddress = new Varien_Object($this->arrayExtract($data, 'shipping_address'));
 
         $customerData = (array) $this->arrayExtract($data, 'customer', []);
-        $customerData = array_merge_recursive($customerData, [
-            'billing_address'  => $billingAddress,
-            'shipping_address' => $shippingAddress
-        ]);
+        $customerData = array_merge_recursive(
+            $customerData,
+            [
+                'billing_address' => $billingAddress,
+                'shipping_address' => $shippingAddress
+            ]
+        );
 
         /** @var Mage_Customer_Model_Customer $customer */
         $customer = $this->getCustomer($customerData);
@@ -100,6 +105,15 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
 
         /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
         $creation = Mage::getModel('bseller_skyhub/support_sales_order_create', $this->getStore());
+
+        $incrementId = $this->getNewOrderIncrementId($code);
+        $info = new Varien_Object(
+            [
+                'increment_id' => $incrementId,
+                'send_confirmation' => 0
+            ]
+        );
+
         $creation->setOrderInfo($info)
             ->setCustomer($customer)
             ->setShippingMethod($shippingMethod, $shippingCarrier, (float) $shippingCost)
@@ -108,8 +122,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             ->setInterestAmount($interestAmount)
             ->addOrderAddress('billing', $billingAddress)
             ->addOrderAddress('shipping', $shippingAddress)
-            ->setComment('This order was automatically created by SkyHub import process.')
-        ;
+            ->setComment('This order was automatically created by SkyHub import process.');
 
         $products = $this->getProducts((array) $this->arrayExtract($data, 'items'));
         if (empty($products)) {
@@ -131,6 +144,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $order->setData('bseller_skyhub', true);
         $order->setData('bseller_skyhub_code', $code);
         $order->setData('bseller_skyhub_channel', $channel);
+        $order->setData('bseller_skyhub_json', json_encode($data));
 
         /** Bizcommerce_SkyHub uses these fields. */
         $order->setData('skyhub_code', $code);
@@ -252,7 +266,15 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     protected function getCustomer(array $data)
     {
         $email = $this->arrayExtract($data, 'email');
-        
+
+        if (!$email) {
+            if ($this->allowCustomerEmailCreationWithTaxvat()) {
+                $vatNumber = $this->arrayExtract($data, 'vat_number');
+                $email = $vatNumber . $this->customerEmailCreationWithTaxvatPattern();
+                $data['email'] = $email;
+            }
+        }
+
         /** @var Mage_Customer_Model_Customer $customer */
         $customer = Mage::getModel('customer/customer');
         $customer->setStore($this->getStore());
@@ -277,13 +299,12 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     protected function createCustomer(array $data, Mage_Customer_Model_Customer $customer)
     {
-        $customer->setStore(Mage::app()->getStore());
+        $customer->setStore($this->getStore());
         
         $dateOfBirth = $this->arrayExtract($data, 'date_of_birth');
         $email       = $this->arrayExtract($data, 'email');
         $gender      = $this->arrayExtract($data, 'gender');
         $name        = $this->arrayExtract($data, 'name');
-        $vatNumber   = $this->arrayExtract($data, 'vat_number');
         $phones      = $this->arrayExtract($data, 'phones', []);
         
         /** @var Varien_Object $nameObject */
@@ -294,7 +315,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $customer->setMiddlename($nameObject->getData('middlename'));
         $customer->setEmail($email);
         $customer->setDob($dateOfBirth);
-        $customer->setTaxvat($vatNumber);
+
+        $this->setPersonTypeInformation($data, $customer);
         
         /** @var string $phone */
         foreach ($phones as $phone) {
@@ -364,9 +386,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     protected function getStore()
     {
-        return $this->getNewOrdersDefaultStore();
+        return Mage::app()->getStore();
     }
-    
     
     /**
      * @param string $code
@@ -377,5 +398,66 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     {
         return $code;
     }
-    
+
+    /**
+     * @param $data
+     * @param $customer
+     *
+     * @return void
+     */
+    protected function setPersonTypeInformation($data, $customer)
+    {
+        //get the vat number
+        $vatNumber = $this->arrayExtract($data, 'vat_number');
+        //the taxvat is filled anyway
+        $customer->setTaxvat($vatNumber);
+        //check if is a PJ customer (if not, it's a PF customer)
+        $customerIsPj = $this->customerIsPj($vatNumber);
+
+        //get customer mapped attributes
+        $mappedCustomerAttributes = $this->getMappedAttributes();
+
+        //if the store has the attribute "person_type" mapped
+        if (isset($mappedCustomerAttributes['person_type'])) {
+            $personTypeAttributeId = $mappedCustomerAttributes['person_type']->getAttributeId();
+            $personTypeAttribute = $this->getAttributeById($personTypeAttributeId);
+
+            if ($customerIsPj) {
+                $personTypeAttributeValue = $this->getAttributeMappingOptionMagentoValue('person_type', 'legal_person');
+            } else {
+                $personTypeAttributeValue = $this->getAttributeMappingOptionMagentoValue('person_type', 'physical_person');
+            }
+            $customer->setData($personTypeAttribute->getAttributeCode(), $personTypeAttributeValue);
+        }
+
+        if ($customerIsPj) {
+            //set the mapped PJ attribute value on customer if exists
+            if (isset($mappedCustomerAttributes['cnpj'])) {
+                $mappedAttribute = $mappedCustomerAttributes['cnpj'];
+                $attribute = $this->getAttributeById($mappedAttribute->getAttributeId());
+                $customer->setData($attribute->getAttributeCode(), $vatNumber);
+            }
+        } else {
+            //set the mapped PF attribute value on customer if exists
+            if (isset($mappedCustomerAttributes['cpf'])) {
+                $mappedAttribute = $mappedCustomerAttributes['cpf'];
+                $attribute = $this->getAttributeById($mappedAttribute->getAttributeId());
+                $customer->setData($attribute->getAttributeCode(), $vatNumber);
+            }
+        }
+
+        //set the mapped IE attribute value on customer if exists
+        if (isset($mappedCustomerAttributes['ie'])) {
+            $mappedAttribute = $mappedCustomerAttributes['ie'];
+            $attribute = $this->getAttributeById($mappedAttribute->getAttributeId());
+            $customer->setData($attribute->getAttributeCode(), $this->arrayExtract($data, 'state_registration'));
+        }
+
+        //set the mapped IE attribute value on customer if exists
+        if (isset($mappedCustomerAttributes['social_name'])) {
+            $mappedAttribute = $mappedCustomerAttributes['social_name'];
+            $attribute = $this->getAttributeById($mappedAttribute->getAttributeId());
+            $customer->setData($attribute->getAttributeCode(), $this->arrayExtract($data, 'name'));
+        }
+    }
 }

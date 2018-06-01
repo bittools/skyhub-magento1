@@ -15,6 +15,9 @@
 abstract class BSeller_SkyHub_Block_Adminhtml_Notifications_Abstract extends BSeller_Core_Block_Adminhtml_Template
 {
     
+    use BSeller_SkyHub_Trait_Store_Iterator;
+    
+    
     protected abstract function canShow();
     
     

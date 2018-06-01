@@ -35,6 +35,12 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
             ->reset('columns')
             ->columns('entity_id');
 
+        $limit = $this->getCronConfig()->salesOrderStatus()->queueCreateLimit();
+        
+        if ($limit) {
+            $select->limit((int) $limit);
+        }
+        
         $orderIds = (array) $this->getQueueResource()
             ->getReadConnection()
             ->fetchCol($select);
@@ -53,20 +59,22 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
         $schedule->setMessages($this->__('Order IDs Queued: %s.', implode(',', $orderIds)));
     }
 
+    public function execute(Mage_Cron_Model_Schedule $schedule)
+    {
+        $this->processStoreIteration($this, 'executeIntegration', $schedule);
+    }
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */
-    public function execute(Mage_Cron_Model_Schedule $schedule)
+    public function executeIntegration(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!$this->canRun($schedule)) {
-            return;
-        }
-
+        $limit = $this->getCronConfig()->salesOrderStatus()->queueExecuteLimit();
+        
         $orderIds = (array) $this->getQueueResource()->getPendingEntityIds(
             BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER_STATUS,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT,
-            50
+            (int) $limit
         );
 
         if (empty($orderIds)) {
@@ -80,6 +88,10 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
 
         /** @var Mage_Sales_Model_Order $order */
         foreach ($collection as $order) {
+            if (!$this->canRun($schedule, $order->getStoreId())) {
+                return;
+            }
+            
             /** @var array $orderData */
             $orderData = (array) $this->orderIntegrator()->orderByOrderId($order->getId());
 
@@ -90,8 +102,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
             $result = $this->salesOrderStatusProcessor()
                 ->processOrderStatus($statusCode, $statusType, $order);
 
-            if (false == $result) {
-                return;
+            if (false == $result && !$this->isOrderExpirated($order)) {
+                continue;
             }
 
             $this->getQueueResource()->removeFromQueue(
@@ -99,6 +111,18 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
                 BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER_STATUS
             );
         }
+    }
+
+    protected function isOrderExpirated($order)
+    {
+        $expirationDays = $limit = $this->getCronConfig()->salesOrderStatus()->orderExpirationDays();
+
+        $referenceDate = new DateTime();
+        $referenceDate = $referenceDate->modify('-' . $expirationDays . ' days');
+        if (new DateTime($order->getCreatedAt()) < $referenceDate) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -115,16 +139,17 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
     
     /**
      * @param Mage_Cron_Model_Schedule $schedule
+     * @param int|null                 $storeId
      *
      * @return bool
      */
-    protected function canRun(Mage_Cron_Model_Schedule $schedule)
+    protected function canRun(Mage_Cron_Model_Schedule $schedule, $storeId = null)
     {
-        if (!$this->getCronConfig()->salesOrderStatus()->isEnabled()) {
+        if (!$this->getCronConfig()->salesOrderStatus()->isEnabled($storeId)) {
             $schedule->setMessages($this->__('Sales Order Status Cron is Disabled'));
             return false;
         }
         
-        return parent::canRun($schedule);
+        return parent::canRun($schedule, $storeId);
     }
 }

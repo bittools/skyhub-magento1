@@ -17,7 +17,8 @@ class BSeller_SkyHub_Controller_Admin_Action extends BSeller_Core_Controller_Adm
 
     use BSeller_SkyHub_Trait_Data,
         BSeller_SkyHub_Trait_Processors,
-        BSeller_SkyHub_Trait_Config;
+        BSeller_SkyHub_Trait_Config,
+        BSeller_SkyHub_Trait_Store_Iterator;
 
 
     /**

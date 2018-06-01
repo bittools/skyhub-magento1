@@ -16,5 +16,27 @@ class BSeller_SkyHub_Model_Cron_Config_Sales_Order_Status extends BSeller_SkyHub
 {
 
     protected $group = 'cron_sales_order_status';
+    
+    
+    /**
+     * @return int
+     */
+    public function queueCreateLimit()
+    {
+        return (int) $this->getGroupConfig('queue_create_limit');
+    }
+    
+    
+    /**
+     * @return int
+     */
+    public function queueExecuteLimit()
+    {
+        return (int) $this->getGroupConfig('queue_execute_limit');
+    }
 
+    public function orderExpirationDays()
+    {
+        return (int)$this->getGroupConfig('order_expiration');
+    }
 }

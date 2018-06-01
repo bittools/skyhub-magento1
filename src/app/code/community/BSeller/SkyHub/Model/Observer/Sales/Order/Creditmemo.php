@@ -22,10 +22,14 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Creditmemo extends BSeller_SkyHu
         /** @var Mage_Sales_Model_Order_Creditmemo $creditmemo */
         $creditmemo = $observer->getData('creditmemo');
         
-        if (!$creditmemo) {
+        if (!$creditmemo || !$creditmemo->getId()) {
             return;
         }
         
-        $this->orderIntegrator()->cancel($creditmemo->getOrderId());
+        /** @var Mage_Core_Model_Store $store */
+        $store   = $creditmemo->getStore();
+        $orderId = $creditmemo->getOrderId();
+        
+        $this->getStoreIterator()->call($this->orderIntegrator(), 'cancel', [$orderId], $store);
     }
 }

@@ -194,7 +194,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     protected function getProductAttributeBlacklist()
     {
         /** @var BSeller_SkyHub_Model_Config $config */
-        $config = Mage::getSingleton('bseller_skyhub/config');
+        $config = Mage::getSingleton('bseller_skyhub/config_catalog_product');
         return $config->getBlacklistedAttributes();
     }
     
@@ -207,7 +207,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     protected function isAttributeCodeInBlacklist($attributeCode)
     {
         /** @var BSeller_SkyHub_Model_Config $config */
-        $config = Mage::getSingleton('bseller_skyhub/config');
+        $config = Mage::getSingleton('bseller_skyhub/config_catalog_product');
         return $config->isAttributeCodeInBlacklist($attributeCode);
     }
 

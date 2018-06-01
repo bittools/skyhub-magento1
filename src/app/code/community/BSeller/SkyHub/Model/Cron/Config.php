@@ -58,4 +58,12 @@ class BSeller_SkyHub_Model_Cron_Config
     {
         return Mage::getSingleton('bseller_skyhub/cron_config_sales_order_queue');
     }
+
+    /**
+     * @return BSeller_SkyHub_Model_Cron_Config_Queue_Clean
+     */
+    public function queueClean()
+    {
+        return Mage::getSingleton('bseller_skyhub/cron_config_queue_clean');
+    }
 }

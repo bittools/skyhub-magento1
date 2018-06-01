@@ -88,4 +88,13 @@ trait BSeller_SkyHub_Trait_Customer
 
         return (array_shift($address) . "\n" . $this->_formatAddress($address, $addressSize - 1));
     }
+
+    protected function customerIsPj($vatNumber)
+    {
+        $cnpj = preg_replace('/[^0-9]/', '', (string)$vatNumber);
+        if (strlen($cnpj) != 14) {
+            return false;
+        }
+        return true;
+    }
 }

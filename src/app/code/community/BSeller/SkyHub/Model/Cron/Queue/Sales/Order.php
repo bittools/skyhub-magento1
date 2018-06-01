@@ -23,12 +23,22 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order extends BSeller_SkyHub_Model_C
      */
     public function execute(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!$this->canRun($schedule)) {
+        $this->processStoreIteration($this, 'executeIntegration', $schedule);
+    }
+    
+    
+    /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     * @param Mage_Core_Model_Store    $store
+     */
+    public function executeIntegration(Mage_Cron_Model_Schedule $schedule, Mage_Core_Model_Store $store)
+    {
+        if (!$this->canRun($schedule, $store->getId())) {
             return;
         }
-
+    
         $orders = (array) $this->orderIntegrator()->orders();
-
+    
         foreach ($orders as $orderData) {
             try {
                 /** @var Mage_Sales_Model_Order $order */
@@ -37,25 +47,33 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order extends BSeller_SkyHub_Model_C
                 Mage::logException($e);
                 continue;
             }
-
+        
             if (!$order || !$order->getId()) {
                 continue;
             }
-
-            $statusType  = $this->arrayExtract($orderData, 'status/type');
-            $statusCode  = $this->arrayExtract($orderData, 'status/code');
+        
+            $statusType = $this->arrayExtract($orderData, 'status/type');
+            $statusCode = $this->arrayExtract($orderData, 'status/code');
             // $statusLabel = $this->arrayExtract($orderData, 'status/label');
-
+        
             $this->salesOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
-
+        
             $message  = $schedule->getMessages();
-
+        
             if ($order->getData('is_created')) {
-                $message .= $this->__('Order ID %s was successfully created.', $order->getIncrementId());
+                $message .= $this->__(
+                    'Order ID %s was successfully created in store %s.',
+                    $order->getIncrementId(),
+                    $store->getName()
+                );
             } elseif ($order->hasDataChanges()) {
-                $message .= $this->__('Order ID %s was updated.', $order->getIncrementId());
+                $message .= $this->__(
+                    'Order ID %s was updated in store %s.',
+                    $order->getIncrementId(),
+                    $store->getName()
+                );
             }
-
+        
             $schedule->setMessages($message);
         }
     }
@@ -63,16 +81,17 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order extends BSeller_SkyHub_Model_C
     
     /**
      * @param Mage_Cron_Model_Schedule $schedule
+     * @param int|null                 $storeId
      *
      * @return bool
      */
-    protected function canRun(Mage_Cron_Model_Schedule $schedule)
+    protected function canRun(Mage_Cron_Model_Schedule $schedule, $storeId = null)
     {
-        if (!$this->getCronConfig()->salesOrderQueue()->isEnabled()) {
+        if (!$this->getCronConfig()->salesOrderQueue()->isEnabled($storeId)) {
             $schedule->setMessages($this->__('Sales Order Queue Cron is Disabled'));
             return false;
         }
 
-        return parent::canRun($schedule);
+        return parent::canRun($schedule, $storeId);
     }
 }

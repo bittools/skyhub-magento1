@@ -23,7 +23,17 @@ class BSeller_SkyHub_Model_Observer_Catalog_Category extends BSeller_SkyHub_Mode
      */
     public function integrateCategory(Varien_Event_Observer $observer)
     {
-        if (!$this->canRun()) {
+        $this->processStoreIteration($this, 'processIntegrateCategory', $observer);
+    }
+    
+    
+    /**
+     * @param Varien_Event_Observer $observer
+     * @param Mage_Core_Model_Store $store
+     */
+    public function processIntegrateCategory(Varien_Event_Observer $observer, Mage_Core_Model_Store $store)
+    {
+        if (!$this->canRun($store->getId())) {
             return;
         }
 
@@ -44,7 +54,16 @@ class BSeller_SkyHub_Model_Observer_Catalog_Category extends BSeller_SkyHub_Mode
      */
     public function deleteCategory(Varien_Event_Observer $observer)
     {
-        if (!$this->canRun()) {
+        $this->processStoreIteration($this, 'processDeleteCategory', $observer);
+    }
+
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function processDeleteCategory(Varien_Event_Observer $observer, Mage_Core_Model_Store $store)
+    {
+        if (!$this->canRun($store->getId())) {
             return;
         }
 
