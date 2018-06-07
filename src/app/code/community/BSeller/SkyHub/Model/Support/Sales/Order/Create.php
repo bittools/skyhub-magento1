@@ -12,6 +12,7 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  * @author    Julio Reis <julio.reis@e-smart.com.br>
+ * @author    Luiz Tucillo <luiz.tucillo@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Support_Sales_Order_Create
@@ -20,7 +21,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     use BSeller_SkyHub_Trait_Data,
         BSeller_SkyHub_Trait_Config,
         BSeller_SkyHub_Trait_Customer;
-    
+
     const CARRIER_PREFIX = 'bseller_skyhub_';
 
     /** @var Mage_Core_Model_Store */
@@ -72,7 +73,23 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         
         return $this;
     }
-    
+
+
+    /**
+     * @param array $customData
+     * @return $this
+     */
+    public function setCustomData(array $customData)
+    {
+        $data   = [
+            'custom' => $customData
+        ];
+
+        $this->merge($data);
+
+        return $this;
+    }
+
     
     /**
      * @param null|string $comment
@@ -470,13 +487,19 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     protected function processQuote($data = array())
     {
-        $order = (array) $this->arrayExtract($data, 'order', []);
+        $order  = (array) $this->arrayExtract($data, 'order', []);
+        $custom = (array) $this->arrayExtract($data, 'custom', []);
         
         /* Saving order data */
         if (!empty($order)) {
             $this->getOrderCreator()->importPostData($order);
             $this->getQuote()
                  ->setReservedOrderId($this->arrayExtract($order, 'increment_id'));
+        }
+
+        // adds custom data to quote
+        if (!empty($custom)) {
+            $this->getQuote()->addData($custom);
         }
         
         // $this->getOrderCreator()->getBillingAddress();
