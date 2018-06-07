@@ -62,8 +62,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     {
         $code        = $this->arrayExtract($data, 'code');
         $channel     = $this->arrayExtract($data, 'channel');
-        $orderId = $this->getOrderId($code);
-        $status     = $this->arrayExtract($data, 'status/type');
+        $orderId     = $this->getOrderId($code);
+        $status      = $this->arrayExtract($data, 'status/type');
 
         if ($orderId) {
             /**
@@ -134,10 +134,16 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             $creation->addProduct($productData);
         }
 
-        /** @var Mage_Sales_Model_Order $order */
-        $order = $creation->create();
+        try {
+            /** @var Mage_Sales_Model_Order $order */
+            $order = $creation->create();
+        } catch (Mage_Exception $e) {
+            Mage::log();
+        }
+
 
         if (!$order) {
+            //throw excpetion
             return false;
         }
 

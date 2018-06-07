@@ -76,14 +76,6 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_Grid
                 'url'     => $this->getUrl('*/*/massUngroup'),
                 'confirm' => $this->__('Are you sure?'),
             )
-        )
-        ->addItem(
-            'remove',
-            array(
-                'label'   => $this->__('Remove'),
-                'url'     => $this->getUrl('*/*/massRemove'),
-                'confirm' => $this->__('Are you sure?'),
-            )
         );
 
         return $this;

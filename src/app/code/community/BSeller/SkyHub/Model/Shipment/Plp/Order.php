@@ -82,6 +82,7 @@ class BSeller_SkyHub_Model_Shipment_Plp_Order extends BSeller_Core_Model_Abstrac
         parent::_beforeSave();
         if (!$this->getPlpId() && $this->getPlp()) {
             $this->setPlpId($this->getPlp()->getId());
+            $this->setStoreId($this->getPlp()->getStoreId());
         }
         return $this;
     }

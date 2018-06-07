@@ -126,6 +126,7 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
             $code  = $mappedAttribute->getAttribute()->getAttributeCode();
         
             if (empty($code) || empty($value)) {
+                Mage::log('empty code = '.$code);
                 continue;
             }
         

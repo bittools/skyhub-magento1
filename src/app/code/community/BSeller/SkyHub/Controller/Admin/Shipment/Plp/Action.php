@@ -12,7 +12,7 @@
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Controller_Admin_Shipment_Plp_Action extends BSeller_SkyHub_Controller_Admin_Action
+class BSeller_SkyHub_Controller_Admin_Shipment_Plp_Action extends BSeller_SkyHub_Controller_Admin_Queue
 {
 
     /**
@@ -46,7 +46,10 @@ class BSeller_SkyHub_Controller_Admin_Shipment_Plp_Action extends BSeller_SkyHub
         $plp = Mage::getModel('bseller_skyhub/shipment_plp');
         $plp->load((int) $id);
 
+        Mage::unregister('current_plp');
         Mage::register('current_plp', $plp, true);
+
+        $this->prepareStore($plp->getStoreId());
 
         return $plp;
     }

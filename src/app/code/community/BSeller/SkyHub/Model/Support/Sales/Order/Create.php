@@ -65,6 +65,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
             'order' => [
                 'increment_id'      => $order->getData('increment_id'),
                 'send_confirmation' => $order->getData('send_confirmation')
+
             ],
         ];
         

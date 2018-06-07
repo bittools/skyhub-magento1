@@ -25,10 +25,18 @@ $this->startSetup();
 //**********************************************************************************************************************
 $tableName = (string) $this->getTable('bseller_skyhub/plp');
 
-//@todo multi-store structure
-
 /** @var Varien_Db_Ddl_Table $table */
 $table = $this->newTable($tableName)
+    ->addColumn(
+        'store_id',
+        $this::TYPE_INTEGER,
+        10,
+        [
+            'unsigned' => true,
+            'nullable' => false,
+            'primary'  => true
+        ]
+    )
     ->addColumn(
         'skyhub_code',
         $this::TYPE_VARCHAR,
@@ -66,6 +74,16 @@ $table = $this->newTable($tableName)
         [
             'nullable' => false,
             'primary'  => true,
+        ]
+    )
+    ->addColumn(
+        'store_id',
+        $this::TYPE_INTEGER,
+        10,
+        [
+            'unsigned' => true,
+            'nullable' => false,
+            'primary'  => true
         ]
     )
     ->addColumn(

@@ -177,7 +177,28 @@ class BSeller_SkyHub_Controller_Admin_Queue extends BSeller_SkyHub_Controller_Ad
 
         return $this;
     }
-    
+
+
+    /**
+     * @return int
+     */
+    protected function getSelectedStore()
+    {
+        return (int) $this->_getSession()->getData('simulated_store_id');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function validateStoreSelection()
+    {
+        if ($this->getSelectedStore() == Mage_Core_Model_App::ADMIN_STORE_ID) {
+            return false;
+        }
+
+        return true;
+    }
+
     
     /**
      * @return Mage_Adminhtml_Controller_Action

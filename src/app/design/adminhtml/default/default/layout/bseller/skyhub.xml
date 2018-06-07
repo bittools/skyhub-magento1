@@ -145,9 +145,17 @@
         <label>BSeller SkyHub PLP Creation</label>
         <update handle="ADD_STYLES"/>
         <reference name="content">
-            <block type="bseller_skyhub/adminhtml_shipment_plp_new"/>
+            <block type="bseller_skyhub/adminhtml_shipment_plp_new_store"/>
         </reference>
     </adminhtml_bseller_skyhub_shipment_plp_new>
+
+    <adminhtml_bseller_skyhub_shipment_plp_newgroup>
+        <label>BSeller SkyHub PLP Creation - Select store</label>
+        <update handle="ADD_STYLES"/>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_shipment_plp_new_group"/>
+        </reference>
+    </adminhtml_bseller_skyhub_shipment_plp_newgroup>
 
     <!-- PLP file (json/pdf) detail -->
     <adminhtml_bseller_skyhub_shipment_plp_viewjsonfile>

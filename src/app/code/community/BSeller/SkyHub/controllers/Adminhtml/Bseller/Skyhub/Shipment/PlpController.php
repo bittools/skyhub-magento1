@@ -52,7 +52,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
 
     /**
-     * PLP create page
+     * PLP create page (store selection)
      */
     public function newAction()
     {
@@ -62,10 +62,73 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
 
     /**
+     * PLP create page (orders selection)
+     */
+    public function newGroupAction()
+    {
+        $this->prepareStore();
+
+        if (!$this->validateStoreSelection()) {
+            $this->_getSession()->addError($this->__('Please select a store.'));
+            $this->_redirect('*/*/new');
+            return;
+        }
+
+        $this->_init('Pre-post list (PLP) Creation');
+        $this->renderLayout();
+    }
+
+
+    /**
+     * Ungroup 'n' PLP's in SkyHub API
+     */
+    public function massUngroupAction()
+    {
+        $plpIds = (array) $this->getRequest()->getPost('plp_ids');
+
+        if (empty($plpIds)) {
+            $this->_getSession()->addError($this->__('Please select a PLP.'));
+            $this->_redirect('*/*/index');
+            return;
+        }
+
+        foreach ($plpIds as $plpId) {
+
+            /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
+            $plp = $this->_getPlp($plpId);
+
+            $skyhubResult = $this->_ungroupPlp($plp->getSkyhubCode());
+            if (!$skyhubResult) {
+                $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP.'));
+                continue;
+            }
+
+            $result = $this->_deletePlp($plpId);
+            if (!$result) {
+                $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP in Magento.'));
+                continue;
+            }
+
+            $this->_getSession()->addSuccess($this->__('The PLP has been ungrouped.'));
+        }
+
+        $this->_redirect('*/*/index');
+    }
+
+
+    /**
      * Group 'n' orders in a PLP in SkyHub API
      */
     public function massGroupAction()
     {
+        if (!$this->validateStoreSelection()) {
+            $this->_getSession()->addError($this->__('Please select a store.'));
+            $this->_redirect('*/*/new');
+            return;
+        }
+
+        $this->prepareStore($this->getSelectedStore());
+
         $skyhubOrderIds = (array) $this->getRequest()->getPost('skyhub_order_ids');
 
         if (empty($skyhubOrderIds)) {
@@ -74,11 +137,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
             return;
         }
 
-        /** @var BSeller_SkyHub_Model_Integrator_Shipment_Plp $plpIntegrator */
-        $plpIntegrator = $this->shipmentPlpIntegrator();
-
-        $skyhubResult = $plpIntegrator->group($skyhubOrderIds);
-
+        $skyhubResult = $this->_groupPlp($skyhubOrderIds);
         if (!$skyhubResult || !$plpId = $this->_extractPlpId($skyhubResult['message'])) {
             $this->_getSession()->addError($this->__('There was a problem when trying to create the PLP.'));
             $this->_redirect('*/*');
@@ -86,7 +145,6 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         }
 
         $result = $this->_savePlp($plpId, $skyhubOrderIds);
-
         if (!$result) {
             $this->_getSession()->addError($this->__('There was a problem when trying to create the PLP in Magento.'));
             $this->_redirect('*/*');
@@ -181,11 +239,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
         $plp = $this->_getPlp($id);
 
-        /** @var BSeller_SkyHub_Model_Integrator_Shipment_Plp $plpIntegrator */
-        $plpIntegrator = $this->shipmentPlpIntegrator();
-
-        $skyhubResult = $plpIntegrator->ungroup($plp->getSkyhubCode());
-
+        $skyhubResult = $this->_ungroupPlp($plp->getSkyhubCode());
         if (!$skyhubResult) {
             $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP.'));
             $this->_redirect('*/*');
@@ -193,7 +247,6 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         }
 
         $result = $this->_deletePlp($id);
-
         if (!$result) {
             $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP in Magento.'));
             $this->_redirect('*/*');
@@ -202,6 +255,43 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
         $this->_getSession()->addSuccess($this->__('The PLP has been ungrouped.'));
         $this->_redirect('*/*/index');
+    }
+
+
+    /**
+     * Call SkyHub API PLP group method
+     *
+     * @param array $skyhubOrderIds
+     *
+     * @return bool
+     */
+    protected function _groupPlp($skyhubOrderIds)
+    {
+        $skyhubResult = $this->shipmentPlpIntegrator()->group($skyhubOrderIds);
+
+        if (!$skyhubResult) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Call SkyHub API PLP ungroup method
+     *
+     * @param string $plpCode
+     *
+     * @return bool
+     */
+    protected function _ungroupPlp($plpCode)
+    {
+        $skyhubResult = $this->shipmentPlpIntegrator()->ungroup($plpCode);
+
+        if (!$skyhubResult) {
+            return false;
+        }
+
+        return true;
     }
 
 
@@ -220,6 +310,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
             /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
             $plp = Mage::getModel('bseller_skyhub/shipment_plp');
             $plp->setSkyhubCode($skyhubId);
+            $plp->setStoreId($this->getSelectedStore());
 
             foreach ($skyhubOrderIds as $order) {
                 /** @var BSeller_SkyHub_Model_Shipment_Plp_Order $plpOrder */
