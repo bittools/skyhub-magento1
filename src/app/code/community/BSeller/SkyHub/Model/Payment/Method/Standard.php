@@ -14,11 +14,12 @@
 
 class BSeller_SkyHub_Model_Payment_Method_Standard extends Mage_Payment_Model_Method_Free
 {
-
     /** @var string */
     protected $_code = 'bseller_skyhub_standard';
+
     protected $_canUseCheckout = false;
 
+    protected $_infoBlockType = 'bseller_skyhub/payment_info';
 
     /**
      * @param null $quote
