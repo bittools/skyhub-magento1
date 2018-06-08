@@ -29,6 +29,9 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             /** @var Mage_Sales_Model_Order $order */
             $order = $this->processOrderCreation($data);
         } catch (Exception $e) {
+
+            $this->removeOrderQuote();
+
             Mage::dispatchEvent(
                 'bseller_skyhub_order_import_exception', [
                     'exception' => $e,
@@ -62,8 +65,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     {
         $code        = $this->arrayExtract($data, 'code');
         $channel     = $this->arrayExtract($data, 'channel');
-        $orderId = $this->getOrderId($code);
-        $status     = $this->arrayExtract($data, 'status/type');
+        $orderId     = $this->getOrderId($code);
+        $status      = $this->arrayExtract($data, 'status/type');
 
         if ($orderId) {
             /**
@@ -368,6 +371,17 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         return $address;
     }
 
+
+    /**
+     * Remove quote in case of order creation exception.
+     */
+    protected function removeOrderQuote()
+    {
+        /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
+        $creation = Mage::getModel('bseller_skyhub/support_sales_order_create', $this->getStore());
+
+        return $creation->removeSessionQuote();
+    }
 
     /**
      * @param Mage_Core_Model_Store $store
