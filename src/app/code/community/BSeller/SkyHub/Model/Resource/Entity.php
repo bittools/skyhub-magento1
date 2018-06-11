@@ -74,15 +74,6 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
         if (!$entityExists) {
             return false;
         }
-    }
-    
-
-    public function flagEntityIntegrate($id)
-    {
-        return $this->getEntityResource()
-            ->updateEntity($id, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT, 0, 1);
-    }
-        }
 
         $data = $this->entityData($integrate);
 
@@ -137,7 +128,7 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
 
         return false;
     }
-
+    
 
     /**
      * @param string  $entityType
