@@ -73,6 +73,9 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
 
         if (!$entityExists) {
             return false;
+        }
+    }
+    
 
     public function flagEntityIntegrate($id)
     {
