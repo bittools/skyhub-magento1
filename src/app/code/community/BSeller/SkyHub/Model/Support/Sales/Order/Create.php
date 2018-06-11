@@ -16,23 +16,23 @@
 
 class BSeller_SkyHub_Model_Support_Sales_Order_Create
 {
-    
+
     use BSeller_SkyHub_Trait_Data,
         BSeller_SkyHub_Trait_Config,
         BSeller_SkyHub_Trait_Customer;
-    
+
     const CARRIER_PREFIX = 'bseller_skyhub_';
 
     /** @var Mage_Core_Model_Store */
     private $store;
-    
+
     /** @var array */
     private $data = [];
-    
+
     /** @var BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create */
     protected $creator;
-    
-    
+
+
     /**
      * BSeller_SkyHub_Model_Support_Sales_Order_Create constructor.
      *
@@ -50,7 +50,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 'currency' => $this->getStore($store)->getCurrentCurrencyCode(),
             ],
         ];
-        
+
         $this->merge($data);
     }
 
@@ -67,13 +67,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 'send_confirmation' => $order->getData('send_confirmation')
             ],
         ];
-        
+
         $this->merge($data);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @param null|string $comment
      *
@@ -88,13 +88,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 ]
             ],
         ];
-        
+
         $this->merge($data);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @param BSeller_SkyHub_Model_Catalog_Product $product
      *
@@ -104,11 +104,11 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     {
         $productId = (int)  $this->arrayExtract($data, 'product_id');
         $qty       = (float) $this->arrayExtract($data, 'qty');
-        
+
         if (!$productId) {
             return $this;
         }
-        
+
         $data = [
             'products' => [
                 [
@@ -119,13 +119,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 ]
             ]
         ];
-        
+
         $this->merge($data);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @param string $method
      *
@@ -138,13 +138,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 'method' => $method,
             ]
         ];
-        
+
         $this->merge($data);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @param float $discount
      *
@@ -157,13 +157,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 'discount_amount' => (float) $discount,
             ]
         ];
-        
+
         $this->merge($data);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @param float $discount
      *
@@ -176,13 +176,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 'interest' => (float) $discount,
             ]
         ];
-        
+
         $this->merge($data);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @param string $title
      * @param float  $cost
@@ -207,13 +207,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 'shipping_cost'          => (float) $cost,
             ]
         ];
-        
+
         $this->merge($data);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @param Mage_Customer_Model_Customer $customer
      *
@@ -232,13 +232,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 'customer_id' => $customer->getId()
             ]
         ];
-    
+
         $this->merge($data);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @param string        $type
      * @param Varien_Object $address
@@ -248,14 +248,14 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     public function addOrderAddress($type, Varien_Object $address)
     {
         $fullname = trim($address->getData('full_name'));
-        
+
         /** @var Varien_Object $nameObject */
         $nameObject = $this->breakName($fullname);
 
         $addressSize = $this->getAddressSizeConfig();
 
         $simpleAddressData = $this->formatAddress($address, $addressSize);
-        
+
         $data = [
             'order' => [
                 "{$type}_address" => [
@@ -277,13 +277,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 ]
             ]
         ];
-        
+
         $this->merge($data);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @return $this
      */
@@ -292,11 +292,11 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         $this->creator = null;
         $this->data    = [];
         $this->store   = null;
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @return Mage_Sales_Model_Quote
      */
@@ -304,8 +304,8 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     {
         return $this->getOrderCreator()->getQuote();
     }
-    
-    
+
+
     /**
      * @return $this
      */
@@ -313,11 +313,11 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     {
         $this->getQuote()
              ->setTotalsCollectedFlag(false);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @return BSeller_SkyHub_Model_Adminhtml_Session_Quote
      */
@@ -327,8 +327,8 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         $session = Mage::getSingleton('bseller_skyhub/adminhtml_session_quote');
         return $session;
     }
-    
-    
+
+
     /**
      * Retrieve order create model
      *
@@ -339,11 +339,11 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         if (!$this->creator) {
             $this->creator = Mage::getModel('bseller_skyhub/adminhtml_sales_order_create');
         }
-        
+
         return $this->creator;
     }
-    
-    
+
+
     /**
      * Initialize order creation session data
      *
@@ -357,12 +357,12 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         if (!empty($data['customer_id'])) {
             $this->getSession()->setCustomerId((int) $this->arrayExtract($data, 'customer_id'));
         }
-        
+
         /* Get/identify store */
         if (!empty($data['store_id'])) {
             $this->getSession()->setStoreId((int) $this->arrayExtract($data, 'store_id'));
         }
-        
+
         return $this;
     }
 
@@ -379,7 +379,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     {
         $orderData = $this->data;
         $order     = null;
-        
+
         if (!empty($orderData)) {
             $this->initSession($this->arrayExtract($orderData, 'session'));
 
@@ -399,7 +399,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
             // $this->processProductOptions();
 
             Mage::app()->getStore()->setConfig(Mage_Sales_Model_Order::XML_PATH_EMAIL_ENABLED, "0");
-    
+
             Mage::dispatchEvent('bseller_skyhub_order_import_before', [
                 'order'      => $order,
                 'order_data' => $orderData,
@@ -416,13 +416,15 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 'order_data' => $orderData,
             ]);
 
+            $this->clearSessionQuote();
+
             Mage::unregister('rule_data');
         }
-    
+
         return $order;
     }
-    
-    
+
+
     /**
      * @return $this
      */
@@ -433,10 +435,10 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
          * @var Mage_Catalog_Model_Product $product
          */
         $products = $this->arrayExtract($this->data, 'products');
-        
+
         foreach ($products as $productId => $product) {
             $item = $this->getOrderCreator()->getQuote()->getItemByProduct($product);
-    
+
             $options = [
                 [
                     'product' => $product,
@@ -449,17 +451,17 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                     'value'   => 'Some value here',
                 ]
             ];
-            
+
             /** @var array $option */
             foreach ($options as $option) {
                 $item->addOption(new Varien_Object($option));
             }
         }
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @param array $data
      *
@@ -470,46 +472,46 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     protected function processQuote($data = array())
     {
         $order = (array) $this->arrayExtract($data, 'order', []);
-        
+
         /* Saving order data */
         if (!empty($order)) {
             $this->getOrderCreator()->importPostData($order);
             $this->getQuote()
                  ->setReservedOrderId($this->arrayExtract($order, 'increment_id'));
         }
-        
+
         // $this->getOrderCreator()->getBillingAddress();
         // $this->getOrderCreator()->getShippingAddress();
-        
+
         /* Just like adding products from Magento admin grid */
         $products = (array) $this->arrayExtract($data, 'products', []);
-        
+
         /** @var array $product */
         foreach ($products as $item) {
             $this->getOrderCreator()->addProductByData($item);
         }
-        
+
         $this->registerDiscount($order);
         $this->registerInterest($order);
-        
+
         $shippingMethod       = (string) $this->arrayExtract($data, 'order/shipping_method');
         $shippingMethodCode   = (string) $this->arrayExtract($data, 'order/shipping_method_code');
         $shippingCarrier      = (string) $this->arrayExtract($data, 'order/shipping_carrier');
         $shippingTitle        = (string) $this->arrayExtract($data, 'order/shipping_title');
         $shippingAmount       = (float) $this->arrayExtract($data, 'order/shipping_cost');
-        
+
         $this->getQuote()
              ->setFixedShippingAmount($shippingAmount)
              ->setFixedShippingMethod($shippingMethod)
              ->setFixedShippingMethodCode($shippingMethodCode)
              ->setFixedShippingCarrier($shippingCarrier)
              ->setFixedShippingTitle($shippingTitle);
-        
+
         /* Collect shipping rates */
         $this->resetQuote()
              ->getOrderCreator()
              ->collectShippingRates();
-        
+
         /* Add payment data */
         $payment = $this->arrayExtract($data, 'payment', []);
         if (!empty($payment)) {
@@ -518,18 +520,18 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                  ->getPayment()
                  ->addData($payment);
         }
-        
+
         $this->getOrderCreator()
              ->initRuleData()
              ->saveQuote();
-        
+
         if (!empty($payment)) {
             $this->getOrderCreator()
                  ->getQuote()
                  ->getPayment()
                  ->addData($payment);
         }
-        
+
         return $this;
     }
 
@@ -547,13 +549,26 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                 return false;
             }
 
-            return $quote->delete();
+            $quote->delete();
+            $this->clearSessionQuote();
         } catch (Mage_Exception $e) {
             Mage::logException($e);
             return false;
         }
+
+        return true;
+    }
+
+
+    /**
+     * Reset session quote data
+     */
+    public function clearSessionQuote()
+    {
+        $this->getSession()->clear();
     }
     
+
     /**
      * @param array $data
      *
@@ -566,19 +581,19 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         if (Mage::registry($key)) {
             Mage::unregister($key);
         }
-    
+
         $discount = (float) $this->arrayExtract($data, 'discount_amount');
-        
+
         if (!$discount) {
             return $this;
         }
-        
+
         Mage::register($key, $discount, true);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @param array $data
      *
@@ -591,19 +606,19 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         if (Mage::registry($key)) {
             Mage::unregister($key);
         }
-    
+
         $interest = (float) $this->arrayExtract($data, 'interest');
-        
+
         if (!$interest) {
             return $this;
         }
-        
+
         Mage::register($key, $interest, true);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @param array $data
      *
@@ -612,11 +627,11 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     protected function merge(array $data = [])
     {
         $this->data = array_merge_recursive($this->data, $data);
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * @return Mage_Core_Model_Store
      *
@@ -627,11 +642,11 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         if (empty($store)) {
             $store = null;
         }
-        
+
         if (!$this->store) {
             $this->store = Mage::app()->getStore($store);
         }
-        
+
         return $this->store;
     }
 
