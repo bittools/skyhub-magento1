@@ -30,7 +30,8 @@ trait BSeller_SkyHub_Trait_Sales_Order
         $collection = Mage::getResourceModel('sales/order_collection');
 
         $collection ->addFieldToFilter('state', ['nin' => $deniedStates])
-            ->addFieldToFilter('bseller_skyhub', 1);
+            ->addFieldToFilter('bseller_skyhub', 1)
+            ->addFieldToFilter('store_id', Mage::app()->getStore()->getId());
 
         return $collection;
     }

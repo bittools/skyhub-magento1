@@ -137,8 +137,8 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
             return;
         }
 
-        $skyhubResult = $this->_groupPlp($skyhubOrderIds);
-        if (!$skyhubResult || !$plpId = $this->_extractPlpId($skyhubResult['message'])) {
+        list($skyhubResult, $skyhubMessage) = $this->_groupPlp($skyhubOrderIds);
+        if (!$skyhubResult || !$plpId = $this->_extractPlpId($skyhubMessage)) {
             $this->_getSession()->addError($this->__('There was a problem when trying to create the PLP.'));
             $this->_redirect('*/*');
             return;
@@ -263,17 +263,17 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
      *
      * @param array $skyhubOrderIds
      *
-     * @return bool
+     * @return array
      */
     protected function _groupPlp($skyhubOrderIds)
     {
         $skyhubResult = $this->shipmentPlpIntegrator()->group($skyhubOrderIds);
 
         if (!$skyhubResult) {
-            return false;
+            return [false, $skyhubResult['message']];;
         }
 
-        return true;
+        return [true, $skyhubResult['message']];
     }
 
     /**
