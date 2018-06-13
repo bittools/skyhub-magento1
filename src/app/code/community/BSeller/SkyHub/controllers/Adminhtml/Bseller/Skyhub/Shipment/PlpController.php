@@ -99,17 +99,19 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
             $skyhubResult = $this->_ungroupPlp($plp->getSkyhubCode());
             if (!$skyhubResult) {
-                $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP.'));
+                $message = $this->__('There was a problem when trying to ungroup the PLP %s.', $plpId);
+                $this->_getSession()->addError($message);
                 continue;
             }
 
             $result = $this->_deletePlp($plpId);
             if (!$result) {
-                $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP in Magento.'));
+                $message = $this->__('There was a problem when trying to delete the PLP %s in Magento.', $plpId);
+                $this->_getSession()->addError($message);
                 continue;
             }
 
-            $this->_getSession()->addSuccess($this->__('The PLP has been ungrouped.'));
+            $this->_getSession()->addSuccess($this->__('The PLP %s has been ungrouped.', $plpId));
         }
 
         $this->_redirect('*/*/index');
@@ -132,7 +134,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         $skyhubOrderIds = (array) $this->getRequest()->getPost('skyhub_order_ids');
 
         if (empty($skyhubOrderIds)) {
-            $this->_getSession()->addError($this->__('No PLP selected for PLP generation.'));
+            $this->_getSession()->addError($this->__('No order selected for PLP generation.'));
             $this->_redirect('*/*/index');
             return;
         }
@@ -146,12 +148,13 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
 
         $result = $this->_savePlp($plpId, $skyhubOrderIds);
         if (!$result) {
-            $this->_getSession()->addError($this->__('There was a problem when trying to create the PLP in Magento.'));
+            $message = $this->__('There was a problem when trying to create the PLP %s in Magento.', $plpId);
+            $this->_getSession()->addError($message);
             $this->_redirect('*/*');
             return;
         }
 
-        $this->_getSession()->addSuccess($this->__('The PLP has been created.'));
+        $this->_getSession()->addSuccess($this->__('The PLP %s has been created.', $plpId));
         $this->_redirect('*/*/index');
     }
 
@@ -167,7 +170,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         $plp = $this->_getPlp($id);
 
         if (!$plp->getId()) {
-            $this->_getSession()->addError($this->__('This PLP does not exist anymore.'));
+            $this->_getSession()->addError($this->__('The PLP %s does not exist anymore.', $id));
             $this->_redirect('*/*');
             return;
         }
@@ -197,7 +200,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         $file = $this->shipmentPlpIntegrator()->viewFile($plp);
 
         if (!$file) {
-            $this->_getSession()->addError($this->__('An error occurred while getting PLP file.'));
+            $this->_getSession()->addError($this->__('An error occurred while getting PLP %s file.', $id));
             $this->_redirect('*/*/view', array('id' => $id));
             return;
         }
@@ -230,7 +233,8 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
      */
     public function ungroupAction()
     {
-        $id = $this->getRequest()->getParam('id', null);
+        $id             = $this->getRequest()->getParam('id', null);
+        $forceDelete    = $this->getRequest()->getParam('force_delete', false);
 
         if (!$this->_validatePlp($id)) {
             return;
@@ -239,21 +243,21 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
         $plp = $this->_getPlp($id);
 
-        $skyhubResult = $this->_ungroupPlp($plp->getSkyhubCode());
-        if (!$skyhubResult) {
-            $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP.'));
+        $skyhubResult = $this->_ungroupPlp($plp->getSkyhubCode().'4145546546564');
+        if (!$skyhubResult && !$forceDelete) {
+            $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP %s.', $id));
             $this->_redirect('*/*');
             return;
         }
 
         $result = $this->_deletePlp($id);
         if (!$result) {
-            $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP in Magento.'));
+            $this->_getSession()->addError($this->__('There was a problem when trying to delete PLP %s in Magento.', $id));
             $this->_redirect('*/*');
             return;
         }
 
-        $this->_getSession()->addSuccess($this->__('The PLP has been ungrouped.'));
+        $this->_getSession()->addSuccess($this->__('The PLP %s has been ungrouped.', $id));
         $this->_redirect('*/*/index');
     }
 
@@ -343,7 +347,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
             $plp = Mage::getModel('bseller_skyhub/shipment_plp')->load((int) $id);
 
             if (!$plp) {
-                Mage::throwException($this->__('There was a problem when trying to ungroup the PLP.'));
+                Mage::throwException($this->__('There was a problem when trying to ungroup the PLP %s.', $id));
             }
 
             $plp->delete();

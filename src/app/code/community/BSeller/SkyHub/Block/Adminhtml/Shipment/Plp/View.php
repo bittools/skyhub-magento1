@@ -27,7 +27,6 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View
         parent::__construct();
         $this->removeButton('save');
         $this->removeButton('reset');
-        $this->removeButton('delete');
 
         $this->_addButton(
             'ungroup',
@@ -36,7 +35,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View
                 'class'     => 'delete',
                 'onclick'   => 'deleteConfirm(\''
                     . Mage::helper('core')->jsQuoteEscape(
-                        Mage::helper('adminhtml')->__('Are you sure you want to do this?')
+                        Mage::helper('adminhtml')->__('Are you sure?')
                     )
                     .'\', \''
                     . $this->_getUngroupUrl()
@@ -65,6 +64,23 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View
             array(
                 'id' => $this->getCurrentPlp()->getId()
             )
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeleteUrl()
+    {
+        $params = array(
+            $this->_objectId                => $this->getRequest()->getParam($this->_objectId),
+            'force_delete'                  => true,
+            Mage_Core_Model_Url::FORM_KEY   => $this->getFormKey()
+        );
+
+        return $this->getUrl(
+            '*/*/ungroup',
+            $params
         );
     }
 }

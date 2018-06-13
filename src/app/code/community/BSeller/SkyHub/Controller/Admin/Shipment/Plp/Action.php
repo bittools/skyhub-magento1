@@ -26,7 +26,7 @@ class BSeller_SkyHub_Controller_Admin_Shipment_Plp_Action extends BSeller_SkyHub
         $plp = $this->_getPlp($id);
 
         if (!$plp->getId()) {
-            $this->_getSession()->addError($this->__('This PLP does not exist anymore.'));
+            $this->_getSession()->addError($this->__('The PLP %s does not exist anymore.', $id));
             $this->_redirect('*/*');
             return false;
         }
