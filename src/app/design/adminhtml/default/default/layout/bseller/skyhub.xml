@@ -227,6 +227,10 @@
                 <name>bseller_skyhub_block_adminhtml_sales_order_view_tab_integrationJson</name>
                 <block>bseller_skyhub/adminhtml_sales_order_view_tab_integrationJson</block>
             </action>
+            <action method="addTab">
+                <name>bseller_skyhub_block_adminhtml_sales_order_view_tab_plp</name>
+                <block>bseller_skyhub/adminhtml_sales_order_view_tab_plp</block>
+            </action>
         </reference>
     </adminhtml_sales_order_view>
 </layout>
