@@ -92,6 +92,29 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
             ]
         );
 
+        /** @var Varien_Data_Form_Element_Fieldset $fieldset */
+        $fieldset = $form->addFieldset(
+            'orders',
+            [
+                'legend'    => $this->__('Orders Information')
+            ]
+        );
+
+        $fieldset->addType(
+            'order_grid',
+            'BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form_Renderer_Order_Grid'
+        );
+
+
+        $fieldset->addField(
+            'orders_id',
+            'order_grid',
+            [
+                'label'     => Mage::helper('core')->__('Related Orders'),
+                'name'      => 'orders_id',
+            ]
+        );
+
         $form->addValues($this->_getPlpFormattedData($this->getCurrentPlp()));
         $form->setUseContainer(true);
         $this->setForm($form);

@@ -11,14 +11,12 @@
  *
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  */
-class BSeller_SkyHub_Block_Adminhtml_Sales_Order_View_Tab_Plp
-    extends Mage_Adminhtml_Block_Widget_Grid
-    implements Mage_Adminhtml_Block_Widget_Tab_Interface
+class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form_Order_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
     public function __construct()
     {
         parent::__construct();
-        $this->setId('order_plp');
+        $this->setId('plp_orders');
         $this->setPagerVisibility(false);
         $this->setFilterVisibility(false);
     }
@@ -31,7 +29,7 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_View_Tab_Plp
      */
     protected function _getCollectionClass()
     {
-        return 'bseller_skyhub/shipment_plp_collection';
+        return 'bseller_skyhub/shipment_plp_order_collection';
     }
 
 
@@ -52,20 +50,18 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_View_Tab_Plp
     protected function _getCollection()
     {
         $collection = Mage::getResourceModel($this->_getCollectionClass())
-            ->addFieldToSelect('id', 'plp_id')
-            ->addFieldToSelect('skyhub_code');
+            ->addFieldToSelect('skyhub_order_code');
 
-        $orderPlpTable = $collection->getResource()->getTable('bseller_skyhub/plp_orders');
+        $plpTable = $collection->getResource()->getTable('bseller_skyhub/plp');
 
         $collection->getSelect()
             ->join(
-                array('plp_order' => $orderPlpTable),
-                "plp_order.plp_id = main_table.id",
+                array('plp' => $plpTable),
+                "plp.id = main_table.plp_id",
                 array()
             );
 
-        $collection->addFieldToFilter('skyhub_order_code', $this->getOrder()->getBsellerSkyhubCode());
-        $collection->getSelect()->group('plp_id');
+        $collection->addFieldToFilter('plp_id', $this->getPlp()->getId());
 
         return $collection;
     }
@@ -77,26 +73,16 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_View_Tab_Plp
     protected function _prepareColumns()
     {
         $this->addColumn(
-            'skyhub_code',
+            'skyhub_order_code',
             array(
-                'header'    => $this->getSkyhubHelper()->__('PLP'),
-                'index'     => 'skyhub_code',
-                'filter'    => false,
+                'header'    => $this->getSkyhubHelper()->__('SkyHub Order code'),
+                'index'     => 'skyhub_order_code',
+                'sortable'  => false,
+                'width'     => 300,
             )
         );
 
         return parent::_prepareColumns();
-    }
-
-
-    /**
-     * Retrieve order model instance
-     *
-     * @return Mage_Sales_Model_Order
-     */
-    public function getOrder()
-    {
-        return Mage::registry('current_order');
     }
 
 
@@ -106,58 +92,29 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_View_Tab_Plp
      */
     public function getRowUrl($row)
     {
+        $order = Mage::getModel('sales/order');
+        $order->load($row->getSkyhubOrderCode(), 'bseller_skyhub_code');
+        if (!($order instanceof Varien_Object) || !$order->getId()) {
+            return '';
+        }
+
         return $this->getUrl(
             '*/bseller_skyhub_shipment_plp/view',
             array(
-                'id'  => $row->getSkyhubCode()
+                'id'  => $order->getId()
             )
         );
     }
 
 
     /**
-     * @return string
+     * Retrieve PLP model instance
+     *
+     * @return BSeller_SkyHub_Model_Shipment_Plp
      */
-    public function getTabLabel()
+    protected function getPlp()
     {
-        return $this->getSkyhubHelper()->__('SkyHub Order PLP');
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getTabTitle()
-    {
-        return $this->getSkyhubHelper()->__('SkyHub Order PLP');
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function canShowTab()
-    {
-        $order = Mage::registry('current_order');
-        if (!$order->getData('bseller_skyhub')) {
-            return false;
-        }
-
-        $plpCollection = $this->_getCollection();
-        if ((bool)$plpCollection->count() == false) {
-            return false;
-        }
-
-        return true;
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function isHidden()
-    {
-        return false;
+        return Mage::registry('current_plp');
     }
 
 
