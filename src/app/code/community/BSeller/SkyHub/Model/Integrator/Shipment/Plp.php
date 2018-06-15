@@ -17,6 +17,30 @@ class BSeller_SkyHub_Model_Integrator_Shipment_Plp extends BSeller_SkyHub_Model_
     /**
      * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
      */
+    public function plps()
+    {
+        /** @var \SkyHub\Api\EntityInterface\Shipment\Plp $interface */
+        $interface = $this->getEntityInterface();
+        $result    = $interface->plps();
+
+        if ($result->exception() || $result->invalid()) {
+            return false;
+        }
+
+        /** @var \SkyHub\Api\Handler\Response\HandlerDefault $items */
+        $items = $result->toArray();
+
+        if (empty($items) || !isset($items['plp'])) {
+            return false;
+        }
+
+        return (array) $items['plp'];
+    }
+
+
+    /**
+     * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
+     */
     public function getOrdersAvailableToGroup()
     {
         /** @var \SkyHub\Api\EntityInterface\Shipment\Plp $interface */

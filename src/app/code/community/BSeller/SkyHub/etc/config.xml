@@ -402,6 +402,14 @@
                     <model>bseller_skyhub/cron_queue_clean::cleanDeletedEntities</model>
                 </run>
             </bseller_skyhub_queue_clean>
+            <!--<bseller_skyhub_expired_plp_clean>-->
+                <!--<schedule>-->
+                    <!--<cron_expr>* */12 * * *</cron_expr>-->
+                <!--</schedule>-->
+                <!--<run>-->
+                    <!--<model>bseller_skyhub/cron_shipment_plp_clean::execute</model>-->
+                <!--</run>-->
+            <!--</bseller_skyhub_expired_plp_clean>-->
         </jobs>
     </crontab>
     <default>

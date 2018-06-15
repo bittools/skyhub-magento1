@@ -243,7 +243,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         /** @var BSeller_SkyHub_Model_Shipment_Plp $plp */
         $plp = $this->_getPlp($id);
 
-        $skyhubResult = $this->_ungroupPlp($plp->getSkyhubCode().'4145546546564');
+        $skyhubResult = $this->_ungroupPlp($plp->getSkyhubCode());
         if (!$skyhubResult && !$forceDelete) {
             $this->_getSession()->addError($this->__('There was a problem when trying to ungroup the PLP %s.', $id));
             $this->_redirect('*/*');
