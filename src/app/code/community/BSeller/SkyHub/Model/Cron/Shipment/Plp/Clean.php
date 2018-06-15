@@ -49,8 +49,6 @@ class BSeller_SkyHub_Model_Cron_Shipment_Plp_Clean extends BSeller_SkyHub_Model_
                 continue;
             }
 
-            $this->_prepareStore($plp->getStoreId());
-
             try {
                 $skyhubResult = $integrator->ungroup($plp->getSkyhubCode());
 
@@ -64,16 +62,5 @@ class BSeller_SkyHub_Model_Cron_Shipment_Plp_Clean extends BSeller_SkyHub_Model_
                 Mage::logException($exception);
             }
         }
-    }
-
-
-    /**
-     * @param int $plpStoreId
-     */
-    protected function _prepareStore($plpStoreId)
-    {
-        /** @var Mage_Core_Model_Store $store */
-        $plpStore  = Mage::app()->getStore($plpStoreId);
-        $this->getStoreIterator()->simulateStore($plpStore);
     }
 }
