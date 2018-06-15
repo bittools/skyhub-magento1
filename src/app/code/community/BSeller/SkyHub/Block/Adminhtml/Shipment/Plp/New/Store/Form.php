@@ -60,8 +60,8 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New_Store_Form
                 'name'     => 'store_id',
                 'required' => true,
                 'options'  => $source->toArray(),
-                'label'    => $this->__('Select Store'),
-                'note'     => $this->__('@todo ????'),
+                'label'    => $this->__('Select a store'),
+                'note'     => $this->__('Select a store for PLP generation.'),
                 'value'    => $storeId,
             )
         );

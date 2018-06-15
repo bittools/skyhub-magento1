@@ -99,9 +99,9 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form_Order_Grid extends M
         }
 
         return $this->getUrl(
-            '*/bseller_skyhub_shipment_plp/view',
+            '*/sales_order/view',
             array(
-                'id'  => $order->getId()
+                'order_id'  => $order->getId()
             )
         );
     }

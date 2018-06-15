@@ -79,9 +79,9 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_View_Tab_Plp
         $this->addColumn(
             'skyhub_code',
             array(
-                'header'    => $this->getSkyhubHelper()->__('PLP'),
+                'header'    => $this->getSkyhubHelper()->__('PLP Code'),
                 'index'     => 'skyhub_code',
-                'filter'    => false,
+                'sortable'  => false,
             )
         );
 
@@ -109,7 +109,7 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_View_Tab_Plp
         return $this->getUrl(
             '*/bseller_skyhub_shipment_plp/view',
             array(
-                'id'  => $row->getSkyhubCode()
+                'id'  => $row->getPlpId()
             )
         );
     }

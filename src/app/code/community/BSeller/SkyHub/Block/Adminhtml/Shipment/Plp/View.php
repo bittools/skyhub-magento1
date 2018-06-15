@@ -28,6 +28,8 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View
         $this->removeButton('save');
         $this->removeButton('reset');
 
+        $this->updateButton('delete', 'label', Mage::helper('bseller_skyhub')->__('Delete'));
+
         $this->_addButton(
             'ungroup',
             array(

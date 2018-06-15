@@ -50,7 +50,7 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Import_Manual_Form extends BSel
             'name'     => 'store_id',
             'required' => true,
             'options'  => $source->toArray(),
-            'label'    => $this->__('Select Store'),
+            'label'    => $this->__('Select a store'),
             'note'     => $this->__('The store the order must be imported to.'),
         ]);
         
