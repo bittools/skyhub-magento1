@@ -142,7 +142,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product
             return false;
         }
         
-        if (!is_null($price) && (((float) $price) <= $specialPrice)) {
+        if (!is_null($price) && (((float) $price) < $specialPrice)) {
             return false;
         }
         
