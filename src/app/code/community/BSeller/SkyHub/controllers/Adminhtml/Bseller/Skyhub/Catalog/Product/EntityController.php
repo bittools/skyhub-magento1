@@ -20,8 +20,17 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_EntityController e
      */
     public function resetEntityAction()
     {
+        $entityType = $this->getRequest()->getParam('entity_type');
+        if (empty($entityType)) {
+            $this->_getSession()
+                 ->addError(Mage::helper('adminhtml')->__('Entity Type not specified'));
+            return $this->redirect();
+        }
+
         try {
-            Mage::getResourceModel('bseller_skyhub/entity')->truncateEntityType('catalog_product');
+            /** @var BSeller_SkyHub_Model_Resource_Entity $resourceEntity*/
+            $resourceEntity = Mage::getResourceModel('bseller_skyhub/entity');
+            $resourceEntity->truncateEntityType($entityType);
             $this->_getSession()->addSuccess(Mage::helper('adminhtml')->__('The product integration entity table has been cleared.'));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
@@ -29,6 +38,15 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_EntityController e
             $this->_getSession()->addException($e, Mage::helper('adminhtml')->__('An error occurred while clearing product integration entity table.'));
         }
 
-        $this->getResponse()->setRedirect(Mage::helper('core/http')->getHttpReferer());
+        return $this->redirect();
+    }
+
+    /**
+     * Redirect to last url accessed
+     */
+    public function redirect()
+    {
+        $this->getResponse()
+            ->setRedirect(Mage::helper('core/http')->getHttpReferer());
     }
 }

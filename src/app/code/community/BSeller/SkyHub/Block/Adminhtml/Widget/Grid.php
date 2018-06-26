@@ -16,12 +16,94 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
 {
 
     /**
+     * @var string
+     */
+    protected $_entityType = null;
+
+    /**
+     * Preparing global layout
+     *
+     * You can redefine this method in child classes for changing layout
+     *
+     * @return Mage_Core_Block_Abstract
+     */
+    protected function _prepareLayout()
+    {
+        $this->setChild(
+            'clear_queue_button',
+            $this->getLayout()
+                 ->createBlock('adminhtml/widget_button')
+                 ->setData(
+                     array(
+                        'label'     => Mage::helper('bseller_skyhub')->__('Reset SkyHub Products Integration History'),
+                        'onclick' => "if (confirm('{$this->getConfirmMessage()}')) { setLocation('{$this->getClearQueueUrl()}')}",
+                        'class' => 'delete'
+                    )
+                 )
+        );
+
+        return BSeller_Core_Block_Adminhtml_Widget_Grid::_prepareLayout();
+    }
+
+    /**
+     * @param BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Product_Grid $block
+     *
+     * @return string
+     */
+    protected function getClearQueueUrl()
+    {
+        $url = (string) $this->getUrl(
+            '*/bseller_skyhub_catalog_product_entity/resetEntity',
+            array(
+                'entity_type' => $this->getEntityType()
+            )
+        );
+
+        return $url;
+    }
+
+    /**
+     * Add button clear queue and get buttons grid
+     *
+     * @return string
+     */
+    public function getMainButtonsHtml()
+    {
+        $html = $this->getClearQueueButtonHtml();
+        $html .= parent::getMainButtonsHtml();
+
+        return $html;
+    }
+
+    /**
+     * Get block of button clear queue
+     *
+     * @return mixed
+     */
+    public function getClearQueueButtonHtml()
+    {
+        return $this->getChildHtml('clear_queue_button');
+    }
+
+    /**
+     * Get message of confirmation to clear queue
+     *
+     * @return string
+     */
+    public function getConfirmMessage()
+    {
+        $msg = 'This action must be accompanied by Skyhub Integration Team. ';
+        $msg .= 'Do you want to continue?';
+
+        return Mage::helper('bseller_skyhub')->__($msg);
+    }
+
+    /**
      * @param BSeller_SkyHub_Model_Resource_Queue_Collection $collection
      *
      * @return BSeller_SkyHub_Model_Resource_Queue_Collection
      */
     protected abstract function getPreparedCollection(BSeller_SkyHub_Model_Resource_Queue_Collection $collection);
-
 
     protected function _prepareCollection()
     {
@@ -32,7 +114,6 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
 
         return $this;
     }
-
 
     /**
      * @return $this
@@ -100,7 +181,6 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
         return $this;
     }
 
-
     /**
      * @param $item
      *
@@ -110,7 +190,6 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
     {
         return false;
     }
-
 
     /**
      * @return BSeller_SkyHub_Model_Resource_Queue_Collection
@@ -122,7 +201,6 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
         return $collection;
     }
 
-
     /**
      * @return int
      *
@@ -133,7 +211,6 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
         return Mage::app()->getStore()->getId();
     }
 
-
     /**
      * @return int
      *
@@ -142,6 +219,14 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
     protected function getAdminStoreId()
     {
         return Mage::app()->getStore(Mage_Core_Model_Store::ADMIN_CODE)->getId();
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityType()
+    {
+        return $this->_entityType;
     }
 
 }

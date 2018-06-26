@@ -17,6 +17,11 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Product_Attribute_Grid
 {
 
     /**
+     * @var string
+     */
+    protected $_entityType = BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT_ATTRIBUTE;
+
+    /**
      * @param BSeller_SkyHub_Model_Resource_Queue_Collection $collection
      *
      * @return BSeller_SkyHub_Model_Resource_Queue_Collection
