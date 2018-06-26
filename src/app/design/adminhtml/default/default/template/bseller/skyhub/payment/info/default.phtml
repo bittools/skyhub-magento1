@@ -1,0 +1,13 @@
+<?php
+$json = $this->getSkyhubJson();
+if (null == $json) {
+    return;
+}
+$paymentData = $json['payments'][0];
+$value = Mage::helper('core')->currency($paymentData['value'], true, false);
+?>
+<p><?php echo $this->__('Paid in SkyHub') ?></p>
+<p><?php echo $this->__('Payment method') ?>: <?php echo $paymentData['method'] ?></p>
+<p><?php echo $this->__('Description') ?>: <?php echo $this->__('In the value of') . ' ' . $value ?></p>
+<p><?php echo $this->__('Parcels') ?>: <?php echo $paymentData['parcels'] ?></p>
+<p><?php echo $this->__('Value') ?>: <?php echo $value; ?></p>
