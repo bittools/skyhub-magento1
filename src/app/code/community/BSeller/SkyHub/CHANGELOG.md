@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.3] - 2018-06-26
+### Added
+- Order payment info em order detail page;
+- Product attributes and categories cleaning feature;
+
+### Changed
+- Solved problem with order creation via admin panel;
+- Categories integration adjustment;
+- Special price product integration adjustment;
+
 ## [1.3.2] - 2018-06-11
 ### Added
 - Added a new column in bseller_skyhub_entity table to force entities integration;
