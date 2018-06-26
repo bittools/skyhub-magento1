@@ -141,6 +141,8 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         $categories->addAttributeToSelect([
             'name',
         ]);
+
+        $categories->addAttributeToFilter('level', array('gteq' => 2));
         
         /** @var Mage_Catalog_Model_Category $category */
         foreach ($categories as $category) {

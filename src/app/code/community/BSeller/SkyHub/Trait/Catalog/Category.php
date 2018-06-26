@@ -58,11 +58,12 @@ trait BSeller_SkyHub_Trait_Catalog_Category
         }
 
         $ids     = array_reverse(explode('/', $category->getPath()));
+        $rootCategoriesIds = $this->getAllRootCategories();
         $pathIds = [];
 
         /** @var int $id */
         foreach ($ids as $id) {
-            if ($id == $store->getRootCategoryId()) {
+            if (in_array($id, $rootCategoriesIds)) {
                 break;
             }
 
@@ -87,5 +88,22 @@ trait BSeller_SkyHub_Trait_Catalog_Category
         }
 
         return Mage::app()->getStore();
+    }
+
+    /**
+     * Add a comment to this line
+     * Get all root categories of all stores
+     *
+     * @return array
+     */
+    protected function getAllRootCategories()
+    {
+        $categoryIds = array(Mage_Catalog_Model_Category::TREE_ROOT_ID, 0);
+        $groupsStore = Mage::app()->getGroups();
+        foreach ($groupsStore as $groupStore) {
+            $categoryIds[] = (int)$groupStore->getRootCategoryId();
+        }
+
+        return $categoryIds;
     }
 }
