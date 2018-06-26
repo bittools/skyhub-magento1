@@ -18,6 +18,7 @@ class BSeller_SkyHub_Model_Payment_Method_Standard extends Mage_Payment_Model_Me
     /** @var string */
     protected $_code = 'bseller_skyhub_standard';
     protected $_canUseCheckout = false;
+    protected $_canUseInternal = false;
 
 
     /**

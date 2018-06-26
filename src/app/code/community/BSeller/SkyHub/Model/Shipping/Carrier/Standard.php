@@ -32,6 +32,10 @@ class BSeller_SkyHub_Model_Shipping_Carrier_Standard extends Mage_Shipping_Model
         if (!$this->getConfigFlag('active')) {
             return false;
         }
+
+        if (!Mage::registry('bseller_skyhub_process_order_creation')) {
+            return false;
+        }
     
         $amount     = 0;
         $methodCode = null;

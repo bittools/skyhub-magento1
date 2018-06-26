@@ -28,8 +28,12 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     public function createOrder(array $data)
     {
         try {
+
+            Mage::register('bseller_skyhub_process_order_creation', true, true);
+
             /** @var Mage_Sales_Model_Order $order */
             $order = $this->processOrderCreation($data);
+
         } catch (Exception $e) {
 
             $this->removeOrderQuote();
