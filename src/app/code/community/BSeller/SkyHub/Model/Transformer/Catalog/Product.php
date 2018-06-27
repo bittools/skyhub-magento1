@@ -327,12 +327,6 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
          */
         $specialPrice = $this->extractProductSpecialPrice($product, $specialPriceCode, $price);
         
-        if (!empty($specialPrice)) {
-            $specialPrice = (float) $specialPrice;
-        } else {
-            $specialPrice = null;
-        }
-        
         $interface->setPromotionalPrice($specialPrice);
     
         $this->addProcessedAttribute($product, $mappedPromoPrice->getAttribute());

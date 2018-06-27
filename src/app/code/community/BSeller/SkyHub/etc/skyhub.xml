@@ -406,6 +406,7 @@
                         <msrp/>
                         <msrp_enabled/>
                         <msrp_display_actual_price_type/>
+                        <promotional_price/>
                     </blacklist>
                 </attributes>
             </product>

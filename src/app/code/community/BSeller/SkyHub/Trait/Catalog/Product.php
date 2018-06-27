@@ -71,7 +71,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product
      * @param null|string                $attributeCode
      * @param null|float                 $comparedPrice
      *
-     * @return float|null
+     * @return float
      */
     protected function extractProductSpecialPrice(
         Mage_Catalog_Model_Product $product,
@@ -83,16 +83,11 @@ trait BSeller_SkyHub_Trait_Catalog_Product
             $attributeCode = 'special_price';
         }
     
-        $specialPrice = $this->productAttributeRawValue($product, $attributeCode);
-        
-        $fromDate = $this->extractProductSpecialFromDate($product);
-        $toDate   = $this->extractProductSpecialToDate($product);
-        
-        if ($this->validateSpecialPrice($specialPrice, $comparedPrice, $fromDate, $toDate)) {
-            return $specialPrice;
-        }
-        
-        return null;
+        $specialPrice   = $this->productAttributeRawValue($product, $attributeCode);
+        $fromDate       = $this->extractProductSpecialFromDate($product);
+        $toDate         = $this->extractProductSpecialToDate($product);
+
+        return $this->getSpecialPrice($specialPrice, $comparedPrice, $fromDate, $toDate);
     }
     
     
@@ -134,27 +129,27 @@ trait BSeller_SkyHub_Trait_Catalog_Product
      *
      * @return bool
      */
-    protected function validateSpecialPrice($specialPrice, $price = null, $fromDate = null, $toDate = null)
+    protected function getSpecialPrice($specialPrice, $price = null, $fromDate = null, $toDate = null)
     {
-        $specialPrice = (float) $specialPrice;
-        
+        $specialPrice = $specialPrice;
+
         if (empty($specialPrice)) {
-            return false;
+            return '';
         }
-        
+
         if (!is_null($price) && (((float) $price) < $specialPrice)) {
-            return false;
+            return '';
         }
         
         if (!empty($fromDate) && (strtotime(now()) < strtotime($fromDate))) {
-            return false;
+            return '';
         }
         
         if (!empty($toDate) && (strtotime(now()) > strtotime($toDate))) {
-            return false;
+            return '';
         }
         
-        return true;
+        return (float) $specialPrice;
     }
     
     
