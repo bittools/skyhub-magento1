@@ -38,7 +38,6 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
         $allowedTypes = [
             Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
             Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
-            Mage_Catalog_Model_Product_Type::TYPE_GROUPED,
         ];
 
         if (!in_array($product->getTypeId(), $allowedTypes)) {
