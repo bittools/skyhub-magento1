@@ -45,7 +45,10 @@ class BSeller_SkyHub_Block_Adminhtml_Notifications_Skyhub_Attributes
     public function getMappingManagerUrl($id = null)
     {
         if ($id) {
-            return $this->getUrl('adminhtml/bseller_skyhub_catalog_product_attributes_mapping/edit', ['id' => $id]);
+            return $this->getUrl(
+                'adminhtml/bseller_skyhub_catalog_product_attributes_mapping/edit',
+                array('id' => $id)
+            );
         }
 
         return $this->getUrl('adminhtml/bseller_skyhub_catalog_product_attributes_mapping/index');

@@ -30,27 +30,27 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Shipment extends BSeller_SkyHub_
         /** @var Mage_Sales_Model_Order $order */
         $order = $this->getOrder($track->getOrderId());
 
-        $items = [];
+        $items = array();
 
         /** @var Mage_Sales_Model_Order_Item $item */
         foreach ($order->getAllVisibleItems() as $item) {
-            $items[] = [
+            $items[] = array(
                 'sku' => (string) $item->getSku(),
                 'qty' => (int)    $item->getQtyOrdered(),
-            ];
+            );
         }
 
         $shippingMethod = $order->getShippingMethod();
 
         try {
-            $params = [
+            $params = array(
                 $order->getId(),
                 $items,
                 $track->getNumber(),
                 $track->getTitle(),
                 $shippingMethod,     // Track method like SEDEX...
                 ''                   // Tracking URL (www.correios.com.br)
-            ];
+            );
             
             $this->getStoreIterator()->call($this->orderIntegrator(), 'shipment', $params, $order->getStore());
         } catch (Exception $e) {

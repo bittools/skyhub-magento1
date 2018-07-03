@@ -30,13 +30,13 @@ class BSeller_SkyHub_Model_Observer_Adminhtml_Sales_Order
             return;
         }
         
-        $block->addTotal(new Varien_Object([
+        $block->addTotal(new Varien_Object(array(
            'code'       => 'bseller_skyhub_interest',
            'strong'     => true,
            'value'      => $block->getSource()->getData('bseller_skyhub_interest'),
            'base_value' => $block->getSource()->getData('bseller_skyhub_interest'),
            'label'      => $this->__('BSeller Interest'),
            'area'       => 'footer'
-        ]));
+        )));
     }
 }

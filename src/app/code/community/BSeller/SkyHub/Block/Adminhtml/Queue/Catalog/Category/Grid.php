@@ -39,8 +39,11 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Category_Grid extends BSeller
 
         /** @var BSeller_SkyHub_Model_Resource_Queue_Collection $collection */
         $collection->getSelect()
-            ->joinLeft(['eav' => $name->getBackendTable()], $condition, ['category_name' => 'value'])
-        ;
+            ->joinLeft(
+                array('eav' => $name->getBackendTable()),
+                $condition,
+                array('category_name' => 'value')
+            );
 
         $collection->addFieldToFilter('entity_type', BSeller_SkyHub_Model_Entity::TYPE_CATALOG_CATEGORY);
 
@@ -55,12 +58,16 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Category_Grid extends BSeller
     {
         parent::_prepareColumns();
 
-        $this->addColumnAfter('category_name', [
-            'header'       => $this->__('Category Name'),
-            'align'        => 'left',
-            'type'         => 'text',
-            'filter_index' => 'eav.value',
-        ], 'entity_id');
+        $this->addColumnAfter(
+            'category_name',
+            array(
+                'header'       => $this->__('Category Name'),
+                'align'        => 'left',
+                'type'         => 'text',
+                'filter_index' => 'eav.value',
+            ),
+            'entity_id'
+        );
 
         $this->sortColumnsByOrder();
 

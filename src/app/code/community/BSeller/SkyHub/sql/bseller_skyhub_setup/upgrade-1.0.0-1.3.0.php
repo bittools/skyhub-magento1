@@ -29,93 +29,98 @@ $table = $this->newTable($tableName)
         'skyhub_code',
         $this::TYPE_TEXT,
         255,
-        [
+        array(
             'nullable' => false,
-        ]
+        )
     )
     ->addColumn(
         'skyhub_label',
         $this::TYPE_TEXT,
-        255, [
+        255,
+        array(
             'nullable' => true,
-        ]
+        )
     )
     ->addColumn(
         'skyhub_description',
         $this::TYPE_TEXT,
         null,
-        [
+        array(
             'nullable' => true,
-        ]
+        )
     )
     ->addColumn(
         'enabled',
         $this::TYPE_BOOLEAN,
         1,
-        [
+        array(
             'nullable' => false,
             'default' => true
-        ]
+        )
     )
     ->addColumn(
         'cast_type',
         $this::TYPE_TEXT,
         255,
-        [
+        array(
             'nullable' => false
-        ]
+        )
     )
     ->addColumn(
         'validation',
         $this::TYPE_TEXT,
         null,
-        [
+        array(
             'nullable' => true
-        ]
+        )
     )
     ->addColumn(
         'attribute_id',
         $this::TYPE_INTEGER,
         255,
-        [
+        array(
             'nullable' => true,
             'default' => null
-        ]
+        )
     )
     ->addColumn(
         'required',
         $this::TYPE_BOOLEAN,
         1,
-        [
+        array(
             'nullable' => false,
             'default' => true
-        ]
+        )
     )
     ->addColumn(
         'editable',
         $this::TYPE_BOOLEAN,
         1,
-        [
+        array(
             'nullable' => false,
             'default' => true
-        ]
+        )
     )
     ->addColumn(
         'has_options',
         $this::TYPE_BOOLEAN,
         1,
-        [
+        array(
             'nullable' => false,
             'default' => false
-        ]
+        )
     );
 
 $this->addTimestamps($table);
 $conn->createTable($table);
 
-$this->addIndex(['skyhub_code', 'attribute_id'], $tableName);
+$this->addIndex(array('skyhub_code', 'attribute_id'), $tableName);
 $this->addForeignKey(
-    $tableName, 'attribute_id', 'eav/attribute', 'attribute_id', $this::FK_ACTION_SET_NULL, $this::FK_ACTION_SET_NULL
+    $tableName,
+    'attribute_id',
+    'eav/attribute',
+    'attribute_id',
+    $this::FK_ACTION_SET_NULL, $this::FK_ACTION_SET_NULL
 );
 
 //**********************************************************************************************************************
@@ -129,41 +134,44 @@ $table = $this->newTable($tableName)
         'customer_attributes_mapping_id',
         $this::TYPE_INTEGER,
         255,
-        [
+        array(
             'nullable' => false
-        ]
+        )
     )
     ->addColumn(
         'skyhub_code',
         $this::TYPE_VARCHAR,
         255,
-        [
+        array(
             'nullable' => false
-        ]
+        )
     )
     ->addColumn(
         'skyhub_label',
         $this::TYPE_VARCHAR,
         255,
-        [
+        array(
             'nullable' => false
-        ]
+        )
     )
     ->addColumn(
         'magento_value',
         $this::TYPE_VARCHAR,
         255,
-        [
+        array(
             'nullable' => true,
             'default' => null
-        ]
+        )
     );
 
 $conn->createTable($table);
 
-$this->addIndex(['customer_attributes_mapping_id', 'skyhub_code'], $tableName);
+$this->addIndex(array('customer_attributes_mapping_id', 'skyhub_code'), $tableName);
 $this->addForeignKey(
-    $tableName, 'customer_attributes_mapping_id', 'bseller_skyhub/customer_attributes_mapping', 'id'
+    $tableName,
+    'customer_attributes_mapping_id',
+    'bseller_skyhub/customer_attributes_mapping',
+    'id'
 );
 
 //**********************************************************************************************************************
@@ -171,13 +179,13 @@ $this->addForeignKey(
 //**********************************************************************************************************************
 $columnName = 'bseller_skyhub_json';
 $tableName = $this->getTable('sales/order');
-$columnConfig = [
+$columnConfig = array(
     'type' => $this::TYPE_TEXT,
     'nullable' => true,
     'default' => null,
     'after' => 'bseller_skyhub_interest',
     'comment' => 'SkyHub Order Json',
-];
+);
 $conn->addColumn($tableName, $columnName, $columnConfig);
 
 $this->endSetup();

@@ -23,13 +23,13 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Grid
         /** @var BSeller_SkyHub_Model_Resource_Customer_Attributes_Mapping_Collection $collection */
         $collection = Mage::getResourceModel('bseller_skyhub/customer_attributes_mapping_collection');
         $collection->getSelect()
-                   ->joinLeft(
-                       [
-                           'ea' => Mage::getSingleton('core/resource')->getTableName('eav/attribute')
-                       ],
-                       'main_table.attribute_id = ea.attribute_id',
-                       'attribute_code'
-                   );
+            ->joinLeft(
+                array(
+                    'ea' => Mage::getSingleton('core/resource')->getTableName('eav/attribute')
+                ),
+                'main_table.attribute_id = ea.attribute_id',
+                'attribute_code'
+            );
         
         $this->setCollection($collection);
         
@@ -104,7 +104,10 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Grid
     public function getRowUrl($mapping)
     {
         if ($mapping->getEditable()) {
-            return $this->getUrl('*/*/edit', ['id' => $mapping->getId()]);
+            return $this->getUrl(
+                '*/*/edit',
+                array('id' => $mapping->getId())
+            );
         }
         
         return false;

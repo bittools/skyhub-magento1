@@ -30,6 +30,6 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Creditmemo extends BSeller_SkyHu
         $store   = $creditmemo->getStore();
         $orderId = $creditmemo->getOrderId();
         
-        $this->getStoreIterator()->call($this->orderIntegrator(), 'cancel', [$orderId], $store);
+        $this->getStoreIterator()->call($this->orderIntegrator(), 'cancel', array($orderId), $store);
     }
 }

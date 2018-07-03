@@ -34,35 +34,41 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Import_Log_Grid extends BSeller
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('reference', [
-            'header'       => $this->__('SkyHub Order#'),
-            'align'        => 'left',
-            'width'        => '150px',
-            'type'         => 'text',
-        ]);
+        $this->addColumn(
+            'reference',
+            array(
+                'header'       => $this->__('SkyHub Order#'),
+                'align'        => 'left',
+                'width'        => '150px',
+                'type'         => 'text',
+            )
+        );
     
         parent::_prepareColumns();
     
-        $this->addColumn('actions', [
-            'header'       => $this->__('SkyHub Order#'),
-            'align'        => 'left',
-            'width'        => '150px',
-            'renderer'     => 'bseller_skyhub/adminhtml_sales_order_import_log_grid_renderer',
-            'type'         => 'action',
-            'getter'       => 'getId',
-            'actions'      => [
-                [
-                    'url'     => ['base'=> '*/*/retry'],
-                    'caption' => $this->__('Retry'),
-                    'field'   => 'id'
-                ],
-                [
-                    'url'     => ['base'=> '*/*/delete'],
-                    'caption' => $this->__('Delete'),
-                    'field'   => 'id'
-                ],
-            ],
-        ]);
+        $this->addColumn(
+            'actions',
+            array(
+                'header'       => $this->__('SkyHub Order#'),
+                'align'        => 'left',
+                'width'        => '150px',
+                'renderer'     => 'bseller_skyhub/adminhtml_sales_order_import_log_grid_renderer',
+                'type'         => 'action',
+                'getter'       => 'getId',
+                'actions'      => array(
+                    array(
+                        'url'     => array('base'=> '*/*/retry'),
+                        'caption' => $this->__('Retry'),
+                        'field'   => 'id'
+                    ),
+                    array(
+                        'url'     => array('base'=> '*/*/delete'),
+                        'caption' => $this->__('Delete'),
+                        'field'   => 'id'
+                    ),
+                ),
+            )
+        );
         
         $this->removeColumn('entity_id');
         $this->sortColumnsByOrder();

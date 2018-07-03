@@ -29,7 +29,7 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
     protected $currentStore = null;
     
     /** @var array */
-    protected $stores = [];
+    protected $stores = array();
     
     
     public function __construct()
@@ -57,7 +57,7 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
      *
      * @throws Mage_Core_Exception
      */
-    public function iterate($subject, $method, array $params = [])
+    public function iterate($subject, $method, array $params = array())
     {
         $this->initIterator()
             ->initStores();
@@ -66,12 +66,12 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
             return $this;
         }
         
-        $eventParams = [
+        $eventParams = array(
             'iterator' => $this,
             'subject'  => $subject,
             'method'   => $method,
             'params'   => $params,
-        ];
+        );
         
         Mage::dispatchEvent('bseller_skyhub_store_iterate_before', $eventParams);
         
@@ -103,7 +103,7 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
      *
      * @return mixed
      */
-    public function call($subject, $method, array $params = [], Mage_Core_Model_Store $store, $force = false)
+    public function call($subject, $method, array $params = array(), Mage_Core_Model_Store $store, $force = false)
     {
         if (!$this->validateStore($store) && !$force) {
             return false;
@@ -119,7 +119,7 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
         
         try {
             $params['__store'] = $store;
-            $result = call_user_func_array([$subject, $method], $params);
+            $result = call_user_func_array(array($subject, $method), $params);
         } catch (Exception $e) {
             Mage::logException($e);
         }
@@ -271,7 +271,7 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
             return false;
         }
         
-        if (!is_callable([$subject, $method])) {
+        if (!is_callable(array($subject, $method))) {
             return false;
         }
         
@@ -295,9 +295,12 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
             /** @var array $stores */
             $stores = Mage::app()->getStores();
     
-            Mage::dispatchEvent('bseller_skyhub_store_init_stores', [
-                'stores' => $stores,
-            ]);
+            Mage::dispatchEvent(
+                'bseller_skyhub_store_init_stores',
+                array(
+                    'stores' => $stores,
+                )
+            );
     
             /** @var Mage_Core_Model_Store $store */
             foreach ($stores as $store) {

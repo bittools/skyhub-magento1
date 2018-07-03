@@ -19,11 +19,11 @@ class BSeller_SkyHub_Model_System_Config_Source_Customer_Attributes_PersonType
      *
      * @var array
      */
-    protected $_options = [
+    protected $_options = array(
         0 => '- - Select - -',
         1 => 'Physical Person',
         2 => 'Legal Person',
-    ];
+    );
 
     /**
      * Return options in select format
@@ -32,13 +32,13 @@ class BSeller_SkyHub_Model_System_Config_Source_Customer_Attributes_PersonType
      */
     public function getAllOptions()
     {
-        $data = [];
+        $data = array();
 
         foreach ($this->_options as $value => $label) {
-            $data[] = [
+            $data[] = array(
                 'value' => $value,
                 'label' => Mage::helper('bseller_skyhub')->__($label)
-            ];
+            );
         }
 
         return $data;

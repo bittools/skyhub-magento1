@@ -163,10 +163,10 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
             'width'        => '50px',
             'type'         => 'options',
             'filter_index' => 'main_table.can_process',
-            'options'      => [
+            'options'      => array(
                 0 => $this->__('No'),
                 1 => $this->__('Yes'),
-            ],
+            ),
         ));
 
         $this->addColumn('process_after', array(

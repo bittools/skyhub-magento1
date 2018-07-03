@@ -39,10 +39,11 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             $this->removeOrderQuote();
 
             Mage::dispatchEvent(
-                'bseller_skyhub_order_import_exception', [
+                'bseller_skyhub_order_import_exception',
+                array(
                     'exception' => $e,
                     'order_data' => $data,
-                ]
+                )
             );
 
             Mage::logException($e);
@@ -94,13 +95,13 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $billingAddress  = new Varien_Object($this->arrayExtract($data, 'billing_address'));
         $shippingAddress = new Varien_Object($this->arrayExtract($data, 'shipping_address'));
 
-        $customerData = (array) $this->arrayExtract($data, 'customer', []);
+        $customerData = (array) $this->arrayExtract($data, 'customer', array());
         $customerData = array_merge_recursive(
             $customerData,
-            [
+            array(
                 'billing_address' => $billingAddress,
                 'shipping_address' => $shippingAddress
-            ]
+            )
         );
 
         /** @var Mage_Customer_Model_Customer $customer */
@@ -117,10 +118,10 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
 
         $incrementId = $this->getNewOrderIncrementId($code);
         $info = new Varien_Object(
-            [
+            array(
                 'increment_id' => $incrementId,
                 'send_confirmation' => 0
-            ]
+            )
         );
 
         $creation->setOrderInfo($info)
@@ -133,7 +134,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             ->addOrderAddress('shipping', $shippingAddress)
             ->setComment('This order was automatically created by SkyHub import process.')
             ->setCustomData(
-                [
+                array(
                     'bseller_skyhub'            => true,
                     'bseller_skyhub_code'       => $code,
                     'bseller_skyhub_channel'    => $channel,
@@ -141,7 +142,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
                     //Bizcommerce_SkyHub uses these fields
                     'skyhub_code'               => $code,
                     'skyhub_marketplace'        => $channel
-                ]
+                )
             );
 
         $products = $this->getProducts((array) $this->arrayExtract($data, 'items'));
@@ -194,7 +195,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     protected function getProducts(array $items)
     {
-        $products = [];
+        $products = array();
         
         foreach ($items as $item) {
             $parentSku    = $this->arrayExtract($item, 'product_id');
@@ -213,20 +214,20 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
                 continue;
             }
     
-            $data = [
+            $data = array(
                 'product_id'    => (int)    $productId,
                 'product_sku'   => (string) $parentSku,
                 'qty'           => (float)  ($qty ? $qty : 1),
                 'price'         => (float)  $price,
                 'special_price' => (float)  $specialPrice,
                 'final_price'   => (float)  $finalPrice,
-            ];
+            );
     
             if ($childId = $this->getProductIdBySku($childSku)) {
-                $data['children'][] = [
+                $data['children'][] = array(
                     'product_id'  => (int)    $childId,
                     'product_sku' => (string) $childSku,
-                ];
+                );
             };
 
             $products[] = $data;
@@ -316,7 +317,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $email       = $this->arrayExtract($data, 'email');
         $gender      = $this->arrayExtract($data, 'gender');
         $name        = $this->arrayExtract($data, 'name');
-        $phones      = $this->arrayExtract($data, 'phones', []);
+        $phones      = $this->arrayExtract($data, 'phones', array());
         
         /** @var Varien_Object $nameObject */
         $nameObject = $this->breakName($name);

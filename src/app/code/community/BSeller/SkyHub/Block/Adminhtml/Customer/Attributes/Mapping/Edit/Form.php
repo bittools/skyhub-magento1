@@ -32,54 +32,54 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Edit_Form
     {
         /** @var Varien_Data_Form $form */
         $form = new Varien_Data_Form(
-            [
-            'id'     => 'edit_form',
-            'action' => $this->getData('action'),
-            'method' => 'post'
-            ]
+            array(
+                'id'     => 'edit_form',
+                'action' => $this->getData('action'),
+                'method' => 'post'
+            )
         );
     
         /** @var Varien_Data_Form_Element_Fieldset $fieldset */
         $fieldset = $form->addFieldset(
             'general',
-            [
+            array(
                 'legend' => $this->__('General Information')
-            ]
+            )
         );
 
         $fieldset->addField(
             'id',
             'hidden',
-            [
+            array(
                 'name' => 'id',
-            ]
+            )
         );
 
         $fieldset->addField(
             'skyhub_code',
             'label',
-            [
+            array(
                 'name' => 'skyhub_code',
                 'label' => $this->__('SkyHub Code'),
-            ]
+            )
         );
 
         $fieldset->addField(
             'skyhub_label',
             'label',
-            [
+            array(
                 'name' => 'skyhub_label',
                 'label' => $this->__('SkyHub Label'),
-            ]
+            )
         );
 
         $fieldset->addField(
             'skyhub_description',
             'label',
-            [
+            array(
                 'name' => 'skyhub_description',
                 'label' => $this->__('SkyHub Description'),
-            ]
+            )
         );
         
         /** @var BSeller_SkyHub_Model_System_Config_Source_Customer_Attributes $attributesSource */
@@ -99,13 +99,13 @@ class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Edit_Form
         $fieldset->addField(
             'attribute_id',
             'select',
-            [
+            array(
                 'name' => 'attribute_id',
                 'label' => $this->__('Related Attribute'),
                 'required' => true,
                 'options' => $attributesSource->toArray(true),
                 'onchange' => "renderAttributeOptions(this.value, '" . $mappingAttributeId . "', 'options_container' , '" . $url . "')"
-            ]
+            )
         )->setAfterElementHtml(
             "
                 <div id=\"options_container\"></div>

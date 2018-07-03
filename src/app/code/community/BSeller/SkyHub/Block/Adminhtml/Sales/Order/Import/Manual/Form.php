@@ -30,40 +30,51 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Import_Manual_Form extends BSel
     protected function _prepareForm()
     {
         /** @var Varien_Data_Form $form */
-        $form = new Varien_Data_Form([
+        $form = new Varien_Data_Form(array(
             'id'     => 'edit_form',
             'action' => $this->getData('action'),
             'method' => 'post'
-        ]);
+        ));
     
         /** @var Varien_Data_Form_Element_Fieldset $fieldset */
-        $fieldset = $form->addFieldset('general', [
-            'legend' => $this->__('Orders Information')
-        ]);
+        $fieldset = $form->addFieldset(
+            'general',
+            array(
+                'legend' => $this->__('Orders Information')
+            )
+        );
         
         $storeId = (int) $this->_getSession()->getData('simulated_store_id');
         $this->_getSession()->unsetData('simulated_store_id');
         
         /** @var BSeller_SkyHub_Model_System_Config_Source_Store_Available $source */
         $source = Mage::getModel('bseller_skyhub/system_config_source_store_available');
-        $fieldset->addField('store_id', 'select', [
-            'name'     => 'store_id',
-            'required' => true,
-            'options'  => $source->toArray(),
-            'label'    => $this->__('Select Store'),
-            'note'     => $this->__('The store the order must be imported to.'),
-        ]);
+        $fieldset->addField(
+            'store_id',
+            'select',
+            array(
+                'name'     => 'store_id',
+                'required' => true,
+                'options'  => $source->toArray(),
+                'label'    => $this->__('Select Store'),
+                'note'     => $this->__('The store the order must be imported to.'),
+            )
+        );
         
         $orderCodes = $this->_getSession()->getData('order_codes');
-        $fieldset->addField('order_codes', 'textarea', [
-            'name'     => 'order_codes',
-            'required' => true,
-            'label'    => $this->__('SkyHub Order Codes'),
-            'value'    => $orderCodes,
-            'note'     => $this->__('The order codes must be inserted one by line.'),
-        ]);
+        $fieldset->addField(
+            'order_codes',
+            'textarea',
+            array(
+                'name'     => 'order_codes',
+                'required' => true,
+                'label'    => $this->__('SkyHub Order Codes'),
+                'value'    => $orderCodes,
+                'note'     => $this->__('The order codes must be inserted one by line.'),
+            )
+        );
         
-        $form->setValues(['store_id' => $storeId]);
+        $form->setValues(array('store_id' => $storeId));
         $form->setUseContainer(true);
         $this->setForm($form);
         
