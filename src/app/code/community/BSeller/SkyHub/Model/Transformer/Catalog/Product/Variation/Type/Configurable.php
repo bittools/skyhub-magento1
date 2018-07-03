@@ -11,10 +11,10 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
     
     
     /** @var array */
-    protected $configurableAttributes    = [];
+    protected $configurableAttributes    = array();
 
     /** @var array */
-    protected $configurableAttributesPrices = [];
+    protected $configurableAttributesPrices = array();
     
     
     /**
@@ -27,8 +27,8 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
      */
     public function create(Mage_Catalog_Model_Product $product, Product $interface)
     {
-        $this->configurableAttributes       = [];
-        $this->configurableAttributesPrices = [];
+        $this->configurableAttributes       = array();
+        $this->configurableAttributesPrices = array();
 
         $this->prepareProductVariationAttributes($product, $interface);
 
@@ -227,7 +227,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
      */
     protected function getConfigurableAttributePrices(Mage_Catalog_Model_Product $configurableProduct)
     {
-        $prices = [];
+        $prices = array();
 
         /** @var Mage_Catalog_Model_Product $childProduct */
         if (!$childProduct = $this->getCurrentChildProduct($configurableProduct)) {
@@ -282,7 +282,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
             /** @var Mage_Catalog_Model_Product_Type_Configurable_Attribute|array $usedAttribute */
             foreach ($usedAttributes as $usedAttribute) {
                 $attributeId = null;
-                $prices      = [];
+                $prices      = array();
 
                 if ($usedAttribute instanceof Mage_Catalog_Model_Product_Type_Configurable_Attribute) {
                     /**

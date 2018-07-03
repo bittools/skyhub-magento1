@@ -60,10 +60,10 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Category extends BSeller_SkyHub_Mo
                           ->convert($category);
 
         $this->eventMethod = 'create';
-        $this->eventParams = [
+        $this->eventParams = array(
             'category'  => $category,
             'interface' => $interface,
-        ];
+        );
 
         $this->beforeIntegration();
         $response = $interface->create();
@@ -86,10 +86,10 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Category extends BSeller_SkyHub_Mo
                           ->convert($category);
 
         $this->eventMethod = 'update';
-        $this->eventParams = [
+        $this->eventParams = array(
             'category'  => $category,
             'interface' => $interface,
-        ];
+        );
 
         $this->beforeIntegration();
         $response = $interface->update();

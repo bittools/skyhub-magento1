@@ -40,14 +40,14 @@ class BSeller_SkyHub_Model_Resource_Eav_Entity_Attribute_Option extends Mage_Eav
         /** @var Varien_Db_Select $select */
         $select = $this->getReadConnection()
              ->select()
-            ->from(['o' => $this->getMainTable()])
+            ->from(array('o' => $this->getMainTable()))
             ->joinInner(
-                ['ov' => $this->getTable('eav/attribute_option_value')],
+                array('ov' => $this->getTable('eav/attribute_option_value')),
                 "o.option_id = ov.option_id",
-                ['store_id', 'value']
+                array('store_id', 'value')
             )
             ->where('o.attribute_id = ?', (int) $attribute)
-            ->where('ov.store_id IN (?)', (array) $this->filterIds([0, $store]))
+            ->where('ov.store_id IN (?)', (array) $this->filterIds(array(0, $store)))
             ->where('o.option_id = ?', (int) $optionId)
             ->order('ov.store_id DESC')
         ;

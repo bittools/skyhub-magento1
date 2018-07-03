@@ -39,7 +39,7 @@ trait BSeller_SkyHub_Trait_Store_Iterator
     protected function processStoreIteration($object, $method, $params = null)
     {
         if (!is_array($params)) {
-            $params = [$params];
+            $params = array($params);
         }
         
         if (!$this->getStoreIterator()->isIterating()) {

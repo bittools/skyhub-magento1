@@ -35,7 +35,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Clean extends BSeller_SkyHub_Model_Cron_Ab
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
 
-        $productsToBeRemovedFromQueue = [];
+        $productsToBeRemovedFromQueue = array();
         foreach ($productIds as $productId) {
             $product = Mage::getModel('catalog/product')->load($productId);
             if (!$product || !$product->getId()) {
@@ -51,7 +51,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Clean extends BSeller_SkyHub_Model_Cron_Ab
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
 
-        $categoriesToBeRemovedFromQueue = [];
+        $categoriesToBeRemovedFromQueue = array();
         foreach ($categoryIds as $categoryId) {
             $category = Mage::getModel('catalog/category')->load($categoryId);
             if (!$category || !$category->getId()) {
@@ -67,7 +67,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Clean extends BSeller_SkyHub_Model_Cron_Ab
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
 
-        $attributesToBeRemovedFromQueue = [];
+        $attributesToBeRemovedFromQueue = array();
         foreach ($attributeIds as $attributeId) {
             $attribute = Mage::getModel('catalog/entity_attribute')->load($attributeId);
             if (!$attribute || !$attribute->getId()) {

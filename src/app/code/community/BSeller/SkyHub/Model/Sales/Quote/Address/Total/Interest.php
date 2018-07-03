@@ -67,11 +67,11 @@ class BSeller_SkyHub_Model_Sales_Quote_Address_Total_Interest extends Mage_Sales
         $amount = (float) $address->getQuote()->getData('bseller_skyhub_interest');
     
         if ($amount != 0) {
-            $address->addTotal([
+            $address->addTotal(array(
                 'code'  => $this->getCode(),
                 'title' => $this->getLabel(),
                 'value' => $amount
-            ]);
+            ));
         }
         
         return parent::fetch($address);

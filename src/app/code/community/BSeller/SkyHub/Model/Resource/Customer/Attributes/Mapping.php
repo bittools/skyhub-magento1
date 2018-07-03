@@ -76,7 +76,7 @@ class BSeller_SkyHub_Model_Resource_Customer_Attributes_Mapping extends BSeller_
         $table = $this->getTable('bseller_skyhub/customer_attributes_mapping_options');
         $this->_getWriteAdapter()->update(
             $table,
-            ['magento_value' => $magentoValue],
+            array('magento_value' => $magentoValue),
             "customer_attributes_mapping_id = '{$attributeMappingId}' and skyhub_code = '{$skyhubCode}'"
         );
     }

@@ -27,11 +27,11 @@ class BSeller_SkyHub_Model_Resource_Catalog_Product_Configurable_Price
         
         $select = $this->getReadConnection()
             ->select()
-            ->from(['cpsa' => $this->getMainTable()], 'attribute_id')
+            ->from(array('cpsa' => $this->getMainTable()), 'attribute_id')
             ->joinInner(
-                ['cpsap' => $this->getTable('catalog/product_super_attribute_pricing')],
+                array('cpsap' => $this->getTable('catalog/product_super_attribute_pricing')),
                 'cpsa.product_super_attribute_id = cpsap.product_super_attribute_id',
-                ['value_index', 'is_percent', 'pricing_value']
+                array('value_index', 'is_percent', 'pricing_value')
             )
             ->where('cpsa.product_id = ?', (int) $productId)
             ->where('cpsa.attribute_id IN (?)', $attributesIds)

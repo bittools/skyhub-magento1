@@ -42,7 +42,7 @@ class BSeller_SkyHub_Model_Resource_Setup_Catalog_Product_Mapping extends BSelle
                 continue;
             }
             
-            $attributeData = [
+            $attributeData = array(
                 'skyhub_code'        => $skyhubCode,
                 'skyhub_label'       => $label,
                 'skyhub_description' => $description,
@@ -51,9 +51,9 @@ class BSeller_SkyHub_Model_Resource_Setup_Catalog_Product_Mapping extends BSelle
                 'validation'         => $validation,
                 'required'           => $required,
                 'editable'           => $editable,
-            ];
+            );
 
-            $installConfig = (array) $this->arrayExtract($data, 'attribute_install_config', []);
+            $installConfig = (array) $this->arrayExtract($data, 'attribute_install_config', array());
             $magentoCode   = $this->arrayExtract($installConfig, 'attribute_code');
 
             /** @var Mage_Eav_Model_Entity_Attribute $attribute */
@@ -71,7 +71,7 @@ class BSeller_SkyHub_Model_Resource_Setup_Catalog_Product_Mapping extends BSelle
                                ->where('skyhub_code = :skyhub_code')
                                ->limit(1);
     
-                $id = $this->getConnection()->fetchOne($select, [':skyhub_code' => $skyhubCode]);
+                $id = $this->getConnection()->fetchOne($select, array(':skyhub_code' => $skyhubCode));
     
                 if ($id) {
                     $this->getConnection()->update($table, $attributeData, "id = {$id}");

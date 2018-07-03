@@ -56,7 +56,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Attribute extends BSeller
      */
     protected function appendAttributeOptions(Mage_Eav_Model_Entity_Attribute $attribute, Attribute $interface)
     {
-        if (!in_array($attribute->getFrontend()->getInputType(), ['select', 'multiselect'])) {
+        if (!in_array($attribute->getFrontend()->getInputType(), array('select', 'multiselect'))) {
             return $this;
         }
 

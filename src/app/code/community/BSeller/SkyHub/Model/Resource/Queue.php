@@ -46,7 +46,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
             return $this;
         }
 
-        $items = [];
+        $items = array();
         
         $deleteSets = array_chunk($entityIds, 1000);
         
@@ -65,7 +65,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
         }
 
         foreach ($entityIds as $entityId) {
-            $items[] = [
+            $items[] = array(
                 'entity_id'     => (int) $entityId,
                 'entity_type'   => (string) $entityType,
                 'status'        => BSeller_SkyHub_Model_Queue::STATUS_PENDING,
@@ -74,7 +74,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
                 'process_after' => empty($processAfter) ? now() : $processAfter,
                 'store_id'      => (int) Mage::app()->getStore($storeId)->getId(),
                 'created_at'    => now(),
-            ];
+            );
         }
 
         /** @var array $item */
@@ -109,10 +109,10 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
         $storeId = 0
     )
     {
-        $integrableStatuses = [
+        $integrableStatuses = array(
             BSeller_SkyHub_Model_Queue::STATUS_PENDING,
             BSeller_SkyHub_Model_Queue::STATUS_RETRY
-        ];
+        );
 
         /** @var Varien_Db_Select $select */
         $select = $this->getReadConnection()
@@ -244,10 +244,11 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     {
         $this->updateQueues(
             $entityIds,
-            $entityType, [
+            $entityType,
+            array(
                 'status'   => $status,
                 'messages' => $message,
-            ],
+            ),
             $storeId
         );
         return $this;
@@ -262,7 +263,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
      *
      * @return $this
      */
-    public function updateQueues($entityIds, $entityType, array $binds = [], $storeId = 0)
+    public function updateQueues($entityIds, $entityType, array $binds = array(), $storeId = 0)
     {
         $entityIds = $this->filterEntityIds((array) $entityIds);
 
@@ -306,11 +307,11 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     {
         $entityIds  = implode(',', $entityIds);
         $storeIds   = implode(',', $this->getStoreIds($storeId));
-        $conditions = [
+        $conditions = array(
             "entity_id IN ({$entityIds})",
             "entity_type = '{$entityType}'",
             "store_id IN ({$storeIds})"
-        ];
+        );
 
         return new Zend_Db_Expr(implode(' AND ', $conditions));
     }
@@ -325,7 +326,7 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
     {
         $storeId = (int) Mage::app()->getStore($storeId)->getId();
 
-        $storeIds = [0, $storeId];
+        $storeIds = array(0, $storeId);
         $storeIds = array_unique($storeIds);
 
         return $storeIds;

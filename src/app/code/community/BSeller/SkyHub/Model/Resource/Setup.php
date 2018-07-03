@@ -37,7 +37,7 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
      *
      * @return $this
      */
-    public function createAssociatedSalesOrderStatuses(array $states = [])
+    public function createAssociatedSalesOrderStatuses(array $states = array())
     {
         foreach ($states as $stateCode => $statuses) {
             $this->createSalesOrderStatus($stateCode, $statuses);
@@ -56,10 +56,10 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
     public function createSalesOrderStatus($state, array $status)
     {
         foreach ($status as $statusCode => $statusLabel) {
-            $statusData = [
+            $statusData = array(
                 'status' => $statusCode,
                 'label'  => $statusLabel
-            ];
+            );
         
             $this->getConnection()->insertIgnore($this->getSalesOrderStatusTable(), $statusData);
             $this->associateStatusToState($state, $statusCode);
@@ -78,11 +78,11 @@ class BSeller_SkyHub_Model_Resource_Setup extends BSeller_Core_Model_Resource_Se
      */
     public function associateStatusToState($state, $status, $isDefault = 0)
     {
-        $associationData = [
+        $associationData = array(
             'status'     => (string) $status,
             'state'      => (string) $state,
             'is_default' => (int)    $isDefault,
-        ];
+        );
     
         $this->getConnection()->insertIgnore($this->getSalesOrderStatusStateTable(), $associationData);
         

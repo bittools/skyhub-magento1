@@ -31,9 +31,9 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product_Attribute extends BSeller_
     {
         $exists = $this->productAttributeExists($attribute->getId());
 
-        $eventParams = [
+        $eventParams = array(
             'attribute' => $attribute
-        ];
+        );
 
         Mage::dispatchEvent('bseller_skyhub_catalog_product_attribute_integrate_before', $eventParams);
 

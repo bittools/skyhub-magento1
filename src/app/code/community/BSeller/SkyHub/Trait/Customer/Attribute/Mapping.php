@@ -15,7 +15,7 @@ trait BSeller_SkyHub_Trait_Customer_Attribute_Mapping
 {
     
     /** @var array */
-    protected $mappedAttributes = [];
+    protected $mappedAttributes = array();
     
     
     /**
@@ -52,7 +52,7 @@ trait BSeller_SkyHub_Trait_Customer_Attribute_Mapping
     protected function initMappedAttributes()
     {
         if (empty($this->mappedAttributes)) {
-            $this->mappedAttributes = [];
+            $this->mappedAttributes = array();
             
             /** @var BSeller_SkyHub_Model_Customer_Attributes_Mapping $mappedAttribute */
             foreach ($this->getMappedAttributesCollection() as $mappedAttribute) {

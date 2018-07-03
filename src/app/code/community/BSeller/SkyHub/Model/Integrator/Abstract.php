@@ -24,7 +24,7 @@ abstract class BSeller_SkyHub_Model_Integrator_Abstract implements BSeller_SkyHu
     protected $eventType   = null;
     protected $eventMethod = null;
     protected $eventSuffix = null;
-    protected $eventParams = [];
+    protected $eventParams = array();
 
 
     /**
@@ -50,12 +50,12 @@ abstract class BSeller_SkyHub_Model_Integrator_Abstract implements BSeller_SkyHu
      */
     protected function getEventName()
     {
-        return vsprintf('%s_%s_%s_$s', [
+        return vsprintf('%s_%s_%s_$s', array(
             $this->eventPrefix,
             $this->eventType,
             $this->eventMethod,
             $this->eventSuffix,
-        ]);
+        ));
     }
 
 

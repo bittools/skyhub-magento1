@@ -43,14 +43,14 @@ class BSeller_SkyHub_Model_Resource_Customer_Attributes_Mapping_Collection
     public function setMappedAttributesFilter()
     {
         $this->addFieldToFilter(
-            [
+            array(
                 'attribute_id',
                 'editable',
-            ],
-            [
-                ['notnull' => true],
-                ['eq' => 0]
-            ]
+            ),
+            array(
+                array('notnull' => true),
+                array('eq' => 0)
+            )
         );
         
         return $this;
@@ -62,7 +62,7 @@ class BSeller_SkyHub_Model_Resource_Customer_Attributes_Mapping_Collection
      */
     public function setPendingAttributesFilter()
     {
-        $this->addFieldToFilter('attribute_id', ['null' => true]);
+        $this->addFieldToFilter('attribute_id', array('null' => true));
         $this->addFieldToFilter('editable', 1);
         
         return $this;

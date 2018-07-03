@@ -72,6 +72,6 @@ trait BSeller_SkyHub_Model_Catalog_Product_Type_Price
             return (array) $skyhubConfig;
         }
         
-        return [];
+        return array();
     }
 }
