@@ -46,7 +46,8 @@ abstract class BSeller_SkyHub_Model_Cron_Abstract
         /**
          * Otherwise checks if any store is activated to use the module.
          */
-        if (!$this->isModuleEnabled($storeId) && empty($this->getStoreIterator()->getStores())) {
+        $stores = $this->getStoreIterator()->getStores();
+        if (!$this->isModuleEnabled($storeId) && empty($stores)) {
             $schedule->setMessages($this->__('Module is not enabled in configuration.'));
             return false;
         }
