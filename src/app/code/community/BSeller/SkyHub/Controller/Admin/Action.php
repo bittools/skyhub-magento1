@@ -21,8 +21,13 @@ class BSeller_SkyHub_Controller_Admin_Action extends BSeller_Core_Controller_Adm
         BSeller_SkyHub_Trait_Store_Iterator;
 
 
+    /**
+     * @var string
+     * @var string
+     */
     protected $_aclPrefix = 'bseller/bseller_skyhub/';
-    protected $_programAclKey = '';
+    protected $_aclSuffix = '';
+
 
     /**
      * @param null|string $actionTitle
