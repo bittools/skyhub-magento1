@@ -21,6 +21,9 @@ class BSeller_SkyHub_Controller_Admin_Action extends BSeller_Core_Controller_Adm
         BSeller_SkyHub_Trait_Store_Iterator;
 
 
+    protected $_aclPrefix = 'bseller/bseller_skyhub/';
+    protected $_programAclKey = '';
+
     /**
      * @param null|string $actionTitle
      *
@@ -36,5 +39,24 @@ class BSeller_SkyHub_Controller_Admin_Action extends BSeller_Core_Controller_Adm
         }
 
         return $this;
+    }
+
+
+    /**
+     * @return Mage_Admin_Model_Session
+     */
+    protected function _getAclSession()
+    {
+        return Mage::getSingleton('admin/session');
+    }
+
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        $session = $this->_getAclSession();
+        return $session->isAllowed($this->_aclPrefix.$this->_aclSuffix);
     }
 }

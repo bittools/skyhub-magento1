@@ -14,6 +14,7 @@
 
 class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_QueueController extends BSeller_SkyHub_Controller_Admin_Action
 {
+    protected $_aclPrefix = 'bseller/bseller_skyhub/queues/';
 
     /**
      * @param string|null $actionTitle
@@ -77,5 +78,32 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_QueueController extends BSeller_Sk
         $this->_setActiveMenu('bseller/bseller_skyhub/queues/sales_order_status_queue');
 
         $this->renderLayout();
+    }
+
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        $action = strtolower($this->getRequest()->getActionName());
+        switch ($action) {
+            case 'productsqueue':
+                $this->_aclSuffix = 'products_queue';
+                break;
+            case 'categoriesqueue':
+                $this->_aclSuffix = 'categories_queue';
+                break;
+            case 'productattributesqueue':
+                $this->_aclSuffix = 'product_attributes_queue';
+                break;
+            case 'salesorderstatusqueue':
+                $this->_aclSuffix = 'sales_order_status_queue';
+                break;
+            default:
+                break;
+        }
+
+        return parent::_isAllowed();
     }
 }

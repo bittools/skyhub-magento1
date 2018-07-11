@@ -14,7 +14,9 @@
 class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Sales_Order_ImportController
     extends BSeller_SkyHub_Controller_Admin_Queue
 {
-    
+
+    protected $_aclPrefix = 'bseller/bseller_skyhub/sales_import/';
+
     public function formAction()
     {
         $this->init('Import Manually');
@@ -112,5 +114,28 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Sales_Order_ImportController
         }
         
         $this->redirectBack();
+    }
+
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        $action = strtolower($this->getRequest()->getActionName());
+        switch ($action) {
+            case 'log':
+            case 'massretry':
+            case 'massdelete':
+            case 'retry':
+            case 'delete':
+                $this->_aclSuffix = 'logs';
+                break;
+            default:
+                $this->_aclSuffix = 'manual_import';
+                break;
+        }
+
+        return parent::_isAllowed();
     }
 }

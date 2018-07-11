@@ -61,7 +61,7 @@
 "Note that this must be a cron expression format.","Note que este campo deve estar no formato de uma expressão de cron."
 "Products Queue","Fila de Produtos"
 "Catalog Categories Queue","Fila de Categorias do Catálogo"
-"Catalog Products Queue","Fila de Produtos do Catalog"
+"Catalog Products Queue","Fila de Produtos do Catálogo"
 "Queue","Filas"
 "Queues Tracking","Acompanhamento de Filas"
 "Product Attributes Queue","Fila de Atributos de Produto"

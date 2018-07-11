@@ -256,4 +256,13 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_Attributes_Mapping
         return $attribute;
     }
 
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        $this->_aclSuffix = 'catalog_product_attributes_mapping';
+        return parent::_isAllowed();
+    }
 }

@@ -285,4 +285,13 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Customer_Attributes_MappingControl
         return $attribute;
     }
 
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        $this->_aclSuffix = 'customer_attributes_mapping';
+        return parent::_isAllowed();
+    }
 }
