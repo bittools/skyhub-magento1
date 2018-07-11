@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.4] - 2018-07-11
+### Changed
+- SkyHub programs ACL implemented;
+
+
 ## [1.3.3] - 2018-06-26
 ### Added
 - Order payment info em order detail page;
