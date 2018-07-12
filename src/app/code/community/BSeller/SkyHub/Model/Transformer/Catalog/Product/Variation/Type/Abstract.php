@@ -157,9 +157,21 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
      */
     protected function getStockQty(Mage_Catalog_Model_Product $product)
     {
+        if (!$product->isSalable()) {
+            return 0;
+        }
+
         /** @var Mage_CatalogInventory_Model_Stock_Item $stockItem */
         $stockItem = Mage::getModel('cataloginventory/stock_item');
         $stockItem->loadByProduct($product);
+
+        if (!$stockItem->getManageStock()) {
+            return 1000;
+        }
+
+        if (!$stockItem->getIsInStock()) {
+            return 0;
+        }
 
         return (float) $stockItem->getQty();
     }

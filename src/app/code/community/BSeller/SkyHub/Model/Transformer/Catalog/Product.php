@@ -272,20 +272,41 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
     {
         /** @var BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping $mappedAttribute */
         $mappedAttribute = $this->getMappedAttribute('qty');
-        
+
         if (!$mappedAttribute || !$mappedAttribute->getId()) {
             return $this;
         }
         
-        /** @var Mage_CatalogInventory_Model_Stock_Item $stockItem */
-        $stockItem = Mage::getModel('cataloginventory/stock_item');
-        $stockItem->loadByProduct($product);
-    
-        $value = (float) $stockItem->getQty();
-        
+        $value = $this->getProductStockQty($product);
         $interface->setQty($value);
         
         return $this;
+    }
+
+
+    /**
+     * @param Mage_Catalog_Model_Product             $product
+     * @return int
+     */
+    protected function getProductStockQty(Mage_Catalog_Model_Product $product)
+    {
+        if (!$product->isSalable()) {
+            return 0;
+        }
+
+        /** @var Mage_CatalogInventory_Model_Stock_Item $stockItem */
+        $stockItem = Mage::getModel('cataloginventory/stock_item');
+        $stockItem->loadByProduct($product);
+
+        if (!$stockItem->getManageStock()) {
+            return 1000;
+        }
+
+        if (!$stockItem->getIsInStock()) {
+            return 0;
+        }
+
+        return $stockItem->getQty();
     }
     
     
