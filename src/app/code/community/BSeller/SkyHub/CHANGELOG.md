@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.5] - 2018-07-13
+### Changed
+- Catalog product inventory rules improved;
+
+
 ## [1.3.4] - 2018-07-11
 ### Changed
 - SkyHub programs ACL implemented;
