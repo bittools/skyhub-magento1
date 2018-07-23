@@ -20,13 +20,13 @@ trait BSeller_SkyHub_Trait_Customer_Attribute
     protected $attributeCollection;
     
     /** @var array */
-    protected $customerAttributes   = [];
+    protected $customerAttributes  = array();
     
     /** @var array */
-    protected $attributesWhitelist = [];
+    protected $attributesWhitelist = array();
     
     /** @var array */
-    protected $entityTypes         = [];
+    protected $entityTypes         = array();
     
     /** @var Mage_Catalog_Model_Customer */
     protected $customer;
@@ -74,7 +74,7 @@ trait BSeller_SkyHub_Trait_Customer_Attribute
      */
     protected function getAllAttributeIds()
     {
-        $attributeIds = [];
+        $attributeIds = array();
         
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         foreach ($this->customerAttributes as $attribute) {
@@ -121,7 +121,7 @@ trait BSeller_SkyHub_Trait_Customer_Attribute
      */
     protected function getIntegrableCustomerAttributes()
     {
-        $integrable = [];
+        $integrable = array();
 
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         foreach ($this->getCustomerAttributesCollection() as $attribute) {
@@ -142,11 +142,11 @@ trait BSeller_SkyHub_Trait_Customer_Attribute
      *
      * @return array
      */
-    protected function getCustomerAttributes(array $ids = [], array $excludeIds = [])
+    protected function getCustomerAttributes(array $ids = array(), array $excludeIds = array())
     {
         $this->initCustomerAttributes();
         
-        $attributes = [];
+        $attributes = array();
         
         /**
          * @var string                          $code

@@ -74,10 +74,10 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
                           ->convert($product);
 
         $this->eventMethod = 'create';
-        $this->eventParams = [
+        $this->eventParams = array(
             'product'   => $product,
             'interface' => $interface,
-        ];
+        );
 
         $this->beforeIntegration();
         $response = $interface->create();
@@ -104,10 +104,10 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
                           ->convert($product);
 
         $this->eventMethod = 'update';
-        $this->eventParams = [
+        $this->eventParams = array(
             'product'   => $product,
             'interface' => $interface,
-        ];
+        );
 
         $this->beforeIntegration();
         $response = $interface->update();

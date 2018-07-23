@@ -98,8 +98,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product_Attribute extends BSeller_
     
         $attributes = $this->getProductAttributes($attributeIds);
         
-        $successQueueIds = [];
-        $failedQueueIds  = [];
+        $successQueueIds = array();
+        $failedQueueIds  = array();
     
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         foreach ($attributes as $attribute) {

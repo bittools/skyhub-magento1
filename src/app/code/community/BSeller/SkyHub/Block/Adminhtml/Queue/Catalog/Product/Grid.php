@@ -39,13 +39,14 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Product_Grid extends BSeller_
         /** @var BSeller_SkyHub_Model_Resource_Queue_Collection $collection */
         $collection->getSelect()
             ->joinLeft(
-                ['entity' => Mage::getSingleton('core/resource')->getTableName('catalog/product')],
+                array('entity' => Mage::getSingleton('core/resource')->getTableName('catalog/product')),
                 "entity.entity_id = main_table.entity_id",
-                ['sku']
-            )->joinLeft(
-                ['eav' => $name->getBackendTable()],
+                array('sku')
+            )
+            ->joinLeft(
+                array('eav' => $name->getBackendTable()),
                 $condition,
-                ['product_name' => 'value']
+                array('product_name' => 'value')
             )
         ;
 
@@ -62,22 +63,30 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Product_Grid extends BSeller_
     {
         parent::_prepareColumns();
 
-        $this->addColumnAfter('sku', [
-            'header'       => $this->__('Product SKU'),
-            'align'        => 'left',
-            'type'         => 'text',
-            'width'        => '200px',
-            'index'        => 'sku',
-            'filter_index' => 'entity.sku',
-        ], 'entity_id');
+        $this->addColumnAfter(
+            'sku',
+            array(
+                'header'       => $this->__('Product SKU'),
+                'align'        => 'left',
+                'type'         => 'text',
+                'width'        => '200px',
+                'index'        => 'sku',
+                'filter_index' => 'entity.sku',
+            ),
+            'entity_id'
+        );
 
-        $this->addColumnAfter('product_name', [
-            'header'       => $this->__('Product Name'),
-            'align'        => 'left',
-            'type'         => 'text',
-            'index'        => 'product_name',
-            'filter_index' => 'eav.value',
-        ], 'sku');
+        $this->addColumnAfter(
+            'product_name',
+            array(
+                'header'       => $this->__('Product Name'),
+                'align'        => 'left',
+                'type'         => 'text',
+                'index'        => 'product_name',
+                'filter_index' => 'eav.value',
+            ),
+            'sku'
+        );
 
         $this->sortColumnsByOrder();
 

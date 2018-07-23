@@ -28,7 +28,7 @@ trait BSeller_SkyHub_Trait_Catalog_Category
         }
 
         $ids            = $this->getCategoryPathIds($category, $store);
-        $categoryPieces = [];
+        $categoryPieces = array();
 
         $categoryResource = Mage::getResourceSingleton('catalog/category');
         foreach ($ids as $id) {
@@ -59,7 +59,7 @@ trait BSeller_SkyHub_Trait_Catalog_Category
 
         $ids     = array_reverse(explode('/', $category->getPath()));
         $rootCategoriesIds = $this->getAllRootCategories();
-        $pathIds = [];
+        $pathIds = array();
 
         /** @var int $id */
         foreach ($ids as $id) {

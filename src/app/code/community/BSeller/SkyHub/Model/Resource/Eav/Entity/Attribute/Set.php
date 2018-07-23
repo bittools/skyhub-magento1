@@ -26,9 +26,9 @@ class BSeller_SkyHub_Model_Resource_Eav_Entity_Attribute_Set extends Mage_Eav_Mo
         /** @var Varien_Db_Select $select */
         $select = $this->getReadConnection()
             ->select()
-            ->from(['sets' => $this->getMainTable()], 'attribute_set_id')
+            ->from(array('sets' => $this->getMainTable()), 'attribute_set_id')
             ->joinLeft(
-                ['groups' => $this->getTable('eav/attribute_group')],
+                array('groups' => $this->getTable('eav/attribute_group')),
                 "sets.attribute_set_id = groups.attribute_set_id AND groups.attribute_group_name='{$groupName}'",
                 'attribute_group_id'
             )
@@ -47,7 +47,7 @@ class BSeller_SkyHub_Model_Resource_Eav_Entity_Attribute_Set extends Mage_Eav_Mo
             return true;
         }
 
-        $groups = [];
+        $groups = array();
 
         /** @var array $result */
         foreach ($results as $result) {
@@ -57,11 +57,11 @@ class BSeller_SkyHub_Model_Resource_Eav_Entity_Attribute_Set extends Mage_Eav_Mo
                 continue;
             }
 
-            $groups[] = [
+            $groups[] = array(
                 'attribute_set_id'     => $setId,
                 'attribute_group_name' => $groupName,
                 'sort_order'           => (int) $sortOrder,
-            ];
+            );
         }
 
         try {

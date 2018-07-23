@@ -23,7 +23,7 @@ class BSeller_SkyHub_Model_System_Config_Source_Store_Available extends BSeller_
      */
     protected function optionsKeyValue($multiselect = null)
     {
-        $stores = [];
+        $stores = array();
         
         /** @var Mage_Core_Model_Store $store */
         foreach ($this->getStoreIterator()->getStores() as $store) {

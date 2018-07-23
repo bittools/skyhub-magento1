@@ -24,13 +24,13 @@ $this->startSetup();
 //**********************************************************************************************************************
 $columnName = 'integrate';
 $tableName = $this->getTable('bseller_skyhub/entity_id');
-$columnConfig = [
+$columnConfig = array(
     'type' => $this::TYPE_INTEGER,
     'nullable' => false,
     'default' => false,
     'after' => '',
     'comment' => 'Product Flag',
-];
+);
 
 $conn->addColumn($tableName, $columnName, $columnConfig);
 

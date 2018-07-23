@@ -156,11 +156,11 @@ class BSeller_SkyHub_Model_Catalog_Product_Attributes_Mapping extends BSeller_Co
      */
     protected function getValidDataTypes()
     {
-        return [
+        return array(
             self::DATA_TYPE_BOOLEAN,
             self::DATA_TYPE_DECIMAL,
             self::DATA_TYPE_INTEGER,
             self::DATA_TYPE_STRING,
-        ];
+        );
     }
 }

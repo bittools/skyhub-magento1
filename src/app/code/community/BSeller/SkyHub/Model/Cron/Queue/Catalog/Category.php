@@ -28,14 +28,14 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
 
         /** @var Mage_Catalog_Model_Resource_Category_Collection $categories */
         $categories = $this->getCategoryCollection()
-            ->addFieldToFilter('level', ['gt' => $rootCategoryLevel]);
+            ->addFieldToFilter('level', array('gt' => $rootCategoryLevel));
 
         if (!$categories->getSize()) {
             $schedule->setMessages($this->__('No category to be listed right now.'));
             return;
         }
 
-        $categoryIds = [];
+        $categoryIds = array();
 
         /** @var Mage_Catalog_Model_Category $category */
         foreach ($categories as $category) {
@@ -98,8 +98,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
             return;
         }
     
-        $successQueueIds = [];
-        $failedQueueIds  = [];
+        $successQueueIds = array();
+        $failedQueueIds  = array();
     
         /** @var Mage_Catalog_Model_Category $category */
         foreach ($categoryIds as $categoryId) {
@@ -133,7 +133,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Category extends BSeller_SkyHub_Mo
      */
     protected function getCategory($categoryId, Mage_Core_Model_Store $store = null)
     {
-        $data = ['disable_flat' => true];
+        $data = array('disable_flat' => true);
         
         /** @var Mage_Catalog_Model_Category $category */
         $category = Mage::getModel('catalog/category', $data);

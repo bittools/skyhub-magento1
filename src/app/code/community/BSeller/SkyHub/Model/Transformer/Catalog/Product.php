@@ -43,10 +43,13 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
              ->prepareProductImages($product, $interface)
              ->prepareProductVariations($product, $interface);
 
-        Mage::dispatchEvent('bseller_skyhub_product_convert_after', [
-            'product'   => $product,
-            'interface' => $interface,
-        ]);
+        Mage::dispatchEvent(
+            'bseller_skyhub_product_convert_after',
+            array(
+                'product'   => $product,
+                'interface' => $interface,
+            )
+        );
 
         return $interface;
     }
@@ -138,9 +141,9 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
     {
         /** @var Mage_Catalog_Model_Resource_Category_Collection $categories */
         $categories = $product->getCategoryCollection();
-        $categories->addAttributeToSelect([
+        $categories->addAttributeToSelect(array(
             'name',
-        ]);
+        ));
 
         $categories->addAttributeToFilter('level', array('gteq' => 2));
         
@@ -168,7 +171,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
          * Let's get the processed attributes to exclude'em from the specification list.
          */
         $processedAttributeIds = (array) $product->getData('processed_attributes');
-        $remainingAttributes   = (array) $this->getProductAttributes([], array_keys($processedAttributeIds));
+        $remainingAttributes   = (array) $this->getProductAttributes(array(), array_keys($processedAttributeIds));
     
         /** @var Mage_Eav_Model_Entity_Attribute $specificationAttribute */
         foreach ($remainingAttributes as $attribute) {
@@ -251,7 +254,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
     
                     $this->addProcessedAttribute($product, $attribute);
     
-                    call_user_func([$interface, $method], $value);
+                    call_user_func(array($interface, $method), $value);
             }
         }
     
@@ -434,7 +437,7 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         /**
          * Attribute is from type select.
          */
-        if (in_array($attribute->getFrontend()->getInputType(), ['select', 'multiselect'])) {
+        if (in_array($attribute->getFrontend()->getInputType(), array('select', 'multiselect'))) {
             try {
                 $data = $this->extractAttributeOptionValue($attribute, $data, $this->getStore());
             } catch (Exception $e) {

@@ -26,10 +26,10 @@ class BSeller_SkyHub_Model_System_Config_Source_Integration_Method
      */
     protected function optionsKeyValue($multiselect = null)
     {
-        return [
+        return array(
             self::INTEGRATION_METHOD_QUEUE   => $this->__('Only With Queues'),
             self::INTEGRATION_METHOD_ON_SAVE => $this->__('On Entity Save'),
             self::INTEGRATION_METHOD_BOTH    => $this->__('Both Queue and On Save'),
-        ];
+        );
     }
 }

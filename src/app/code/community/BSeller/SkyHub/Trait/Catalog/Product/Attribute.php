@@ -19,13 +19,13 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
     protected $attributeCollection;
     
     /** @var array */
-    protected $productAttributes   = [];
+    protected $productAttributes   = array();
     
     /** @var array */
-    protected $attributesWhitelist = [];
+    protected $attributesWhitelist = array();
     
     /** @var array */
-    protected $entityTypes         = [];
+    protected $entityTypes         = array();
     
     /** @var Mage_Catalog_Model_Product */
     protected $product;
@@ -73,7 +73,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
      */
     protected function getAllAttributeIds()
     {
-        $attributeIds = [];
+        $attributeIds = array();
         
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         foreach ($this->productAttributes as $attribute) {
@@ -120,7 +120,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
      */
     protected function getIntegrableProductAttributes()
     {
-        $integrable = [];
+        $integrable = array();
 
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         foreach ($this->getProductAttributesCollection() as $attribute) {
@@ -141,11 +141,11 @@ trait BSeller_SkyHub_Trait_Catalog_Product_Attribute
      *
      * @return array
      */
-    protected function getProductAttributes(array $ids = [], array $excludeIds = [])
+    protected function getProductAttributes(array $ids = array(), array $excludeIds = array())
     {
         $this->initProductAttributes();
         
-        $attributes = [];
+        $attributes = array();
         
         /**
          * @var string                          $code

@@ -19,10 +19,10 @@ abstract class BSeller_SkyHub_Model_Config
     protected $config;
 
     /** @var array */
-    protected $attributes = [];
+    protected $attributes = array();
 
     /** @var array */
-    protected $blacklist = [];
+    protected $blacklist = array();
 
 
     /**
@@ -35,7 +35,7 @@ abstract class BSeller_SkyHub_Model_Config
         $this->getSkyHubFixedAttributes();
 
         if (!isset($this->attributes[$code], $this->attributes[$code]['attribute_install_config'])) {
-            return [];
+            return array();
         }
 
         return (array)$this->attributes[$code]['attribute_install_config'];

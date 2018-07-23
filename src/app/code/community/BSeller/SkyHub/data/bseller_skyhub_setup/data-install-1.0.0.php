@@ -27,12 +27,12 @@ $this->installSkyHubRequiredAttributes(Mage_Catalog_Model_Product::ENTITY);
 //**********************************************************************************************************************
 // Install statuses data.
 //**********************************************************************************************************************
-$statuses = [
-    Mage_Sales_Model_Order::STATE_COMPLETE => [
+$statuses = array(
+    Mage_Sales_Model_Order::STATE_COMPLETE => array(
         'customer_delivered' => 'Delivered to Customer',
         'shipment_exception' => 'Shipment Exception',
-    ]
-];
+    )
+);
 
 $this->createAssociatedSalesOrderStatuses($statuses);
 

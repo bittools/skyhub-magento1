@@ -24,7 +24,7 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
      *
      * @return array|bool
      */
-    public function orders($page = 1, $perPage = 30, $saleSystem = null, array $statuses = [])
+    public function orders($page = 1, $perPage = 30, $saleSystem = null, array $statuses = array())
     {
         /** @var \SkyHub\Api\EntityInterface\Sales\Order $interface */
         $interface = $this->api()->order()->entityInterface();

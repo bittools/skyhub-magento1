@@ -22,52 +22,52 @@ $this->startSetup();
 //**********************************************************************************************************************
 // Update sales/order
 //**********************************************************************************************************************
-$interest = [
+$interest = array(
     'type'     => $this::TYPE_DECIMAL,
     'length'   => '12,4',
     'nullable' => false,
     'default'  => '0.0000',
     'comment'  => 'SkyHub Interest Amount',
-];
+);
 
-$tables = [
-    $this->getTable('sales/quote') => [
+$tables = array(
+    $this->getTable('sales/quote') => array(
         'bseller_skyhub_interest' => $interest
-    ],
-    $this->getTable('sales/order') => [
-        'bseller_skyhub' => [
+    ),
+    $this->getTable('sales/order') => array(
+        'bseller_skyhub' => array(
             'type'     => $this::TYPE_BOOLEAN,
             'nullable' => true,
             'default'  => false,
             'comment'  => 'If Order Was Created By BSeller SkyHub',
-        ],
-        'bseller_skyhub_code' => [
+        ),
+        'bseller_skyhub_code' => array(
             'type'     => $this::TYPE_TEXT,
             'size'     => 255,
             'nullable' => true,
             'default'  => false,
             'after'    => 'bseller_skyhub',
             'comment'  => 'SkyHub Code',
-        ],
-        'bseller_skyhub_channel' => [
+        ),
+        'bseller_skyhub_channel' => array(
             'type'     => $this::TYPE_TEXT,
             'size'     => 255,
             'nullable' => true,
             'default'  => false,
             'after'    => 'bseller_skyhub_code',
             'comment'  => 'SkyHub Code',
-        ],
-        'bseller_skyhub_invoice_key' => [
+        ),
+        'bseller_skyhub_invoice_key' => array(
             'type'     => $this::TYPE_TEXT,
             'size'     => 255,
             'nullable' => true,
             'default'  => null,
             'after'    => 'bseller_skyhub_channel',
             'comment'  => 'SkyHub Invoice Key',
-        ],
-        'bseller_skyhub_interest' => array_merge($interest, ['after' => 'bseller_skyhub_invoice_key']),
-    ]
-];
+        ),
+        'bseller_skyhub_interest' => array_merge($interest, array('after' => 'bseller_skyhub_invoice_key')),
+    )
+);
 
 /**
  * @var string $tableName
@@ -86,43 +86,42 @@ $tableName = (string) $this->getTable('bseller_skyhub/product_attributes_mapping
 
 /** @var Varien_Db_Ddl_Table $table */
 $table = $this->newTable($tableName)
-     ->addColumn('skyhub_code', $this::TYPE_TEXT, 255, [
-         'nullable' => false,
-     ])
-     ->addColumn('skyhub_label', $this::TYPE_TEXT, 255, [
-         'nullable' => true,
-     ])
-     ->addColumn('skyhub_description', $this::TYPE_TEXT, null, [
-         'nullable' => true,
-     ])
-     ->addColumn('enabled', $this::TYPE_BOOLEAN, 1, [
-         'nullable' => false,
-         'default' => true,
-     ])
-     ->addColumn('cast_type', $this::TYPE_TEXT, 255, [
-         'nullable' => false,
-     ])
-     ->addColumn('validation', $this::TYPE_TEXT, null, [
-         'nullable' => true,
-     ])
-     ->addColumn('attribute_id', $this::TYPE_INTEGER, 255, [
-         'nullable' => true,
-         'default'  => null,
-     ])
-     ->addColumn('required', $this::TYPE_BOOLEAN, 1, [
-         'nullable' => false,
-         'default'  => true,
-     ])
-     ->addColumn('editable', $this::TYPE_BOOLEAN, 1, [
-         'nullable' => false,
-         'default'  => true,
-     ])
-;
+    ->addColumn('skyhub_code', $this::TYPE_TEXT, 255, array(
+        'nullable' => false,
+    ))
+    ->addColumn('skyhub_label', $this::TYPE_TEXT, 255, array(
+        'nullable' => true,
+    ))
+    ->addColumn('skyhub_description', $this::TYPE_TEXT, null, array(
+        'nullable' => true,
+    ))
+    ->addColumn('enabled', $this::TYPE_BOOLEAN, 1, array(
+        'nullable' => false,
+        'default' => true,
+    ))
+    ->addColumn('cast_type', $this::TYPE_TEXT, 255, array(
+        'nullable' => false,
+    ))
+    ->addColumn('validation', $this::TYPE_TEXT, null, array(
+        'nullable' => true,
+    ))
+    ->addColumn('attribute_id', $this::TYPE_INTEGER, 255, array(
+        'nullable' => true,
+        'default'  => null,
+    ))
+    ->addColumn('required', $this::TYPE_BOOLEAN, 1, array(
+        'nullable' => false,
+        'default'  => true,
+    ))
+    ->addColumn('editable', $this::TYPE_BOOLEAN, 1, array(
+        'nullable' => false,
+        'default'  => true,
+    ));
 
 $this->addTimestamps($table);
 $conn->createTable($table);
 
-$this->addIndex(['skyhub_code', 'attribute_id'], $tableName);
+$this->addIndex(array('skyhub_code', 'attribute_id'), $tableName);
 $this->addForeignKey(
     $tableName, 'attribute_id', 'eav/attribute', 'attribute_id', $this::FK_ACTION_SET_NULL, $this::FK_ACTION_SET_NULL
 );
@@ -133,20 +132,19 @@ $this->addForeignKey(
 //**********************************************************************************************************************
 $tableName = (string) $this->getTable('bseller_skyhub/entity_id');
 $table = $this->newTable($tableName)
-    ->addColumn('entity_id', $this::TYPE_INTEGER, 10, [
+    ->addColumn('entity_id', $this::TYPE_INTEGER, 10, array(
         'nullable' => false,
         'primary'  => true,
-    ])
-    ->addColumn('entity_type', $this::TYPE_TEXT, 255, [
+    ))
+    ->addColumn('entity_type', $this::TYPE_TEXT, 255, array(
         'nullable' => false,
-    ])
-    ->addColumn('store_id', $this::TYPE_INTEGER, 10, [
+    ))
+    ->addColumn('store_id', $this::TYPE_INTEGER, 10, array(
         'unsigned' => true,
         'nullable' => false,
         'primary'  => true,
         'default'  => 0,
-    ])
-;
+    ));
 
 $this->addTimestamps($table);
 $conn->createTable($table);
@@ -155,7 +153,7 @@ $this->addForeignKey($tableName, 'store_id', 'core/store', 'store_id');
 
 $this->addIndex('entity_id',   $tableName, $this::INDEX_TYPE_INDEX);
 $this->addIndex('entity_type', $tableName, $this::INDEX_TYPE_INDEX);
-$this->addIndex(['entity_id', 'entity_type'], $tableName);
+$this->addIndex(array('entity_id', 'entity_type'), $tableName);
 
 
 //**********************************************************************************************************************
@@ -163,42 +161,41 @@ $this->addIndex(['entity_id', 'entity_type'], $tableName);
 //**********************************************************************************************************************
 $tableName = (string) $this->getTable('bseller_skyhub/queue');
 $table = $this->newTable($tableName)
-    ->addColumn('entity_id', $this::TYPE_INTEGER, 10, [
+    ->addColumn('entity_id', $this::TYPE_INTEGER, 10, array(
         'nullable' => true,
-    ])
-    ->addColumn('reference', $this::TYPE_TEXT, 255, [
+    ))
+    ->addColumn('reference', $this::TYPE_TEXT, 255, array(
         'nullable' => true,
-    ])
-    ->addColumn('entity_type', $this::TYPE_TEXT, 255, [
+    ))
+    ->addColumn('entity_type', $this::TYPE_TEXT, 255, array(
         'nullable' => true,
-    ])
-    ->addColumn('status', $this::TYPE_INTEGER, 2, [
+    ))
+    ->addColumn('status', $this::TYPE_INTEGER, 2, array(
         'nullable' => false,
         'default'  => 0,
-    ])
-    ->addColumn('process_type', $this::TYPE_INTEGER, 2, [
+    ))
+    ->addColumn('process_type', $this::TYPE_INTEGER, 2, array(
         'nullable' => false,
         'default'  => BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT,
-    ])
-    ->addColumn('messages', $this::TYPE_TEXT, null, [
+    ))
+    ->addColumn('messages', $this::TYPE_TEXT, null, array(
         'nullable' => true,
-    ])
-    ->addColumn('additional_data', $this::TYPE_TEXT, null, [
+    ))
+    ->addColumn('additional_data', $this::TYPE_TEXT, null, array(
         'nullable' => true,
-    ])
-    ->addColumn('can_process', $this::TYPE_INTEGER, 1, [
+    ))
+    ->addColumn('can_process', $this::TYPE_INTEGER, 1, array(
         'nullable' => false,
         'default'  => 0,
-    ])
-    ->addColumn('store_id', $this::TYPE_INTEGER, 10, [
+    ))
+    ->addColumn('store_id', $this::TYPE_INTEGER, 10, array(
         'unsigned' => true,
         'nullable' => false,
         'primary'  => true,
         'default'  => 0,
-    ])
-;
+    ));
 
-$this->addCustomTimestamp($table, 'process_after', [], 'Schedule the process to run after this time if needed.');
+$this->addCustomTimestamp($table, 'process_after', array(), 'Schedule the process to run after this time if needed.');
 $this->addTimestamps($table);
 $conn->createTable($table);
 
@@ -206,7 +203,7 @@ $this->addForeignKey($tableName, 'store_id', 'core/store', 'store_id');
 
 $this->addIndex('entity_id',   $tableName, $this::INDEX_TYPE_INDEX);
 $this->addIndex('entity_type', $tableName, $this::INDEX_TYPE_INDEX);
-$this->addIndex(['entity_id', 'entity_type', 'store_id'], $tableName);
+$this->addIndex(array('entity_id', 'entity_type', 'store_id'), $tableName);
 
 
 //**********************************************************************************************************************

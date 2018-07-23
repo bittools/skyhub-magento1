@@ -23,7 +23,7 @@ abstract class BSeller_SkyHub_Model_Cron_Queue_Abstract
      *
      * @return $this
      */
-    protected function mergeResults(Mage_Cron_Model_Schedule $schedule, array $successIds = [], array $failIds = [])
+    protected function mergeResults(Mage_Cron_Model_Schedule $schedule, array $successIds = array(), array $failIds = array())
     {
         $successQueueIds = (array) $schedule->getData('success_queue_ids');
         $failedQueueIds  = (array) $schedule->getData('failed_queue_ids');
@@ -35,12 +35,12 @@ abstract class BSeller_SkyHub_Model_Cron_Queue_Abstract
         $schedule->setData('failed_queue_ids', $failedQueueIds);
         
         $byStore     = (array) $schedule->getData('by_store');
-        $dataByStore = [
-            $this->getStoreId() => [
+        $dataByStore = array(
+            $this->getStoreId() => array(
                 'success_queue_ids' => $successIds,
                 'failed_queue_ids'  => $failIds,
-            ]
-        ];
+            )
+        );
         
         $schedule->setData('by_store', array_merge_recursive($byStore, $dataByStore));
         

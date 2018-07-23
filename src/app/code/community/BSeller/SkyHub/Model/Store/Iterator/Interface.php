@@ -31,7 +31,7 @@ interface BSeller_SkyHub_Model_Store_Iterator_Interface
      *
      * @return $this
      */
-    public function iterate($object, $method, array $params = []);
+    public function iterate($object, $method, array $params = array());
     
     
     /**
@@ -43,7 +43,7 @@ interface BSeller_SkyHub_Model_Store_Iterator_Interface
      *
      * @return mixed
      */
-    public function call($subject, $method, array $params = [], Mage_Core_Model_Store $store, $force = false);
+    public function call($subject, $method, array $params = array(), Mage_Core_Model_Store $store, $force = false);
     
     
     /**

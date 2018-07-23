@@ -101,7 +101,10 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
         switch ($redirect) {
             case 'edit':
                 $result = function () use ($productId) {
-                    $this->_redirect('adminhtml/catalog_product/edit', ['id' => (int) $productId]);
+                    $this->_redirect(
+                        'adminhtml/catalog_product/edit',
+                        array('id' => (int) $productId)
+                    );
                 };
                 break;
             default:
@@ -125,7 +128,10 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
      */
     protected function redirectProductEdit($productId)
     {
-        $this->_redirect('adminhtml/catalog_product/edit', ['id' => (int) $productId]);
+        $this->_redirect(
+            'adminhtml/catalog_product/edit',
+            array('id' => (int) $productId)
+        );
         return;
     }
     

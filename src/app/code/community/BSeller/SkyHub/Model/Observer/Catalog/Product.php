@@ -202,11 +202,11 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
 
         /** @var Mage_Adminhtml_Block_Widget_Button $button */
         $button = $block->getLayout()->createBlock('adminhtml/widget_button');
-        $button->setData([
+        $button->setData(array(
             'label'   => Mage::helper('catalog')->__('Integrate With SkyHub'),
             'onclick' => "setLocation('{$this->getIntegrateUrl($block)}')",
             'class'   => 'success'
-        ]);
+        ));
 
         $backButton->setData('before_html', $button->toHtml());
     }
@@ -219,7 +219,10 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     protected function getIntegrateUrl(Mage_Adminhtml_Block_Catalog_Product_Edit $block)
     {
-        $url = (string) $block->getUrl('*/*/integrate', ['product_id' => $block->getProductId()]);
+        $url = (string) $block->getUrl(
+            '*/*/integrate',
+            array('product_id' => $block->getProductId())
+        );
         return $url;
     }
 

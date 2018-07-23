@@ -52,9 +52,12 @@ trait BSeller_SkyHub_Trait_Attribute_Notification
      */
     public function getProductAttributeAutoUrl($id)
     {
-        return $this->getUrl('adminhtml/bseller_skyhub_catalog_product_attributes_mapping/createAutomatically', [
-            'id' => $id
-        ]);
+        return $this->getUrl(
+            'adminhtml/bseller_skyhub_catalog_product_attributes_mapping/createAutomatically',
+            array(
+                'id' => $id
+            )
+        );
     }
 
     /**
@@ -64,8 +67,11 @@ trait BSeller_SkyHub_Trait_Attribute_Notification
      */
     public function getCustomerAttributeAutoUrl($id)
     {
-        return $this->getUrl('adminhtml/bseller_skyhub_customer_attributes_mapping/createAutomatically', [
-            'id' => $id
-        ]);
+        return $this->getUrl(
+            'adminhtml/bseller_skyhub_customer_attributes_mapping/createAutomatically',
+            array(
+                'id' => $id
+            )
+        );
     }
 }

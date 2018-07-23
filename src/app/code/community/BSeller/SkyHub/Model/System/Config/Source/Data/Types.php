@@ -20,12 +20,12 @@ class BSeller_SkyHub_Model_System_Config_Source_Data_Types extends BSeller_Core_
      */
     protected function optionsKeyValue($multiselect = null)
     {
-        return [
+        return array(
             'string'  => $this->__('String'),
             'decimal' => $this->__('Decimal'),
             'number'  => $this->__('Number'),
             'boolean' => $this->__('Boolean'),
-        ];
+        );
     }
     
 }

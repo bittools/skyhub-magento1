@@ -24,17 +24,16 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
             return;
         }
 
-        $deniedStates = [
+        $deniedStates = array(
             Mage_Sales_Model_Order::STATE_CANCELED,
             Mage_Sales_Model_Order::STATE_CLOSED,
             Mage_Sales_Model_Order::STATE_COMPLETE,
-        ];
+        );
 
         /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
         $collection = $this->getOrderCollection()
-            ->addFieldToFilter('state', ['nin' => $deniedStates])
-            ->addFieldToFilter('bseller_skyhub', 1)
-        ;
+            ->addFieldToFilter('state', array('nin' => $deniedStates))
+            ->addFieldToFilter('bseller_skyhub', 1);
 
         /** @var Varien_Db_Select $select */
         $select = $collection->getSelect()
@@ -90,7 +89,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
 
         /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
         $collection = $this->getOrderCollection()
-            ->addFieldToFilter('entity_id', ['in' => $orderIds]);
+            ->addFieldToFilter('entity_id', array('in' => $orderIds));
 
         /** @var Mage_Sales_Model_Order $order */
         foreach ($collection as $order) {

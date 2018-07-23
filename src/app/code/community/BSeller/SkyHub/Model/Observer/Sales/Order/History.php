@@ -50,10 +50,10 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
         }
 
         try {
-            $params = [
+            $params = array(
                 $order->getId(),
                 $invoiceKeyNumber
-            ];
+            );
     
             /** @var boolean $result */
             $result = $this->getStoreIterator()
@@ -106,11 +106,11 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
         }
 
         try {
-            $params = [
+            $params = array(
                 $history->getParentId(),
                 $datetime,
                 $comment
-            ];
+            );
             
             /** @var Mage_Core_Model_Store $store */
             $store = $history->getStore();

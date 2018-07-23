@@ -142,7 +142,7 @@ class BSeller_SkyHub_Controller_Admin_Queue extends BSeller_SkyHub_Controller_Ad
         $orderCodes = $this->getRequest()->getPost('order_codes');
         $orderCodes = explode(PHP_EOL, $orderCodes);
         
-        $cleanedCodes = [];
+        $cleanedCodes = array();
         
         foreach ($orderCodes as $orderCode) {
             if (empty($orderCode)) {
@@ -184,7 +184,10 @@ class BSeller_SkyHub_Controller_Admin_Queue extends BSeller_SkyHub_Controller_Ad
      */
     protected function redirectOrdersGrid()
     {
-        return $this->_redirect('adminhtml/sales_order/index', ['_current' => true]);
+        return $this->_redirect(
+            'adminhtml/sales_order/index',
+            array('_current' => true)
+        );
     }
     
     

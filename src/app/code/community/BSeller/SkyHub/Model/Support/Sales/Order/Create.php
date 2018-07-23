@@ -28,7 +28,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     private $store;
 
     /** @var array */
-    private $data = [];
+    private $data = array();
 
     /** @var BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create */
     protected $creator;
@@ -43,14 +43,14 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function __construct($store = null)
     {
-        $data = [
-            'session' => [
+        $data = array(
+            'session' => array(
                 'store_id' => $this->getStore($store)->getId(),
-            ],
-            'order'   => [
+            ),
+            'order'   => array(
                 'currency' => $this->getStore($store)->getCurrentCurrencyCode(),
-            ],
-        ];
+            ),
+        );
 
         $this->merge($data);
     }
@@ -62,12 +62,12 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function setOrderInfo(Varien_Object $order)
     {
-        $data = [
-            'order' => [
+        $data = array(
+            'order' => array(
                 'increment_id'      => $order->getData('increment_id'),
                 'send_confirmation' => $order->getData('send_confirmation')
-            ],
-        ];
+            ),
+        );
 
         $this->merge($data);
 
@@ -81,9 +81,9 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function setCustomData(array $customData)
     {
-        $data   = [
+        $data   = array(
             'custom' => $customData
-        ];
+        );
 
         $this->merge($data);
 
@@ -98,13 +98,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function setComment($comment = null)
     {
-        $data = [
-            'order' => [
-                'comment' => [
+        $data = array(
+            'order' => array(
+                'comment' => array(
                     'customer_note' => $comment,
-                ]
-            ],
-        ];
+                )
+            ),
+        );
 
         $this->merge($data);
 
@@ -126,16 +126,16 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
             return $this;
         }
 
-        $data = [
-            'products' => [
-                [
+        $data = array(
+            'products' => array(
+                array(
                     'product' => $data,
-                    'config'  => [
+                    'config'  => array(
                         'qty' => $qty ? $qty : 1,
-                    ],
-                ]
-            ]
-        ];
+                    ),
+                )
+            )
+        );
 
         $this->merge($data);
 
@@ -150,11 +150,11 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function setPaymentMethod($method = 'checkmo')
     {
-        $data = [
-            'payment' => [
+        $data = array(
+            'payment' => array(
                 'method' => $method,
-            ]
-        ];
+            )
+        );
 
         $this->merge($data);
 
@@ -169,11 +169,11 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function setDiscountAmount($discount)
     {
-        $data = [
-            'order' => [
+        $data = array(
+            'order' => array(
                 'discount_amount' => (float) $discount,
-            ]
-        ];
+            )
+        );
 
         $this->merge($data);
 
@@ -188,11 +188,11 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function setInterestAmount($discount)
     {
-        $data = [
-            'order' => [
+        $data = array(
+            'order' => array(
                 'interest' => (float) $discount,
-            ]
-        ];
+            )
+        );
 
         $this->merge($data);
 
@@ -215,15 +215,15 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         /** @var string $methodCode */
         $methodCode = $this->helper()->normalizeString($title);
 
-        $data = [
-            'order' => [
+        $data = array(
+            'order' => array(
                 'shipping_method'        => self::CARRIER_PREFIX.$methodCode,
                 'shipping_method_code'   => $methodCode,
                 'shipping_title'         => $title,
                 'shipping_carrier'       => $carrier,
                 'shipping_cost'          => (float) $cost,
-            ]
-        ];
+            )
+        );
 
         $this->merge($data);
 
@@ -238,17 +238,17 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function setCustomer(Mage_Customer_Model_Customer $customer)
     {
-        $data = [
-            'order' => [
-                'account' => [
+        $data = array(
+            'order' => array(
+                'account' => array(
                     'group_id' => $customer->getGroupId(),
                     'email'    => $customer->getEmail()
-                ]
-            ],
-            'session' => [
+                )
+            ),
+            'session' => array(
                 'customer_id' => $customer->getId()
-            ]
-        ];
+            )
+        );
 
         $this->merge($data);
 
@@ -273,9 +273,9 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
 
         $simpleAddressData = $this->formatAddress($address, $addressSize);
 
-        $data = [
-            'order' => [
-                "{$type}_address" => [
+        $data = array(
+            'order' => array(
+                "{$type}_address" => array(
                     'customer_address_id' => $address->getData('customer_address_id'),
                     'prefix'              => '',
                     'firstname'           => $nameObject->getData('firstname'),
@@ -291,9 +291,9 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                     'postcode'            => $address->getData('postcode'),
                     'telephone'           => $this->formatPhone($address->getData('phone')),
                     'fax'                 => $address->getData('secondary_phone'),
-                ]
-            ]
-        ];
+                )
+            )
+        );
 
         $this->merge($data);
 
@@ -307,7 +307,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     public function reset()
     {
         $this->creator = null;
-        $this->data    = [];
+        $this->data    = array();
         $this->store   = null;
 
         return $this;
@@ -417,21 +417,27 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
 
             Mage::app()->getStore()->setConfig(Mage_Sales_Model_Order::XML_PATH_EMAIL_ENABLED, "0");
 
-            Mage::dispatchEvent('bseller_skyhub_order_import_before', [
-                'order'      => $order,
-                'order_data' => $orderData,
-                'creator'    => $this,
-            ]);
+            Mage::dispatchEvent(
+                'bseller_skyhub_order_import_before',
+                array(
+                    'order'      => $order,
+                    'order_data' => $orderData,
+                    'creator'    => $this,
+                )
+            );
 
             /** @var Mage_Sales_Model_Order $order */
             $order = $this->getOrderCreator()
                           ->importPostData($this->arrayExtract($orderData, 'order'))
                           ->createOrder();
 
-            Mage::dispatchEvent('bseller_skyhub_order_import_success', [
-                'order'      => $order,
-                'order_data' => $orderData,
-            ]);
+            Mage::dispatchEvent(
+                'bseller_skyhub_order_import_success',
+                array(
+                    'order'      => $order,
+                    'order_data' => $orderData,
+                )
+            );
 
             $this->clearSessionQuote();
 
@@ -456,18 +462,19 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         foreach ($products as $productId => $product) {
             $item = $this->getOrderCreator()->getQuote()->getItemByProduct($product);
 
-            $options = [
-                [
+            $options = array(
+                array(
                     'product' => $product,
                     'code'    => 'option_ids',
                     'value'   => '5',
                     // Option id goes here. If more options, then comma separate
-                ], [
+                ),
+                array(
                     'product' => $product,
                     'code'    => 'option_5',
                     'value'   => 'Some value here',
-                ]
-            ];
+                )
+            );
 
             /** @var array $option */
             foreach ($options as $option) {
@@ -488,8 +495,8 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     protected function processQuote($data = array())
     {
-        $order  = (array) $this->arrayExtract($data, 'order', []);
-        $custom = (array) $this->arrayExtract($data, 'custom', []);
+        $order  = (array) $this->arrayExtract($data, 'order', array());
+        $custom = (array) $this->arrayExtract($data, 'custom', array());
         
         /* Saving order data */
         if (!empty($order)) {
@@ -507,7 +514,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         // $this->getOrderCreator()->getShippingAddress();
 
         /* Just like adding products from Magento admin grid */
-        $products = (array) $this->arrayExtract($data, 'products', []);
+        $products = (array) $this->arrayExtract($data, 'products', array());
 
         /** @var array $product */
         foreach ($products as $item) {
@@ -536,7 +543,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
              ->collectShippingRates();
 
         /* Add payment data */
-        $payment = $this->arrayExtract($data, 'payment', []);
+        $payment = $this->arrayExtract($data, 'payment', array());
         if (!empty($payment)) {
             $this->getOrderCreator()
                  ->getQuote()
@@ -647,7 +654,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      *
      * @return $this
      */
-    protected function merge(array $data = [])
+    protected function merge(array $data = array())
     {
         $this->data = array_merge_recursive($this->data, $data);
 

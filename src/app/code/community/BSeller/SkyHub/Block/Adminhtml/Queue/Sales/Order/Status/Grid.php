@@ -28,16 +28,15 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Sales_Order_Status_Grid extends BSell
         /** @var BSeller_SkyHub_Model_Resource_Queue_Collection $collection */
         $collection->getSelect()
             ->joinLeft(
-                [
+                array(
                     'orders' => $resource->getTableName('sales/order')
-                ],
+                ),
                 "orders.entity_id = main_table.entity_id",
-                [
+                array(
                     'increment_id',
                     'customer_email',
-                ]
-            )
-        ;
+                )
+            );
 
         $collection->addFieldToFilter('entity_type', BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER_STATUS);
         $collection->addFieldToFilter('process_type', BSeller_SkyHub_Model_Queue::PROCESS_TYPE_IMPORT);
@@ -53,21 +52,29 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Sales_Order_Status_Grid extends BSell
     {
         parent::_prepareColumns();
 
-        $this->addColumnAfter('increment_id', [
-            'header'       => $this->__('Order#'),
-            'align'        => 'left',
-            'width'        => '150px',
-            'type'         => 'text',
-            'filter_index' => 'orders.increment_id',
-        ], 'entity_id');
+        $this->addColumnAfter(
+            'increment_id',
+            array(
+                'header'       => $this->__('Order#'),
+                'align'        => 'left',
+                'width'        => '150px',
+                'type'         => 'text',
+                'filter_index' => 'orders.increment_id',
+            ),
+            'entity_id'
+        );
 
-        $this->addColumnAfter('customer_email', [
-            'header'       => $this->__('Customer E-mail'),
-            'align'        => 'left',
-            'width'        => '200px',
-            'type'         => 'text',
-            'filter_index' => 'orders.customer_email',
-        ], 'increment_id');
+        $this->addColumnAfter(
+            'customer_email',
+            array(
+                'header'       => $this->__('Customer E-mail'),
+                'align'        => 'left',
+                'width'        => '200px',
+                'type'         => 'text',
+                'filter_index' => 'orders.customer_email',
+            ),
+            'increment_id'
+        );
 
         $this->sortColumnsByOrder();
 

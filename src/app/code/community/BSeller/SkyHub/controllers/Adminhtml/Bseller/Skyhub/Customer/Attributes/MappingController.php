@@ -151,7 +151,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Customer_Attributes_MappingControl
             return;
         }
 
-        $config = [
+        $config = array(
             'label'           => $mapping->getSkyhubLabel(),
             'type'            => 'varchar',
             'input'           => 'text',
@@ -169,7 +169,7 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Customer_Attributes_MappingControl
                 $this->__('Created automatically by BSeller SkyHub module.'),
                 $this->__($mapping->getSkyhubDescription())
             ),
-        ];
+        );
 
         $installConfig = (array) $mapping->getAttributeInstallConfig();
 
@@ -250,7 +250,10 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Customer_Attributes_MappingControl
      */
     protected function redirectToAttributeMappingEdit($id)
     {
-        $this->_redirect('*/*/edit', ['id' => (int) $id]);
+        $this->_redirect(
+            '*/*/edit',
+            array('id' => (int) $id)
+        );
     }
     
     

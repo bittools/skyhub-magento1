@@ -52,7 +52,7 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
      *
      * @throws Mage_Core_Exception
      */
-    public function addProductByData(array $data = [])
+    public function addProductByData(array $data = array())
     {
         $productData = (array) $this->arrayExtract($data, 'product');
         $productId   = (int)   $this->arrayExtract($productData, 'product_id');
@@ -80,7 +80,7 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
                 break;
             case Mage_Catalog_Model_Product_Type::TYPE_SIMPLE:
             default:
-                $config = ['qty' => $qty];
+                $config = array('qty' => $qty);
                 $this->addProduct($product, $config);
         }
         
@@ -110,7 +110,7 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
      *
      * @return bool
      */
-    protected function addProductConfigurable(Mage_Catalog_Model_Product $product, array $productData = [])
+    protected function addProductConfigurable(Mage_Catalog_Model_Product $product, array $productData = array())
     {
         $qty = (float) $this->arrayExtract($productData, 'qty');
     
@@ -120,7 +120,7 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
          */
         $typeInstance    = $product->getTypeInstance(true);
         $attributes      = $typeInstance->getConfigurableAttributes($product);
-        $superAttributes = [];
+        $superAttributes = array();
         $children        = (array) $this->arrayExtract($productData, 'children');
         
         /** @var Mage_Catalog_Model_Product_Type_Configurable_Attribute $attribute */
@@ -140,11 +140,11 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
             }
         }
         
-        $config = [
+        $config = array(
             'qty'             => $qty,
             'config'          => $productData,
             'super_attribute' => $superAttributes,
-        ];
+        );
         
         $this->addProduct($product, $config);
         
@@ -158,12 +158,12 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
      *
      * @return $this
      */
-    protected function addProductGrouped(Mage_Catalog_Model_Product $product, array $productData = [])
+    protected function addProductGrouped(Mage_Catalog_Model_Product $product, array $productData = array())
     {
         $children = (array) $this->arrayExtract($productData, 'children');
         $qty      = (float) $this->arrayExtract($productData, 'qty');
         
-        $childrenIds = [];
+        $childrenIds = array();
         
         /** @var array $child */
         foreach ($children as $child) {
@@ -176,10 +176,10 @@ class BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create extends Mage_Adminhtml_M
             $childrenIds[$childId] = $qty;
         }
         
-        $params = [
+        $params = array(
             'config'      => $productData,
             'super_group' => $childrenIds,
-        ];
+        );
         
         $this->addProduct($product, $params);
         

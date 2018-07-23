@@ -44,7 +44,7 @@ abstract class BSeller_SkyHub_Shell_Abstract extends Mage_Shell_Abstract
      */
     protected function printLine($message)
     {
-        echo "{$message}\n";
+        print_r("{$message}\n");
         return $this;
     }
 }

@@ -42,11 +42,11 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Item extends BSeller_SkyHub_Mode
             return;
         }
         
-        $prices = [
+        $prices = array(
             'price'         => $this->arrayExtract($config, 'price'),
             'special_price' => $this->arrayExtract($config, 'special_price'),
             'final_price'   => $this->arrayExtract($config, 'final_price'),
-        ];
+        );
         
         $product->addData($prices);
     }

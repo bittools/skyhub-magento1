@@ -39,14 +39,17 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
 
         try {
             $this->beginTransaction();
-            $this->_getWriteAdapter()->insert($this->getMainTable(), [
-                'entity_id'   => (int)    $entityId,
-                'entity_type' => (string) $entityType,
-                'store_id'    => (int)    Mage::app()->getStore($storeId)->getId(),
-                'created_at'  => Varien_Date::now(),
-                'updated_at'  => Varien_Date::now(),
-                'integrate'   => 0,
-            ]);
+            $this->_getWriteAdapter()->insert(
+                $this->getMainTable(),
+                array(
+                    'entity_id'   => (int)    $entityId,
+                    'entity_type' => (string) $entityType,
+                    'store_id'    => (int)    Mage::app()->getStore($storeId)->getId(),
+                    'created_at'  => Varien_Date::now(),
+                    'updated_at'  => Varien_Date::now(),
+                    'integrate'   => 0,
+                )
+            );
             $this->commit();
 
             return true;

@@ -28,12 +28,12 @@ class BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types
      */
     protected function optionsKeyValue($multiselect = null)
     {
-        return [
+        return array(
             self::TYPE_NEW       => $this->__('New'),
             self::TYPE_CANCELED  => $this->__('Canceled'),
             self::TYPE_APPROVED  => $this->__('Approved'),
             self::TYPE_SHIPPED   => $this->__('Shipped'),
             self::TYPE_DELIVERED => $this->__('Delivered'),
-        ];
+        );
     }
 }

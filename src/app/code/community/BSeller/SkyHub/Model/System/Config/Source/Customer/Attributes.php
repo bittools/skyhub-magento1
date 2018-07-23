@@ -25,7 +25,7 @@ class BSeller_SkyHub_Model_System_Config_Source_Customer_Attributes
     protected function optionsKeyValue($multiselect = null)
     {
         $attributes = $this->getCustomerAttributesCollection();
-        $options    = [];
+        $options    = array();
         
         if (!$multiselect) {
             $options[''] = $this->__('-- Select One Attribute --');

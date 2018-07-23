@@ -33,12 +33,12 @@ trait BSeller_SkyHub_Trait_Customer
         }
         $middlename = ucwords(implode(' ', $fullnametmp));
         
-        return new Varien_Object([
+        return new Varien_Object(array(
             'firstname' => $firstname,
             'middlename' => $middlename,
             'lastname' => $lastname,
             'fullname' => $fullname,
-        ]);
+        ));
     }
 
     /**
@@ -62,16 +62,17 @@ trait BSeller_SkyHub_Trait_Customer
     {
         $street = $address->getData('street');
         $number = $address->getData('number');
-        $complement = implode(' ', [$address->getData('reference'), $address->getData('detail')]);
+        $complement = implode(' ', array($address->getData('reference'), $address->getData('detail')));
         $neighborhood = $address->getData('neighborhood');
 
         return $this->_formatAddress(
-            [
+            array(
                 $street,
                 $number,
                 $complement,
                 $neighborhood,
-            ], $addressSize
+            ),
+            $addressSize
         );
     }
 

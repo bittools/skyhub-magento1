@@ -39,7 +39,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
 
         $orderCode = $this->arrayExtract($orderData, 'code');
 
-        $data = [
+        $data = array(
             'entity_id' => null,
             'reference' => (string)$orderCode,
             'entity_type' => BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER,
@@ -49,7 +49,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
             'additional_data' => json_encode($orderData),
             'can_process' => false,
             'store_id' => (int)$this->getStoreId(),
-        ];
+        );
 
         /** @var BSeller_SkyHub_Model_Queue $queue */
         $queue = Mage::getModel('bseller_skyhub/queue');
@@ -69,7 +69,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
         if (!$order || !$order->getId()) {
             return;
         }
-        $this->getStoreIterator()->call($this->orderIntegrator(), 'cancel', [$order->getId()], $order->getStore());
+        $this->getStoreIterator()->call($this->orderIntegrator(), 'cancel', array($order->getId()), $order->getStore());
     }
 
     /**
@@ -85,7 +85,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
         }
 
         $products = $order->getAllVisibleItems();
-        $productIds = [];
+        $productIds = array();
 
         foreach ($products as $item) {
             $product = $item->getProduct();

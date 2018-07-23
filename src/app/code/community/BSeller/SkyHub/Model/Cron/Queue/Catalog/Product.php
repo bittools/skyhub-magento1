@@ -41,10 +41,10 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
 
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = $this->getProductCollection()
-            ->addAttributeToFilter('visibility', ['in' => $productVisibilities]);
+            ->addAttributeToFilter('visibility', array('in' => $productVisibilities));
 
         if (!empty($queuedIds)) {
-            $collection->addFieldToFilter('entity_id', ['nin' => $queuedIds]);
+            $collection->addFieldToFilter('entity_id', array('nin' => $queuedIds));
         }
 
         /** @var Varien_Db_Select $select */
@@ -132,7 +132,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = $this->getProductCollection()
             ->addStoreFilter($store)
-            ->addFieldToFilter('entity_id', ['in' => $productIds]);
+            ->addFieldToFilter('entity_id', array('in' => $productIds));
 
         /** Set limitation. */
         $limit = abs($this->getCronConfig()->catalogProduct()->getQueueExecuteLimit());
@@ -146,8 +146,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             return;
         }
     
-        $successQueueIds = [];
-        $failedQueueIds  = [];
+        $successQueueIds = array();
+        $failedQueueIds  = array();
 
         /** @var Mage_Catalog_Model_Product $product */
         foreach ($collection as $product) {
@@ -159,7 +159,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
              */
             if ($response === false) {
                 $this->getQueueResource()->removeFromQueue(
-                    [$product->getId()],
+                    array($product->getId()),
                     BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT
                 );
                 continue;
