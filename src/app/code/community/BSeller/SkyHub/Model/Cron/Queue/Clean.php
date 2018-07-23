@@ -14,7 +14,7 @@
 
 class BSeller_SkyHub_Model_Cron_Queue_Clean extends BSeller_SkyHub_Model_Cron_Abstract
 {
-    use BSeller_SkyHub_Trait_Catalog_Product_Attribute_Notification;
+    use BSeller_SkyHub_Trait_Attribute_Notification;
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
@@ -91,7 +91,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Clean extends BSeller_SkyHub_Model_Cron_Ab
         }
 
         //if the notification block can be showed, it means there's a products attributes mapping problem;
-        if ($this->canShowAttributesNotificiationBlock()) {
+        if ($this->hasPendingAttributesToMap()) {
             $schedule->setMessages($this->__('The installation is not completed. All required product attributes must be mapped.'));
             return false;
         }
