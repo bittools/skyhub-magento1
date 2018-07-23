@@ -3,9 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [1.3.6] - 2018-07-20
+## [1.3.6] - 2018-07-23
 ### Changed
 - Fix pass argument by reference;
+- Entities clean cron fix;
+
 
 ## [1.3.5] - 2018-07-13
 ### Changed
