@@ -233,6 +233,14 @@
                     </bseller_skyhub_force_entity_integration>
                 </observers>
             </skyhub_force_entity_integration>
+            <catalog_product_attribute_update_after>
+                <observers>
+                    <bseller_skyhub_catalog_product_attribute_update_after>
+                        <class>bseller_skyhub/observer_catalog_product</class>
+                        <method>integrateProductsAfterMassiveAttributesUpdate</method>
+                    </bseller_skyhub_catalog_product_attribute_update_after>
+                </observers>
+            </catalog_product_attribute_update_after>
         </events>
         <sales>
             <quote>
