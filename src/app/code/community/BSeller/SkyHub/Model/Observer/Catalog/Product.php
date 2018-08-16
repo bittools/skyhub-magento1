@@ -48,29 +48,45 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      * @param bool $forceQueue
      * @return void
      */
-    protected function processIntegrationProduct(Mage_Catalog_Model_Product $product, $forceQueue = false)
+    protected function processIntegrationProduct(Mage_Catalog_Model_Product $product)
     {
         $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
         foreach ($parentIds as $id) {
-            $this->processIntegrationProduct(Mage::getModel('catalog/product')->load($id), true);
+            $this->processIntegrationProduct(Mage::getModel('catalog/product')->load($id));
+        }
+
+        if (!$product->getData('is_salable')) {
+            if ($product->hasData('is_salable') && $product->getIsInStock()) {
+                $product->setIsSalable(1);
+            }
         }
 
         if (!$this->canIntegrateProduct($product)) {
             return;
         }
 
+        $forceIntegrate = true;
         if ($this->hasActiveIntegrateOnSaveFlag() && $this->hasStockOrPriceUpdate($product)) {
-            /** Create or Update Product */
-            $this->catalogProductIntegrator()->createOrUpdate($product);
+            try {
+                /** Create or Update Product */
+                $this->catalogProductIntegrator()->createOrUpdate($product);
+                $forceIntegrate = false;
+
+                // just to tell other "observers" to don't put the integration flag on these products;
+                if ($recentIntegratedIds = Mage::registry('recent_integrated_product')) {
+                    Mage::unregister('recent_integrated_product');
+                    Mage::register('recent_integrated_product', array_merge($recentIntegratedIds, [$product->getId()]));
+                } else {
+                    Mage::register('recent_integrated_product', [$product->getId()]);
+                }
+                // end
+            } catch (Exception $e) {
+                Mage::logException($e);
+            }
         }
 
-        if ($forceQueue) {
-            $this->getQueueResource()
-                ->queue(
-                    $product->getId(),
-                    BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
-                    BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
-                );
+        if ($forceIntegrate) {
+            $this->flagEntityIntegrate($product->getId());
         }
     }
     
@@ -229,19 +245,13 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
     /**
      * @param Varien_Event_Observer $observer
      */
-    public function productCommit(Varien_Event_Observer $observer)
-    {
-        $productId = $observer->getProduct()->getId();
-        $this->flagEntityIntegrate($productId);
-    }
-
-    /**
-     * @param Varien_Event_Observer $observer
-     */
     public function catalogInventoryCommit(Varien_Event_Observer $observer)
     {
+        $recentIntegratedProductIds = Mage::registry('recent_integrated_product');
         $productId = $observer->getItem()->getProductId();
-        $this->flagEntityIntegrate($productId);
+        if (!$recentIntegratedProductIds || !in_array($productId, $recentIntegratedProductIds)) {
+            $this->flagEntityIntegrate($productId);
+        }
     }
 
     public function integrateProductForce(Varien_Event_Observer $observer)
