@@ -56,8 +56,8 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         }
 
         if (!$product->getData('is_salable')) {
-            if ($product->hasData('is_salable') && $product->getIsInStock()) {
-                $product->setIsSalable(1);
+            if ($product->hasData('is_salable') && $product->getData('is_salable') == null) {
+                $product->unsetData('is_salable');
             }
         }
 
