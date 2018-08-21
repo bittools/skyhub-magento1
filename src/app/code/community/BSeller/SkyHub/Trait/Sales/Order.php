@@ -9,11 +9,34 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
+ * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  * @author    Julio Reis <julio.reis@e-smart.com.br>
  */
 
 trait BSeller_SkyHub_Trait_Sales_Order
 {
+    /**
+     * @return Mage_Sales_Model_Resource_Order_Collection
+     */
+    public function getPendingOrdersFromSkyHub()
+    {
+        $deniedStates = [
+            Mage_Sales_Model_Order::STATE_CANCELED,
+            Mage_Sales_Model_Order::STATE_CLOSED,
+            Mage_Sales_Model_Order::STATE_COMPLETE,
+        ];
+
+        /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
+        $collection = Mage::getResourceModel('sales/order_collection');
+
+        $collection ->addFieldToFilter('state', ['nin' => $deniedStates])
+            ->addFieldToFilter('bseller_skyhub', 1)
+            ->addFieldToFilter('store_id', Mage::app()->getStore()->getId());
+
+        return $collection;
+    }
+
+
     /**
      * @param string $skyhubCode
      *
@@ -23,6 +46,7 @@ trait BSeller_SkyHub_Trait_Sales_Order
     {
         /** @var BSeller_SkyHub_Model_Resource_Sales_Order $orderResource */
         $orderResource = Mage::getResourceModel('bseller_skyhub/sales_order');
+
         /*
          * try to get the original skyhub ID by "Bizz Commerce" module column
          */
@@ -34,6 +58,7 @@ trait BSeller_SkyHub_Trait_Sales_Order
 
         return $orderId;
     }
+
 
     /**
      * @param $code
@@ -48,6 +73,7 @@ trait BSeller_SkyHub_Trait_Sales_Order
         }
         return null;
     }
+
 
     /**
      * @param int $orderId (entity_id)

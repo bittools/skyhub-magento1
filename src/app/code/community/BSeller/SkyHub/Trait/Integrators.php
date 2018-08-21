@@ -64,4 +64,13 @@ trait BSeller_SkyHub_Trait_Integrators
     {
         return Mage::getSingleton('bseller_skyhub/integrator_sales_order');
     }
+
+
+    /**
+     * @return BSeller_SkyHub_Model_Integrator_Shipment_Plp
+     */
+    protected function shipmentPlpIntegrator()
+    {
+        return Mage::getSingleton('bseller_skyhub/integrator_shipment_plp');
+    }
 }

@@ -15,6 +15,9 @@
 class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_Model_Cron_Queue_Sales_Abstract
 {
 
+    use BSeller_SkyHub_Trait_Sales_Order;
+
+
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      */

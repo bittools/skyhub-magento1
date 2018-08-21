@@ -17,6 +17,7 @@ class BSeller_SkyHub_Helper_Data extends BSeller_Core_Helper_Data
 {
     /**
      * @param string $method
+     *
      * @return string
      */
     public function normalizeString($method)
@@ -26,5 +27,20 @@ class BSeller_SkyHub_Helper_Data extends BSeller_Core_Helper_Data
         $method = $this->removeAccents($method);
         
         return $method;
+    }
+
+
+    /**
+     * @param string $date
+     *
+     * @return string
+     */
+    public function formatDateWithoutTimezone($date)
+    {
+        /** @var Mage_Core_Model_Date $coreDateModel */
+        $coreDateModel  = Mage::getSingleton('core/date');
+        $dateFormat     = 'd/m/Y';
+
+        return $coreDateModel->gmtDate($dateFormat, $date);
     }
 }
