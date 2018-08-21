@@ -259,4 +259,13 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         $productId = $observer->getProductId();
         $this->flagEntityIntegrate($productId);
     }
+
+    public function integrateProductsAfterMassiveAttributesUpdate(Varien_Event_Observer $observer)
+    {
+        $productIds = $observer->getProductIds();
+
+        foreach ($productIds as $productId) {
+            $this->flagEntityIntegrate($productId);
+        }
+    }
 }
