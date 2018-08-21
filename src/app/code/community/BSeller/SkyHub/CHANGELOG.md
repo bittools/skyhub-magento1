@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.0] - 2018-08-21
+### Changed
+- Fix permission to "see" "Skyhub Integrate Button" at product page;
+- Fix BUG at product integration on save when the flag "Integrate on save" is set as "true"; Products was being sent to skyhub with no stock, then later the cron correct it;
+- Product attributes massivelly updated now are being placed at the queue to be integrated;
+### Added
+- PLP now is available to be managed at magento admin.
+
 ## [1.3.6] - 2018-07-23
 ### Changed
 - Fix pass argument by reference;
