@@ -37,8 +37,17 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
         
         $this->redirectProductList();
     }
-    
-    
+
+    /**
+     * Check for is allowed
+     *
+     * @return boolean
+     */
+    protected function _isAllowed()
+    {
+        return Mage::getSingleton('admin/session')->isAllowed('catalog/products');
+    }
+
     /**
      * @param int                   $productId
      * @param Mage_Core_Model_Store $store
