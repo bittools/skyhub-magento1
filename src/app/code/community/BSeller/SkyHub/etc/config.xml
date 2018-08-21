@@ -215,14 +215,6 @@
                     </bs_sales_model_service_quote_submit_success>
                 </observers>
             </sales_model_service_quote_submit_success>
-            <catalog_product_save_commit_after>
-                <observers>
-                    <bs_catalog_product_commit_after>
-                        <class>bseller_skyhub/observer_catalog_product</class>
-                        <method>productCommit</method>
-                    </bs_catalog_product_commit_after>
-                </observers>
-            </catalog_product_save_commit_after>
             <cataloginventory_stock_item_save_commit_after>
                 <observers>
                     <bs_cataloginventory_stock_item_save_commit_after>
