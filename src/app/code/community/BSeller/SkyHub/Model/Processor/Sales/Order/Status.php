@@ -69,6 +69,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
                 $this->invoiceOrder($order);
             } catch (Exception $e) {
                 $order->addStatusHistoryComment('Error to invoice order: ' . $e->getMessage(), true);
+                Mage::logException($e);
                 return false;
             }
 
