@@ -14,7 +14,7 @@
 
 class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_Model_Integrator_Abstract
 {
-
+    use BSeller_SkyHub_Trait_Queue;
     /**
      * @param string                 $skyhubStatusCode
      * @param string                 $skyhubStatusType
@@ -57,13 +57,18 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
             return true;
         }
 
+        if ($order->hasInvoices() && !$order->canInvoice()) {
+            return true;
+        }
+
         /**
          * If order is APPROVED in SkyHub.
          */
-        if ($state == Mage_Sales_Model_Order::STATE_PROCESSING) {
+        if ($state == Mage_Sales_Model_Order::STATE_PROCESSING && $order->canInvoice()) {
             try {
                 $this->invoiceOrder($order);
             } catch (Exception $e) {
+                $order->addStatusHistoryComment('Error to invoice order: ' . $e->getMessage(), true);
                 return false;
             }
 
