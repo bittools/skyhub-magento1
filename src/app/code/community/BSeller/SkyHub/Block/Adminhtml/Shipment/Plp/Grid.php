@@ -88,6 +88,6 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_Grid
      */
     public function getRowUrl($plp)
     {
-        return $this->getUrl('*/*/view', ['id' => $plp->getId()]);
+        return $this->getUrl('*/*/view', array('id' => $plp->getId()));
     }
 }

@@ -20,16 +20,16 @@ trait BSeller_SkyHub_Trait_Sales_Order
      */
     public function getPendingOrdersFromSkyHub()
     {
-        $deniedStates = [
+        $deniedStates = array(
             Mage_Sales_Model_Order::STATE_CANCELED,
             Mage_Sales_Model_Order::STATE_CLOSED,
             Mage_Sales_Model_Order::STATE_COMPLETE,
-        ];
+        );
 
         /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
         $collection = Mage::getResourceModel('sales/order_collection');
 
-        $collection ->addFieldToFilter('state', ['nin' => $deniedStates])
+        $collection ->addFieldToFilter('state', array('nin' => $deniedStates))
             ->addFieldToFilter('bseller_skyhub', 1)
             ->addFieldToFilter('store_id', Mage::app()->getStore()->getId());
 

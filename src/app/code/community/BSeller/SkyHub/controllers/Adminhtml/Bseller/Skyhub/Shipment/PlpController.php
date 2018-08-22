@@ -274,10 +274,10 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Shipment_PlpController extends BSe
         $skyhubResult = $this->shipmentPlpIntegrator()->group($skyhubOrderIds);
 
         if (!$skyhubResult) {
-            return [false, $skyhubResult['message']];;
+            return array(false, $skyhubResult['message']);;
         }
 
-        return [true, $skyhubResult['message']];
+        return array(true, $skyhubResult['message']);
     }
 
     /**

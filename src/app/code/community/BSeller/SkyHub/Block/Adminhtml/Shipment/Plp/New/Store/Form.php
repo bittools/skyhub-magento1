@@ -32,11 +32,11 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New_Store_Form
     {
         /** @var Varien_Data_Form $form */
         $form = new Varien_Data_Form(
-            [
+            array(
                 'id'     => 'edit_form',
                 'action' => $this->getData('action'),
                 'method' => 'post'
-            ]
+            )
         );
 
         /** @var Varien_Data_Form_Element_Fieldset $fieldset */

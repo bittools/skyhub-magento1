@@ -3,6 +3,7 @@ $json = $this->getSkyhubJson();
 if (null == $json) {
     return;
 }
+
 $paymentData = $json['payments'][0];
 $value = Mage::helper('core')->currency($paymentData['value'], true, false);
 ?>

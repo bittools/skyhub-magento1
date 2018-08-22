@@ -37,67 +37,67 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
 
         /** @var Varien_Data_Form $form */
         $form = new Varien_Data_Form(
-            [
+            array(
                 'id'        => 'view_form',
-            ]
+            )
         );
     
         /** @var Varien_Data_Form_Element_Fieldset $fieldset */
         $fieldset = $form->addFieldset(
             'general',
-            [
+            array(
                 'legend'    => $this->__('General Information')
-            ]
+            )
         );
 
         $fieldset->addField(
             'created_at',
             'label',
-            [
+            array(
                 'name'      => 'created_at',
                 'label'     => $this->__('Creation Date'),
-            ]
+            )
         );
 
         $fieldset->addField(
             'skyhub_code',
             'label',
-            [
+            array(
                 'name'      => 'skyhub_code',
                 'label'     => $this->__('PLP Code'),
-            ]
+            )
         );
 
         $fieldset->addField(
             'pdf_file',
             'button',
-            [
+            array(
                 'label'     => Mage::helper('core')->__('PLP File (PDF format)'),
                 'value'     => Mage::helper('core')->__('Download PLP File (PDF format)'),
                 'name'      => 'pdf_file',
                 'class'     => 'form-button',
                 'onclick'   => "window.setLocation('{$this->_getFileButtonLink('pdf')}'); return false;",
-            ]
+            )
         );
 
         $fieldset->addField(
             'json_file',
             'button',
-            [
+            array(
                 'label'     => Mage::helper('core')->__('PLP File (JSON format)'),
                 'value'     => Mage::helper('core')->__('Download PLP File (JSON format)'),
                 'name'      => 'json_file',
                 'class'     => 'form-button',
                 'onclick'   => "window.open('{$this->_getFileButtonLink('json')}',{$fileButtonParams}'); return false;",
-            ]
+            )
         );
 
         /** @var Varien_Data_Form_Element_Fieldset $fieldset */
         $fieldset = $form->addFieldset(
             'orders',
-            [
+            array(
                 'legend'    => $this->__('Orders Information')
-            ]
+            )
         );
 
         $fieldset->addType(
@@ -109,10 +109,10 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
         $fieldset->addField(
             'orders_id',
             'order_grid',
-            [
+            array(
                 'label'     => Mage::helper('core')->__('Related Orders'),
                 'name'      => 'orders_id',
-            ]
+            )
         );
 
         $form->addValues($this->_getPlpFormattedData($this->getCurrentPlp()));
@@ -132,10 +132,10 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form
     {
         return $this->getUrl(
             '*/*/view'.ucfirst($format).'File',
-            [
+            array(
                 'id'        => $this->getCurrentPlp()->getId(),
                 'format'    => $format
-            ]
+            )
         );
     }
 

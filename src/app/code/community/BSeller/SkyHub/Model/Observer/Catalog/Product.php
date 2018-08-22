@@ -75,9 +75,9 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
                 // just to tell other "observers" to don't put the integration flag on these products;
                 if ($recentIntegratedIds = Mage::registry('recent_integrated_product')) {
                     Mage::unregister('recent_integrated_product');
-                    Mage::register('recent_integrated_product', array_merge($recentIntegratedIds, [$product->getId()]));
+                    Mage::register('recent_integrated_product', array_merge($recentIntegratedIds, array($product->getId())));
                 } else {
-                    Mage::register('recent_integrated_product', [$product->getId()]);
+                    Mage::register('recent_integrated_product', array($product->getId()));
                 }
                 // end
             } catch (Exception $e) {

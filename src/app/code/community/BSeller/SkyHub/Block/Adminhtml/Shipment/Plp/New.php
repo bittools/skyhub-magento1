@@ -37,7 +37,7 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New
 
         /** @var Mage_Sales_Model_Resource_Order_Collection $collection */
         $collection = Mage::getResourceModel('sales/order_grid_collection')
-            ->addFieldtoFilter('entity_id', ['in' => $mutualIds]);
+            ->addFieldtoFilter('entity_id', array('in' => $mutualIds));
 
         $collection->getSelect()
             ->join(

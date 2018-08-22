@@ -31,33 +31,33 @@ $table = $this->newTable($tableName)
         'store_id',
         $this::TYPE_INTEGER,
         10,
-        [
+        array(
             'unsigned' => true,
             'nullable' => false,
             'primary'  => true
-        ]
+        )
     )
     ->addColumn(
         'skyhub_code',
         $this::TYPE_VARCHAR,
         30,
-        [
+        array(
             'nullable' => false,
-        ]
+        )
     )
     ->addColumn(
         'expiration_date',
         $this::TYPE_DATE,
         null,
-        [
+        array(
             'nullable' => false,
-        ]
+        )
     );
 
 $this->addTimestamps($table);
 $conn->createTable($table);
 
-$this->addIndex(['skyhub_code'], $tableName);
+$this->addIndex(array('skyhub_code'), $tableName);
 
 
 //**********************************************************************************************************************
@@ -71,43 +71,43 @@ $table = $this->newTable($tableName)
         'plp_id',
         $this::TYPE_INTEGER,
         10,
-        [
+        array(
             'nullable' => false,
             'primary'  => true,
-        ]
+        )
     )
     ->addColumn(
         'store_id',
         $this::TYPE_INTEGER,
         10,
-        [
+        array(
             'unsigned' => true,
             'nullable' => false,
             'primary'  => true
-        ]
+        )
     )
     ->addColumn(
         'skyhub_order_code',
         $this::TYPE_VARCHAR,
         128,
-        [
+        array(
             'nullable' => false
-        ]
+        )
     )
     ->addColumn(
         'additional_data',
         $this::TYPE_TEXT,
         null,
-        [
+        array(
             'nullable' => true,
-        ]
+        )
     );
 
 $conn->createTable($table);
 
 $this->addForeignKey($tableName, 'plp_id', 'bseller_skyhub/plp', 'id');
 
-$this->addIndex(['plp_id'], $tableName, Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX);
-$this->addIndex(['skyhub_order_code'], $tableName, Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX);
+$this->addIndex(array('plp_id'), $tableName, Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX);
+$this->addIndex(array('skyhub_order_code'), $tableName, Varien_Db_Adapter_Interface::INDEX_TYPE_INDEX);
 
 $this->endSetup();
