@@ -14,7 +14,6 @@
 
 class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_Model_Integrator_Abstract
 {
-    use BSeller_SkyHub_Trait_Queue;
     /**
      * @param string                 $skyhubStatusCode
      * @param string                 $skyhubStatusType
