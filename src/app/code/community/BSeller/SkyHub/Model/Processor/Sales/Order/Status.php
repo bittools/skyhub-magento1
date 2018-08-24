@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BSeller Platform | B2W - Companhia Digital
  *
@@ -11,67 +12,58 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
-
 class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_Model_Integrator_Abstract
 {
     /**
-     * @param string                 $skyhubStatusCode
-     * @param string                 $skyhubStatusType
+     * @param string $skyhubStatusCode
+     * @param string $skyhubStatusType
      * @param Mage_Sales_Model_Order $order
      *
      * @return bool|$this
      */
-    public function processOrderStatus($skyhubStatusCode, $skyhubStatusType, Mage_Sales_Model_Order $order)
+    public function processOrderStatus($skyhubStatusCode, $skyhubStatusType, Mage_Sales_Model_Order $order, array $orderData)
     {
+        if ($order->hasInvoice() && $order->hasShipments()) {
+            return true;
+        }
+
         if (!$this->validateOrderStatusType($skyhubStatusType)) {
             return false;
         }
 
         $state = $this->getStateBySkyhubStatusType($skyhubStatusType);
 
+        //if the state is the same, means there's no order movement, so keep it in track;
         if ($order->getState() == $state) {
             return false;
         }
 
-        /**
-         * Order is already in the following states:
-         *  - complete
-         *  - closed
-         */
-        if ($order->isStateProtected($state)) {
-            /** State is protected. */
-            return false;
-        }
+        $result = false;
 
         /**
          * If order is CANCELED in SkyHub.
          */
         if ($state == Mage_Sales_Model_Order::STATE_CANCELED) {
-            try {
-                $this->cancelOrder($order);
-            } catch (Exception $e) {
-                return false;
-            }
-
-            return true;
-        }
-
-        if ($order->hasInvoices() && !$order->canInvoice()) {
-            return true;
+            $this->cancelOrder($order);
+            $result = true;
         }
 
         /**
          * If order is APPROVED in SkyHub.
          */
         if ($state == Mage_Sales_Model_Order::STATE_PROCESSING && $order->canInvoice()) {
-            try {
-                $this->invoiceOrder($order);
-            } catch (Exception $e) {
-                $order->addStatusHistoryComment('Error to invoice order: ' . $e->getMessage(), true);
-                Mage::logException($e);
-                return false;
-            }
+            $this->invoiceOrder($order);
+            $result = false;
+        }
 
+        /**
+         * If order is SHIPPED in SkyHub.
+         */
+        if ($state == Mage_Sales_Model_Order::STATE_COMPLETE && $order->canShip()) {
+            $trackingNumber = $this->arrayExtract($orderData, 'trackingNumber');
+            $this->shipOrder($order, $trackingNumber);
+            //we can't set state "complete" manually because magento don't allow this;
+            //shipping created will automatically set order state to "complete";
             return true;
         }
 
@@ -83,8 +75,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
 
         $order->setState($state, true, $message);
         $order->save();
-
-        return true;
+        return $result;
     }
 
 
@@ -187,5 +178,49 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
             ->save();
 
         return true;
+    }
+
+    /**
+     * @param Mage_Sales_Model_Order $order
+     *
+     * @return bool
+     *
+     * @throws Exception
+     */
+    protected function shipOrder(Mage_Sales_Model_Order $order, $trackingNumber)
+    {
+        if (!$order->canShip() || !$trackingNumber) {
+            throwException('Can\'t create shipment, no has tracking code or order not allowed');
+        }
+
+        $items = array();
+
+        foreach ($order->getAllItems() as $item) {
+            $items[$item->getId()] = $item->getQtyOrdered();
+        }
+
+        $shipment = Mage::getModel('sales/service_order', $order)->prepareShipment($items);
+
+        $dataTracking = array(
+            'carrier_code' => 'custom',
+            'title' => $order->getShippingDescription(),
+            'number' => $trackingNumber
+        );
+
+        /** @var Mage_Sales_Model_Order_Shipment_Track $track */
+        $track = Mage::getModel('sales/order_shipment_track')->addData($dataTracking);
+        $shipment->addTrack($track);
+
+        $shipment->setEmailSent(true);
+        $shipment->sendEmail(true);
+        $shipment->getOrder()->setCustomerNoteNotify(true);
+        $shipment->register();
+        $shipment->getOrder()->setIsInProcess(true);
+
+        Mage::getModel('core/resource_transaction')
+            ->addObject($shipment)
+            ->addObject($shipment->getOrder())
+            ->save();
+        return $this;
     }
 }

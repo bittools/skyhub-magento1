@@ -56,7 +56,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order extends BSeller_SkyHub_Model_C
             $statusCode = $this->arrayExtract($orderData, 'status/code');
             // $statusLabel = $this->arrayExtract($orderData, 'status/label');
         
-            $this->salesOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order);
+            $this->salesOrderStatusProcessor()->processOrderStatus($statusCode, $statusType, $order, $orderData);
         
             $message  = $schedule->getMessages();
         
