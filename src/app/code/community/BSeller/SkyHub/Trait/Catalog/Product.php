@@ -30,7 +30,7 @@ trait BSeller_SkyHub_Trait_Catalog_Product
 
         if (empty($data)) {
             try {
-                $data = $product->getResource()
+                $data = $this->getCatalogProductResource()
                     ->getAttributeRawValue($product->getId(), $attribute, Mage::app()->getStore());
                 return $data;
             } catch (Exception $e) {}
@@ -38,8 +38,17 @@ trait BSeller_SkyHub_Trait_Catalog_Product
 
         return $data;
     }
-    
-    
+
+    /**
+     * @return BSeller_SkyHub_Model_Resource_Catalog_Product
+     */
+    protected function getCatalogProductResource()
+    {
+        /** @var BSeller_SkyHub_Model_Resource_Catalog_Product $resource */
+        $resource = Mage::getResourceModel('bseller_skyhub/catalog_product');
+        return $resource;
+    }
+
     /**
      * @param BSeller_SkyHub_Model_Catalog_Product             $product
      * @param Mage_Eav_Model_Entity_Attribute|string $attribute
