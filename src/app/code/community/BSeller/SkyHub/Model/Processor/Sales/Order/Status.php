@@ -21,12 +21,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
      *
      * @return bool|$this
      */
-    public function processOrderStatus($skyhubStatusCode, $skyhubStatusType, Mage_Sales_Model_Order $order, array $orderData)
+    public function processOrderStatus($skyhubStatusCode, $skyhubStatusType, Mage_Sales_Model_Order $order, array $orderData, $updateFromSkyhubQueue = false)
     {
-        if ($order->hasInvoice() && $order->hasShipments()) {
-            return true;
-        }
-
         if (!$this->validateOrderStatusType($skyhubStatusType)) {
             return false;
         }
@@ -38,14 +34,11 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
             return false;
         }
 
-        $result = false;
-
         /**
          * If order is CANCELED in SkyHub.
          */
         if ($state == Mage_Sales_Model_Order::STATE_CANCELED) {
             $this->cancelOrder($order);
-            $result = true;
         }
 
         /**
@@ -53,7 +46,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
          */
         if ($state == Mage_Sales_Model_Order::STATE_PROCESSING && $order->canInvoice()) {
             $this->invoiceOrder($order);
-            $result = false;
+            $status = $this->getApprovedOrdersStatus();
         }
 
         /**
@@ -62,9 +55,21 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
         if ($state == Mage_Sales_Model_Order::STATE_COMPLETE && $order->canShip()) {
             $trackingNumber = $this->arrayExtract($orderData, 'trackingNumber');
             $this->shipOrder($order, $trackingNumber);
-            //we can't set state "complete" manually because magento don't allow this;
-            //shipping created will automatically set order state to "complete";
-            return true;
+            $isOrderShippedStatus = true;
+        }
+
+        /**
+         * If order is DELIVERED in SkyHub.
+         */
+        if ($state == BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_DELIVERED) {
+            $status = $this->getDeliveredOrdersStatus();
+        }
+
+        /**
+         * If order is SHIPMENT_EXCEPTION in SkyHub.
+         */
+        if ($state == BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_SHIPMENT_EXCEPTION) {
+            $status = $this->getShipmentExceptionOrderStatus();
         }
 
         $message = $this->__(
@@ -73,9 +78,19 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
             $skyhubStatusType
         );
 
-        $order->setState($state, true, $message);
-        $order->save();
-        return $result;
+        //this is because inside method "shipOrder" it already changes the status/state of the order;
+        if (!isset($isOrderShippedStatus)) {
+            $status = isset($status) ? $status : true;
+            $order->setState($state, $status, $message);
+            $order->save();
+        } else {
+            $order->addStatusHistoryComment(
+                $message
+            );
+            $order->save();
+        }
+
+        return true;
     }
 
 
@@ -93,6 +108,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
                 return Mage_Sales_Model_Order::STATE_CANCELED;
             case BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_DELIVERED:
             case BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_SHIPPED:
+            case BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_SHIPMENT_EXCEPTION:
+            case BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_DELIVERED:
                 return Mage_Sales_Model_Order::STATE_COMPLETE;
             case BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_NEW:
             default:
@@ -126,19 +143,10 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
     protected function cancelOrder(Mage_Sales_Model_Order $order)
     {
         if (!$order->canCancel()) {
-            $order->addStatusHistoryComment(
-                $this->__('Order is canceled in SkyHub but could not be canceled in Magento.')
-            );
-
-            $order->save();
-
-            return false;
+            throwException($this->__('Order is canceled in SkyHub but could not be canceled in Magento.'));
         }
-
         $order->addStatusHistoryComment($this->__('Order canceled automatically by SkyHub.'));
-
-        $order->cancel()->save();
-
+        $order->cancel();
         return true;
     }
 
@@ -166,10 +174,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
 
         $comment = $this->__('Invoiced automatically via SkyHub.');
         $invoice->addComment($comment);
-
-        $order->setIsInProcess(true);
-        $order->setStatus($this->getApprovedOrdersStatus());
-        $order->addStatusHistoryComment($comment, true);
 
         /** @var Mage_Core_Model_Resource_Transaction $transaction */
         $transaction = Mage::getResourceModel('core/transaction');
@@ -219,7 +223,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
 
         Mage::getModel('core/resource_transaction')
             ->addObject($shipment)
-            ->addObject($shipment->getOrder())
             ->save();
         return $this;
     }
