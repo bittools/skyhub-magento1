@@ -143,7 +143,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
     protected function cancelOrder(Mage_Sales_Model_Order $order)
     {
         if (!$order->canCancel()) {
-            throwException($this->__('Order is canceled in SkyHub but could not be canceled in Magento.'));
+            Mage::throwException($this->__('Order is canceled in SkyHub but could not be canceled in Magento.'));
         }
         $order->addStatusHistoryComment($this->__('Order canceled automatically by SkyHub.'));
         $order->cancel();
@@ -194,7 +194,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
     protected function shipOrder(Mage_Sales_Model_Order $order, $trackingNumber)
     {
         if (!$order->canShip() || !$trackingNumber) {
-            throwException('Can\'t create shipment, no has tracking code or order not allowed');
+            Mage::throwException('Can\'t create shipment, no has tracking code or order not allowed');
         }
 
         $items = array();
