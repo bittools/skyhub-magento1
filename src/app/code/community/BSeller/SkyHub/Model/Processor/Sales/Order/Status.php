@@ -53,8 +53,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
          * If order is SHIPPED in SkyHub.
          */
         if ($state == Mage_Sales_Model_Order::STATE_COMPLETE && $order->canShip()) {
-            $trackingNumber = $this->arrayExtract($orderData, 'trackingNumber');
-            $this->shipOrder($order, $trackingNumber);
+            $trackingNumbers = $this->getTrackingNumbers($orderData);
+            $this->shipOrder($order, $trackingNumbers);
             $isOrderShippedStatus = true;
         }
 
@@ -191,10 +191,10 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
      *
      * @throws Exception
      */
-    protected function shipOrder(Mage_Sales_Model_Order $order, $trackingNumber)
+    protected function shipOrder(Mage_Sales_Model_Order $order, $trackingNumbers)
     {
-        if (!$order->canShip() || !$trackingNumber) {
-            Mage::throwException('Can\'t create shipment, no has tracking code or order not allowed');
+        if (!$order->canShip() || !$trackingNumbers || empty($trackingNumbers)) {
+            Mage::throwException("Can't create shipment, there's no tracking code or order not allowed");
         }
 
         $items = array();
@@ -205,15 +205,17 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
 
         $shipment = Mage::getModel('sales/service_order', $order)->prepareShipment($items);
 
-        $dataTracking = array(
-            'carrier_code' => 'custom',
-            'title' => $order->getShippingDescription(),
-            'number' => $trackingNumber
-        );
+        foreach($trackingNumbers as $trackingNumber) {
+            $dataTracking = array(
+                'carrier_code' => 'custom',
+                'title' => $trackingNumber['carrier'],
+                'number' => $trackingNumber['code']
+            );
 
-        /** @var Mage_Sales_Model_Order_Shipment_Track $track */
-        $track = Mage::getModel('sales/order_shipment_track')->addData($dataTracking);
-        $shipment->addTrack($track);
+            /** @var Mage_Sales_Model_Order_Shipment_Track $track */
+            $track = Mage::getModel('sales/order_shipment_track')->addData($dataTracking);
+            $shipment->addTrack($track);
+        }
 
         $shipment->setEmailSent(true);
         $shipment->sendEmail(true);
@@ -225,5 +227,24 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
             ->addObject($shipment)
             ->save();
         return $this;
+    }
+
+    protected function getTrackingNumbers($skyhubOrderData)
+    {
+        $shipments = $this->arrayExtract($skyhubOrderData, 'shipments');
+        $arrayResult = [];
+
+        foreach ($shipments as $shipment) {
+            $tracks = $shipment['tracks'];
+
+            foreach ($tracks as $track) {
+                $arrayResult[] = [
+                    'code' => $track['code'],
+                    'carrier' => $track['carrier']
+                ];
+            }
+        }
+
+        return $arrayResult;
     }
 }
