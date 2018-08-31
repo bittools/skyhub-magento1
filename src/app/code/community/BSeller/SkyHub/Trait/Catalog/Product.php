@@ -188,4 +188,32 @@ trait BSeller_SkyHub_Trait_Catalog_Product
         }
         return false;
     }
+
+    /**
+     * Get collection of product categories with extra attributes
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return Mage_Catalog_Model_Resource_Product_Collection
+     */
+    protected function getProductCategories(Mage_Catalog_Model_Product $product)
+    {
+        /** @var Mage_Catalog_Model_Resource_Category_Collection $collection */
+        $collection = Mage::getResourceModel('catalog/category_collection');
+        $collection->joinField('product_id',
+            'catalog/category_product',
+            'product_id',
+            'category_id = entity_id',
+            null)
+            ->addFieldToFilter('product_id', (int)$product->getId());
+
+        /** @var Mage_Core_Model_Config_Element $attributes */
+        $attributes = Mage::getConfig()->getNode('adminhtml/category/collection/attributes');
+        if ($attributes) {
+            $attributes = $attributes->asArray();
+            $attributes = array_keys($attributes);
+        }
+        $collection->addAttributeToSelect($attributes);
+
+        return $collection;
+    }
 }

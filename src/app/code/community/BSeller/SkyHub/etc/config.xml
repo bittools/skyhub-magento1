@@ -331,6 +331,13 @@
                 </bseller_skyhub>
             </updates>
         </layout>
+        <category>
+            <collection>
+                <attributes>
+                    <name/>
+                </attributes>
+            </collection>
+        </category>
         <events>
             <adminhtml_block_html_before>
                 <observers>
