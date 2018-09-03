@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.1] - 2018-09-03
+### Changed
+- Fix problem with status orders queue that wasn't beeing cleaned;
+- Fix problem with order status mapping between Skyhub and magento;
+- Products attributes with 0 value wasn't beeing sent to Skyhub;
+- Minor fixes.
+
 ## [1.4.0] - 2018-08-21
 ### Changed
 - Fix permission to "see" "Skyhub Integrate Button" at product page;
