@@ -186,8 +186,8 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
             
             try {
                 $value = $this->extractProductData($product, $attribute);
-    
-                if (empty($value)) {
+
+                if (empty($value) && $value !== 0 && $value !== '0') {
                     continue;
                 }
     
