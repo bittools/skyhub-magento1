@@ -107,17 +107,28 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Status extends BSeller_SkyHub_
             $statusType = $this->arrayExtract($orderData, 'status/type');
             // $statusLabel = $this->arrayExtract($orderData, 'status/label');
 
-            $result = $this->salesOrderStatusProcessor()
-                ->processOrderStatus($statusCode, $statusType, $order);
+            try {
+                $result = $this->salesOrderStatusProcessor()
+                    ->processOrderStatus($statusCode, $statusType, $order, $orderData);
+            } catch (Exception $ex) {
+                Mage::logException($ex);
 
-            if (false == $result && !$this->isOrderExpirated($order)) {
+                //set queue register to error
+                $this->getQueueResource()->setFailedEntityIds(
+                    $order->getId(),
+                    BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER_STATUS,
+                    $ex->getMessage()
+                );
+                //end
                 continue;
             }
 
-            $this->getQueueResource()->removeFromQueue(
-                $order->getId(),
-                BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER_STATUS
-            );
+            if (($order->hasInvoices() && $order->hasShipments()) || $this->isOrderExpirated($order)) {
+                $this->getQueueResource()->removeFromQueue(
+                    $order->getId(),
+                    BSeller_SkyHub_Model_Entity::TYPE_SALES_ORDER_STATUS
+                );
+            }
         }
     }
 

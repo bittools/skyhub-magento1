@@ -188,7 +188,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $skyhubStatusType = $this->arrayExtract($skyhubOrderData, 'status/type');
         
         $this->salesOrderStatusProcessor()
-             ->processOrderStatus($skyhubStatusCode, $skyhubStatusType, $order);
+             ->processOrderStatus($skyhubStatusCode, $skyhubStatusType, $order, $skyhubOrderData);
         
         return $this;
     }
