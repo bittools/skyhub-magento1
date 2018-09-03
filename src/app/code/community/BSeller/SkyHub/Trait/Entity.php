@@ -117,4 +117,14 @@ trait BSeller_SkyHub_Trait_Entity
         return $this->getEntityResource()
             ->updateEntity($id, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT, 0, 1);
     }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    protected function deleteProductEntity($id)
+    {
+        return (bool)$this->getEntityResource()
+            ->deleteEntity((int)$id, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT);
+    }
 }
