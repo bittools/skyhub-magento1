@@ -14,9 +14,10 @@
 
 class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_Controller_Admin_Action
 {
-    
+
     use BSeller_SkyHub_Trait_Integrators,
-        BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
+        BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation,
+        BSeller_SkyHub_Trait_Entity;
     
     
     /**

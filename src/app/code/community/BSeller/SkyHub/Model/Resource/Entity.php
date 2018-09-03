@@ -175,20 +175,22 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
     {
         $entityExists = $this->entityExists($entityId, $entityType);
 
-        if ($entityExists) {
+        if (!$entityExists) {
             return false;
 
         }
+
+        /**
+         * handling params to SQL
+         */
+        $storeId = Mage::app()->getStore($storeId)->getId();
+        $where = new Zend_Db_Expr("entity_id = {$entityId} AND entity_type = '{$entityType}' AND store_id = {$storeId}");
 
         try {
             $this->beginTransaction();
             $this->_getWriteAdapter()->delete(
                 $this->getMainTable(),
-                array(
-                    'entity_id' => (int)$entityId,
-                    'entity_type' => (string)$entityType,
-                    'store_id' => (int)Mage::app()->getStore($storeId)->getId(),
-                )
+                $where
             );
             $this->commit();
 

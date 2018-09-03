@@ -16,6 +16,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
 {
     use BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
     use BSeller_SkyHub_Trait_Queue;
+    use BSeller_SkyHub_Trait_Entity;
 
     /**
      * @param Varien_Event_Observer $observer
