@@ -232,16 +232,16 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
     protected function getTrackingNumbers($skyhubOrderData)
     {
         $shipments = $this->arrayExtract($skyhubOrderData, 'shipments');
-        $arrayResult = [];
+        $arrayResult = array();
 
         foreach ($shipments as $shipment) {
             $tracks = $shipment['tracks'];
 
             foreach ($tracks as $track) {
-                $arrayResult[] = [
+                $arrayResult[] = array(
                     'code' => $track['code'],
                     'carrier' => $track['carrier']
-                ];
+                );
             }
         }
 
