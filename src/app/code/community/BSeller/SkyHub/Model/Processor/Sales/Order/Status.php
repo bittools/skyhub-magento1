@@ -142,6 +142,14 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
      */
     protected function cancelOrder(Mage_Sales_Model_Order $order)
     {
+        /** @var $order Mage_Sales_Model_Order */
+        if ($order->hasInvoices()) {
+            /** @var \Mage_Sales_Model_Order_Invoice $invoice */
+            foreach ($order->getInvoiceCollection() as $invoice) {
+                $this->cancelInvoice($invoice);
+            }
+        }
+
         if (!$order->canCancel()) {
             Mage::throwException($this->__('Order is canceled in SkyHub but could not be canceled in Magento.'));
         }
@@ -246,5 +254,16 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
         }
 
         return $arrayResult;
+    }
+
+    protected function cancelInvoice($invoice)
+    {
+        if ($invoice->isCanceled() || !$invoice->canCancel()) {
+            return $this;
+        }
+
+        Mage::getModel('core/resource_transaction')
+            ->addObject($invoice)
+            ->save();
     }
 }
