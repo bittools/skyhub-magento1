@@ -86,29 +86,32 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
         }
 
         $products = $order->getAllVisibleItems();
-        $productIds = array();
 
         foreach ($products as $item) {
-            $product = $item->getProduct();
-            if (!$this->canIntegrateProduct($product)) {
-                continue;
-            }
+            $this->processReintegrationOrderProducts($item->getProduct());
+        }
+    }
 
-            $success = true;
-            $hasActiveIntegrateProductsOnOrderPlaceFlag = $this->hasActiveIntegrateProductsOnOrderPlaceFlag();
-            if ($hasActiveIntegrateProductsOnOrderPlaceFlag) {
-                /**
-                 * integrate all order items on skyhub (mainly to update stock qty)
-                 */
-                $response = $this->catalogProductIntegrator()->createOrUpdate($product);
+    protected function processReintegrationOrderProducts($product)
+    {
+        $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
+        foreach ($parentIds as $id) {
+            $this->processReintegrationOrderProducts(Mage::getModel('catalog/product')->load($id));
+        }
 
-                if ($response && $response->exception()) {
-                    $success = false;
-                }
-            }
+        if (!$this->canIntegrateProduct($product)) {
+            return;
+        }
 
-            if (!$success || !$hasActiveIntegrateProductsOnOrderPlaceFlag) {
-                $productIds[] = $product->getId();
+        $hasActiveIntegrateProductsOnOrderPlaceFlag = $this->hasActiveIntegrateProductsOnOrderPlaceFlag();
+        if ($hasActiveIntegrateProductsOnOrderPlaceFlag) {
+            /**
+             * integrate all order items on skyhub (mainly to update stock qty)
+             */
+            $response = $this->catalogProductIntegrator()->createOrUpdate($product);
+
+            if ($response && $response->success()) {
+                return;
             }
         }
 
@@ -117,7 +120,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
          * put the product on the line
          */
         $queueResource->queue(
-            $productIds,
+            [$product->getId()],
             BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
