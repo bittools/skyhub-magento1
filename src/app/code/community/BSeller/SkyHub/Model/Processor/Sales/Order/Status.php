@@ -261,7 +261,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
         if ($invoice->isCanceled() || !$invoice->canCancel()) {
             return $this;
         }
-
+        $invoice->cancel();
         Mage::getModel('core/resource_transaction')
             ->addObject($invoice)
             ->save();
