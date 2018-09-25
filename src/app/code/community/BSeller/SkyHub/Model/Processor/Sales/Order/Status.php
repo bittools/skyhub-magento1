@@ -258,7 +258,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
 
     protected function cancelInvoice($invoice)
     {
-        if ($invoice->isCanceled() || !$invoice->canCancel()) {
+        if ($invoice->isCanceled()) {
             return $this;
         }
         $invoice->cancel();
