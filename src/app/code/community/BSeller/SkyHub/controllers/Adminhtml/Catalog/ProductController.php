@@ -26,7 +26,6 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
     public function integrateAction()
     {
         $productId = (int) $this->getRequest()->getParam('product_id');
-        
         $this->processStoreIteration($this, 'integrateProduct', $productId);
         
         $proceed = Mage::registry('result_redirect');
@@ -88,8 +87,9 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
     
         if ($response && $response->exception()) {
             $message = $this->__(
-                'There was a problem when trying to integrate the product in store %s.',
-                $store->getCode()
+                'There was a problem when trying to integrate the product in store %s. <br/> %s',
+                $store->getCode(),
+                $this->_prepareBody($response) ?: ''
             );
             
             $this->_getSession()->addError($message);
@@ -97,7 +97,23 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
     
         $this->resultRedirect($productId, 'edit');
     }
-    
+
+    /**
+     * Prepare body
+     *
+     * @param $response
+     *
+     * @return string
+     */
+    protected function _prepareBody($response)
+    {
+        $body = '';
+        if (!method_exists($response, 'body')) {
+            return $body;
+        }
+
+        return $response->body() ?: $body;
+    }
     
     /**
      * @param null $flag
