@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - Allowing order cancellation even after invoice creation;
 - Fixing products with variation integration - variation attributes are set correctly now;
 - Improving product's integration error messages on admin product's page;
+### Added
+- PLP now is available to be consulted by magento API;
 
 ## [1.4.1] - 2018-09-03
 ### Changed
