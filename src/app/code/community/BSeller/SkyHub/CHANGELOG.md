@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.2] - 2018-10-23
+### Changed
+- Allowing order cancellation even after invoice creation;
+- Fixing products with variation integration - variation attributes are set correctly now;
+- Improving product's integration error messages on admin product's page;
+
 ## [1.4.1] - 2018-09-03
 ### Changed
 - Fix problem with status orders queue that wasn't beeing cleaned;
