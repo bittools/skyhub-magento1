@@ -138,4 +138,18 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Sales_Order_ImportController
 
         return parent::_isAllowed();
     }
+
+    public function exportSkyhubCsvAction()
+    {
+        $fileName = 'skyhub_errors.csv';
+        $grid = $this->getLayout()->createBlock('bseller_skyhub/adminhtml_widget_grid');
+        $this->_prepareDownloadResponse($fileName, $grid->getCsvFile());
+    }
+
+    public function exportSkyhubExcelAction()
+    {
+        $fileName = 'skyhub_errors.xml';
+        $grid = $this->getLayout()->createBlock('bseller_skyhub/adminhtml_widget_grid');
+        $this->_prepareDownloadResponse($fileName, $grid->getExcelFile($fileName));
+    }
 }
