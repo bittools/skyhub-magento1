@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<config>
+    <api>
+        <resources>
+            <bseller_skyhub_plp translate="title" module="bseller_skyhub">
+                <model>bseller_skyhub/shipment_plp_api</model>
+                <title>PLP API</title>
+                <acl>bseller_skyhub/plp</acl>
+                <methods>
+                    <list translate="title" module="bseller_skyhub">
+                        <title>List of plps</title>
+                        <method>plps</method>
+                    </list>
+                </methods>
+            </bseller_skyhub_plp>
+        </resources>
+        <resources_alias>
+            <plp>bseller_skyhub_plp</plp>
+        </resources_alias>
+        <v2>
+            <resources_function_prefix>
+                <plp>plp</plp>
+            </resources_function_prefix>
+        </v2>
+        <acl>
+            <resources>
+                <bseller_skyhub translate="title" module="bseller_skyhub">
+                    <title>PLPs data</title>
+                    <sort_order>5</sort_order>
+                    <plp translate="title" module="bseller_skyhub">
+                        <title>PLPs data</title>
+                    </plp>
+                </bseller_skyhub>
+            </resources>
+        </acl>
+    </api>
+</config>

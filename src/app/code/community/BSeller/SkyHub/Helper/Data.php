@@ -43,4 +43,14 @@ class BSeller_SkyHub_Helper_Data extends BSeller_Core_Helper_Data
 
         return $coreDateModel->gmtDate($dateFormat, $date);
     }
+
+    /**
+     * @param $string
+     * @return bool
+     */
+    public function isJson($string)
+    {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
 }

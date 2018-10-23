@@ -32,6 +32,56 @@
                     <element name="bseller_skyhub_invoice_key" type="xsd:string" minOccurs="0"/>
                 </all>
             </complexType>
+
+            <complexType name="plp">
+                <sequence>
+                    <element name="id" type="xsd:string"/>
+                    <element name="skyhub_code" type="xsd:string"/>
+                    <element name="created_at" type="xsd:date"/>
+                    <element name="json" type="xsd:string"/>
+                </sequence>
+            </complexType>
+            <complexType name="plpArray">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="typens:plp[]" />
+                    </restriction>
+                </complexContent>
+            </complexType>
         </schema>
     </types>
+
+    <message name="plpListRequest">
+        <part name="sessionId" type="xsd:string" />
+        <part name="fromDate" type="xsd:date" />
+        <part name="toDate" type="xsd:date" />
+    </message>
+    <message name="plpListResponse">
+        <part name="plps" type="typens:plpArray"/>
+    </message>
+
+    <portType name="{{var wsdl.handler}}PortType">
+        <operation name="plpList">
+            <documentation>List of Plps</documentation>
+            <input message="typens:plpListRequest" />
+            <output message="typens:plpListResponse" />
+        </operation>
+    </portType>
+    <binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+        <operation name="plpList">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+    </binding>
+    <service name="{{var wsdl.name}}Service">
+        <port name="{{var wsdl.handler}}Port" binding="typens:{{var wsdl.handler}}Binding">
+            <soap:address location="{{var wsdl.url}}" />
+        </port>
+    </service>
 </definitions>
