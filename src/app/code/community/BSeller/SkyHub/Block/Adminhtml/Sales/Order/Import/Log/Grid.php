@@ -49,7 +49,7 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Import_Log_Grid extends BSeller
         $this->addColumn(
             'actions',
             array(
-                'header'       => $this->__('SkyHub Order#'),
+                'header'       => $this->__('Actions'),
                 'align'        => 'left',
                 'width'        => '150px',
                 'renderer'     => 'bseller_skyhub/adminhtml_sales_order_import_log_grid_renderer',

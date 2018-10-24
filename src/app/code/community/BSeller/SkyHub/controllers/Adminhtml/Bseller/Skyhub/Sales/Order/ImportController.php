@@ -142,14 +142,14 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Sales_Order_ImportController
     public function exportSkyhubCsvAction()
     {
         $fileName = 'skyhub_errors.csv';
-        $grid = $this->getLayout()->createBlock('bseller_skyhub/adminhtml_widget_grid');
+        $grid = $this->getLayout()->createBlock('bseller_skyhub/adminhtml_sales_order_import_log_grid');
         $this->_prepareDownloadResponse($fileName, $grid->getCsvFile());
     }
 
     public function exportSkyhubExcelAction()
     {
         $fileName = 'skyhub_errors.xml';
-        $grid = $this->getLayout()->createBlock('bseller_skyhub/adminhtml_widget_grid');
+        $grid = $this->getLayout()->createBlock('bseller_skyhub/adminhtml_sales_order_import_log_grid');
         $this->_prepareDownloadResponse($fileName, $grid->getExcelFile($fileName));
     }
 }
