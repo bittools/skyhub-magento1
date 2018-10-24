@@ -165,7 +165,12 @@ class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_New_Group
         $mutualIds = array();
 
         foreach ($magentoOrders as $order) {
-            if (in_array($order->getBsellerSkyhubCode(), $skyHubOrdersToGroup)) {
+            $skyhubCode = $order->getBsellerSkyhubCode();
+            if (strpos($skyhubCode, '-') !== false) {
+                $skyhubCode = explode('-', $skyhubCode)[1];
+            }
+
+            if (in_array($skyhubCode, $skyHubOrdersToGroup)) {
                 $mutualIds[] = $order->getId();
             }
         }
