@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.3] - 2018-10-25
+### Changed
+- Fixing PLP listing feature.
+- Fixing product's configurable children integration problem;
+### Added
+- Adding csv / xls export option to orders errors page listing;
+
 ## [1.4.2] - 2018-10-23
 ### Changed
 - Allowing order cancellation even after invoice creation;
