@@ -178,6 +178,10 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
         ));
 
         parent::_prepareColumns();
+
+        $this->addExportType('*/*/exportSkyhubCsv', $this->__('CSV'));
+        $this->addExportType('*/*/exportSkyhubExcel', $this->__('Excel XML'));
+
         return $this;
     }
 
