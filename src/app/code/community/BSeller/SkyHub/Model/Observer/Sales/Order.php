@@ -120,7 +120,9 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
          * put the product on the line
          */
         $queueResource->queue(
-            [$product->getId()],
+            array(
+                $product->getId()
+            ),
             BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
