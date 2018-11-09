@@ -18,7 +18,7 @@
 <config>
     <modules>
         <BSeller_SkyHub>
-            <version>1.4.3</version>
+            <version>1.4.4</version>
         </BSeller_SkyHub>
     </modules>
     <global>

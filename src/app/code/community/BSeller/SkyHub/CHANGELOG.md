@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.4] - 2018-11-09
+### Changed
+- Fixing problem at orders creation when cart rules are being applied to it;
+- Fixing exception throw when casting attribute "cost";
+
 ## [1.4.3] - 2018-10-25
 ### Changed
 - Fixing PLP listing feature.
