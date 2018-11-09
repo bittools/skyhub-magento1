@@ -142,6 +142,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
         }
 
         $item = $observer->getItem();
+
         $result = $observer->getResult();
         $rule = $observer->getRule();
         $result->setDiscountAmount(0);
@@ -177,7 +178,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
     public function cleanRuleIds(Varien_Event_Observer $observer)
     {
         $quote = $observer->getQuote();
-        if (!$quote->getData('bseller_skyhub')) {
+        if (!$quote->getData('bseller_skyhub') || !$quote->getAppliedRuleIds()) {
             return;
         }
 

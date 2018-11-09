@@ -477,23 +477,20 @@
         <bseller_skyhub>
             <general>
                 <version>1.4.0</version>
-                <store_scope_information>You need to change the store scope to enable the module.
-                </store_scope_information>
+                <store_scope_information>You need to change the store scope to enable the module.</store_scope_information>
                 <enabled>0</enabled>
                 <integration_product_visibility>4</integration_product_visibility>
             </general>
             <customer>
                 <allow_customer_email_creation_with_taxvat>1</allow_customer_email_creation_with_taxvat>
-                <customer_email_creation_with_taxvat_pattern>@skyhub.com.br
-                </customer_email_creation_with_taxvat_pattern>
+                <customer_email_creation_with_taxvat_pattern>@skyhub.com.br</customer_email_creation_with_taxvat_pattern>
             </customer>
             <log>
                 <enabled>1</enabled>
                 <filename>bseller_skyhub_request_log.log</filename>
             </log>
             <service>
-                <store_scope_information>You need to change the store scope to configure the credentials.
-                </store_scope_information>
+                <store_scope_information>You need to change the store scope to configure the credentials.</store_scope_information>
                 <base_uri>https://api.skyhub.com.br</base_uri>
                 <email/>
                 <api_key/>
