@@ -444,8 +444,11 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                 // Mage::logException($e);
             }
         }
-        
+
         if ((false !== $data) && !is_null($data)) {
+            if (is_array($data) && empty($data)) {
+                return false;
+            }
             return $data;
         }
         

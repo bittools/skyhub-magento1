@@ -18,6 +18,8 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
     use BSeller_SkyHub_Trait_Queue;
     use BSeller_SkyHub_Trait_Entity;
 
+    const RULE_REGISTRY_KEY = 'rule_to_registry';
+
     /**
      * @param Varien_Event_Observer $observer
      */
@@ -126,5 +128,88 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
             BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     * @return $this
+     */
+    public function removePromotions(Varien_Event_Observer $observer)
+    {
+        $quote = $observer->getQuote();
+        if (!$quote->getData('bseller_skyhub')) {
+            return;
+        }
+
+        $item = $observer->getItem();
+
+        $result = $observer->getResult();
+        $rule = $observer->getRule();
+        $result->setDiscountAmount(0);
+        $result->setBaseDiscountAmount(0);
+        $item->setDiscountPercent(0);
+        $item->setAppliedRuleIds(null);
+        $this->_registerRuleToRemove($item, $rule);
+        return $this;
+    }
+
+    /**
+     * @param Mage_Sales_Model_Quote_Item $item
+     * @param Mage_SalesRule_Model_Rule $rule
+     * @return $this
+     */
+    protected function _registerRuleToRemove(Mage_Sales_Model_Quote_Item $item, Mage_SalesRule_Model_Rule $rule)
+    {
+        $registry = Mage::registry(self::RULE_REGISTRY_KEY);
+
+        Mage::unregister(self::RULE_REGISTRY_KEY);
+
+        $registry[$item->getId()][] = $rule->getId();
+
+        Mage::register(self::RULE_REGISTRY_KEY, $registry, true);
+
+        return $this;
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     * @return $this
+     */
+    public function cleanRuleIds(Varien_Event_Observer $observer)
+    {
+        $quote = $observer->getQuote();
+        if (!$quote->getData('bseller_skyhub') || !$quote->getAppliedRuleIds()) {
+            return;
+        }
+
+        $this->removeRulesFromItem($quote);
+        return $this;
+    }
+
+    /**
+     * @param Mage_Sales_Model_Quote $quote
+     * @return $this
+     */
+    public function removeRulesFromItem(Mage_Sales_Model_Quote $quote)
+    {
+        $registry = Mage::registry(self::RULE_REGISTRY_KEY);
+
+        /** @var Mage_Sales_Model_Quote_Item $item */
+        foreach ($quote->getAllItems() as $item) {
+            if (isset($registry[$item->getId()])) {
+                $rules = explode(',', $item->getAppliedRuleIds());
+                foreach ($registry[$item->getId()] as $ruleId) {
+                    $key = array_search($ruleId, $rules);
+
+                    if ($key !== false) {
+                        unset($rules[$key]);
+                    }
+                }
+
+                $item->setAppliedRuleIds(implode(',', $rules));
+            }
+        }
+
+        return $this;
     }
 }
