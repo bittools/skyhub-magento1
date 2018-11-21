@@ -574,13 +574,13 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     {
         try {
             $quote = $this->getSession()->getQuote();
+            $this->clearSessionQuote();
 
             if (!$quote->getId()) {
                 return false;
             }
 
             $quote->delete();
-            $this->clearSessionQuote();
         } catch (Mage_Exception $e) {
             Mage::logException($e);
             return false;
