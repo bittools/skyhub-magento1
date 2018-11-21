@@ -24,20 +24,25 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
      */
     public function create(Mage_Cron_Model_Schedule $schedule)
     {
+        $this->processStoreIteration($this, 'createIntegration', $schedule);
+    }
+
+    public function createIntegration(Mage_Cron_Model_Schedule $schedule, Mage_Core_Model_Store $store)
+    {
         if (!$this->canRun($schedule)) {
             return;
         }
 
-        $queuedIds = (array) $this->getQueueResource()->getPendingEntityIds(
+        $queuedIds = (array)$this->getQueueResource()->getPendingEntityIds(
             BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
 
-        $queuedIds          = $this->filterIds($queuedIds);
-        $skyhubEntityTable  = Mage::getSingleton('core/resource')->getTableName('bseller_skyhub/entity_id');
+        $queuedIds = $this->filterIds($queuedIds);
+        $skyhubEntityTable = Mage::getSingleton('core/resource')->getTableName('bseller_skyhub/entity_id');
 
         /** @var array $productVisibilities */
-        $productVisibilities = $this->getSkyHubModuleConfigAsArray('integration_product_visibility', 'general');
+        $productVisibilities = $this->getSkyHubModuleConfigAsArray('integration_product_visibility', 'general', $store);
 
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = $this->getProductCollection()
@@ -52,21 +57,25 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             ->joinLeft(
                 array('bseller_skyhub_entity' => $skyhubEntityTable),
                 'bseller_skyhub_entity.entity_id = e.entity_id 
-                      AND bseller_skyhub_entity.entity_type = \''.BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT.'\''
+                      AND bseller_skyhub_entity.entity_type = \'' . BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT . '\''
             )
             ->reset('columns')
             ->columns('e.entity_id')
             ->where('bseller_skyhub_entity.updated_at IS NULL OR bseller_skyhub_entity.integrate = 1')
             ->order(array('e.updated_at DESC', 'e.created_at DESC'));
 
+        //adding a website filter
+        $collection->addWebsiteFilter($store->getWebsiteId());
+        //end
+
         /** Set limitation. */
         $limit = abs($this->getCronConfig()->catalogProduct()->getQueueCreateLimit());
-        
+
         if ($limit) {
-            $select->limit((int) $limit);
+            $select->limit((int)$limit);
         }
 
-        $productIds = (array) $this->getQueueResource()->getReadConnection()->fetchCol($select);
+        $productIds = (array)$this->getQueueResource()->getReadConnection()->fetchCol($select);
 
         if (empty($productIds)) {
             $schedule->setMessages($this->__('No products to be queued this time.'));
