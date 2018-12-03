@@ -32,7 +32,7 @@ $installer->addAttribute(
         'user_defined' => true, // or false
         'used_in_product_listing' => '1',
         'default' => '',
-        'note' => "Flag to ignore the product and doesn't send to merketplace.",
+        'note' => "Marque SIM para que o produto não seja enviado à Skyhub / Marketplace."
     )
 );
 
