@@ -28,13 +28,18 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             return;
         }
 
+        $eavConfigModel = Mage::getSingleton('eav/config');
+        $ignoreMarketplaceAttr = $eavConfigModel->getAttribute('catalog_product', 'ignore_marketplace');
+
         $queuedIds = (array) $this->getQueueResource()->getPendingEntityIds(
             BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
 
         $queuedIds          = $this->filterIds($queuedIds);
-        $skyhubEntityTable  = Mage::getSingleton('core/resource')->getTableName('bseller_skyhub/entity_id');
+        $resource = Mage::getSingleton('core/resource');
+        $skyhubEntityTable  = $resource->getTableName('bseller_skyhub/entity_id');
+        $catalogIntAttrTable = $resource->getTableName('catalog_product_entity_int');
 
         /** @var array $productVisibilities */
         $productVisibilities = $this->getSkyHubModuleConfigAsArray('integration_product_visibility', 'general');
@@ -54,9 +59,15 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
                 'bseller_skyhub_entity.entity_id = e.entity_id 
                       AND bseller_skyhub_entity.entity_type = \''.BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT.'\''
             )
+            /** filter by ignore_marketplace flag */
+            ->joinLeft(
+                array("cpee_marketplace" => $catalogIntAttrTable),
+                "cpee_marketplace.entity_id = e.entity_id AND cpee_marketplace.attribute_id = {$ignoreMarketplaceAttr->getId()}"
+            )
             ->reset('columns')
             ->columns('e.entity_id')
             ->where('bseller_skyhub_entity.updated_at IS NULL OR bseller_skyhub_entity.integrate = 1')
+            ->where('(cpee_marketplace.value is null or cpee_marketplace.value = 0)')
             ->order(array('e.updated_at DESC', 'e.created_at DESC'));
 
         /** Set limitation. */
