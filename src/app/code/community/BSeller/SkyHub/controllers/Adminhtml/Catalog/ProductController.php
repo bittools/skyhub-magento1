@@ -67,7 +67,7 @@ class BSeller_SkyHub_Adminhtml_Catalog_ProductController extends BSeller_SkyHub_
         $product->setStoreId($store->getId());
         $product->load($productId);
     
-        if (!$this->canIntegrateProduct($product)) {
+        if (!$this->canIntegrateProduct($product, false, $store)) {
             $this->_getSession()
                  ->addNotice($this->__('This product cannot be integrated for store %s.', $store->getCode()));
             $this->resultRedirect($productId, 'edit');
