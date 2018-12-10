@@ -90,18 +90,18 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
         $products = $order->getAllVisibleItems();
 
         foreach ($products as $item) {
-            $this->processReintegrationOrderProducts($item->getProduct());
+            $this->processReintegrationOrderProducts($item->getProduct(), $order->getStore());
         }
     }
 
-    protected function processReintegrationOrderProducts($product)
+    protected function processReintegrationOrderProducts($product, Mage_Core_Model_Store $store = null)
     {
         $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
         foreach ($parentIds as $id) {
-            $this->processReintegrationOrderProducts(Mage::getModel('catalog/product')->load($id));
+            $this->processReintegrationOrderProducts(Mage::getModel('catalog/product')->load($id), $store);
         }
 
-        if (!$this->canIntegrateProduct($product)) {
+        if (!$this->canIntegrateProduct($product, false, $store)) {
             return;
         }
 
