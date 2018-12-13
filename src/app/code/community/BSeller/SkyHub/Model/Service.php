@@ -12,7 +12,7 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once Mage::getModuleDir(null, 'BSeller_SkyHub') . '/vendor/autoload.php';
 
 use SkyHub\Api;
 use SkyHub\Api\Service\ServicePdf;
