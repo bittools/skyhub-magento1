@@ -53,4 +53,23 @@ class BSeller_SkyHub_Helper_Data extends BSeller_Core_Helper_Data
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
     }
+
+    /**
+     * @param $content
+     * @param $start
+     * @param $end
+     * @param bool $trim
+     * @return string
+     */
+    public function getStringBetween($content, $start, $end, $trim = false)
+    {
+        preg_match("/{$start}(.*?){$end}/", $content, $match);
+        if (!$match || !isset($match[1])) {
+            return '';
+        }
+        if ($trim) {
+            return trim($match[1]);
+        }
+        return $match[1];
+    }
 }
