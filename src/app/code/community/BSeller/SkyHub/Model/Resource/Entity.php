@@ -131,7 +131,26 @@ class BSeller_SkyHub_Model_Resource_Entity extends BSeller_Core_Model_Resource_A
 
         return false;
     }
-    
+
+    public function isEntityFlagged($entityId, $entityType, $storeId = 0)
+    {
+        /** @var Varien_Db_Select $select */
+        $select = $this->getReadConnection()
+            ->select()
+            ->from($this->getMainTable(), 'integrate')
+            ->where('entity_id = ?', (int) $entityId)
+            ->where('entity_type = ?', (string) $entityType)
+            ->where('store_id = ?', (int) Mage::app()->getStore($storeId)->getId())
+            ->limit(1);
+
+        try {
+            return (int) $this->getReadConnection()->fetchOne($select);
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+
+        return false;
+    }
 
     /**
      * @param string  $entityType

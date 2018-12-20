@@ -31,7 +31,7 @@ eav:
       url_key: hidratante-no-foundation-foundation-spf-30-30-ml
       manufacturer: 173
       status: 1
-      visibility: 1
+      visibility: 4
       tax_class_id: 0
       has_replacement: 1
       mundipagg_recurrences: 1
@@ -82,6 +82,29 @@ eav:
       is_salable: 1
       is_in_stock: 1
 
+    - entity_id: 1
+      sku: simple-1
+      type_id: simple
+      entity_type_id: 4
+      attribute_set_id: 4
+      color: green
+    - entity_id: 2
+      sku: simple-2
+      type_id: simple
+      entity_type_id: 4
+      attribute_set_id: 4
+      color: red
+    - entity_id: 3
+      sku: conf-1
+      type_id: configurable
+      entity_type_id: 4
+      attribute_set_id: 4
+      super_attributes:
+        - color
+      configurable_children:
+        - 1
+        - 2
+
 tables:
   cataloginventory/stock_item:
     - item_id: 1
@@ -89,3 +112,19 @@ tables:
       stock_id: 1
       qty: 100
       is_in_stock: 1
+  eav_attribute_option:
+    - option_id: 3
+      attribute_id: 92
+      sort_order: 0
+    - option_id: 4
+      attribute_id: 92
+      sort_order: 0
+  eav_attribute_option_value:
+    - value_id: 3
+      option_id: 3
+      store_id: 0
+      value: green
+    - value_id: 4
+      option_id: 4
+      store_id: 0
+      value: red
