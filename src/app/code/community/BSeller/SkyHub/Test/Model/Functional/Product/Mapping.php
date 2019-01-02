@@ -21,6 +21,8 @@ class BSeller_SkyHub_Test_Model_Functional_Product_Mapping extends BSeller_SkyHu
 
     public function testMapProductAttribute()
     {
+        $this->deleteEavAttribute('height');
+
         //height attribute id
         $id = 10;
 

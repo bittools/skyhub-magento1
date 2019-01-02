@@ -15,14 +15,19 @@
 class BSeller_SkyHub_Test_Model_Functional_Product_Queue extends BSeller_SkyHub_Test_Product_AbstractProduct
 {
     use BSeller_SkyHub_Trait_Entity;
+
+    public function setUp()
+    {
+        $this->createAndMapAllProductAttributes();
+        parent::setUp();
+    }
+
     /**
      * @loadFixture config
      * @loadFixture product
      */
     public function testProductIsGoingToQueue()
     {
-        $this->createAndMapAllProductAttributes();
-
         $productId = 21335;
 
         $this->registerProductEntity($productId);
@@ -68,12 +73,12 @@ class BSeller_SkyHub_Test_Model_Functional_Product_Queue extends BSeller_SkyHub_
 
     public function tearDown()
     {
-        $this->deleteEavAttribute('height');
-        $this->deleteEavAttribute('width');
-        $this->deleteEavAttribute('length');
-        $this->deleteEavAttribute('brand');
-        $this->deleteEavAttribute('ean');
-        $this->deleteEavAttribute('nbm');
+//        $this->deleteEavAttribute('height');
+//        $this->deleteEavAttribute('width');
+//        $this->deleteEavAttribute('length');
+//        $this->deleteEavAttribute('brand');
+//        $this->deleteEavAttribute('ean');
+//        $this->deleteEavAttribute('nbm');
 
         $this->cleanEntityTable('bseller_skyhub/queue');
         Mage::getResourceModel('bseller_skyhub/entity')

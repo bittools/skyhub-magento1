@@ -18,28 +18,18 @@ eav:
       is_returnable: 2
       reference_code: 5122
       reference: 30 ml
-      gtin: 651473512202
-      height: 0.00
-      width: 0.00
-      length: 0.00
-      ncm: 33049910
-      ax_department: DEP00003
-      ax_category: CAT00008
-      ax_subcategory: SUB00059
-      ax_parent_code: PRD11028
-      bar_code: 651473512202
       url_key: hidratante-no-foundation-foundation-spf-30-30-ml
       manufacturer: 173
       status: 1
       visibility: 4
       tax_class_id: 0
       has_replacement: 1
-      mundipagg_recurrences: 1
-      is_bc: 2
-      tax_treatment: 1
       special_from_date: 2016-07-05 00:00:00
       is_salable: 1
       is_in_stock: 1
+      qty: 100
+      price: 232.00
+      special_price: 212.00
 
     - entity_id: 21336
       entity_type_id: 4
@@ -60,10 +50,7 @@ eav:
       reference_code: 5122
       reference: 30 ml
       gtin: 651473512202
-      height: 0.00
       width: 0.00
-      length: 0.00
-      ncm: 33049910
       ax_department: DEP00003
       ax_category: CAT00008
       ax_subcategory: SUB00059
