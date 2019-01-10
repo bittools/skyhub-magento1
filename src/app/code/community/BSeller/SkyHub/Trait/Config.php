@@ -43,7 +43,7 @@ trait BSeller_SkyHub_Trait_Config
      *
      * @return array
      */
-    protected function getSkyHubModuleConfigAsArray($field, $group, Mage_Core_Model_Config $store = null)
+    protected function getSkyHubModuleConfigAsArray($field, $group, Mage_Core_Model_Store $store = null)
     {
         $values      = $this->getModuleConfig($field, $group, 'bseller_skyhub', $store);
         $arrayValues = explode(',', $values);

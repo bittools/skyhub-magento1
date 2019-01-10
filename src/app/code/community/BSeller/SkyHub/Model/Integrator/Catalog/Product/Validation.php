@@ -25,7 +25,10 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
      *
      * @return bool
      */
-    public function canIntegrateProduct(Mage_Catalog_Model_Product $product, $bypassVisibleCheck = false)
+    public function canIntegrateProduct(Mage_Catalog_Model_Product $product,
+                                        $bypassVisibleCheck = false,
+                                        Mage_Core_Model_Store $store = null
+    )
     {
     
         /**
@@ -62,6 +65,14 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
         if (!$bypassVisibleCheck && !$this->hasAllowedVisibility($product)) {
             return false;
         }
+
+        //check if every website atatched to this product is
+        if ($store) {
+            if (!in_array($store->getWebsiteId(), $product->getWebsiteIds())) {
+                return false;
+            }
+        }
+        //end
 
         return true;
     }

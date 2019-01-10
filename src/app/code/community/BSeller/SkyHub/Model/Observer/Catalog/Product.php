@@ -40,7 +40,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
     
         /** @var Mage_Catalog_Model_Product $product */
         $product = $observer->getData('product');
-        $this->processIntegrationProduct($product);
+        $this->processIntegrationProduct($product, $store);
     }
 
     /**
@@ -48,7 +48,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      * @param bool $forceQueue
      * @return void
      */
-    protected function processIntegrationProduct(Mage_Catalog_Model_Product $product)
+    protected function processIntegrationProduct(Mage_Catalog_Model_Product $product, Mage_Core_Model_Store $store)
     {
         $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
         foreach ($parentIds as $id) {
@@ -61,7 +61,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
             }
         }
 
-        if (!$this->canIntegrateProduct($product)) {
+        if (!$this->canIntegrateProduct($product, false, $store)) {
             return;
         }
 
