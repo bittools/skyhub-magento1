@@ -1,0 +1,5 @@
+config:
+  default/bseller_skyhub/general/enabled: 1
+  default/bseller_skyhub/cron_sales_order_queue/enabled: 1
+  default/bseller_skyhub/service/email: skyhubtest@skyhub.com.br
+  default/bseller_skyhub/service/api_key: skyhubtestapikey

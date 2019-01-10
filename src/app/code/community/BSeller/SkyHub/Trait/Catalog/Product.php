@@ -125,8 +125,13 @@ trait BSeller_SkyHub_Trait_Catalog_Product
         if (empty($attributeCode)) {
             $attributeCode = 'special_to_date';
         }
-    
-        return (string) $this->productAttributeRawValue($product, $attributeCode);
+
+        $result = $this->productAttributeRawValue($product, $attributeCode);
+
+        if (is_string($result)) {
+            return (string)$result;
+        }
+        return '';
     }
     
     

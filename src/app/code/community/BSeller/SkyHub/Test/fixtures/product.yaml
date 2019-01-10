@@ -1,0 +1,117 @@
+eav:
+  catalog_product:
+    - entity_id: 21335
+      entity_type_id: 4
+      attribute_set_id: 4
+      type_id: simple
+      sku: teste-produto-1
+      has_options: 0
+      required_options: 0
+      created_at: 2016-07-06T03:00:40-03:00
+      updated_at: 2016-07-20 21:55:03
+      price: 396.0000
+      special_price: 396.0000
+      weight: 0.0000
+      name: Teste Produto 1
+      meta_title: Teste Produto 1
+      options_container: container1
+      is_returnable: 2
+      reference_code: 5122
+      reference: 30 ml
+      url_key: hidratante-no-foundation-foundation-spf-30-30-ml
+      manufacturer: 173
+      status: 1
+      visibility: 4
+      tax_class_id: 0
+      has_replacement: 1
+      special_from_date: 2016-07-05 00:00:00
+      is_salable: 1
+      is_in_stock: 1
+      qty: 100
+      price: 232.00
+      special_price: 212.00
+
+    - entity_id: 21336
+      entity_type_id: 4
+      attribute_set_id: 4
+      type_id: simple
+      sku: teste-produto-2
+      has_options: 0
+      required_options: 0
+      created_at: 2016-07-06T03:00:40-03:00
+      updated_at: 2016-07-20 21:55:03
+      price: 396.0000
+      special_price: 396.0000
+      weight: 0.0000
+      name: Teste Produto 2
+      meta_title: Teste Produto 2
+      options_container: container1
+      is_returnable: 2
+      reference_code: 5122
+      reference: 30 ml
+      gtin: 651473512202
+      width: 0.00
+      ax_department: DEP00003
+      ax_category: CAT00008
+      ax_subcategory: SUB00059
+      ax_parent_code: PRD11028
+      bar_code: 651473512202
+      url_key: hidratante-no-foundation-foundation-spf-30-30-ml
+      manufacturer: 173
+      status: 1
+      visibility: 1
+      tax_class_id: 0
+      has_replacement: 1
+      mundipagg_recurrences: 1
+      is_bc: 2
+      tax_treatment: 1
+      special_from_date: 2016-07-05 00:00:00
+      is_salable: 1
+      is_in_stock: 1
+
+    - entity_id: 1
+      sku: simple-1
+      type_id: simple
+      entity_type_id: 4
+      attribute_set_id: 4
+      color: green
+    - entity_id: 2
+      sku: simple-2
+      type_id: simple
+      entity_type_id: 4
+      attribute_set_id: 4
+      color: red
+    - entity_id: 3
+      sku: conf-1
+      type_id: configurable
+      entity_type_id: 4
+      attribute_set_id: 4
+      super_attributes:
+        - color
+      configurable_children:
+        - 1
+        - 2
+
+tables:
+  cataloginventory/stock_item:
+    - item_id: 1
+      product_id: 21335
+      stock_id: 1
+      qty: 100
+      is_in_stock: 1
+  eav_attribute_option:
+    - option_id: 3
+      attribute_id: 92
+      sort_order: 0
+    - option_id: 4
+      attribute_id: 92
+      sort_order: 0
+  eav_attribute_option_value:
+    - value_id: 3
+      option_id: 3
+      store_id: 0
+      value: green
+    - value_id: 4
+      option_id: 4
+      store_id: 0
+      value: red
