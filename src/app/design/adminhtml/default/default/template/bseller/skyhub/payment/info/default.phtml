@@ -4,11 +4,19 @@ if (null == $json) {
     return;
 }
 
-$paymentData = $json['payments'][0];
-$value = Mage::helper('core')->currency($paymentData['value'], true, false);
-?>
-<p><?php echo $this->__('Paid in SkyHub') ?></p>
-<p><?php echo $this->__('Payment method') ?>: <?php echo $paymentData['method'] ?></p>
-<p><?php echo $this->__('Description') ?>: <?php echo $this->__('In the value of') . ' ' . $value ?></p>
-<p><?php echo $this->__('Parcels') ?>: <?php echo $paymentData['parcels'] ?></p>
-<p><?php echo $this->__('Value') ?>: <?php echo $value; ?></p>
+$payments = $json['payments'];
+
+foreach ($payments as $key => $payment) {
+    $paymentIndex = $key+1;
+    ?>
+    <p><?php echo $this->__("Payment # %s", $paymentIndex) ?></p>
+    <?php
+    $value = Mage::helper('core')->currency($payment['value'], true, false);
+    ?>
+    <p><?php echo $this->__('Paid in SkyHub') ?></p>
+    <p><?php echo $this->__('Payment method') ?>: <?php echo $payment['method'] ?></p>
+    <p><?php echo $this->__('Description') ?>: <?php echo $this->__('In the value of') . ' ' . $value ?></p>
+    <p><?php echo $this->__('Parcels') ?>: <?php echo $payment['parcels'] ?></p>
+    <p><?php echo $this->__('Value') ?>: <?php echo $value; ?></p>
+    <p>=======================================================</p>
+<?php } ?>
