@@ -18,7 +18,7 @@
 <config>
     <modules>
         <BSeller_SkyHub>
-            <version>1.4.4</version>
+            <version>1.4.5</version>
         </BSeller_SkyHub>
     </modules>
     <global>
@@ -476,7 +476,7 @@
     <default>
         <bseller_skyhub>
             <general>
-                <version>1.4.0</version>
+                <version>1.4.5</version>
                 <store_scope_information>You need to change the store scope to enable the module.</store_scope_information>
                 <enabled>0</enabled>
                 <integration_product_visibility>4</integration_product_visibility>

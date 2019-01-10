@@ -52,7 +52,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
     {
         $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
         foreach ($parentIds as $id) {
-            $this->processIntegrationProduct(Mage::getModel('catalog/product')->load($id));
+            $this->processIntegrationProduct(Mage::getModel('catalog/product')->load($id), $store);
         }
 
         if (!$product->getData('is_salable')) {

@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.5] - 2019-01-10
+### Changed
+- Fixing bug at quote when the first order or the queue throws an exception and the next orders are being created without currency;
+- Fixing products integration. Now, the module has a filter to allow the integration to work only with products atatched with enabled integration websites;
+- Showing multiple payment methods at orders page;
+- Removing duplicate order billing / shipping addresses information (complement and reference);
+- Fixing BUG when "compliance mode" is activated;
+- Fixing BUG at order status update when the order is "holded" in magento;
+- Writing first functional tests.
+
+### Added
+- Adding csv / xls export option to orders errors page listing;
+
 ## [1.4.4] - 2018-11-09
 ### Changed
 - Fixing problem at orders creation when cart rules are being applied to it;
