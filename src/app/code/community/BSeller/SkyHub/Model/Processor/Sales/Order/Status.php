@@ -34,6 +34,11 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
             return false;
         }
 
+        //if the state is 'holded', just skip;
+        if ($order->getState() == Mage_Sales_Model_Order::STATE_HOLDED) {
+            return false;
+        }
+
         /**
          * If order is CANCELED in SkyHub.
          */
