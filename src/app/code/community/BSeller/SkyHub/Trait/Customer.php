@@ -62,7 +62,7 @@ trait BSeller_SkyHub_Trait_Customer
     {
         $street = $address->getData('street');
         $number = $address->getData('number');
-        $complement = implode(' ', array($address->getData('reference'), $address->getData('detail')));
+        $complement = implode(' ', array($address->getData('complement'), $address->getData('reference')));
         $neighborhood = $address->getData('neighborhood');
 
         return $this->_formatAddress(
