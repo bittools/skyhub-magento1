@@ -86,6 +86,10 @@ eav:
       type_id: configurable
       entity_type_id: 4
       attribute_set_id: 4
+      salable: 1
+      website_ids:
+              - admin
+              - base
       super_attributes:
         - color
       configurable_children:
