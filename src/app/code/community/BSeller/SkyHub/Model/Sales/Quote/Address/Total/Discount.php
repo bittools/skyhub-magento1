@@ -53,7 +53,7 @@ class BSeller_SkyHub_Model_Sales_Quote_Address_Total_Discount extends Mage_Sales
             $existingBaseDiscount = $item->getBaseDiscountAmount();
             
             $item->setDiscountAmount($existingDiscount + $amount);
-            $item->setBaseDiscountAmount($existingBaseDiscount + $factor);
+            $item->setBaseDiscountAmount($existingBaseDiscount + $amount);
             $item->setDiscountPercent($factor);
         }
         
