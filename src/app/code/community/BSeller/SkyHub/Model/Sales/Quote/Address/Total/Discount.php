@@ -14,10 +14,6 @@
 class BSeller_SkyHub_Model_Sales_Quote_Address_Total_Discount extends Mage_Sales_Model_Quote_Address_Total_Abstract
 {
     
-    /** @var string */
-    protected $_code = 'discount';
-    
-    
     /**
      * @param Mage_Sales_Model_Quote_Address $address
      *
@@ -32,6 +28,9 @@ class BSeller_SkyHub_Model_Sales_Quote_Address_Total_Discount extends Mage_Sales
         if (!$skyhubDiscount) {
             return $this;
         }
+
+        //force use the default magento field for discount;
+        $this->setCode('discount');
         
         $items = $this->_getAddressItems($address);
         

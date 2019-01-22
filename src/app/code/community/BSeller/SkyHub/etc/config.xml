@@ -259,11 +259,11 @@
         <sales>
             <quote>
                 <totals>
-                    <discount>
+                    <bseller_skyhub_discount>
                         <class>bseller_skyhub/sales_quote_address_total_discount</class>
                         <after>discount</after>
                         <before>grand_total</before>
-                    </discount>
+                    </bseller_skyhub_discount>
                     <bseller_skyhub_interest>
                         <class>bseller_skyhub/sales_quote_address_total_interest</class>
                         <after>discount</after>
