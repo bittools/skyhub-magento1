@@ -29,19 +29,6 @@ abstract class BSeller_SkyHub_Block_Adminhtml_Widget_Grid extends BSeller_Core_B
      */
     protected function _prepareLayout()
     {
-        $this->setChild(
-            'clear_queue_button',
-            $this->getLayout()
-                 ->createBlock('adminhtml/widget_button')
-                 ->setData(
-                     array(
-                        'label'     => Mage::helper('bseller_skyhub')->__('Reset SkyHub Products Integration History'),
-                        'onclick' => "if (confirm('{$this->getConfirmMessage()}')) { setLocation('{$this->getClearQueueUrl()}')}",
-                        'class' => 'delete'
-                    )
-                 )
-        );
-
         return BSeller_Core_Block_Adminhtml_Widget_Grid::_prepareLayout();
     }
 
