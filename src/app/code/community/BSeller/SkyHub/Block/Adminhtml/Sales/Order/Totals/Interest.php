@@ -33,15 +33,16 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Totals_Interest extends BSeller
         if (!$order) {
             return $this;
         }
-        
+
         $block->addTotal(new Varien_Object(array(
-            'code'       => 'bseller_skyhub_interest',
-            'strong'     => true,
-            'value'      => $order->getData('bseller_skyhub_interest'),
+            'code' => 'bseller_skyhub_interest',
+            'strong' => true,
+            'value' => $order->getData('bseller_skyhub_interest'),
             'base_value' => $order->getData('bseller_skyhub_interest'),
-            'label'      => $this->__('BSeller Interest'),
-            'area'       => 'footer'
-        )));
+            'label' => $this->__('BSeller Interest'),
+            'area' => 'footer'
+        )),
+            'subtotal');
         
         return $this;
     }
