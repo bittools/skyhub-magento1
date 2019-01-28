@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.6] - 2019-01-28
+### Changed
+- Showing button to reset product's integration history only on the product's queue page;
+- Fixing bug with orders created with interest value;
+- Showing discount amount on orders page;
+
 ## [1.4.5] - 2019-01-10
 ### Changed
 - Fixing bug at quote when the first order or the queue throws an exception and the next orders are being created without currency;
