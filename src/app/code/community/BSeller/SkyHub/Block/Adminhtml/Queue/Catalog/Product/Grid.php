@@ -20,6 +20,31 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Product_Grid extends BSeller_
     protected $_entityType = BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT;
 
     /**
+     * Preparing global layout
+     *
+     * You can redefine this method in child classes for changing layout
+     *
+     * @return Mage_Core_Block_Abstract
+     */
+    protected function _prepareLayout()
+    {
+        $this->setChild(
+            'clear_queue_button',
+            $this->getLayout()
+                ->createBlock('adminhtml/widget_button')
+                ->setData(
+                    array(
+                        'label' => Mage::helper('bseller_skyhub')->__('Reset SkyHub Products Integration History'),
+                        'onclick' => "if (confirm('{$this->getConfirmMessage()}')) { setLocation('{$this->getClearQueueUrl()}')}",
+                        'class' => 'delete'
+                    )
+                )
+        );
+
+        return parent::_prepareLayout();
+    }
+
+    /**
      * @param BSeller_SkyHub_Model_Resource_Queue_Collection $collection
      *
      * @return BSeller_SkyHub_Model_Resource_Queue_Collection
