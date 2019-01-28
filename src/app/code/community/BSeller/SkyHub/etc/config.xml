@@ -271,6 +271,24 @@
                     </bseller_skyhub_interest>
                 </totals>
             </quote>
+            <order_invoice>
+                <totals>
+                    <bseller_skyhub_interest>
+                        <class>bseller_skyhub/sales_order_invoice_total_interest</class>
+                        <after>discount</after>
+                        <before>grand_total</before>
+                    </bseller_skyhub_interest>
+                </totals>
+            </order_invoice>
+            <order_creditmemo>
+                <totals>
+                    <bseller_skyhub_interest>
+                        <class>bseller_skyhub/sales_order_creditmemo_total_interest</class>
+                        <after>discount</after>
+                        <before>grand_total</before>
+                    </bseller_skyhub_interest>
+                </totals>
+            </order_creditmemo>
         </sales>
         <fieldsets>
             <sales_convert_quote>
