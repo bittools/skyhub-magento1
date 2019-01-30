@@ -30,7 +30,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
         $state = $this->getStateBySkyhubStatusType($skyhubStatusType);
 
         //if the state is the same, means there's no order movement, so keep it in track;
-        if ($order->getState() == $state) {
+        if ($state != Mage_Sales_Model_Order::STATE_COMPLETE && $state = $order->getState()) {
             return false;
         }
 
@@ -66,7 +66,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
         /**
          * If order is DELIVERED in SkyHub.
          */
-        if ($state == BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_DELIVERED) {
+        if ($skyhubStatusType == BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_DELIVERED) {
             $status = $this->getDeliveredOrdersStatus();
         }
 
@@ -111,7 +111,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
                 return Mage_Sales_Model_Order::STATE_PROCESSING;
             case BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_CANCELED:
                 return Mage_Sales_Model_Order::STATE_CANCELED;
-            case BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_DELIVERED:
             case BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_SHIPPED:
             case BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_SHIPMENT_EXCEPTION:
             case BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_DELIVERED:
