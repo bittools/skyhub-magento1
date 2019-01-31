@@ -99,7 +99,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     protected function hasStockOrPriceUpdate(Mage_Catalog_Model_Product $product)
     {
-        if ($product->getOrigData('price') != $product->getData('price')) {
+        if ($product->getOrigData('price') && $product->getOrigData('price') != $product->getData('price')) {
             return true;
         }
         if ($product->getOrigData('special_price') != $product->getData('special_price')) {
@@ -248,8 +248,12 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
     public function catalogInventoryCommit(Varien_Event_Observer $observer)
     {
         $recentIntegratedProductIds = Mage::registry('recent_integrated_product');
-        $productId = $observer->getItem()->getProductId();
+        $product = $observer->getItem()->getProduct();
+        $productId = $product->getId();
         if (!$recentIntegratedProductIds || !in_array($productId, $recentIntegratedProductIds)) {
+            if (!$this->canIntegrateProduct($product)) {
+                return false;
+            }
             $this->flagEntityIntegrate($productId);
         }
     }
