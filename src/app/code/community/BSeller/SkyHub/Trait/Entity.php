@@ -120,7 +120,7 @@ trait BSeller_SkyHub_Trait_Entity
         }
 
         return $this->getEntityResource()
-            ->updateEntity($id, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT, 1);
+            ->updateEntity($id, BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT, 0, 1);
     }
 
     /**
