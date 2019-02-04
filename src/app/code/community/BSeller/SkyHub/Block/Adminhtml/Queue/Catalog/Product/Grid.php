@@ -113,9 +113,43 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Product_Grid extends BSeller_
             'sku'
         );
 
+        $this->addColumn(
+            'actions',
+            array(
+                'header'       => $this->__('Actions'),
+                'align'        => 'left',
+                'width'        => '150px',
+                'type'         => 'action',
+                'getter'       => 'getId',
+                'actions'      => array(
+                    array(
+                        'url'     => array('base'=> '*/*/delete'),
+                        'caption' => $this->__('Delete'),
+                        'field'   => 'id'
+                    ),
+                ),
+            )
+        );
+
         $this->sortColumnsByOrder();
 
         return $this;
     }
-    
+
+    /**
+     * @return $this
+     */
+    protected function _prepareMassaction()
+    {
+        $this->setMassactionIdField('id');
+        $this->getMassactionBlock()->setFormFieldName('queue_ids');
+
+        $this->getMassactionBlock()->addItem('delete', array(
+            'label'   => $this->__('Delete'),
+            'url'     => $this->getUrl('*/*/massDelete'),
+            'confirm' => $this->__('Are you sure?')
+        ));
+
+        return $this;
+    }
 }
