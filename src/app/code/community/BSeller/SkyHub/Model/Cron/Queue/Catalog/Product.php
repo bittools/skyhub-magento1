@@ -15,9 +15,8 @@
 
 class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Model_Cron_Queue_Abstract
 {
-    use BSeller_SkyHub_Trait_Attribute_Notification;
-
-    use BSeller_Core_Trait_Config;
+    use BSeller_Core_Trait_Config,
+        BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation;
 
     /**
      * @param Mage_Cron_Model_Schedule $schedule
@@ -33,7 +32,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             return;
         }
 
-        $queuedIds = (array)$this->getQueueResource()->getPendingEntityIds(
+        $queuedIds = (array) $this->getQueueResource()->getPendingEntityIds(
             BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
             BSeller_SkyHub_Model_Queue::PROCESS_TYPE_EXPORT
         );
@@ -77,6 +76,16 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
 
         $productIds = (array)$this->getQueueResource()->getReadConnection()->fetchCol($select);
 
+        $productIdsTmp = [];
+
+        foreach ($productIds as $productId) {
+            if ($this->canIntegrateProduct(Mage::getModel('catalog/product')->load($productId))) {
+                $productIdsTmp[] = $productId;
+            }
+        }
+
+        $productIds = $productIdsTmp;
+
         if (empty($productIds)) {
             $schedule->setMessages($this->__('No products to be queued this time.'));
             return;
@@ -93,8 +102,8 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             $this->__('%s product(s) were queued. IDs: %s.', count($productIds), implode(',', $productIds))
         );
     }
-    
-    
+
+
     /**
      * @param Mage_Cron_Model_Schedule $schedule
      *
@@ -103,17 +112,17 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
     public function execute(Mage_Cron_Model_Schedule $schedule)
     {
         $this->processStoreIteration($this, 'executeIntegration', $schedule);
-    
+
         $successQueueIds = $this->extractResultSuccessIds($schedule);
         $failedQueueIds  = $this->extractResultFailIds($schedule);
-    
+
         if (!empty($successQueueIds)) {
             $this->getQueueResource()->removeFromQueue(
                 $successQueueIds,
                 BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT
             );
         }
-    
+
         $schedule->setMessages($this->__(
             'Queue was processed. Success: %s. Errors: %s.',
             implode(',', $successQueueIds),
@@ -145,7 +154,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
 
         /** Set limitation. */
         $limit = abs($this->getCronConfig()->catalogProduct()->getQueueExecuteLimit());
-        
+
         if ($limit) {
             $collection->getSelect()->limit((int) $limit);
         }
@@ -154,7 +163,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             $schedule->setMessages($this->__('No product to be integrated this time.'));
             return;
         }
-    
+
         $successQueueIds = array();
         $failedQueueIds  = array();
 
@@ -183,10 +192,10 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
                     BSeller_SkyHub_Model_Entity::TYPE_CATALOG_PRODUCT,
                     $response->message()
                 );
-                
+
                 continue;
             }
-    
+
             $successQueueIds[] = $product->getId();
         }
 
@@ -233,7 +242,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             $schedule->setMessages($this->__('Catalog Product Cron is Disabled'));
             return false;
         }
-    
+
         /**
          * If the notification block can be shown, it means there's a products attributes mapping problem.
          */
@@ -241,7 +250,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
             $schedule->setMessages(
                 $this->__('The installation is not completed. All required product attributes must be mapped.')
             );
-            
+
             return false;
         }
 
