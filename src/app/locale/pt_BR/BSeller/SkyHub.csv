@@ -209,3 +209,4 @@
 "If the customer works with B2W Entregas, when the order status at skyhub is set to SHIPMENT_EXCEPTION, the integration will define this status at Magento. If it's not B2W entregas, when the order status is set to this status at magento (manually or programatically), the integration will update Skyhub with SHIPMENT_EXCEPTION status.","Se você lojista utiliza B2W Entregas, quando o status do pedido na skyhub é definido para SHIPMENT_EXCEPTION, a integração definirá este status no Magento. Se não trabalhar com B2W entregas, quando o status do pedido é definido para este no magento (manualmente ou programaticamente), a integração atualizará o pedido na Skyhub com o status de SHIPMENT_EXCEPTION."
 "Shipment Exception Order Status","Status de Erro de Entrega do Pedido"
 "Payment # %s","Pagamento # %s"
+"SkyHub - Estimated Delivery Date","SkyHub - Data de Entrega Estimada"

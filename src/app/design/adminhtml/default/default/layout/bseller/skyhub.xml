@@ -232,5 +232,10 @@
                 <block>bseller_skyhub/adminhtml_sales_order_view_tab_plp</block>
             </action>
         </reference>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_sales_order_view_shipping"
+                   name="bseller_skyhub_block_adminhtml_sales_order_view_shipping"
+                   template="bseller/skyhub/order/view/shipping.phtml"/>
+        </reference>
     </adminhtml_sales_order_view>
 </layout>

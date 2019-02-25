@@ -1,0 +1,25 @@
+<?php if($this->getDeliveryDate()): ?>
+    <div id="deliverydate">
+            <label><?php echo $this->__('SkyHub - Estimated Delivery Date') ?></label>
+            <strong><?php echo $this->htmlEscape($this->getDeliveryDate()) ?></strong>
+    </div>
+    <script type="text/javascript">
+        document.observe('dom:loaded', function() {
+            var cnt            = $('deliverydate'),
+                shippingHeader = $$('.head-shipping-method')[0];
+
+            if (!shippingHeader) {
+                return;
+            }
+
+            var fieldset = shippingHeader.up('.entry-edit').down('fieldset');
+
+            fieldset && fieldset.insert({
+                top: '<strong>' + cnt.down('label').innerHTML + '</strong> '
+                    + '<span class="deliverydate">' + cnt.down('strong').innerHTML + '</span><br/><br/>'
+            });
+
+            cnt.hide();
+        });
+    </script>
+<?php endif; ?>
