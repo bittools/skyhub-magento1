@@ -12,6 +12,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
+ * @author    Rafael Falcao <rafael.falcao@e-smart.com.br>
  */
 
 -->
@@ -41,6 +42,15 @@
             <block type="bseller_skyhub/adminhtml_catalog_product_attributes_mapping_edit"/>
         </reference>
     </adminhtml_bseller_skyhub_catalog_product_attributes_mapping_edit>
+
+    <!-- Catalog Product Attributes Blacklist -->
+    <adminhtml_bseller_skyhub_catalog_product_attributes_blacklist_index>
+        <label>BSeller SkyHub Customer Attributes Blacklist</label>
+        <update handle="ADD_STYLES"/>
+        <reference name="content">
+            <block type="bseller_skyhub/adminhtml_catalog_product_attributes_blacklist"/>
+        </reference>
+    </adminhtml_bseller_skyhub_catalog_product_attributes_blacklist_index>
 
     <!-- Customer Attributes Mapping -->
     <adminhtml_bseller_skyhub_customer_attributes_mapping_index>

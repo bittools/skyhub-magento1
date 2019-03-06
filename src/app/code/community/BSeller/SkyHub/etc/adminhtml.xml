@@ -12,6 +12,7 @@
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
+ * @author    Rafael Falcao <rafael.falcao@e-smart.com.br>
  */
 -->
 <config>
@@ -31,6 +32,11 @@
                                     <sort_order>10</sort_order>
                                     <action>adminhtml/bseller_skyhub_catalog_product_attributes_mapping</action>
                                 </grid>
+                                <form>
+                                    <title>Attributes Blacklist</title>
+                                    <sort_order>20</sort_order>
+                                    <action>adminhtml/bseller_skyhub_catalog_product_attributes_blacklist</action>
+                                </form>
                             </children>
                         </catalog_product_attributes_mapping>
                         <customer_attributes_mapping>

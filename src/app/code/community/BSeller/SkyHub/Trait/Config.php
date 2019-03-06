@@ -35,6 +35,23 @@ trait BSeller_SkyHub_Trait_Config
         return $this->getModuleConfig($field, $group, 'bseller_skyhub', $storeId);
     }
 
+    /**
+     * @param $field
+     * @param $group
+     * @param $value
+     * @param null $storeId
+     *
+     * @return Mage_Core_Store_Config
+     */
+    protected function setSkyhubModuleConfig($field, $group, $value, $storeId = 0)
+    {
+        $path = implode('/', array('bseller_skyhub', $group, $field));
+        $success = Mage::getConfig()->saveConfig($path, $value, 'default', $storeId);
+
+        Mage::app()->getStore()->resetConfig();
+
+        return $success;
+    }
 
     /**
      * @param string   $field

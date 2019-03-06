@@ -10,6 +10,7 @@
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * @author    Rafael Falcao <rafael.falcao@e-smart.com.br>
  */
 
 use SkyHub\Api\EntityInterface\Catalog\Product;
@@ -190,6 +191,10 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                 if (empty($value) && $value !== 0 && $value !== '0') {
                     continue;
                 }
+
+                if ($this->_validateProductAttributeBlacklist($attribute)) {
+                    continue;
+                }
     
 //                $interface->addSpecification($attribute->getFrontend()->getLabel(), $value);
                 $interface->addSpecification($attribute->getAttributeCode(), $value);
@@ -200,7 +205,28 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
         
         return $this;
     }
-    
+
+    /**
+     * Check if attribute is not in blacklist
+     *
+     * @param $attribute
+     * @return bool
+     */
+    protected function _validateProductAttributeBlacklist($attribute)
+    {
+        $productAttributeBlackList = Mage::getSingleton('bseller_skyhub/system_config_source_catalog_product_blacklist_attributes')
+                                            ->getCustomProductAttributeBlacklist();
+
+        if(!count($productAttributeBlackList)){
+            return false;
+        }
+
+        if(in_array($attribute->getId(), $productAttributeBlackList)){
+            return true;
+        }
+
+        return false;
+    }
     
     /**
      * @param Mage_Eav_Model_Entity_Attribute $attribute
