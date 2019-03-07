@@ -125,6 +125,10 @@
                                                 <title>Attributes Mapping</title>
                                                 <sort_order>10</sort_order>
                                             </grid>
+                                            <form>
+                                                <title>Attributes Blacklist</title>
+                                                <sort_order>20</sort_order>
+                                            </form>
                                         </children>
                                     </catalog_product_attributes_mapping>
                                     <customer_attributes_mapping>
