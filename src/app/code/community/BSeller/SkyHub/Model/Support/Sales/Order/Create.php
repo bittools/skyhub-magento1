@@ -237,6 +237,9 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     protected function getShippingTitle($title, $carrier)
     {
+        /**
+         * Comparing string to a specific marketplace (Magazine Luiza)
+         */
         if(!$title || $this->helper()->normalizeString($title) == 'nao_informado'){
             $title = $carrier;
         }
