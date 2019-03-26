@@ -29,10 +29,6 @@ class BSeller_SkyHub_Model_System_Config_Source_Sales_Order_Status_Complete
         $options = parent::toOptionArray();
         
         foreach ($options as $idx => &$option) {
-            if ($option['value'] == 'complete') {
-                unset($options[$idx]);
-            }
-    
             $option['label'] = $this->__($option['label']);
         }
         
