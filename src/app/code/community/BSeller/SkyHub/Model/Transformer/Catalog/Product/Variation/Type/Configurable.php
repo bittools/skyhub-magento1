@@ -7,7 +7,8 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
 {
 
     use BSeller_SkyHub_Trait_Catalog_Product,
-        BSeller_SkyHub_Trait_Eav_Option;
+        BSeller_SkyHub_Trait_Eav_Option,
+        BSeller_SkyHub_Model_Integrator_Catalog_Product_Type_Configurable_Validation;
     
     
     /** @var array */
@@ -41,6 +42,10 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
 
         /** @var Mage_Catalog_Model_Product $child */
         foreach ($children as $child) {
+            if (!$this->canIntegrateChildProduct($child)) {
+                continue;
+            }
+
             $child->setData('parent_product', $product);
 
             /** @var Product\Variation $variation */

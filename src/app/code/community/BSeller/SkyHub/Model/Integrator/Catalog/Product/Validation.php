@@ -47,6 +47,11 @@ trait BSeller_SkyHub_Model_Integrator_Catalog_Product_Validation
             return false;
         }
 
+        //check if the product is flagged to doesn't go to marketplace
+        if ($product->getIgnoreMarketplace()) {
+            return false;
+        }
+
         if (!$product->getId()) {
             return false;
         }
