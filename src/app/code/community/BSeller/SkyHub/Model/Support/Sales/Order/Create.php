@@ -208,9 +208,8 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function setShippingMethod($title = null, $carrier = null, $cost = 0.0000)
     {
-        if (!$title) {
-            $title = 'Standard';
-        }
+        /** @var string $title */
+        $title = $this->getShippingTitle($title, $carrier);
 
         /** @var string $methodCode */
         $methodCode = $this->helper()->normalizeString($title);
@@ -228,6 +227,28 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         $this->merge($data);
 
         return $this;
+    }
+
+    /**
+     * @param $title
+     * @param $carrier
+     *
+     * @return string
+     */
+    protected function getShippingTitle($title, $carrier)
+    {
+        /**
+         * Comparing string to a specific marketplace (Magazine Luiza)
+         */
+        if(!$title || $this->helper()->normalizeString($title) == 'nao_informado'){
+            $title = $carrier;
+        }
+
+        if (!$title) {
+            return 'Standard';
+        }
+
+        return $title;
     }
 
 
