@@ -12,7 +12,7 @@
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  */
 
-class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_QueueController extends BSeller_SkyHub_Controller_Admin_Action
+class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_QueueController extends BSeller_SkyHub_Controller_Admin_Queue
 {
     protected $_aclPrefix = 'bseller/bseller_skyhub/queues/';
 
@@ -105,5 +105,27 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_QueueController extends BSeller_Sk
         }
 
         return parent::_isAllowed();
+    }
+
+    /**
+     * Delete Unique Queue ID.
+     */
+    public function deleteAction()
+    {
+        $queueId = (int)$this->getRequest()->getParam('id');
+
+        $this->deleteQueueIds($queueId);
+        $this->redirectBack();
+    }
+
+    /**
+     * Delete a bunch of queue IDs.
+     */
+    public function massDeleteAction()
+    {
+        $queueIds = (array)$this->getRequest()->getPost('queue_ids');
+
+        $this->deleteQueueIds($queueIds);
+        $this->redirectBack();
     }
 }

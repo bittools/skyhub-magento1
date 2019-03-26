@@ -65,10 +65,6 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
      */
     public function create(Mage_Catalog_Model_Product $product)
     {
-        if (!$this->canIntegrateProduct($product)) {
-            return false;
-        }
-
         /** @var \SkyHub\Api\EntityInterface\Catalog\Product $interface */
         $interface = $this->productTransformer()
                           ->convert($product);
@@ -95,10 +91,6 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
      */
     public function update(Mage_Catalog_Model_Product $product)
     {
-        if (!$this->canIntegrateProduct($product)) {
-            return false;
-        }
-        
         /** @var \SkyHub\Api\EntityInterface\Catalog\Product $interface */
         $interface = $this->productTransformer()
                           ->convert($product);
