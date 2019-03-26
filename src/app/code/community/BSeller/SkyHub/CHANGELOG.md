@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.7] - 2019-03-26
+### Changed
+- Showing estimated delivery information in the order in the admin panel;
+- Adding custom blacklist of product attributes that are integrated to Skyhub;
+- Showing estimated delivery date in admin view order when exists;
+- Adding possibility to remove items from the product integration queue;
+- Fixing bug in order status update when it is delivered
+- Adding flag on products to allow or not to be integrated into the marketplace
+
 ## [1.4.6] - 2019-01-28
 ### Changed
 - Showing button to reset product's integration history only on the product's queue page;
@@ -34,7 +43,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Adding csv / xls export option to orders errors page listing;
 
-## [1.4.2] - 2018-10-23
+## [1.4.2] - 2018-10-23Fixing bug at quote when the first
 ### Changed
 - Allowing order cancellation even after invoice creation;
 - Fixing products with variation integration - variation attributes are set correctly now;
