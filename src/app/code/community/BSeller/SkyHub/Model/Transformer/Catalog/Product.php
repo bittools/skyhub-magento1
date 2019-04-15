@@ -184,13 +184,14 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
             if (!$attribute || !$this->validateSpecificationAttribute($attribute)) {
                 continue;
             }
+
+            // TODO verify this logic
+            if($attribute->getBackendType() == 'static'){
+                continue;
+            }
             
             try {
                 $value = $this->extractProductData($product, $attribute);
-
-                if (empty($value) && $value !== 0 && $value !== '0') {
-                    continue;
-                }
 
                 if ($this->_validateProductAttributeBlacklist($attribute)) {
                     continue;
@@ -442,8 +443,12 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
     public function extractProductData(Mage_Catalog_Model_Product $product, Mage_Eav_Model_Entity_Attribute $attribute)
     {
         $data = $this->productAttributeRawValue($product, $attribute);
-        
-        if ((false === $data) || is_null($data)) {
+
+        if(is_null($data)){
+            return '';
+        }
+
+        if (false === $data) {
             return false;
         }
         
