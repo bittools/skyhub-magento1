@@ -185,11 +185,6 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
                 continue;
             }
 
-            // TODO verify this logic
-            if($attribute->getBackendType() == 'static'){
-                continue;
-            }
-            
             try {
                 $value = $this->extractProductData($product, $attribute);
 
