@@ -248,7 +248,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
     public function catalogInventoryCommit(Varien_Event_Observer $observer)
     {
         $recentIntegratedProductIds = Mage::registry('recent_integrated_product');
-        $product = $observer->getItem()->getProduct();
+        $product = $this->_getProduct($observer->getItem());
         $productId = $product->getId();
         if (!$recentIntegratedProductIds || !in_array($productId, $recentIntegratedProductIds)) {
             if (!$this->canIntegrateProduct($product)) {
@@ -256,6 +256,20 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
             }
             $this->flagEntityIntegrate($productId);
         }
+    }
+
+    /**
+     * @param $item
+     * @return Mage_Core_Model_Abstract|Varien_Object
+     */
+    protected function _getProduct($item)
+    {
+        $product = $item->getProduct();
+        if ($product instanceof Varien_Object) {
+            return $product;
+        }
+
+        return Mage::getModel('catalog/product')->load((int)$item->getProductId());
     }
 
     public function integrateProductForce(Varien_Event_Observer $observer)
