@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.8] - 2019-06-04
+### Changed
+- setting to when storeId is zero
+- fix get product
+- remove cond is static
+- add attribute category_ids to blacklist because skyhub not support
+- Adding check if attribute is static and send when empty
+- Update setup to next version to be released
+- settings general
+
 ## [1.4.7] - 2019-03-26
 ### Changed
 - Showing estimated delivery information in the order in the admin panel;
