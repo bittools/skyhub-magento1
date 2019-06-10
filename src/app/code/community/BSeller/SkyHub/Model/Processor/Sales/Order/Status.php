@@ -64,6 +64,14 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
         }
 
         /**
+         * If order dont have invoice but have shipment, invoiced order
+         */
+        if ($order->hasShipments() && !$order->hasInvoices()) {
+            $this->invoiceOrder($order);
+            $status = $this->getApprovedOrdersStatus();
+        }
+
+        /**
          * If order is DELIVERED in SkyHub.
          */
         if ($skyhubStatusType == BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_DELIVERED) {
