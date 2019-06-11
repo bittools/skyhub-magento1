@@ -330,11 +330,20 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      */
     public function getRegion($address)
     {
-        if ($address->getData('region') == self::CODE_REGION_EMPTY) {
+        if ($this->_prepareString($address->getData('region')) == $this->_prepareString(self::CODE_REGION_EMPTY)) {
             return self::CODE_REGION_DEFAULT;
         }
 
         return $address->getData('region');
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    protected function _prepareString($value)
+    {
+        return strtolower(trim($value));
     }
 
     /**
