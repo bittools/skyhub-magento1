@@ -33,6 +33,9 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     /** @var BSeller_SkyHub_Model_Adminhtml_Sales_Order_Create */
     protected $creator;
 
+    const CODE_REGION_EMPTY = 'N/A';
+
+    const CODE_REGION_DEFAULT = 'SP';
 
     /**
      * BSeller_SkyHub_Model_Support_Sales_Order_Create constructor.
@@ -307,7 +310,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
                     'street'              => $simpleAddressData,
                     'city'                => $address->getData('city'),
                     'country_id'          => $address->getData('country'),
-                    'region'              => $address->getData('region'),
+                    'region'              => $this->getRegion($address),
                     'region_id'           => '',
                     'postcode'            => $address->getData('postcode'),
                     'telephone'           => $this->formatPhone($address->getData('phone')),
@@ -321,6 +324,18 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         return $this;
     }
 
+    /**
+     * @param $address
+     * @return string
+     */
+    public function getRegion($address)
+    {
+        if ($address->getData('region') == self::CODE_REGION_EMPTY) {
+            return self::CODE_REGION_DEFAULT;
+        }
+
+        return $address->getData('region');
+    }
 
     /**
      * @return $this
