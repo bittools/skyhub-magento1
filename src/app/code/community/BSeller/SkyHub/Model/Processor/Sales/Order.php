@@ -34,6 +34,10 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             /** @var Mage_Sales_Model_Order $order */
             $order = $this->processOrderCreation($data);
 
+            if ($order && $order->getId()) {
+                $this->updateOrderStatus($data, $order);
+            }
+
         } catch (Exception $e) {
 
             $this->removeOrderQuote();
@@ -49,10 +53,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             Mage::logException($e);
 
             return false;
-        }
-
-        if ($order && $order->getId()) {
-            $this->updateOrderStatus($data, $order);
         }
 
         return $order;
