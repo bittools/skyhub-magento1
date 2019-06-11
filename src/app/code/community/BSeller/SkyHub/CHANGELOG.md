@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [1.4.8] - 2019-06-04
+## [1.4.8] - 2019-06-11
 ### Changed
 - setting to when storeId is zero
 - fix get product
@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
 - Adding check if attribute is static and send when empty
 - Update setup to next version to be released
 - settings general
+- settings to create order when not informed the region code
+- settings to queue continue when occur error in process of update status to order during execution of request
+- settings to invoiced order when order init with status delivered without invoice
 
 ## [1.4.7] - 2019-03-26
 ### Changed
