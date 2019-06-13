@@ -73,7 +73,7 @@ class BSeller_SkyHub_Model_Integrator_Shipment_Plp extends BSeller_SkyHub_Model_
         $interface = $this->getEntityInterface();
 
         foreach ($orders as $order) {
-            $interface->addOrder($order);
+            $interface->addOrder($this->_prepareOrderCode($order));
         }
 
         $result = $interface->group();
@@ -92,6 +92,22 @@ class BSeller_SkyHub_Model_Integrator_Shipment_Plp extends BSeller_SkyHub_Model_
         return (array) $data;
     }
 
+    /**
+     * @param $code
+     * @return mixed
+     */
+    protected function _prepareOrderCode($code)
+    {
+        return $this->_helper()->onlyNumbers($code);
+    }
+
+    /**
+     * @return BSeller_SkyHub_Helper_Data
+     */
+    protected function _helper()
+    {
+        return Mage::helper('bseller_skyhub');
+    }
 
     /**
      * @param $plp

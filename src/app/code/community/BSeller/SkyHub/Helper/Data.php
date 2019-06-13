@@ -55,6 +55,15 @@ class BSeller_SkyHub_Helper_Data extends BSeller_Core_Helper_Data
     }
 
     /**
+     * @param $value
+     * @return mixed
+     */
+    public function onlyNumbers($value)
+    {
+        return preg_replace('/[^0-9]/', '', trim($value));
+    }
+
+    /**
      * @param $content
      * @param $start
      * @param $end
