@@ -76,7 +76,6 @@ class BSeller_SkyHub_Model_Integrator_Shipment_Plp extends BSeller_SkyHub_Model_
             $interface->addOrder($this->_prepareOrderCode($order));
         }
 
-        die();
         $result = $interface->group();
 
         if ($result->exception() || $result->invalid()) {
