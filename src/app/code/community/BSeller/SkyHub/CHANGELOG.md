@@ -3,8 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [1.4.8] - 2019-06-11
+## [1.4.8] - 2019-06-17
 ### Changed
+- settings to get order code to grouping PLP
 - setting to when storeId is zero
 - fix get product
 - remove cond is static
