@@ -76,6 +76,7 @@ class BSeller_SkyHub_Model_Integrator_Shipment_Plp extends BSeller_SkyHub_Model_
             $interface->addOrder($this->_prepareOrderCode($order));
         }
 
+        die();
         $result = $interface->group();
 
         if ($result->exception() || $result->invalid()) {
@@ -98,7 +99,8 @@ class BSeller_SkyHub_Model_Integrator_Shipment_Plp extends BSeller_SkyHub_Model_
      */
     protected function _prepareOrderCode($code)
     {
-        return $this->_helper()->onlyNumbers($code);
+        $code = explode('-', $code);
+        return isset($code[1]) ? $code[1] : $code[0];
     }
 
     /**
