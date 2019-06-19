@@ -119,6 +119,16 @@
                                 <allow_customer_email_creation_with_taxvat>1</allow_customer_email_creation_with_taxvat>
                             </depends>
                         </customer_email_creation_with_taxvat_pattern>
+                        <allow_register_customer_address>
+                            <label>Allow the module to create the order address in the customer record.</label>
+                            <sort_order>30</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>* Note: Caution, when enabling this option, can cause excessive consumption of the database.</comment>
+                        </allow_register_customer_address>
                     </fields>
                 </customer>
                 <service translate="label" module="bseller_skyhub">

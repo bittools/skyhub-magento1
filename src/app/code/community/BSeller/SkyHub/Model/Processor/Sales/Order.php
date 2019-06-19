@@ -18,6 +18,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
 {
     use BSeller_SkyHub_Trait_Sales_Order;
     use BSeller_SkyHub_Trait_Customer_Attribute_Mapping,
+        BSeller_SkyHub_Trait_Config_General,
+        BSeller_SkyHub_Trait_Config,
         BSeller_SkyHub_Trait_Customer_Attribute;
 
     /**
@@ -106,6 +108,10 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
 
         /** @var Mage_Customer_Model_Customer $customer */
         $customer = $this->getCustomer($customerData);
+        if ($this->allowRegisterCustomerAddress()) {
+            $this->assignAddressToCustomer($customerData, $customer);
+        }
+
 
         $shippingCarrier = (string) $this->arrayExtract($data, 'shipping_carrier');
         $shippingMethod  = (string) $this->arrayExtract($data, 'shipping_method');
@@ -318,7 +324,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     protected function createCustomer(array $data, Mage_Customer_Model_Customer $customer)
     {
         $customer->setStore($this->getStore());
-        
+
         $dateOfBirth = $this->arrayExtract($data, 'date_of_birth');
         $email       = $this->arrayExtract($data, 'email');
         $gender      = $this->arrayExtract($data, 'gender');
@@ -352,40 +358,105 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         }
         
         $customer->save();
-        
-        /** @var Varien_Object $billing */
-        if ($billing = $this->arrayExtract($data, 'billing_address')) {
-            $address = $this->createCustomerAddress($billing);
-            $address->setCustomer($customer);
-        }
-        
-        /** @var Varien_Object $billing */
-        if ($shipping = $this->arrayExtract($data, 'shipping_address')) {
-            $address = $this->createCustomerAddress($shipping);
-            $address->setCustomer($customer);
-        }
-        
+
         return $customer;
     }
-    
-    
+
     /**
-     * @param Varien_Object $addressObject
-     *
-     * @return Mage_Customer_Model_Address
+     * @param array $data
+     * @param Mage_Customer_Model_Customer $customer
      */
-    protected function createCustomerAddress(Varien_Object $addressObject)
+    public function assignAddressToCustomer(array $data, Mage_Customer_Model_Customer $customer)
     {
-        /** @var Mage_Customer_Model_Address $address */
-        $address = Mage::getModel('customer/address');
-        
-        /**
-         * @todo Create customer address algorithm based on $addressObject.
-         */
-        
-        return $address;
+        /** @var Varien_Object $billing */
+        if ($billing = $this->arrayExtract($data, 'billing_address')) {
+            $this->createCustomerAddress($billing, $customer);
+        }
+
+        /** @var Varien_Object $billing */
+        if ($shipping = $this->arrayExtract($data, 'shipping_address')) {
+            $this->createCustomerAddress($shipping, $customer);
+        }
     }
 
+    /**
+     * @param Varien_Object $addressObject
+     * @param Mage_Customer_Model_Customer $customer
+     *
+     * @return bool
+     */
+    protected function canRegisterAddress(Varien_Object $addressObject, Mage_Customer_Model_Customer $customer)
+    {
+        try {
+
+            $addressSize = $this->getAddressSizeConfig();
+            $simpleAddressData = $this->formatAddress($addressObject, $addressSize);
+
+            /** @var Mage_Customer_Model_Resource_Customer_Collection $collection*/
+            $collection = Mage::getResourceModel('customer/address_collection');
+            $collection->addAttributeToFilter('street', array('eq' => $simpleAddressData))
+                       ->addAttributeToFilter('parent_id', array('eq' => $customer->getId()))
+                       ->addAttributeToFilter('postcode', array('eq' => $addressObject->getPostcode()));
+            if ($collection->getSize()) {
+                return false;
+            }
+
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Varien_Object $addressObject
+     * @param Mage_Customer_Model_Customer $customer
+     *
+     * @return Mage_Customer_Model_Address|void
+     */
+    protected function createCustomerAddress(Varien_Object $addressObject, Mage_Customer_Model_Customer $customer)
+    {
+        if (!$this->canRegisterAddress($addressObject, $customer)) {
+            return;
+        }
+
+        /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
+        $creation = Mage::getSingleton('bseller_skyhub/support_sales_order_create', $this->getStore());
+        $addressSize = $this->getAddressSizeConfig();
+        $simpleAddressData = $this->formatAddress($addressObject, $addressSize);
+
+        $fullname = trim($addressObject->getData('full_name'));
+
+        /** @var Varien_Object $nameObject */
+        $nameObject = $this->breakName($fullname);
+
+        /** @var Mage_Customer_Model_Address $address */
+        $address = Mage::getSingleton('customer/address');
+        $address->setData(
+            array(
+                'firstname' => $nameObject->getData('firstname'),
+                'middlename' => $nameObject->getData('middlename'),
+                'lastname' => $nameObject->getData('lastname'),
+                'suffix' => '',
+                'company' => '',
+                'street' => $simpleAddressData,
+                'city' => $addressObject->getData('city'),
+                'country_id' => $addressObject->getData('country'),
+                'region' => $creation->getRegion($addressObject),
+                'region_id' => $creation->getRegionId($addressObject),
+                'postcode' => $addressObject->getData('postcode'),
+                'telephone' => $this->formatPhone($addressObject->getData('phone')),
+                'fax' => $addressObject->getData('secondary_phone'),
+                'save_in_address_book' => '1',
+                'is_default_shipping' => true,
+                'is_default_billing' => true
+            )
+        );
+
+        $address->setCustomer($customer)->save();
+
+        return $address;
+    }
 
     /**
      * Remove quote in case of order creation exception.

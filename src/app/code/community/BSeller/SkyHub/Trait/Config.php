@@ -259,6 +259,16 @@ trait BSeller_SkyHub_Trait_Config
         return $this->getCustomerConfig('allow_customer_email_creation_with_taxvat');
     }
 
+    /**
+     * @param string $field
+     *
+     * @return string|integer
+     */
+    protected function allowRegisterCustomerAddress()
+    {
+        return $this->getCustomerConfig('allow_register_customer_address');
+    }
+
     protected function customerEmailCreationWithTaxvatPattern()
     {
         return $this->getCustomerConfig('customer_email_creation_with_taxvat_pattern');

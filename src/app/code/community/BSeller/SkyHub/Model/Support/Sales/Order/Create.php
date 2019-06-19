@@ -37,6 +37,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
 
     const CODE_REGION_DEFAULT = 'SP';
 
+    const CODE_COUNTRY_DEFAULT = 'BR';
     /**
      * BSeller_SkyHub_Model_Support_Sales_Order_Create constructor.
      *
@@ -325,16 +326,34 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
     }
 
     /**
-     * @param $address
-     * @return string
+     * @param Varien_Object $address
+     *
+     * @return mixed|string
      */
-    public function getRegion($address)
+    public function getRegion(Varien_Object $address)
     {
         if ($this->_prepareString($address->getData('region')) == $this->_prepareString(self::CODE_REGION_EMPTY)) {
             return self::CODE_REGION_DEFAULT;
         }
 
         return $address->getData('region');
+    }
+
+    /**
+     * @param Varien_Object $address
+     *
+     * @return mixed
+     */
+    public function getRegionId(Varien_Object $address)
+    {
+        /** @var Mage_Directory_Model_Region $directory */
+        $directory = Mage::getModel("directory/region");
+        $directory->loadByCode($this->getRegion($address), self::CODE_COUNTRY_DEFAULT);
+        if (!$directory->hasData()) {
+            $directory->loadByCode(self::CODE_REGION_DEFAULT, self::CODE_COUNTRY_DEFAULT);
+        }
+
+        return $directory->getRegionId();
     }
 
     /**
