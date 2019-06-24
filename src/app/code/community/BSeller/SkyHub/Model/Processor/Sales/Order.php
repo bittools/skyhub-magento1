@@ -418,7 +418,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         }
 
         /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
-        $creation = Mage::getSingleton('bseller_skyhub/support_sales_order_create', $this->getStore());
+        $creation = Mage::getSingleton('bseller_skyhub/support_sales_order_create');
         $addressSize = $this->getAddressSizeConfig();
         $simpleAddressData = $this->formatAddress($addressObject, $addressSize);
 
