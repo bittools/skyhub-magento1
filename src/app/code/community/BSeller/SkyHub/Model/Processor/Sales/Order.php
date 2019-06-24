@@ -367,14 +367,18 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     public function assignAddressToCustomer(array $data, Mage_Customer_Model_Customer $customer)
     {
-        /** @var Varien_Object $billing */
-        if ($billing = $this->arrayExtract($data, 'billing_address')) {
-            $this->createCustomerAddress($billing, $customer);
-        }
+        try {
+            /** @var Varien_Object $billing */
+            if ($billing = $this->arrayExtract($data, 'billing_address')) {
+                $this->createCustomerAddress($billing, $customer);
+            }
 
-        /** @var Varien_Object $billing */
-        if ($shipping = $this->arrayExtract($data, 'shipping_address')) {
-            $this->createCustomerAddress($shipping, $customer);
+            /** @var Varien_Object $billing */
+            if ($shipping = $this->arrayExtract($data, 'shipping_address')) {
+                $this->createCustomerAddress($shipping, $customer);
+            }
+        } catch (Exception $e) {
+            Mage::logException($e);
         }
     }
 
@@ -386,22 +390,16 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     protected function canRegisterAddress(Varien_Object $addressObject, Mage_Customer_Model_Customer $customer)
     {
-        try {
+        $addressSize = $this->getAddressSizeConfig();
+        $simpleAddressData = $this->formatAddress($addressObject, $addressSize);
 
-            $addressSize = $this->getAddressSizeConfig();
-            $simpleAddressData = $this->formatAddress($addressObject, $addressSize);
-
-            /** @var Mage_Customer_Model_Resource_Customer_Collection $collection*/
-            $collection = Mage::getResourceModel('customer/address_collection');
-            $collection->addAttributeToFilter('street', array('eq' => $simpleAddressData))
-                       ->addAttributeToFilter('parent_id', array('eq' => $customer->getId()))
-                       ->addAttributeToFilter('postcode', array('eq' => $addressObject->getPostcode()));
-            if ($collection->getSize()) {
-                return false;
-            }
-
-        } catch (Exception $e) {
-            Mage::logException($e);
+        /** @var Mage_Customer_Model_Resource_Customer_Collection $collection*/
+        $collection = Mage::getResourceModel('customer/address_collection');
+        $collection->addAttributeToFilter('street', array('eq' => $simpleAddressData))
+                   ->addAttributeToFilter('parent_id', array('eq' => $customer->getId()))
+                   ->addAttributeToFilter('postcode', array('eq' => $addressObject->getPostcode()));
+        if ($collection->getSize()) {
+            return false;
         }
 
         return true;
