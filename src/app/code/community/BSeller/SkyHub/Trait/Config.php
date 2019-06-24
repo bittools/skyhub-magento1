@@ -266,7 +266,7 @@ trait BSeller_SkyHub_Trait_Config
      */
     protected function allowRegisterCustomerAddress()
     {
-        return $this->getCustomerConfig('allow_register_customer_address');
+        return (bool)$this->getCustomerConfig('allow_register_customer_address');
     }
 
     protected function customerEmailCreationWithTaxvatPattern()

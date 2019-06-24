@@ -19,7 +19,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     use BSeller_SkyHub_Trait_Sales_Order;
     use BSeller_SkyHub_Trait_Customer_Attribute_Mapping,
         BSeller_SkyHub_Trait_Config_General,
-        BSeller_SkyHub_Trait_Config,
         BSeller_SkyHub_Trait_Customer_Attribute;
 
     /**
