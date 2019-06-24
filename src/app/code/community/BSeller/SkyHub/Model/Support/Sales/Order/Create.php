@@ -251,7 +251,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
             return 'Standard';
         }
 
-        return $title;
+        return "{$carrier} - {$title}";
     }
 
 
