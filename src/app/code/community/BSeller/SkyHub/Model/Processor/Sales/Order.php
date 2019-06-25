@@ -12,6 +12,7 @@
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
  * @author    Luiz Tucillo <luiz.tucillo@e-smart.com.br>
+ * @author    Jefferson Porto <jefferson.porto@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Processor_Abstract
@@ -130,8 +131,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             ->setPaymentMethod('bseller_skyhub_standard')
             ->setDiscountAmount($discountAmount)
             ->setInterestAmount($interestAmount)
-            ->addOrderAddress('billing', $billingAddress)
-            ->addOrderAddress('shipping', $shippingAddress)
+            ->addOrderAddress('billing', $billingAddress, $channel)
+            ->addOrderAddress('shipping', $shippingAddress, $channel)
             ->setComment('This order was automatically created by SkyHub import process.')
             ->setCustomData(
                 array(
@@ -159,7 +160,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             /** @var Mage_Sales_Model_Order $order */
             $order = $creation->create();
         } catch (Mage_Exception $e) {
-            Mage::log();
+            Mage::logException($e);
         }
 
 
