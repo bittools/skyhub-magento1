@@ -722,6 +722,10 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
             $this->store = Mage::app()->getStore($store);
         }
 
+        if ($this->store->isAdmin()) {
+            $this->store = Mage::app()->getDefaultStoreView();
+        }
+
         return $this->store;
     }
 
