@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.9] - 2019-07-05
+### Changed
+- Fix get store_id when store_id is admin
+- Settings to new policies of price skyhub
+
 ## [1.4.8] - 2019-06-17
 ### Changed
 - settings to get order code to grouping PLP
