@@ -209,13 +209,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             $qty          = $this->arrayExtract($item, 'qty');
             
             $price        = (float) $this->arrayExtract($item, 'original_price');
-
-//            $specialPrice = (float) $this->arrayExtract($item, 'special_price');
-//            $finalPrice = $price;
-//            if (!empty($specialPrice)) {
-//                $finalPrice = $specialPrice;
-//            }
-    
             if (!$productId = $this->getProductIdBySku($parentSku)) {
                 continue;
             }
@@ -226,9 +219,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
                 'qty'           => (float)  ($qty ? $qty : 1),
                 'price'         => (float)  $price,
                 'special_price' => (float)  $price,
-                'final_price'   => (float)  $price,
-//                'special_price' => (float)  $specialPrice,
-//                'final_price'   => (float)  $finalPrice,
+                'final_price'   => (float)  $price
             );
     
             if ($childId = $this->getProductIdBySku($childSku)) {
