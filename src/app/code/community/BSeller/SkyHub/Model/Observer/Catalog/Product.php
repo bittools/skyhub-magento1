@@ -244,7 +244,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
 
     public function integrateCatalogInventory(Varien_Event_Observer $observer)
     {
-        $this->catalogInventoryCommit($this, 'catalogInventoryCommit', $observer);
+        $this->processStoreIteration($this, 'catalogInventoryCommit', $observer);
     }
 
     /**
