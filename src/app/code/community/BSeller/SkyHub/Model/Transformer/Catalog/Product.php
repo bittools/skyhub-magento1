@@ -315,6 +315,12 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
      */
     protected function getProductStockQty(Mage_Catalog_Model_Product $product)
     {
+        if ($product->getStoreId()) {
+            /** @var $status Mage_CatalogInventory_Model_Stock_Status */
+            $status = Mage::getSingleton('cataloginventory/stock_status');
+            $status->assignProduct($product);
+        }
+
         if (!$product->isSalable()) {
             return 0;
         }
