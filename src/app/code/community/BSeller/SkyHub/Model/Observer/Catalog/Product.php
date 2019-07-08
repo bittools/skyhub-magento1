@@ -242,6 +242,9 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         return $url;
     }
 
+    /**
+     * @param Varien_Event_Observer $observer
+     */
     public function integrateCatalogInventory(Varien_Event_Observer $observer)
     {
         $this->processStoreIteration($this, 'catalogInventoryCommit', $observer);
@@ -249,6 +252,9 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
 
     /**
      * @param Varien_Event_Observer $observer
+     * @param Mage_Core_Model_Store $store
+     *
+     * @return bool|void
      */
     public function catalogInventoryCommit(Varien_Event_Observer $observer, Mage_Core_Model_Store $store)
     {
