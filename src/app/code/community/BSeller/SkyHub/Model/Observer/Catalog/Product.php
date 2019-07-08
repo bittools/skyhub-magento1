@@ -242,16 +242,25 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         return $url;
     }
 
+    public function integrateCatalogInventory(Varien_Event_Observer $observer)
+    {
+        $this->catalogInventoryCommit($this, 'catalogInventoryCommit', $observer);
+    }
+
     /**
      * @param Varien_Event_Observer $observer
      */
-    public function catalogInventoryCommit(Varien_Event_Observer $observer)
+    public function catalogInventoryCommit(Varien_Event_Observer $observer, Mage_Core_Model_Store $store)
     {
+        if (!$this->canRun($store->getId())) {
+            return;
+        }
+
         $recentIntegratedProductIds = Mage::registry('recent_integrated_product');
         $product = $this->_getProduct($observer->getItem());
         $productId = $product->getId();
         if (!$recentIntegratedProductIds || !in_array($productId, $recentIntegratedProductIds)) {
-            if (!$this->canIntegrateProduct($product)) {
+            if (!$this->canIntegrateProduct($product, false, $store)) {
                 return false;
             }
             $this->flagEntityIntegrate($productId);

@@ -219,7 +219,7 @@
                 <observers>
                     <bs_cataloginventory_stock_item_save_commit_after>
                         <class>bseller_skyhub/observer_catalog_product</class>
-                        <method>catalogInventoryCommit</method>
+                        <method>integrateCatalogInventory</method>
                     </bs_cataloginventory_stock_item_save_commit_after>
                 </observers>
             </cataloginventory_stock_item_save_commit_after>
