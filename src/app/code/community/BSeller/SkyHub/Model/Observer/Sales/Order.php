@@ -110,12 +110,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
             /**
              * integrate all order items on skyhub (mainly to update stock qty)
              */
-
-            if (!(int)$product->getStoreId()) {
-                $product->setStoreId($store->getId());
-            }
-
-            $response = $this->catalogProductIntegrator()->createOrUpdate($product);
+            $response = $this->catalogProductIntegrator()->createOrUpdate($product, $store);
 
             if ($response && $response->success()) {
                 return;
