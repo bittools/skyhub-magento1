@@ -181,7 +181,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Catalog_Product extends BSeller_SkyHub_Mod
         /** @var Mage_Catalog_Model_Product $product */
         foreach ($collection as $product) {
             /** @var \SkyHub\Api\Handler\Response\HandlerInterface $response */
-            $response = $this->catalogProductIntegrator()->createOrUpdate($product);
+            $response = $this->catalogProductIntegrator()->createOrUpdate($product, $store);
 
             /*
              * If the response is exactly equal to false, means it cannot be integrated because of internal validation;

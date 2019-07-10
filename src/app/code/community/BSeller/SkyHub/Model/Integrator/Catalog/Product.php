@@ -26,11 +26,16 @@ class BSeller_SkyHub_Model_Integrator_Catalog_Product extends BSeller_SkyHub_Mod
 
     /**
      * @param BSeller_SkyHub_Model_Catalog_Product $product
+     * @param Mage_Core_Model_Store $store
      *
      * @return bool|\SkyHub\Api\Handler\Response\HandlerInterface
      */
-    public function createOrUpdate(Mage_Catalog_Model_Product $product)
+    public function createOrUpdate(Mage_Catalog_Model_Product $product, Mage_Core_Model_Store $store = null)
     {
+        if ($store && !(int)$product->getStoreId()) {
+            $product->setStoreId($store->getId());
+        }
+
         $exists = $this->productExists($product->getId());
 
         if (true == $exists) {

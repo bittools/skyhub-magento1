@@ -69,7 +69,7 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         if ($this->hasActiveIntegrateOnSaveFlag() && $this->hasStockOrPriceUpdate($product)) {
             try {
                 /** Create or Update Product */
-                $this->catalogProductIntegrator()->createOrUpdate($product);
+                $this->catalogProductIntegrator()->createOrUpdate($product, $store);
                 $forceIntegrate = false;
 
                 // just to tell other "observers" to don't put the integration flag on these products;
