@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.0] - 2019-07-10
+### Changed
+- ON-13135 - Integration of Product inactive
+- ON-13342 - Fix Bugs
+- ON-13496 - Fix address reference on Magazine Luiza
+- ON-13693 - Method of Tracking 
+- ON-13733 - Fix integration of product after order cancel
+
 ## [1.4.9] - 2019-07-05
 ### Changed
 - Fix get store_id when store_id is admin
