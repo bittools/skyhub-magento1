@@ -13,6 +13,7 @@
  * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
  * @author    Julio Reis <julio.reis@e-smart.com.br>
  * @author    Luiz Tucillo <luiz.tucillo@e-smart.com.br>
+ * @author    Jefferson Porto <jefferson.porto@e-smart.com.br>
  */
 
 class BSeller_SkyHub_Model_Support_Sales_Order_Create
@@ -20,7 +21,9 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
 
     use BSeller_SkyHub_Trait_Data,
         BSeller_SkyHub_Trait_Config,
-        BSeller_SkyHub_Trait_Customer;
+        BSeller_SkyHub_Trait_Customer,
+        BSeller_SkyHub_Trait_Address;
+
 
     const CARRIER_PREFIX = 'bseller_skyhub_';
 
@@ -287,7 +290,7 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
      *
      * @return $this
      */
-    public function addOrderAddress($type, Varien_Object $address)
+    public function addOrderAddress($type, Varien_Object $address, $channel = null)
     {
         $fullname = trim($address->getData('full_name'));
 
@@ -295,6 +298,8 @@ class BSeller_SkyHub_Model_Support_Sales_Order_Create
         $nameObject = $this->breakName($fullname);
 
         $addressSize = $this->getAddressSizeConfig();
+
+        $this->treatAddressByChannel($address, $channel);
 
         $simpleAddressData = $this->formatAddress($address, $addressSize);
 
