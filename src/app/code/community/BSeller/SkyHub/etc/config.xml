@@ -502,6 +502,7 @@
             <customer>
                 <allow_customer_email_creation_with_taxvat>1</allow_customer_email_creation_with_taxvat>
                 <customer_email_creation_with_taxvat_pattern>@skyhub.com.br</customer_email_creation_with_taxvat_pattern>
+                <allow_register_customer_address>0</allow_register_customer_address>
             </customer>
             <log>
                 <enabled>1</enabled>
