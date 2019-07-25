@@ -34,6 +34,16 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
             return false;
         }
 
+        if (
+            $order->hasShipments() && $order->hasInvoices() &&
+            (
+                $order->getStatus() == $this->getShipmentExceptionOrderStatus() ||
+                $order->getStatus() == $this->getDeliveredOrdersStatus()
+            )
+        ) {
+            return false;
+        }
+
         //if the state is 'holded', just skip;
         if ($order->getState() == Mage_Sales_Model_Order::STATE_HOLDED) {
             return false;
@@ -82,7 +92,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
         /**
          * If order is SHIPMENT_EXCEPTION in SkyHub.
          */
-        if ($state == BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_SHIPMENT_EXCEPTION) {
+        if ($skyhubStatusType == BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_SHIPMENT_EXCEPTION) {
             $status = $this->getShipmentExceptionOrderStatus();
         }
 
