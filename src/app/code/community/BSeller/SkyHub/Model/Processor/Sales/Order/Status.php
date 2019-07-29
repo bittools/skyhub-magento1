@@ -49,6 +49,13 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
             return false;
         }
 
+        if (
+            $order->hasShipments() &&
+            $skyhubStatusType == BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_SHIPPED
+        ) {
+            return false;
+        }
+
         /**
          * If order is CANCELED in SkyHub.
          */
