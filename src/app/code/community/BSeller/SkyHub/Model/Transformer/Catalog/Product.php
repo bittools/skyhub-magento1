@@ -378,7 +378,11 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product extends BSeller_SkyHub_Mo
          * Add Promotional Price.
          */
         $specialPrice = $this->extractProductSpecialPrice($product, $specialPriceCode, $price);
-        
+
+        if (!$specialPrice) {
+            $specialPrice = $price;
+        }
+
         $interface->setPromotionalPrice($specialPrice);
     
         $this->addProcessedAttribute($product, $mappedPromoPrice->getAttribute());
