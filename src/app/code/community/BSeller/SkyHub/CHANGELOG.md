@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.1] - 2019-07-30
+### Changed
+- ON-13750 - Remove duplicate items from queue (shipped, delivered and shipment_exceptions statuses)
+- ON-13116 - Send price value when promotional_price is empty
+
 ## [1.5.0] - 2019-07-10
 ### Changed
 - ON-13135 - Integration of Product inactive
