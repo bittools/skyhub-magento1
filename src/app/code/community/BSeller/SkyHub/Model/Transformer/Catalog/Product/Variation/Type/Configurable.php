@@ -189,8 +189,10 @@ class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_Configurab
 
         if (!empty($specialPrice)) {
             $specialPrice = (float) $this->calculatePrice($parentProduct, (float) $specialPrice);
-        } else {
-            $specialPrice = null;
+        }
+
+        if (empty($specialPrice)) {
+            $specialPrice = $price;
         }
     
         $variation->addSpecification($mappedSpecialPrice->getSkyhubCode(), $specialPrice);
