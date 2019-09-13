@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.2] - 2019-09-13
+### Changed
+- ON-13806 - Added configs to set custom status on order requests
+- ON-13810 - Send delivered date on delivery's order request
+- ON-13778 - Send price value when promotional_price is empty on variations
+
 ## [1.5.1] - 2019-07-30
 ### Changed
 - ON-13750 - Remove duplicate items from queue (shipped, delivered and shipment_exceptions statuses)
