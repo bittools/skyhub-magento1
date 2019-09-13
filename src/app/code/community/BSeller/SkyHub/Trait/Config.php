@@ -64,7 +64,7 @@ trait BSeller_SkyHub_Trait_Config
     {
         $values      = $this->getModuleConfig($field, $group, 'bseller_skyhub', $store);
         $arrayValues = explode(',', $values);
-        
+
         return $arrayValues;
     }
 
@@ -109,7 +109,7 @@ trait BSeller_SkyHub_Trait_Config
         if (is_null($storeId)) {
             $storeId = (int) Mage::app()->getDefaultStoreView();
         }
-    
+
         try {
             if (Mage::app()->getStore($storeId)->isAdmin()) {
                 $storeId = Mage::app()->getDefaultStoreView()->getId();
@@ -152,8 +152,8 @@ trait BSeller_SkyHub_Trait_Config
 
         return $status;
     }
-    
-    
+
+
     /**
      * @param null|int $storeId
      *
@@ -188,8 +188,79 @@ trait BSeller_SkyHub_Trait_Config
 
         return $status;
     }
-    
-    
+
+    /**
+     * @param null|int $storeId
+     *
+     * @return string|null
+     */
+    protected function getSkyHubCustomShippedStatus($storeId = null)
+    {
+        $status = (string) $this->getSkyHubModuleConfig('shipped_status', 'sales_order_status_skyhub', $storeId);
+
+        return $status ?: null;
+    }
+
+    /**
+     * @param null|int $storeId
+     *
+     * @return string|null
+     */
+    protected function getSkyHubCustomDeliveredStatus($storeId = null)
+    {
+        $status = (string) $this->getSkyHubModuleConfig(
+            'delivered_order_status',
+            'sales_order_status_skyhub',
+            $storeId
+        );
+
+        return $status ?: null;
+    }
+
+    /**
+     * @param null|int $storeId
+     *
+     * @return string|null
+     */
+    protected function getSkyHubCustomCanceledStatus($storeId = null)
+    {
+        $status = (string) $this->getSkyHubModuleConfig(
+            'canceled_order_status',
+            'sales_order_status_skyhub',
+            $storeId
+        );
+
+        return $status ?: null;
+    }
+
+    /**
+     * @param null|int $storeId
+     *
+     * @return string|null
+     */
+    protected function getSkyHubCustomShipmentExceptionStatus($storeId = null)
+    {
+        $status = (string) $this->getSkyHubModuleConfig(
+            'shipment_exception_status',
+            'sales_order_status_skyhub',
+            $storeId
+        );
+
+        return $status ?: null;
+    }
+
+    /**
+     * @param null|int $storeId
+     *
+     * @return string|null
+     */
+    protected function getSkyHubCustomInvoicedStatus($storeId = null)
+    {
+        $status = (string) $this->getSkyHubModuleConfig('invoiced_status', 'sales_order_status_skyhub', $storeId);
+
+        return $status ?: null;
+    }
+
     /**
      * @param string $state
      *
@@ -200,7 +271,7 @@ trait BSeller_SkyHub_Trait_Config
         /** @var Mage_Sales_Model_Order_Status $status */
         $status = Mage::getModel('sales/order_status');
         $status->loadDefaultByState($state);
-        
+
         return (string) $status->getId();
     }
 
@@ -212,8 +283,8 @@ trait BSeller_SkyHub_Trait_Config
     {
         return (string) $this->getSkyHubModuleConfig('pattern', 'tax_invoice_key', $storeId);
     }
-    
-    
+
+
     /**
      * @return BSeller_SkyHub_Model_Config
      */
@@ -229,7 +300,7 @@ trait BSeller_SkyHub_Trait_Config
     {
         return Mage::getSingleton('bseller_skyhub/config_customer');
     }
-    
+
 
     /**
      * @return boolean

@@ -224,7 +224,7 @@
                 </tax_invoice_key>
                 <!-- SALES ORDER STATUS -->
                 <sales_order_status translate="label comment" module="bseller_skyhub">
-                    <label>Order Status Configuration</label>
+                    <label>Order Status Configuration (Magento)</label>
                     <sort_order>50</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
@@ -273,6 +273,62 @@
                         </shipment_exception_order_status>
                     </fields>
                 </sales_order_status>
+                <sales_order_status_skyhub translate="label comment" module="bseller_skyhub">
+                    <label>Order Status Configuration (SkyHub)</label>
+                    <sort_order>55</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <comment>Custom status sent to SkyHub whem a order update occurs</comment>
+                    <fields>
+                        <invoiced_status>
+                            <label>INVOICED Status</label>
+                            <sort_order>0</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Custom status sent to SkyHub when order receive NFE Key (invoiced).]]></comment>
+                        </invoiced_status>
+                        <shipped_status>
+                            <label>SHIPPED Status</label>
+                            <sort_order>0</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Custom status sent to SkyHub when order is shipped.]]></comment>
+                        </shipped_status>
+                        <shipment_exception_status>
+                            <label>SHIPMENT_EXCEPTION Status</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Custom status sent to SkyHub when a shipment exception occurs.]]></comment>
+                        </shipment_exception_status>
+                        <delivered_order_status>
+                            <label>DELIVERED Status</label>
+                            <sort_order>20</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Custom status sent to SkyHub when order is delivered.]]></comment>
+                        </delivered_order_status>
+                        <canceled_order_status>
+                            <label>CANCELED Status</label>
+                            <sort_order>30</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Custom status sent to SkyHub when order is canceled.]]></comment>
+                        </canceled_order_status>
+                    </fields>
+                </sales_order_status_skyhub>
                 <!-- CATALOG PRODUCT TYPE ATTRIBUTE -->
                 <!--
                 <catalog_product_type_grouped>
