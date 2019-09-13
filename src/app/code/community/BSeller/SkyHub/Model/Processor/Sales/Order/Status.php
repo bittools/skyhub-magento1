@@ -113,7 +113,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
         if (!isset($isOrderShippedStatus)) {
             $status = isset($status) ? $status : true;
 
-            if (!$isOrderDeliveredStatus) {
+            if (!isset($isOrderDeliveredStatus)) {
                 $order->setState($state, $status, $message);
             } else {
                 $order->addStatusHistoryComment($message, $status);

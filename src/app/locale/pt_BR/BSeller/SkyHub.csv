@@ -215,3 +215,8 @@
 "Product Attributes selected below will not be integrated into the specifications","Atributos de produto selecionados abaixo não serão integrados nas especificações"
 "Product Attributes Blacklist - Skyhub","Blacklist de Atributos de Produto - Skyhub"
 "Ignore Marketplace?","Ignorar Marketplace?"
+"Custom status sent to SkyHub when order is shipped.","Status customizado que será enviado para a SkyHub quando o pedido receber Tracking Code (pedido enviado)."
+"Custom status sent to SkyHub when a shipment exception occurs.","Status customizado que será enviado para a SkyHub houver um Erro de Entrega."
+"Custom status sent to SkyHub when order is delivered.","Status customizado que será enviado para a SkyHub quando o pedido for entregue."
+"Custom status sent to SkyHub when order is canceled.","Status customizado que será enviado para a SkyHub quando o pedido for cancelado."
+"Custom status sent to SkyHub when order receive NFE Key (invoiced).","Status customizado que será enviado à SkyHub quando o pedido for faturado."
