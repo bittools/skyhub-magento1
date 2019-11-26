@@ -49,7 +49,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Shipment extends BSeller_SkyHub_
                 $track->getNumber(),
                 $track->getTitle(),
                 $shippingMethod,     // Track method like SEDEX...
-                ''                   // Tracking URL (www.correios.com.br)
+                $this->_getCarriersUrlConfig($shippingMethod)  // Tracking URL (www.correios.com.br)
             );
             
             $this->getStoreIterator()->call($this->orderIntegrator(), 'shipment', $params, $order->getStore());
@@ -58,6 +58,27 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Shipment extends BSeller_SkyHub_
         }
     }
 
+    /**
+     * Return url of tracking
+     *
+     * @param string $shippingMethod
+     * @return string
+     */
+    protected function _getCarriersUrlConfig($shippingMethod)
+    {
+        $url = '';
+        $config = unserialize(Mage::getStoreConfig('bseller_skyhub/tracking/carriers'));
+        if (!$config) {
+            return $url;
+        }
+        
+        foreach ($config as $value) {
+            if ($shippingMethod != $value['carriers']) {
+                continue;
+            }
+            return $value['carriers_url'];
+        }
+    }
 
     /**
      * @param int $orderId
