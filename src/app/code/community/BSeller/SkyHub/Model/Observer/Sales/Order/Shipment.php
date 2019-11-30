@@ -49,7 +49,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Shipment extends BSeller_SkyHub_
                 $track->getNumber(),
                 $track->getTitle(),
                 $shippingMethod,     // Track method like SEDEX...
-                $this->_getCarriersUrlConfig($shippingMethod)  // Tracking URL (www.correios.com.br)
+                $this->_getCarriersUrlConfig($track->getCarrierCode())  // Tracking URL (www.correios.com.br)
             );
             
             $this->getStoreIterator()->call($this->orderIntegrator(), 'shipment', $params, $order->getStore());
