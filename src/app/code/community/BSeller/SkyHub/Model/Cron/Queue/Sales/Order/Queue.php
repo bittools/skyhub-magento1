@@ -14,9 +14,24 @@
 
 class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_Model_Cron_Queue_Sales_Abstract
 {
+    const QUEUE_PROCESS = 'sales_order_queue_process';
 
-	use BSeller_Core_Trait_Data;
-    
+    use BSeller_Core_Trait_Data;
+
+    /**
+     * @return bool
+     */
+    public static function isRunning()
+    {
+        return Mage::registry(self::QUEUE_PROCESS) === true;
+    }
+
+    /**
+     * @param Mage_Cron_Model_Schedule $schedule
+     *
+     * @throws Mage_Core_Exception
+     * @return mixed|void
+     */
     public function execute(Mage_Cron_Model_Schedule $schedule)
     {
         $this->processStoreIteration($this, 'executeIntegration', $schedule);
@@ -26,6 +41,9 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
      * Import next orders from the queue in SkyHub.
      *
      * @param Mage_Cron_Model_Schedule $schedule
+     * @param Mage_Core_Model_Store $store
+     *
+     * @throws Mage_Core_Exception
      */
     public function executeIntegration(Mage_Cron_Model_Schedule $schedule, Mage_Core_Model_Store $store)
     {
@@ -33,20 +51,20 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
             return;
         }
 
+        Mage::register(self::QUEUE_PROCESS, true, true);
+
         $limit = $this->getCronConfig()->salesOrderQueue()->getLimit();
         $count = 0;
 
         while ($count < $limit) {
-            /** @var \SkyHub\Api\Handler\Response\HandlerDefault $result */
-            $orderData = $this->orderQueueIntegrator()
-                ->nextOrder();
+            $message = $schedule->getMessages();
+            $orderData = $this->orderQueueIntegrator()->nextOrder();
 
             if (empty($orderData)) {
-                $schedule->setMessages($this->__('No order found in the queue.'));
+                $schedule->setMessages(empty($message) ? $this->__('No order found in the queue.') : $message);
                 break;
             }
 
-            /** @var Mage_Sales_Model_Order $order */
             $order = $this->salesOrderProcessor()->createOrder($orderData);
             if (!$order || !$order->getId()) {
                 $message = $schedule->getMessages();
@@ -55,14 +73,12 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
                 continue;
             }
 
-            $message = $schedule->getMessages();
             $message .= $this->__(
                 'Order %s successfully created in store %s.', $order->getIncrementId(), $store->getName()
             );
 
-            /** @var \SkyHub\Api\Handler\Response\HandlerDefault $isDeleted */
             $isDeleted = $this->orderQueueIntegrator()->deleteByOrder($order);
-            
+
             if ($isDeleted) {
                 $message .= ' ' . $this->__('It was also removed from queue.');
             }
@@ -70,12 +86,14 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
             $schedule->setMessages($message);
             $count++;
         }
+
+        Mage::unregister(self::QUEUE_PROCESS);
     }
 
-    
+
     /**
      * @param Mage_Cron_Model_Schedule $schedule
-     * @param int|null                 $storeId
+     * @param int|null $storeId
      *
      * @return bool
      */
@@ -85,7 +103,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
             $schedule->setMessages($this->__('Sales Order Queue Cron is Disabled'));
             return false;
         }
-        
+
         return parent::canRun($schedule, $storeId);
     }
 }

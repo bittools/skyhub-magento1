@@ -14,7 +14,7 @@
 
 trait BSeller_SkyHub_Trait_Store_Iterator
 {
-    
+
     /**
      * Process the iteration for any class that needs to be iterated through the stores.
      * If false is returned you need to skip the original call.
@@ -30,10 +30,11 @@ trait BSeller_SkyHub_Trait_Store_Iterator
      *     ...
      * }
      *
-     * @param object      $object
-     * @param string      $method
+     * @param object $object
+     * @param string $method
      * @param array|mixed $params
      *
+     * @throws Mage_Core_Exception
      * @return bool
      */
     protected function processStoreIteration($object, $method, $params = null)

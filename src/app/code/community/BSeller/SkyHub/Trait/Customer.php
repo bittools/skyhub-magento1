@@ -56,14 +56,27 @@ trait BSeller_SkyHub_Trait_Customer
     /**
      * @param $address
      * @param $addressSize
+     * @param $fallbackAddress
      * @return string
      */
-    protected function formatAddress($address, $addressSize)
+    protected function formatAddress($address, $addressSize, $fallbackAddress = null)
     {
         $street = $address->getData('street');
         $number = $address->getData('number');
-        $complement = implode(' ', array($address->getData('complement'), $address->getData('reference')));
+        $complement = trim(implode(' ', array($address->getData('complement'), $address->getData('reference'))));
         $neighborhood = $address->getData('neighborhood');
+
+        if (empty($neighborhood) && $fallbackAddress && $fallbackAddress->getData('neighborhood')) {
+            $neighborhood = $fallbackAddress->getData('neighborhood');
+        }
+
+        if (empty($neighborhood)) {
+            $neighborhood = 'Não informado';
+        }
+
+        if (empty($complement)) {
+            $complement = 'Não informado';
+        }
 
         return $this->_formatAddress(
             array(

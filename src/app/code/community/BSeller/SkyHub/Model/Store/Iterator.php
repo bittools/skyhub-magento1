@@ -114,7 +114,9 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
         }
     
         $result = false;
-    
+
+        $previousStore = $this->currentStore;
+
         $this->simulateStore($store);
         
         try {
@@ -124,7 +126,7 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
             Mage::logException($e);
         }
     
-        $this->reset();
+        $this->simulateStore($previousStore);
         
         return $result;
     }
@@ -138,8 +140,6 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
     public function simulateStore(Mage_Core_Model_Store $store)
     {
         try {
-            $this->previousStore = $this->currentStore;
-            
             Mage::app()->setCurrentStore($store);
             
             /** Reinitialize the service parameters. */
