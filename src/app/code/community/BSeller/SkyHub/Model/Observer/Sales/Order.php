@@ -22,6 +22,8 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
 
     /**
      * @param Varien_Event_Observer $observer
+     *
+     * @throws Mage_Core_Model_Store_Exception
      */
     public function logOrderDetails(Varien_Event_Observer $observer)
     {
@@ -66,6 +68,10 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
      */
     public function cancelOrderAfter(Varien_Event_Observer $observer)
     {
+        if ($this->isRunningQueueProcess()) {
+            return;
+        }
+
         /** @var Mage_Sales_Model_Order $order */
         $order = $observer->getData('order');
 
@@ -94,6 +100,10 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
         }
     }
 
+    /**
+     * @param $product
+     * @param Mage_Core_Model_Store|null $store
+     */
     protected function processReintegrationOrderProducts($product, Mage_Core_Model_Store $store = null)
     {
         $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
@@ -132,6 +142,8 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
 
     /**
      * @param Varien_Event_Observer $observer
+     *
+     * @throws Mage_Core_Exception
      * @return $this
      */
     public function removePromotions(Varien_Event_Observer $observer)
@@ -156,6 +168,8 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
     /**
      * @param Mage_Sales_Model_Quote_Item $item
      * @param Mage_SalesRule_Model_Rule $rule
+     *
+     * @throws Mage_Core_Exception
      * @return $this
      */
     protected function _registerRuleToRemove(Mage_Sales_Model_Quote_Item $item, Mage_SalesRule_Model_Rule $rule)
@@ -211,5 +225,13 @@ class BSeller_SkyHub_Model_Observer_Sales_Order extends BSeller_SkyHub_Model_Obs
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isRunningQueueProcess()
+    {
+        return BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue::isRunning();
     }
 }

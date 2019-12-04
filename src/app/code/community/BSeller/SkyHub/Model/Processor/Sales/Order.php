@@ -363,13 +363,13 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     {
         try {
             /** @var Varien_Object $billing */
-            if ($billing = $this->arrayExtract($data, 'billing_address')) {
-                $this->createCustomerAddress($billing, $customer);
+            if ($shipping = $this->arrayExtract($data, 'shipping_address')) {
+                $this->createCustomerAddress($shipping, $customer);
             }
 
             /** @var Varien_Object $billing */
-            if ($shipping = $this->arrayExtract($data, 'shipping_address')) {
-                $this->createCustomerAddress($shipping, $customer);
+            if ($billing = $this->arrayExtract($data, 'billing_address')) {
+                $this->createCustomerAddress($billing, $customer, $shipping ? $shipping : null);
             }
         } catch (Exception $e) {
             Mage::logException($e);
@@ -402,10 +402,16 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     /**
      * @param Varien_Object $addressObject
      * @param Mage_Customer_Model_Customer $customer
+     * @param Varien_Object|null $fallbackAddress
      *
+     * @throws Exception
      * @return Mage_Customer_Model_Address|void
      */
-    protected function createCustomerAddress(Varien_Object $addressObject, Mage_Customer_Model_Customer $customer)
+    protected function createCustomerAddress(
+        Varien_Object $addressObject,
+        Mage_Customer_Model_Customer $customer,
+        Varien_Object $fallbackAddress = null
+    )
     {
         if (!$this->canRegisterAddress($addressObject, $customer)) {
             return;
@@ -414,7 +420,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
         $creation = Mage::getSingleton('bseller_skyhub/support_sales_order_create');
         $addressSize = $this->getAddressSizeConfig();
-        $simpleAddressData = $this->formatAddress($addressObject, $addressSize);
+        $simpleAddressData = $this->formatAddress($addressObject, $addressSize, $fallbackAddress);
 
         $fullname = trim($addressObject->getData('full_name'));
 
