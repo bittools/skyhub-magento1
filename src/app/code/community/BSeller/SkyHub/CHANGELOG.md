@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.3] - 2019-09-04
+### Changed
+- ON-13851 - Fix bug on order queue. Previous this version, api settings is  removed from some requests
+- ON-13846 - Send order requests without status field
+- ON-13851 - Save "Não informado" in "Complement" and "Neighborhood" field when is empty
+
 ## [1.5.2] - 2019-09-13
 ### Changed
 - ON-13806 - Added configs to set custom status on order requests
