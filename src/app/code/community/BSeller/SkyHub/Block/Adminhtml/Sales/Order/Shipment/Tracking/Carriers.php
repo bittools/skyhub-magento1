@@ -46,14 +46,11 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Shipment_Tracking_Carriers
     /**
      * Return renderer by type
      *
-     * @param string $column
      * @return array
      */
     protected function getRendererCarriers()
     {
-
         if (!$this->_render) {
-            $options = array();
             $options = $this->getCarriers();
             
             $this->_render = $this->getLayout()
@@ -72,7 +69,6 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Shipment_Tracking_Carriers
      */
     public function getCarriers()
     {
-        $carriers = array();
         $carrierInstances = Mage::getSingleton('shipping/config')->getAllCarriers(0);
         $carriers[] = [
             'label' => Mage::helper('sales')->__('Custom Value'),
