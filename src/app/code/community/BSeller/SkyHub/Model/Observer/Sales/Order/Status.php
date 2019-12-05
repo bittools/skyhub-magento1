@@ -19,6 +19,10 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
      */
     public function processCompleteStatusOrder(Varien_Event_Observer $observer)
     {
+        if ($this->processingQueue()) {
+            return;
+        }
+
         /** @var Mage_Sales_Model_Order $order */
         $order = $observer->getData('order');
         
@@ -37,6 +41,10 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
      */
     protected function processDeliveredCustomerStatus(Mage_Sales_Model_Order $order)
     {
+        if ($this->processingQueue()) {
+            return;
+        }
+
         $configStatus = $this->getDeliveredOrdersStatus();
         
         if (!$this->statusMatches($configStatus, $order->getStatus())) {
@@ -70,5 +78,13 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
         }
         
         return true;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function processingQueue()
+    {
+        return BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue::isRunning();
     }
 }

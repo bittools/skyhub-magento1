@@ -14,12 +14,15 @@
 
 class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_Model_Observer_Sales_Abstract
 {
-
     /**
      * @param Varien_Event_Observer $observer
      */
     public function sendTaxInvoiceKey(Varien_Event_Observer $observer)
     {
+        if ($this->isRunningQueueProcess()) {
+            return;
+        }
+
         /** @var Mage_Sales_Model_Order_Status_History $history */
         $history = $observer->getData('status_history');
 
@@ -71,13 +74,16 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
 
         $order->getResource()->save($order);
     }
-    
-    
+
     /**
      * @param Varien_Event_Observer $observer
      */
     public function processOrderShippingException(Varien_Event_Observer $observer)
     {
+        if ($this->isRunningQueueProcess()) {
+            return;
+        }
+
         /** @var Mage_Sales_Model_Order_Status_History $history */
         $history = $observer->getData('status_history');
     
@@ -121,7 +127,6 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
         }
     }
 
-
     /**
      * @param $comment
      *
@@ -146,7 +151,6 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
         return (string) $number;
     }
 
-
     /**
      * @param $pattern
      *
@@ -159,5 +163,13 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
         }
 
         return (bool) (strpos($pattern, '%d') != false);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isRunningQueueProcess()
+    {
+        return BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue::isRunning();
     }
 }

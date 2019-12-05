@@ -93,10 +93,9 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
     public function invoice($orderId, $invoiceKey)
     {
         $incrementId = $this->getOrderIncrementId($orderId);
-        $status = $this->getSkyHubCustomInvoicedStatus();
 
         /** @var \SkyHub\Api\Handler\Response\HandlerInterface $result */
-        $result = $this->getEntityInterface()->invoice($incrementId, $invoiceKey, $status);
+        $result = $this->getEntityInterface()->invoice($incrementId, $invoiceKey);
 
         if ($result->exception() || $result->invalid()) {
             return false;
@@ -114,10 +113,9 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
     public function cancel($orderId)
     {
         $incrementId = $this->getOrderIncrementId($orderId);
-        $status = $this->getSkyHubCustomCanceledStatus();
 
         /** @var \SkyHub\Api\Handler\Response\HandlerInterface $result */
-        $result = $this->getEntityInterface()->cancel($incrementId, $status);
+        $result = $this->getEntityInterface()->cancel($incrementId);
 
         if ($result->exception() || $result->invalid()) {
             return false;
@@ -135,11 +133,10 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
     public function delivery($orderId)
     {
         $incrementId = $this->getOrderIncrementId($orderId);
-        $status = $this->getSkyHubCustomDeliveredStatus();
         $date = $this->getDateModel()->date('d/m/Y');
 
         /** @var \SkyHub\Api\Handler\Response\HandlerInterface $result */
-        $result = $this->getEntityInterface()->delivery($incrementId, $date, $status);
+        $result = $this->getEntityInterface()->delivery($incrementId, $date);
 
         if ($result->exception() || $result->invalid()) {
             return false;
@@ -183,11 +180,10 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
     public function shipment($orderId, array $items, $trackCode, $trackCarrier, $trackMethod, $trackUrl)
     {
         $incrementId = $this->getOrderIncrementId($orderId);
-        $status = $this->getSkyHubCustomShippedStatus();
 
         /** @var \SkyHub\Api\Handler\Response\HandlerInterface $result */
         $result = $this->getEntityInterface()
-            ->shipment($incrementId, $items, $trackCode, $trackCarrier, $trackMethod, $trackUrl, $status);
+            ->shipment($incrementId, $items, $trackCode, $trackCarrier, $trackMethod, $trackUrl);
 
         if ($result->exception() || $result->invalid()) {
             return false;
@@ -208,10 +204,7 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
     public function shipmentException($orderId, $datetime, $observation)
     {
         $incrementId = $this->getOrderIncrementId($orderId);
-        $status = $this->getSkyHubCustomShipmentExceptionStatus();
-
-        $result = $this->getEntityInterface()
-                       ->shipmentException($incrementId, $datetime, $observation, $status);
+        $result = $this->getEntityInterface()->shipmentException($incrementId, $datetime, $observation);
     
         if ($result->exception() || $result->invalid()) {
             return false;
