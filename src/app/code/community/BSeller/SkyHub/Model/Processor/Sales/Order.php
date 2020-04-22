@@ -18,10 +18,13 @@
 class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Processor_Abstract
 {
     /** @var string */
-    public const ADDRESS_TYPE_BILLING  = \BitTools\SkyHub\Integration\Support\Sales\Order\Create::ADDRESS_TYPE_BILLING;
+    const ADDRESS_TYPE_BILLING  = 'billing_address';
 
     /** @var string */
-    public const ADDRESS_TYPE_SHIPPING = \BitTools\SkyHub\Integration\Support\Sales\Order\Create::ADDRESS_TYPE_SHIPPING;
+    const ADDRESS_TYPE_SHIPPING = 'shipping_address';
+
+    /** @var boolean */
+    private $saveCustomer = false;
 
     /** @var array|AddressInterface[] */
     protected $addresses = [
@@ -88,7 +91,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $channel     = $this->arrayExtract($data, 'channel');
         $orderId     = $this->getOrderId($code);
         $status      = $this->arrayExtract($data, 'status/type');
-
+        $order       = false;
         if ($orderId) {
             /**
              * @var Mage_Sales_Model_Order $order
@@ -119,11 +122,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
 
         /** @var Mage_Customer_Model_Customer $customer */
         $customer = $this->getCustomer($customerData);
-        if ($this->allowRegisterCustomerAddress()) {
-            $this->assignAddressToCustomer($customerData, $customer);
-        }
-
-
+        $this->assignAddressToCustomer($customerData, $customer);
+        
         $shippingCarrier = (string) $this->arrayExtract($data, 'shipping_carrier');
         $shippingMethod  = (string) $this->arrayExtract($data, 'shipping_method');
         $shippingCost    = (float)  $this->arrayExtract($data, 'shipping_cost', 0.0000);
@@ -141,6 +141,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             $this->updateOrderAddressData($customer, $order->getShippingAddress(), $this->getShippingAddress());
             
             $order->save();
+
+            return $order;
         }
 
         /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
@@ -205,6 +207,35 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         return $order;
     }
     
+    /**
+     * @return AddressInterface|mixed
+     */
+    protected function getBillingAddress()
+    {
+        /** @todo Create a logic to retrieve this address when address was not created in this process. */
+        $address = $this->addresses[self::ADDRESS_TYPE_BILLING];
+
+        if (empty($address)) {
+            $address = $this->addresses[self::ADDRESS_TYPE_SHIPPING];
+        }
+
+        return $address;
+    }
+
+    /**
+     * @return AddressInterface|mixed
+     */
+    protected function getShippingAddress()
+    {
+        /** @todo Create a logic to retrieve this address when address was not created in this process. */
+        $address = $this->addresses[self::ADDRESS_TYPE_SHIPPING];
+
+        if (empty($address)) {
+            $address = $this->addresses[self::ADDRESS_TYPE_BILLING];
+        }
+
+        return $address;
+    }
     
     /**
      * @param array                  $skyhubOrderData
@@ -242,7 +273,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             ->setTelephone($address->getTelephone())
             ->setPostcode($address->getPostcode())
             ->setCity($address->getCity())
-            ->setRegion($address->getRegion()->getRegionCode())
+            ->setRegion($address->getRegion())
             ->setRegionId($address->getRegionId());
     }
     
@@ -342,7 +373,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         /** @var Mage_Customer_Model_Customer $customer */
         $customer = $this->getCustomerByEmailOrTaxvat($email, $taxvat);
         
-        if ($this->foundByTaxvat) {
+        if ($this->saveCustomer) {
             $this->createCustomer($data, $customer);
         }
         
@@ -351,7 +382,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
 
     protected function getCustomerByEmailOrTaxvat($email, $taxvat)
     {
-        $this->foundByTaxvat = false;
+        $this->saveCustomer = false;
         $websiteId = $this->getStore()->getWebsiteId();
         $patternEmailWithTaxvat = $this->customerEmailCreationWithTaxvatPattern();
      
@@ -363,19 +394,23 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $emailDefault = $taxvat . $patternEmailWithTaxvat;
         if ($customer->getId()) {
             if ($customer->getEmail() == $emailDefault) {
-                $this->foundByTaxvat = true;
+                $this->saveCustomer = true;
             }
             return $customer;
         }
 
-        $customer = Mage::getModel('customer/customer');
-        $customer   ->getCollection()
-                    ->addAttributeToFilter('taxvat', ['eq' => $taxvat])
-                    ->addFieldToFilter('website_id', $websiteId)
-                    ->load();
+        $customerCollection = Mage::getModel('customer/customer')->getCollection();
+        $customerCollection->addAttributeToFilter('taxvat', ['eq' => $taxvat])
+                 ->addFieldToFilter('website_id', $websiteId)
+                 ->load();
+        $customer = $customerCollection->getFirstItem();
+        if (!$customer->getId()) {
+            $this->saveCustomer = true;
+            return $customer;
+        }
 
         if (strpos($customer->getEmail(), $patternEmailWithTaxvat) !== false) {
-            $this->foundByTaxvat = true;
+            $this->saveCustomer = true;
         }
 
         return $customer;
@@ -503,10 +538,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         Varien_Object $fallbackAddress = null
     )
     {
-        if (!$this->canRegisterAddress($addressObject, $customer)) {
-            return;
-        }
-
         /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
         $creation = Mage::getSingleton('bseller_skyhub/support_sales_order_create');
         $addressSize = $this->getAddressSizeConfig();
@@ -540,7 +571,13 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             )
         );
 
-        $address->setCustomer($customer)->save();
+        if (!$this->canRegisterAddress($addressObject, $customer)) {
+            return $address;
+        }
+
+        if ($this->allowRegisterCustomerAddress()) {
+            $address->setCustomer($customer)->save();
+        }
 
         return $address;
     }
