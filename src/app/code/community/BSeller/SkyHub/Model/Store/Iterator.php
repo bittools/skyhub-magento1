@@ -126,6 +126,10 @@ class BSeller_SkyHub_Model_Store_Iterator implements BSeller_SkyHub_Model_Store_
             Mage::logException($e);
         }
     
+        if (!$previousStore) {
+            return $result;
+        }
+
         $this->simulateStore($previousStore);
         
         return $result;
