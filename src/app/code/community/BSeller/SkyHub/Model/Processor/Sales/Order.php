@@ -96,7 +96,6 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
              * Order already exists.
              */
             $order = Mage::getModel('sales/order')->load($orderId);
-            return $order;
         }
 
         if ($status == "CANCELED") {
