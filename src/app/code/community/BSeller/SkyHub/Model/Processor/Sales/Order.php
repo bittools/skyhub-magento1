@@ -273,7 +273,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             ->setTelephone($address->getTelephone())
             ->setPostcode($address->getPostcode())
             ->setCity($address->getCity())
-            ->setRegion($address->getRegion())
+            ->setRegion($address->getRegionCode())
             ->setRegionId($address->getRegionId());
     }
     
@@ -400,7 +400,8 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         }
 
         $customerCollection = Mage::getModel('customer/customer')->getCollection();
-        $customerCollection->addAttributeToFilter('taxvat', ['eq' => $taxvat])
+        $customerCollection->addAttributeToSelect('*')
+                 ->addAttributeToFilter('taxvat', ['eq' => $taxvat])
                  ->addFieldToFilter('website_id', $websiteId)
                  ->load();
         $customer = $customerCollection->getFirstItem();
@@ -475,13 +476,23 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         try {
             /** @var Varien_Object $billing */
             if ($shipping = $this->arrayExtract($data, 'shipping_address')) {
-                $address = $this->createCustomerAddress($shipping, $customer);
+                $address = $this->createCustomerAddress(
+                    $shipping,
+                    $customer,
+                    null,
+                    self::ADDRESS_TYPE_SHIPPING
+                );
                 $this->pushAddress($address, self::ADDRESS_TYPE_SHIPPING);
             }
 
             /** @var Varien_Object $billing */
             if ($billing = $this->arrayExtract($data, 'billing_address')) {
-                $address = $this->createCustomerAddress($billing, $customer, $shipping ? $shipping : null);
+                $address = $this->createCustomerAddress(
+                    $billing,
+                    $customer,
+                    $shipping ? $shipping : null,
+                    self::ADDRESS_TYPE_BILLING
+                );
                 $this->pushAddress($address, self::ADDRESS_TYPE_BILLING);
             }
         } catch (Exception $e) {
@@ -528,6 +539,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      * @param Varien_Object $addressObject
      * @param Mage_Customer_Model_Customer $customer
      * @param Varien_Object|null $fallbackAddress
+     * @param string $type
      *
      * @throws Exception
      * @return Mage_Customer_Model_Address|void
@@ -535,9 +547,9 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     protected function createCustomerAddress(
         Varien_Object $addressObject,
         Mage_Customer_Model_Customer $customer,
-        Varien_Object $fallbackAddress = null
-    )
-    {
+        Varien_Object $fallbackAddress = null,
+        $type
+    ) {
         /** @var BSeller_SkyHub_Model_Support_Sales_Order_Create $creation */
         $creation = Mage::getSingleton('bseller_skyhub/support_sales_order_create');
         $addressSize = $this->getAddressSizeConfig();
@@ -550,6 +562,22 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
 
         /** @var Mage_Customer_Model_Address $address */
         $address = Mage::getSingleton('customer/address');
+
+        $currentAddress = false;
+        if ($type === self::ADDRESS_TYPE_BILLING) {
+            $currentAddress = $customer->getDefaultBillingAddress();
+        } elseif ($type === self::ADDRESS_TYPE_SHIPPING) {
+            $currentAddress = $customer->getDefaultShippingAddress();
+        }
+
+        if ($currentAddress && ($currentAddress->getPostcode() === $addressObject->getData('postcode'))) {
+            return $currentAddress;
+        }
+        
+        if ($currentAddress && $currentAddress->getPostcode() === '00000000') {
+            $address = $currentAddress;
+        }
+
         $address->setData(
             array(
                 'firstname' => $nameObject->getData('firstname'),
@@ -572,6 +600,10 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         );
 
         if (!$this->canRegisterAddress($addressObject, $customer)) {
+            return $address;
+        }
+
+        if ($customer->getAddresses() && $addressObject->getData('postcode') == '00000000') {
             return $address;
         }
 
