@@ -381,6 +381,14 @@
                     </bseller_skyhub_add_integration_button_to_product_edit_page>
                 </observers>
             </adminhtml_block_html_before>
+            <catalog_product_delete_after_done>
+                <observers>
+                    <bseller_skyhub_delete_product>
+                        <class>bseller_skyhub/observer_catalog_product</class>
+                        <method>deleteProduct</method>
+                    </bseller_skyhub_delete_product>
+                </observers>
+            </catalog_product_delete_after_done>
         </events>
     </adminhtml>
     <admin>
