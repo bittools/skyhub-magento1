@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.4] - 2020-04-27
+### Changed
+- ON-13842 - Send url carrier, configured in SkyHub Integrations
+- SKYHUB-51 - Fix bug in simulateStore
+- SKYHUB-54 - Create customer when order is amazon
+- SKYHUB-58 - Fix bug when product is delete
+
 ## [1.5.3] - 2019-09-04
 ### Changed
 - ON-13851 - Fix bug on order queue. Previous this version, api settings is  removed from some requests
