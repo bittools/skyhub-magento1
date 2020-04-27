@@ -613,6 +613,27 @@
                         </expression>
                     </fields>
                 </cron_queue_clean>
+                <tracking translate="label comment" module="bseller_skyhub">
+                    <label>Tracking URL</label>
+                    <sort_order>1700</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                        <carriers>
+                            <label>Carriers</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>bseller_skyhub/adminhtml_sales_order_shipment_tracking_carriers</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[]]></comment>
+                        </carriers>
+                    </fields>
+                </tracking>
             </groups>
         </bseller_skyhub>
     </sections>
