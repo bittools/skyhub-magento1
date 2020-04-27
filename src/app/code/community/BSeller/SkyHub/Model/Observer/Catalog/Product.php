@@ -149,7 +149,15 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
      */
     public function disableProduct(Varien_Event_Observer $observer)
     {
-        if (!$this->canRun()) {
+        $this->processStoreIteration($this, 'processDisableProduct', $observer);
+    }
+    
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function processDisableProduct(Varien_Event_Observer $observer, Mage_Core_Model_Store $store)
+    {
+        if (!$this->canRun($store->getId())) {
             return;
         }
 
@@ -176,7 +184,6 @@ class BSeller_SkyHub_Model_Observer_Catalog_Product extends BSeller_SkyHub_Model
         /** Create or Update Product */
         $this->catalogProductIntegrator()->update($product);
     }
-    
     
     /**
      * @param Varien_Event_Observer $observer
