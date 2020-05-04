@@ -126,6 +126,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         
         $shippingCarrier = (string) $this->arrayExtract($data, 'shipping_carrier');
         $shippingMethod  = (string) $this->arrayExtract($data, 'shipping_method');
+        $shippingMethod  = $this->_getShippingMethodConfig($shippingMethod, $channel);
         $shippingCost    = (float)  $this->arrayExtract($data, 'shipping_cost', 0.0000);
         $discountAmount  = (float)  $this->arrayExtract($data, 'discount', 0.0000);
         $interestAmount  = (float)  $this->arrayExtract($data, 'interest', 0.0000);
@@ -207,6 +208,27 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         return $order;
     }
     
+    /**
+     * Return url of tracking
+     *
+     * @param string $shippingMethod
+     * @return string
+     */
+    protected function _getShippingMethodConfig($shippingMethod, $channel)
+    {
+        $config = unserialize(Mage::getStoreConfig('bseller_skyhub/methodShipping/marketplaces'));
+        if (!$config) {
+            return $shippingMethod;
+        }
+        
+        foreach ($config as $value) {
+            if ($channel != $value['channel']) {
+                continue;
+            }
+            return $value['method_shipping_default'];
+        }
+    }
+
     /**
      * @return AddressInterface|mixed
      */
