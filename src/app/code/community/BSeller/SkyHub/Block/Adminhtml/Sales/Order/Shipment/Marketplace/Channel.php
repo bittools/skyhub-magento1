@@ -60,7 +60,7 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Shipment_Marketplace_Channel
     protected function _getRendererChannels()
     {
         if (!$this->_render) {
-            $options = $this->getChannels();
+            $options = $this->_getChannels();
             $this->_render = $this->getLayout()
                 ->createBlock('bseller_skyhub/adminhtml_sales_order_shipment_marketplace_field_channels')
                 ->setIsRenderToJsTemplate(true)
@@ -73,7 +73,7 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Shipment_Marketplace_Channel
     /**
      * @return array
      */
-    protected function getChannels()
+    protected function _getChannels()
     {
         $model = Mage::getModel('bseller_skyhub/source_order_marketplaces');
         return $model->toOptionArray();
@@ -88,7 +88,7 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Shipment_Marketplace_Channel
     protected function _prepareArrayRow(Varien_Object $row)
     {
         $row->setData(
-            'option_extra_attr_' . $this->getRendererChannels()
+            'option_extra_attr_' . $this->_getRendererChannels()
                 ->calcOptionHash($row->getData('channel')),
             'selected="selected"'
         );
