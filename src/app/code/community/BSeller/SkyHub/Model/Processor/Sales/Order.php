@@ -220,7 +220,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         if (!$config) {
             return false;
         }
-        return $config = unserialize($config);
+        return unserialize($config);
     }
 
     /**
