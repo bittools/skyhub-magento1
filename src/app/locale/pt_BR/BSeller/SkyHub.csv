@@ -220,3 +220,5 @@
 "Custom status sent to SkyHub when order is delivered.","Status customizado que será enviado para a SkyHub quando o pedido for entregue."
 "Custom status sent to SkyHub when order is canceled.","Status customizado que será enviado para a SkyHub quando o pedido for cancelado."
 "Custom status sent to SkyHub when order receive NFE Key (invoiced).","Status customizado que será enviado à SkyHub quando o pedido for faturado."
+"Method Shipping Default", "Método de entrega padrão"
+"When selected, is created a order with selected shipping method and ignore skyhub data","Quando selecionado, é criado um pedido com o método de entrega selecionado e ignora os dados do skyhub"

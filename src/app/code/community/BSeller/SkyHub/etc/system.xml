@@ -651,7 +651,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment><![CDATA[]]></comment>
+                            <comment><![CDATA[When selected, is created a order with selected shipping method and ignore skyhub data]]></comment>
                         </marketplaces>
                     </fields>
                 </methodShipping>
