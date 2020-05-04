@@ -210,6 +210,20 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
     }
     
     /**
+     * Return Config methodShipping
+     *
+     * @return bool|array
+     */
+    protected function _getMethodShippingConfig()
+    {
+        $config = Mage::getStoreConfig('bseller_skyhub/methodShipping/marketplaces');
+        if (!$config) {
+            return false;
+        }
+        return $config = unserialize($config);
+    }
+
+    /**
      * Return Method Shipping Default
      *
      * @param string $shippingMethod
@@ -217,11 +231,11 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     protected function _getShippingMethodConfig($shippingMethod, $channel)
     {
-        $config = unserialize(Mage::getStoreConfig('bseller_skyhub/methodShipping/marketplaces'));
+        $config = $this->_getMethodShippingConfig();
         if (!$config) {
             return $shippingMethod;
         }
-        
+
         foreach ($config as $value) {
             if ($channel != $value['channel']) {
                 continue;
@@ -239,7 +253,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
      */
     protected function _getShippingCarrierConfig($shippingCarrier, $channel)
     {
-        $config = unserialize(Mage::getStoreConfig('bseller_skyhub/methodShipping/marketplaces'));
+        $config = $this->_getMethodShippingConfig();
         if (!$config) {
             return $shippingCarrier;
         }
