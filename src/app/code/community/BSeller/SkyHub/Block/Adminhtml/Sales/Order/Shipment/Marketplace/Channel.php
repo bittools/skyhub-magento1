@@ -31,7 +31,7 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Shipment_Marketplace_Channel
             [
                 'label'    => Mage::helper('sales')->__('Channel'),
                 'class'    => 'input-text required-entry',
-                'renderer' => $this->getRendererChannels()
+                'renderer' => $this->_getRendererChannels()
             ]
         );
 
@@ -42,6 +42,14 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Shipment_Marketplace_Channel
                 'class'    => 'input-text required-entry'
             ]
         );
+
+        $this->addColumn(
+            'carrier_shipping_default',
+            [
+                'label'    => Mage::helper('sales')->__('Carrier Shipping Default'),
+                'class'    => 'input-text required-entry'
+            ]
+        );
     }
 
     /**
@@ -49,7 +57,7 @@ class BSeller_SkyHub_Block_Adminhtml_Sales_Order_Shipment_Marketplace_Channel
      *
      * @return array
      */
-    protected function getRendererChannels()
+    protected function _getRendererChannels()
     {
         if (!$this->_render) {
             $options = $this->getChannels();
