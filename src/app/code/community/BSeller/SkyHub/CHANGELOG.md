@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.5] - 2020-05-07
+### Changed
+- SKYHUB-60 - Fix bug when update stock
+- SKYHUB-61 - Set Shipping method default
+
 ## [1.5.4] - 2020-04-27
 ### Changed
 - ON-13842 - Send url carrier, configured in SkyHub Integrations
