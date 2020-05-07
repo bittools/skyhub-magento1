@@ -125,7 +125,9 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $this->assignAddressToCustomer($customerData, $customer);
         
         $shippingCarrier = (string) $this->arrayExtract($data, 'shipping_carrier');
+        $shippingCarrier  = $this->_getShippingCarrierConfig($shippingCarrier, $channel);
         $shippingMethod  = (string) $this->arrayExtract($data, 'shipping_method');
+        $shippingMethod  = $this->_getShippingMethodConfig($shippingMethod, $channel);
         $shippingCost    = (float)  $this->arrayExtract($data, 'shipping_cost', 0.0000);
         $discountAmount  = (float)  $this->arrayExtract($data, 'discount', 0.0000);
         $interestAmount  = (float)  $this->arrayExtract($data, 'interest', 0.0000);
@@ -207,6 +209,64 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         return $order;
     }
     
+    /**
+     * Return Config methodShipping
+     *
+     * @return bool|array
+     */
+    protected function _getMethodShippingConfig()
+    {
+        $config = Mage::getStoreConfig('bseller_skyhub/methodShipping/marketplaces');
+        if (!$config) {
+            return false;
+        }
+        return unserialize($config);
+    }
+
+    /**
+     * Return Method Shipping Default
+     *
+     * @param string $shippingMethod
+     * @return string
+     */
+    protected function _getShippingMethodConfig($shippingMethod, $channel)
+    {
+        $config = $this->_getMethodShippingConfig();
+        if (!$config) {
+            return $shippingMethod;
+        }
+
+        foreach ($config as $value) {
+            if ($channel != $value['channel']) {
+                continue;
+            }
+            return $value['method_shipping_default'];
+        }
+        return $shippingMethod;
+    }
+
+    /**
+     * Return Carrier Shipping Default
+     *
+     * @param string $carrierMethod
+     * @return string
+     */
+    protected function _getShippingCarrierConfig($shippingCarrier, $channel)
+    {
+        $config = $this->_getMethodShippingConfig();
+        if (!$config) {
+            return $shippingCarrier;
+        }
+        
+        foreach ($config as $value) {
+            if ($channel != $value['channel']) {
+                continue;
+            }
+            return $value['carrier_shipping_default'];
+        }
+        return $shippingCarrier;
+    }
+
     /**
      * @return AddressInterface|mixed
      */
