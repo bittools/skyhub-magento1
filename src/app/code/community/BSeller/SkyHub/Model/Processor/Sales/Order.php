@@ -111,7 +111,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
             $order = Mage::getModel('sales/order')->load($orderId);
         } else if ($status == "CANCELED") {
             $exceptText = $code . ' ' . $this->__("Order doesn't create, because status is CANCELED");
-            throw new UnprocessableException($exceptText);
+            throw new BSeller_SkyHub_Exceptions_UnprocessableException($exceptText);
         }
 
         //$this->simulateStore($this->getStore());
