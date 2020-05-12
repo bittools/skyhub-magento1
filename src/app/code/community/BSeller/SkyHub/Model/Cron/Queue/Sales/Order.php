@@ -43,6 +43,9 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order extends BSeller_SkyHub_Model_C
             try {
                 /** @var Mage_Sales_Model_Order $order */
                 $order = $this->salesOrderProcessor()->createOrder($orderData);
+            } catch (BSeller_SkyHub_Exceptions_UnprocessableException $e) {
+                $schedule->setMessages($e->getMessage());
+                continue;
             } catch (Exception $e) {
                 Mage::logException($e);
                 continue;
