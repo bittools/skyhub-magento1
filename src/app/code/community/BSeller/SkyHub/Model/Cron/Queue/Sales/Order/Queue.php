@@ -75,7 +75,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
 
                 $message = $e->getMessage();
                 if ($isDeleted) {
-                    $message .= ' ' . __('It was also removed from queue.');
+                    $message .= ' ' . $this->__('It was also removed from queue.');
                 }
 
                 $schedule->setMessages($message);
