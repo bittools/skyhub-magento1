@@ -73,7 +73,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
             } catch (BSeller_SkyHub_Exceptions_UnprocessableException $e) {
                 $isDeleted = $this->orderQueueIntegrator()->delete($skyhubCode);
 
-                $message = $e->getMessage();
+                $message .= $e->getMessage();
                 if ($isDeleted) {
                     $message .= ' ' . $this->__('It was also removed from queue.');
                 }
