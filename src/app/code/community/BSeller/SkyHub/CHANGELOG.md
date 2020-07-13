@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.6] - 2020-07-13
+### Changed
+- SKYHUB-74 - Fix bug in diferent address in order
+
 ## [1.5.5] - 2020-05-07
 ### Changed
 - SKYHUB-60 - Fix bug when update stock
