@@ -621,7 +621,7 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
         $nameObject = $this->breakName($fullname);
 
         /** @var Mage_Customer_Model_Address $address */
-        $address = Mage::getSingleton('customer/address');
+        $address = Mage::getModel('customer/address');
 
         $currentAddress = false;
         if ($type === self::ADDRESS_TYPE_BILLING) {
