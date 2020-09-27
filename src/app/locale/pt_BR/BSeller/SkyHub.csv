@@ -223,3 +223,4 @@
 "Method Shipping Default", "Método de entrega padrão"
 "Carrier Shipping Default", "Transportadora padrão"
 "When selected, is created a order with selected shipping method and ignore skyhub data","Quando selecionado, é criado um pedido com o método de entrega selecionado e ignora os dados do skyhub"
+"Order doesn't create, because status is CANCELED","Pedido não criado, porque o status está como cancelado."

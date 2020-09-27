@@ -44,6 +44,7 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
      * @param Mage_Core_Model_Store $store
      *
      * @throws Mage_Core_Exception
+     * @throws BSeller_SkyHub_Exceptions_UnprocessableException
      */
     public function executeIntegration(Mage_Cron_Model_Schedule $schedule, Mage_Core_Model_Store $store)
     {
@@ -65,10 +66,25 @@ class BSeller_SkyHub_Model_Cron_Queue_Sales_Order_Queue extends BSeller_SkyHub_M
                 break;
             }
 
-            $order = $this->salesOrderProcessor()->createOrder($orderData);
+            $skyhubCode = $this->arrayExtract($orderData, 'code');
+
+            try {
+                $order = $this->salesOrderProcessor()->createOrder($orderData);
+            } catch (BSeller_SkyHub_Exceptions_UnprocessableException $e) {
+                $isDeleted = $this->orderQueueIntegrator()->delete($skyhubCode);
+
+                $message .= $e->getMessage();
+                if ($isDeleted) {
+                    $message .= ' ' . $this->__('It was also removed from queue.');
+                }
+
+                $schedule->setMessages($message);
+                continue;
+            }
+
             if (!$order || !$order->getId()) {
                 $message = $schedule->getMessages();
-                $message .= $this->__('Order cannot be created.', $this->arrayExtract($orderData, 'code'));
+                $message .= $this->__('Order cannot be created.', $skyhubCode);
                 $schedule->setMessages($message);
                 continue;
             }

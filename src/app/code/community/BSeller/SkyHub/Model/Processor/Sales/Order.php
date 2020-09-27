@@ -55,6 +55,16 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
                 $this->updateOrderStatus($data, $order);
             }
 
+        } catch (BSeller_SkyHub_Exceptions_UnprocessableException $e) {
+            Mage::dispatchEvent(
+                'bseller_skyhub_order_import_exception',
+                array(
+                    'exception' => $e,
+                    'order_data' => $data,
+                )
+            );
+
+            throw $e;
         } catch (Exception $e) {
 
             $this->removeOrderQuote();
@@ -99,11 +109,9 @@ class BSeller_SkyHub_Model_Processor_Sales_Order extends BSeller_SkyHub_Model_Pr
              * Order already exists.
              */
             $order = Mage::getModel('sales/order')->load($orderId);
-        }
-
-        if ($status == "CANCELED") {
-            Mage::getSingleton('bseller_skyhub/integrator_sales_order_queue')->delete($code);
-            Mage::throwException($this->__('This order is canceled in the queue.'));
+        } else if ($status == "CANCELED") {
+            $exceptText = $code . ' ' . $this->__("Order doesn't create, because status is CANCELED");
+            throw new BSeller_SkyHub_Exceptions_UnprocessableException($exceptText);
         }
 
         //$this->simulateStore($this->getStore());
