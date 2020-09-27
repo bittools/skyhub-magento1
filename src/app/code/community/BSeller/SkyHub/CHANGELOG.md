@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.7] - 2020-09-27
+### Changed
+- Fix bug in canceled order
+
 ## [1.5.6] - 2020-07-13
 ### Changed
 - SKYHUB-74 - Fix bug in diferent address in order
