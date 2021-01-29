@@ -10,7 +10,7 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
- * @author    Julio Reis <julio.reis@e-smart.com.br>
+ * Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
  */
 class BSeller_SkyHub_Block_Adminhtml_Customer_Attributes_Mapping_Grid
     extends BSeller_Core_Block_Adminhtml_Widget_Grid

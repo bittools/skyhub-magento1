@@ -9,7 +9,7 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
- * @author    Julio Reis <julio.reis@b2wdigital.com>
+ * Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
  */
 
 $installer = new Mage_Eav_Model_Entity_Setup('core_setup');

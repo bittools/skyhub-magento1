@@ -9,7 +9,7 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
- * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ * Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
  */
 class BSeller_SkyHub_Model_Catalog_Product_Type_Configurable_Price
     extends Mage_Catalog_Model_Product_Type_Configurable_Price

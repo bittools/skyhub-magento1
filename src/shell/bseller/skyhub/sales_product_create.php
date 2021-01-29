@@ -8,7 +8,7 @@
  *
  * @copyright     Copyright (c) 2017 B2W Companhia Digital. (http://www.bseller.com.br/)
  *
- * @author        Julio Reis <julio.reis@e-smart.com.br>
+ * Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
  */
 require '../../../../../../shell/abstract.php';
 
