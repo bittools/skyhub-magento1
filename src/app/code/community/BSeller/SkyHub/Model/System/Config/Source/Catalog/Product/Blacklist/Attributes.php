@@ -9,7 +9,7 @@
  *
  * @copyright Copyright (c) 2019 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
- * @author    Rafael Falcão <rafael.falcao@e-smart.com.br>
+ * Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
  */
 
 class BSeller_SkyHub_Model_System_Config_Source_Catalog_Product_Blacklist_Attributes

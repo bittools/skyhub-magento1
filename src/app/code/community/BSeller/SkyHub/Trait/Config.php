@@ -9,9 +9,7 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
- * @author    Tiago Sampaio <tiago.sampaio@e-smart.com.br>
- * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
- * @author    Julio Reis <julio.reis@e-smart.com.br>
+ * Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
  */
 
 trait BSeller_SkyHub_Trait_Config

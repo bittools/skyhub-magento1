@@ -9,7 +9,7 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
- * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
+ * Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
  */
 
 class BSeller_SkyHub_Controller_Admin_Shipment_Plp_Action extends BSeller_SkyHub_Controller_Admin_Queue

@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.8] - 2021-02-01
+- Change documentation with email in files. If you need help, Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
+
 ## [1.5.7] - 2020-09-27
 ### Changed
 - Fix bug in canceled order

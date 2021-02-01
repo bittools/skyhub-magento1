@@ -9,7 +9,7 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BSeller Platform. (http://www.bseller.com.br)
  *
- * @author    Bruno Gemelli <bruno.gemelli@e-smart.com.br>
+ * Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
  */
 class BSeller_SkyHub_Block_Adminhtml_Shipment_Plp_View_Form_Renderer_Order_Grid extends Varien_Data_Form_Element_Abstract
 {

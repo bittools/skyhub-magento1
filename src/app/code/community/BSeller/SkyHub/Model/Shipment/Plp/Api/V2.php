@@ -10,7 +10,7 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BIT Tools.
  *
- * @author    Julio Reis <julio.reis@b2wdigital.com>
+ * Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
  */
 class BSeller_SkyHub_Model_Shipment_Plp_Api_V2 extends BSeller_SkyHub_Model_Shipment_Plp_Api
 {

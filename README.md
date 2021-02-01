@@ -56,9 +56,10 @@ A documentação para cada funcionalidade está escrita nos códigos fonte do m�
 
 ## Créditos
 
-Autor||Versão
---- | --- | ---
-**Tiago Sampaio** | tiago.sampaio@e-smart.com.br | `0.1.0`
+**B2W Digital**
+
+## Precisa de Ajuda
+Acesse **https://ajuda.skyhub.com.br/hc/pt-br/requests/new** para dúvidas e demais solicitações. 
 
 ## Licença
 

@@ -10,7 +10,7 @@
  *
  * @copyright Copyright (c) 2018 B2W Digital - BIT Tools.
  *
- * @author    Julio Reis <julio.reis@b2wdigital.com>
+ * Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
  */
 class BSeller_SkyHub_Test_Model_Functional_Product_Queue extends BSeller_SkyHub_Test_Product_AbstractProduct
 {
