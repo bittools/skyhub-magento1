@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.9] - 2021-08-12
+- Fix issue send order that not Skyhub
+
 ## [1.5.8] - 2021-02-01
 - Change documentation with email in files. If you need help, Access https://ajuda.skyhub.com.br/hc/pt-br/requests/new for questions and other requests.
 

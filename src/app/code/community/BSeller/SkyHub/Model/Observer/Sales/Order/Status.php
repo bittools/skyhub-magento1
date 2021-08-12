@@ -76,6 +76,10 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Status extends BSeller_SkyHub_Mo
         if ($order->getState() != Mage_Sales_Model_Order::STATE_COMPLETE) {
             return false;
         }
+
+        if (!$order->getBsellerSkyhubChannel() || empty($order->getBsellerSkyhubChannel())) {
+            return false;
+        }
         
         return true;
     }
