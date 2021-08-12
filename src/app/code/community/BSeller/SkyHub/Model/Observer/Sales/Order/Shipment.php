@@ -30,6 +30,10 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_Shipment extends BSeller_SkyHub_
         /** @var Mage_Sales_Model_Order $order */
         $order = $this->getOrder($track->getOrderId());
 
+        if (!$order->getBsellerSkyhubChannel() || empty($order->getBsellerSkyhubChannel())) {
+            return false;
+        }
+
         $items = array();
 
         /** @var Mage_Sales_Model_Order_Item $item */
