@@ -1,0 +1,43 @@
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-products"><?php echo $this->getTabTitle() ?></h4>
+    </div>
+
+    <form id="sendXmlForm" action="<?=$this->getUrl('*/bseller_skyhub_sales_order_invoicedXml/uploadXml')?>" method="POST" enctype='multipart/form-data'>
+        <input type="hidden" name="form_key" value="<?php echo Mage::getModel('core/session')->getFormKey();?>"/>
+        <input type="hidden" name="bseller_skyhub_code" value="<?php echo $this->getOrder()->getBsellerSkyhubCode();?>"/>
+        <input type="hidden" name="order_id" value="<?php echo $this->getOrder()->getId();?>"/>
+        <div class="fieldset">
+            <table class="form-list">
+                <tbody>
+                    <tr>
+                        <td class="label">
+                            <label for='volume_qty'><?=$this->_helper()->__('Volume Qty')?>: </label>
+                        </td>
+                        <td class="value">
+                            <input type="text" name="volume_qty" id="volume_qty" class="required-entry validate-number"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for='file'><?=$this->_helper()->__('File Xml')?>: </label>
+                        </td>
+                        <td class="value">
+                            <input type="file" name="file" id="file"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="buttons-set">
+                <input type="submit" class="sendXml" value="<?=$this->_helper()->__('Send Xml to SkyHub')?>"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $('volume_qty').onkeypress = function(event){
+        if (/^\s*-?\d*(\.\d*)?\s*$/.test(event.key)== false) {
+            return false;
+        }
+    }
+</script>

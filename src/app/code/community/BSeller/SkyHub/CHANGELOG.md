@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.6.0] - 2021-08-24
+- Send xml invoice to skyhub
+
 ## [1.5.9] - 2021-08-12
 - Fix issue send order that not Skyhub
 

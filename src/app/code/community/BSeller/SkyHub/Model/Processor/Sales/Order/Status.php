@@ -56,6 +56,14 @@ class BSeller_SkyHub_Model_Processor_Sales_Order_Status extends BSeller_SkyHub_M
             return false;
         }
 
+        if (
+            $skyhubStatusType == BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_APPROVED
+        ) {
+            $order->setBsellerSkyhubStatus(
+                BSeller_SkyHub_Model_System_Config_Source_Skyhub_Status_Types::TYPE_APPROVED
+            );
+        }
+
         /**
          * If order is CANCELED in SkyHub.
          */

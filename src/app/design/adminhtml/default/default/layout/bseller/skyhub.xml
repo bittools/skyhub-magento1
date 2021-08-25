@@ -230,6 +230,11 @@
     </ADD_STYLES>
 
     <adminhtml_sales_order_view>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>bseller/skyhub/css/styles.css</stylesheet>
+            </action>
+        </reference>
         <reference name="sales_order_tabs">
             <action method="addTab">
                 <name>bseller_skyhub_block_adminhtml_sales_order_view_tab_integrationJson</name>
@@ -238,6 +243,10 @@
             <action method="addTab">
                 <name>bseller_skyhub_block_adminhtml_sales_order_view_tab_plp</name>
                 <block>bseller_skyhub/adminhtml_sales_order_view_tab_plp</block>
+            </action>
+            <action method="addTab">
+                <name>bseller_skyhub_block_adminhtml_sales_order_view_tab_b2wDirectInvoiced</name>
+                <block>bseller_skyhub/adminhtml_sales_order_view_tab_b2wDirectInvoiced</block>
             </action>
         </reference>
         <reference name="content">

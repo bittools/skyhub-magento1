@@ -59,3 +59,17 @@ td.skyhub-code {
 .skyhub-notification-container .unmapped-attribute-table td a {
 
 }
+
+.sendXml { 
+    border-width:1px;
+    border-style:solid;
+    border-color:#ed6502 #a04300 #a04300 #ed6502;
+    padding:1px 7px 2px 7px;
+    background:#f77c16;
+    color:#fff; font:bold 12px arial, helvetica, sans-serif;
+    cursor:pointer; text-align:center !important; white-space:nowrap;
+}
+
+.sendXml:hover {
+    background:#ffac47;
+}

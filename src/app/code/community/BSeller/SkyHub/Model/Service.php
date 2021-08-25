@@ -16,6 +16,7 @@ require_once Mage::getModuleDir(null, 'BSeller_SkyHub') . '/vendor/autoload.php'
 
 use SkyHub\Api;
 use SkyHub\Api\Service\ServicePdf;
+use SkyHub\Api\Service\ServiceMultipart;
 
 class BSeller_SkyHub_Model_Service
 {
@@ -23,6 +24,8 @@ class BSeller_SkyHub_Model_Service
     use BSeller_SkyHub_Trait_Config;
 
     const RESPONSE_PDF = 'pdf';
+
+    const RESPONSE_MULTPART = 'multipart';
 
     /** @var Api */
     protected $api;
@@ -67,6 +70,8 @@ class BSeller_SkyHub_Model_Service
 
         if ($serviceResponseFormat == self::RESPONSE_PDF) {
             $service = new ServicePdf(null);
+        } else if($serviceResponseFormat == self::RESPONSE_MULTPART) {
+            $service = new ServiceMultipart(null);
         }
 
         $this->api = new Api(
