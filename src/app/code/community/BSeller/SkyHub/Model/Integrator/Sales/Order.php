@@ -87,15 +87,16 @@ class BSeller_SkyHub_Model_Integrator_Sales_Order extends BSeller_SkyHub_Model_I
     /**
      * @param int    $orderId
      * @param string $invoiceKey
+     * @param string|null $volumeQty
      *
      * @return bool
      */
-    public function invoice($orderId, $invoiceKey)
+    public function invoice($orderId, $invoiceKey, $volumeQty = null)
     {
         $incrementId = $this->getOrderIncrementId($orderId);
 
         /** @var \SkyHub\Api\Handler\Response\HandlerInterface $result */
-        $result = $this->getEntityInterface()->invoice($incrementId, $invoiceKey);
+        $result = $this->getEntityInterface()->invoice($incrementId, $invoiceKey, $volumeQty);
 
         if ($result->exception() || $result->invalid()) {
             return false;

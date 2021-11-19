@@ -47,6 +47,7 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
         }
 
         $invoiceKeyNumber = $this->extractInvoiceKeyNumber($comment);
+        $volumeQty = $this->extractVolumeQty($comment, $order);
 
         if (empty($invoiceKeyNumber)) {
             return;
@@ -57,6 +58,10 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
                 $order->getId(),
                 $invoiceKeyNumber
             );
+
+            if (!empty($volumeQty)) {
+                $params[] = $volumeQty;
+            }
     
             /** @var boolean $result */
             $result = $this->getStoreIterator()
@@ -70,7 +75,8 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
         }
 
         $order->setData('invoice_key', $invoiceKeyNumber)
-            ->setData('bseller_skyhub_invoice_key', $invoiceKeyNumber);
+            ->setData('bseller_skyhub_invoice_key', $invoiceKeyNumber)
+            ->setData('bseller_skyhub_volume_qty', $volumeQty);
 
         $order->getResource()->save($order);
     }
@@ -149,6 +155,36 @@ class BSeller_SkyHub_Model_Observer_Sales_Order_History extends BSeller_SkyHub_M
         }
 
         return (string) $number;
+    }
+
+    /**
+     * Return volume qty
+     *
+     * @param string $comment
+     * @param Mage_Sales_Model_Order $order
+     * @return null|string
+     */
+    protected function extractVolumeQty($comment, $order)
+    {
+        if (!$this->isSendVolumeQty()) {
+            return null;
+        }
+
+        $volumeQty = null;
+        preg_match('/([[:<:]]volume_qty:)([ ]{0,}[0-9]{1,})/', $comment, $matches);
+        if (!empty($matches) && isset($matches[0])) {
+            $matches = explode(':', $matches[0]);
+            if (!isset($matches[1])) {
+                return null;
+            }
+
+            if (!$matches[1]) {
+                return null;
+            }
+            $volumeQty = (string)trim($matches[1]);
+        }
+
+        return $volumeQty;
     }
 
     /**
