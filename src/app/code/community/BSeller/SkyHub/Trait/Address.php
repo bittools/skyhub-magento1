@@ -17,7 +17,8 @@ trait BSeller_SkyHub_Trait_Address
      * @var array
      */
     protected $_magazine = array(
-        'magazine luiza'
+        'magazine luiza',
+        'carrefour'
     );
 
     /**

@@ -201,7 +201,6 @@ trait BSeller_SkyHub_Trait_Config
         return (string) $status->getId();
     }
 
-
     /**
      * @return string
      */
@@ -210,6 +209,13 @@ trait BSeller_SkyHub_Trait_Config
         return (string) $this->getSkyHubModuleConfig('pattern', 'tax_invoice_key', $storeId);
     }
 
+    /**
+     * @return bool
+     */
+    protected function isSendVolumeQty($storeId = null)
+    {
+        return (bool) $this->getSkyHubModuleConfig('send_volume_qty', 'tax_invoice_key', $storeId);
+    }
 
     /**
      * @return BSeller_SkyHub_Model_Config
