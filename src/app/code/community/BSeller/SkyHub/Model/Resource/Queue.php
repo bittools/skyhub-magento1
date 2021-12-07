@@ -135,6 +135,24 @@ class BSeller_SkyHub_Model_Resource_Queue extends BSeller_Core_Model_Resource_Ab
         return (array) $ids;
     }
 
+    /**
+     * Get queues by ids
+     *
+     * @param array $queueIds
+     * @return array
+     */
+    public function getEntityIdsByQueuesIds($queueIds)
+    {
+        /** @var Varien_Db_Select $select */
+        $select = $this->getReadConnection()
+            ->select()
+            ->from($this->getMainTable(), 'entity_id')
+            ->where('id IN (?)', $queueIds);
+        ;
+        $ids = $this->getReadConnection()->fetchCol($select);
+        return (array) $ids;
+    }
+
 
     /**
      * @param integer|array $entityIds

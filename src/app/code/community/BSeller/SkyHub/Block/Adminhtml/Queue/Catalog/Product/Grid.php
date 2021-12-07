@@ -144,11 +144,23 @@ class BSeller_SkyHub_Block_Adminhtml_Queue_Catalog_Product_Grid extends BSeller_
         $this->setMassactionIdField('id');
         $this->getMassactionBlock()->setFormFieldName('queue_ids');
 
-        $this->getMassactionBlock()->addItem('delete', array(
-            'label'   => $this->__('Delete'),
-            'url'     => $this->getUrl('*/*/massDelete'),
-            'confirm' => $this->__('Are you sure?')
-        ));
+        $this->getMassactionBlock()->addItem(
+            'executeQueue',
+            array(
+                'label' => $this->__('Execute Queue'),
+                'url' => $this->getUrl('*/*/massExecuteQueue'),
+                'confirm' => $this->__('Are you sure?')
+            )
+        );
+
+        $this->getMassactionBlock()->addItem(
+            'delete', 
+            array(
+                'label'   => $this->__('Delete'),
+                'url'     => $this->getUrl('*/*/massDelete'),
+                'confirm' => $this->__('Are you sure?')
+            )
+        );
 
         return $this;
     }

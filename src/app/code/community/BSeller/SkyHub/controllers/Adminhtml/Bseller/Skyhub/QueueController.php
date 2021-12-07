@@ -128,4 +128,25 @@ class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_QueueController extends BSeller_Sk
         $this->deleteQueueIds($queueIds);
         $this->redirectBack();
     }
+
+    /**
+     * Execute Quere
+     *
+     * @return void
+     */
+    public function massExecuteQueueAction()
+    {
+        $queueIds = (array)$this->getRequest()->getPost('queue_ids');
+        /** @var BSeller_SkyHub_Model_Queue_Product $modelQueue */
+        $modelQueue = Mage::getModel('bseller_skyhub/queue_product');
+        $this->processStoreIteration(
+            $modelQueue,
+            'executeQueues',
+            [
+                'queueIds' => (array)$queueIds
+            ]
+        );
+        $this->_getSession()->addSuccess($this->__('The queue were successfully executed.'));
+        $this->redirectBack();
+    }
 }
