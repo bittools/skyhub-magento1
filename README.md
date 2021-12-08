@@ -25,7 +25,7 @@ modman init
 Logo em seguinda clone o módulo diretamente do repositório do bitbucket:
 
 ```bash
-modman clone git@bitbucket.org:esmart/bseller_core.git
+modman clone git@github.com:bittools/skyhub-magento1.git
 ```
 
 Ou você também pode clonar o projeto em seu local de desenvolvimento e apenas fazer o link no modman:
@@ -63,4 +63,4 @@ Acesse **https://ajuda.skyhub.com.br/hc/pt-br/requests/new** para dúvidas e dem
 
 ## Licença
 
-Todo o código está protegido e pertence à **Smart E-commerce do Brasil LTDA** e faz parte da **BSeller Platform**.
+Todo o código está protegido e pertence à **B2W Digital**.
