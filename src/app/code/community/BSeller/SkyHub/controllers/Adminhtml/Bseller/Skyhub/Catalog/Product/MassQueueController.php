@@ -15,7 +15,11 @@
 class BSeller_SkyHub_Adminhtml_Bseller_Skyhub_Catalog_Product_MassQueueController
     extends BSeller_SkyHub_Controller_Admin_Action
 {
-
+    /**
+     * Add product to queue
+     *
+     * @return void
+     */
     public function addProductToQueueAction()
     {
         $products = $this->getRequest()->getParam('product', null);

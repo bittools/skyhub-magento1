@@ -14,6 +14,11 @@
 class BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Grid
     extends Mage_Adminhtml_Block_Catalog_Product_Grid
 {
+    /**
+     * Add new action
+     *
+     * @return BSeller_SkyHub_Block_Adminhtml_Catalog_Product_Grid
+     */
     protected function _prepareMassaction()
     {
         parent::_prepareMassaction();
