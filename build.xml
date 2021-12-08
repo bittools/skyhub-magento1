@@ -38,7 +38,7 @@
     </target>
     <target name="bseller-core" depends="build">
         <property name="bseller-core-dir" value="${tmp-dir}/bseller_core"/>
-        <property name="bseller-core-repo" value="git@bitbucket.org:esmart/bseller_core.git"/>
+        <property name="bseller-core-repo" value="git@github.com:bittools/skyhub-magento1.git"/>
 
         <echo msg="Cloning BSeller_Core module form ${bseller-core-repo} repository..." level="info"/>
 
