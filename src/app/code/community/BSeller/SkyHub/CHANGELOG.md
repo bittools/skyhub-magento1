@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.6.2] - 2021-12-07
+- Add product to queue and in Queue, execute Queue the product
+
 ## [1.6.1] - 2021-08-24
 - Send in invoice to skyhub the volume_qty. You need to active the config in Invoice Key Configuration -> Send Volume Qty to SkyHub. Exemplo: volume_qty: 2
 - Hotfix in address for channel Carrefour
