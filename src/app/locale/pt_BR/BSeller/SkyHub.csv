@@ -224,3 +224,5 @@
 "Carrier Shipping Default", "Transportadora padrão"
 "When selected, is created a order with selected shipping method and ignore skyhub data","Quando selecionado, é criado um pedido com o método de entrega selecionado e ignora os dados do skyhub"
 "Order doesn't create, because status is CANCELED","Pedido não criado, porque o status está como cancelado."
+"Product add to queue with success. The queue are execute to cron.","Produto adicionado a fila com sucesso. A fila é executada no cron."
+"There was a problem when trying to add product the Queue.","Ocorreu um erro ao tentar adicionar produto na fila."

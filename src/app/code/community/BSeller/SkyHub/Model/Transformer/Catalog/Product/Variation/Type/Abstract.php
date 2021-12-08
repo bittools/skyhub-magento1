@@ -34,7 +34,10 @@ abstract class BSeller_SkyHub_Model_Transformer_Catalog_Product_Variation_Type_A
         /** @var Mage_Eav_Model_Entity_Attribute $attribute */
         if ($mapping->getId() && $mapping->getAttribute()->getId()) {
             $ean = $mapping->extractProductValue($product);
-            $variation->setEan($ean);
+            
+            if (!is_array($ean)) {
+                $variation->setEan($ean);
+            }
         }
 
         /**
