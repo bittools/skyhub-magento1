@@ -18,7 +18,7 @@ class BSeller_SkyHub_Model_System_Config_Source_Catalog_Product_Visibilities
     /**
      * @return array
      */
-    public function toOptionArray()
+    public static function toOptionArray()
     {
         $res = array();
         foreach (self::getOptionArray() as $index => $value) {
